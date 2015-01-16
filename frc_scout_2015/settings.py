@@ -37,6 +37,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'frc_scout',
+    'compressor'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -127,6 +128,13 @@ ROOT_URLCONF = "%s.urls" % PROJECT_DIRNAME
 # Always use forward slashes, even on Windows.
 # Don't forget to use absolute paths, not relative paths.
 TEMPLATE_DIRS = (os.path.join(PROJECT_ROOT, "templates"),)
+
+STATICFILES_FINDERS = (
+    "django.contrib.staticfiles.finders.FileSystemFinder",
+    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
+    "compressor.finders.CompressorFinder",
+#    'django.contrib.staticfiles.finders.DefaultStorageFinder',
+)
 
 # Local settings
 try:

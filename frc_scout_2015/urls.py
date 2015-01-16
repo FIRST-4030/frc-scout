@@ -11,5 +11,5 @@ urlpatterns = patterns(
 
     url(r'^admin/', include(admin.site.urls)),
 
-    url(r'^', include('frc_scout.urls')),
+    url(r'^', include('frc_scout.urls', namespace='frc_scout')),
 )
