@@ -8,6 +8,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.7/ref/settings/
 """
 
+from django.contrib import messages
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
@@ -141,3 +143,7 @@ try:
     from .local_settings import *
 except ImportError:
     pass
+
+MESSAGE_TAGS = {
+    messages.ERROR: "danger"
+}

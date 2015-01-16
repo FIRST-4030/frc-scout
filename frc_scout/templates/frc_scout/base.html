@@ -17,6 +17,10 @@
 </head>
 <body>
 <div class="container">
+    <br>
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+    {% endfor %}
     {% block main_content %}{% endblock %}
     <br>
     <!-- ¯\_(ツ)_/¯ -->

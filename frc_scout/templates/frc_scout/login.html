@@ -12,15 +12,14 @@
                 {% csrf_token %}
 
                 <div class="form-group">
-                    <input type="number" class="form-control" placeholder="Team Number" name="team_number" required>
-                    <input type="text" class="form-control" placeholder="Scout Name" name="scout_name" required>
+                    <input type="text" class="form-control" placeholder="Username" name="username" required>
                     <input type="password" class="form-control" placeholder="Password" name="password" required>
-                    <input type="text" class="form-control" placeholder="Event Location" name="event" required>
+                    <input type="text" class="form-control" placeholder="Event Location" name="location" required>
                 </div>
                 <br>
                 <div class="form-group">
-                    <button style="margin-bottom: 1px; border-bottom-left-radius: 0; border-bottom-right-radius: 0;" class="btn btn-primary form-control">Login</button>
-                    <button style="margin-top: 1px; border-top-left-radius: 0; border-top-right-radius: 0;" class="btn btn-warning form-control" type="button">Create Account</button>
+                    <button class="btn btn-primary form-control" style="margin-bottom: 2px;">Login</button>
+                    <button class="btn btn-warning form-control" type="button">Create Account</button>
                 </div>
             </form>
         </div>

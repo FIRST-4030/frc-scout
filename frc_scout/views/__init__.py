@@ -1,3 +1,3 @@
 __author__ = 'Sam'
 
-from .views import *
+from .session_views import *
