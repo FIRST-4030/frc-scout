@@ -1,4 +1,0 @@
-Django==1.7.3
-django-appconf==0.6
-django-compressor==1.4
-six==1.9.0
