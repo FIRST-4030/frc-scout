@@ -1,0 +1,27 @@
+{% extends 'frc_scout/base.html' %}
+
+{% block title %}FRC Scout - Login{% endblock %}
+
+{% block main_content %}
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4" style="text-align: center;">
+            <br>
+            <img src="http://www.nhpack68.com/resources/ScoutHappy.gif" style="margin-left: auto; margin-right: auto; width: 200px;">
+            <h2 style="text-align: center;">FRC Scout: Login</h2>
+            <form method="post" class="form-horizontal">
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Username" name="username" required>
+                    <input type="password" class="form-control" placeholder="Password" name="password" required>
+                    <input type="text" class="form-control" placeholder="Event Location" name="location" required>
+                </div>
+                <br>
+                <div class="form-group">
+                    <button class="btn btn-primary form-control" style="margin-bottom: 10px;">Login</button>
+                    <a href="{% url 'frc_scout:create_account' %}" class="btn btn-warning form-control" type="button">Create Account</a>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

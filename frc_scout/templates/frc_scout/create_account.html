@@ -1,0 +1,118 @@
+{% extends 'frc_scout/base.html' %}
+{% block title %}Create Account{% endblock %}
+
+{% block main_content %}
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+            <h2 style="text-align: center;">Create Account</h2>
+            <form role="form" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <input type="number" class="form-control" placeholder="Team Number" name="team_number" id="team_number" required>
+                    <div class="alert alert-success" style="display: none; margin-top: 10px;" id="team_exists">
+                        <span class="glyphicon glyphicon-check"></span><strong> Your team is already registered.</strong> Your account will require approval by a team manager, please get in touch with your scout leader.
+                    </div>
+                    <div class="alert alert-warning" style="display: none; margin-top: 10px;" id="team_does_not_exist">
+                        <span class="glyphicon glyphicon-info-sign"></span><strong> Your team is not yet registered. </strong> Your account will be considered the "team manager" account. From it you will be able to manage your team's scouts.
+                    </div>
+                </div>
+                <div class="form-group">
+                    <input type="text" name="username" placeholder="Username" id="username" class="form-control" required>
+                    <div class="alert alert-warning" style="display: none; margin-top: 10px;" id="user_exists">
+                        <span class="glyphicon glyphicon-info-sign"></span> <b>This username has been taken.</b>
+                    </div>
+                    <div class="alert alert-success" style="display: none; margin-top: 10px;" id="user_does_not_exist">
+                        <span class="glyphicon glyphicon-check"></span> <b>This username is available.</b>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <input type="text" name="first_name" placeholder="First Name" class="form-control" required>
+                    <input type="text" name="last_name" placeholder="Last Name" class="form-control" required>
+                    <input type="email" name="email" placeholder="Email Address" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="password" name="password" placeholder="Password" class="form-control pw" required>
+                    <input type="password" id="password_confirm" name="password_confirm" placeholder="Confirm Password" class="form-control pw" required>
+                    <div class="alert alert-warning" style="display: none; margin-top: 10px;" id="no_match">
+                        <span class="glyphicon glyphicon-info-sign"></span> <b>Your passwords don't match.</b>
+                    </div>
+                    <div class="alert alert-success" style="display: none; margin-top: 10px;" id="match">
+                        <span class="glyphicon glyphicon-check"></span> <b>Your passwords match.</b>
+                    </div>
+                </div>
+                <br>
+                <div class="form-group">
+                    <button class="btn btn-success form-control">create account</button>
+                    <a class="btn btn-warning form-control" style="margin-top: 10px;" href="{% url 'frc_scout:login' %}">go back</a>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script type="text/javascript">
+        $(".pw").keyup(function () {
+            if(($("#password").val() === $("#password_confirm").val()) && ($("#password").val() !== "")) {
+                $("#no_match").hide();
+                $("#match").show();
+            } else {
+                $("#match").hide();
+                $("#no_match").show();
+            }
+        })
+
+        $("#team_number").keyup(function() {
+            if($("#team_number").val() === "") {
+                $("#team_does_not_exist").hide();
+                $("#team_exists").hide();
+                return;
+            }
+
+            $.ajax({
+                url: "{% url 'frc_scout:check_if_team_exists' %}",
+                type: "POST",
+                data: {
+                    'csrfmiddlewaretoken': $.cookie('csrftoken'),
+                    'team_number': $("#team_number").val()
+                },
+                success: function(response) {
+                    console.log(response);
+
+                    if (response['team_exists']) {
+                        $("#team_does_not_exist").hide();
+                        $("#team_exists").show();
+                    } else {
+                        $("#team_exists").hide();
+                        $("#team_does_not_exist").show();
+                    }
+                }
+            })
+        })
+
+        $("#username").keyup(function() {
+            if($("#username").val() === "") {
+                $("#user_does_not_exist").hide();
+                $("#user_exists").hide();
+                return;
+            }
+
+            $.ajax({
+                url: "{% url 'frc_scout:check_if_username_exists' %}",
+                type: "POST",
+                data: {
+                    'csrfmiddlewaretoken': $.cookie('csrftoken'),
+                    'username': $("#username").val()
+                },
+                success: function(response) {
+                    console.log(response);
+
+                    if (response['username_exists']) {
+                        $("#user_does_not_exist").hide();
+                        $("#user_exists").show();
+                    } else {
+                        $("#user_exists").hide();
+                        $("#user_does_not_exist").show();
+                    }
+                }
+            })
+        })
+    </script>
+{% endblock %}
