@@ -14,7 +14,7 @@ def index(request):
     if request.user.is_authenticated():
         context = {
             'user': request.user,
-            'nav_title': "FRC Scout: Home"
+            'nav_title': "Home"
         }
         return render(request, 'frc_scout/index.html', context)
     else:
