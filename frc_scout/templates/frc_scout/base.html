@@ -1,17 +1,19 @@
-<!DOCTYPE html>
-<html>
-<head lang="en">
-    <meta charset="UTF-8">
-    {% load staticfiles compress %}
+    <!DOCTYPE html>
+    <html>
+    <head lang="en">
+        <meta charset="UTF-8">
+        {% load staticfiles compress %}
 
-    {% compress js %}
-        <script type="text/javascript" src="{% static 'frc_scout/js/jquery-1.11.2.min.js' %}"></script>
-        <script type="text/javascript" src="{% static 'frc_scout/js/bootstrap.min.js' %}"></script>
-    {% endcompress %}
+        {% compress js %}
+            <script type="text/javascript" src="{% static 'frc_scout/js/jquery-1.11.2.min.js' %}"></script>
+            <script type="text/javascript" src="{% static 'frc_scout/js/bootstrap.min.js' %}"></script>
+            <script type="text/javascript" src="{% static 'frc_scout/js/typeahead.bundle.js' %}"></script>
+        {% endcompress %}
 
-    {% compress css %}
-        <link rel="stylesheet" type="text/css" href="{% static 'frc_scout/css/paper.theme.min.css' %}">
-    {% endcompress %}
+        {% compress css %}
+            <link rel="stylesheet" type="text/css" href="{% static 'frc_scout/css/paper.theme.min.css' %}">
+            <link rel="stylesheet" type="text/css" href="{% static 'frc_scout/css/twitter-typeahead.css' %}">
+        {% endcompress %}
 
     <title>{% block title %}{% endblock %}</title>
 </head>
@@ -26,4 +28,5 @@
     <!-- ¯\_(ツ)_/¯ -->
 </div>
 </body>
+{% block extra_js %}{% endblock %}
 </html>
