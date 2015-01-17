@@ -25,3 +25,35 @@
         </div>
     </div>
 {% endblock %}
+
+{% block extra_js %}
+<script type="text/javascript">
+var locations;
+function searcher(query, cb) {
+    var matches, substrRegex;
+    matches = [];
+    substrRegex = new RegExp(query, 'i');
+    $.each(locations, function(i, str) {
+        if (substrRegex.test(str)) {
+            matches.push({value:str});
+        }
+        });
+        cb(matches);
+    }
+    $(function() { {% load staticfiles %}
+        $.getJSON('{% static 'frc_scout/js/locations.json' %}')
+        .done(function(json) {
+            locations = json.locations;
+            })
+        .fail(function(json) {
+            console.log("abject failure! couldn't load the locations list.");
+            });
+        $('.typeahead').typeahead({
+            highlight: true
+        }, {
+            name: 'events',
+            source: searcher
+        });
+        });
+</script>
+{% endblock %}
