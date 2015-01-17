@@ -14,7 +14,7 @@
                 <div class="form-group">
                     <input type="text" class="form-control" placeholder="Username" name="username" required>
                     <input type="password" class="form-control" placeholder="Password" name="password" required>
-                    <input type="text" class="form-control" placeholder="Event Location" name="location" required>
+                    <input type="text" class="typeahead form-control" placeholder="Event Location" name="location" required>
                 </div>
                 <br>
                 <div class="form-group">
@@ -37,23 +37,24 @@ function searcher(query, cb) {
         if (substrRegex.test(str)) {
             matches.push({value:str});
         }
+    });
+    cb(matches);
+}
+
+$(function() { {% load staticfiles %}
+    $.getJSON('{% static 'frc_scout/js/locations.json' %}')
+    .done(function(json) {
+        locations = json.locations;
+        })
+    .fail(function(json) {
+        console.log("abject failure! couldn't load the locations list.");
         });
-        cb(matches);
-    }
-    $(function() { {% load staticfiles %}
-        $.getJSON('{% static 'frc_scout/js/locations.json' %}')
-        .done(function(json) {
-            locations = json.locations;
-            })
-        .fail(function(json) {
-            console.log("abject failure! couldn't load the locations list.");
-            });
-        $('.typeahead').typeahead({
-            highlight: true
-        }, {
-            name: 'events',
-            source: searcher
-        });
-        });
+    $('.typeahead').typeahead({
+        highlight: true
+    }, {
+        name: 'events',
+        source: searcher
+    });
+});
 </script>
 {% endblock %}
