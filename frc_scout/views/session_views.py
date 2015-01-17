@@ -11,9 +11,10 @@ from django.db import IntegrityError
 def index(request):
     if request.user.is_authenticated():
         context = {
-            'user': request.user
+            'user': request.user,
+            'nav_title': "FRC Scout: Home"
         }
-        return render(request, 'frc_scout/index.html')
+        return render(request, 'frc_scout/index.html', context)
     else:
         return HttpResponseRedirect(reverse('frc_scout:login'))
 

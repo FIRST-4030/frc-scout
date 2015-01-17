@@ -17,16 +17,12 @@
     <title>{% block title %}{% endblock %}</title>
 </head>
 <body>
+{% block nav %}{% endblock %}
 <div class="container">
-{% block nav %}
-
-{% endblock %}
-    <br>
     {% for message in messages %}
         <div class="alert alert-{{ message.tags }}">{{ message }}</div>
     {% endfor %}
     {% block main_content %}{% endblock %}
-    <br>
     <!-- ¯\_(ツ)_/¯ -->
 </div>
 </body>
