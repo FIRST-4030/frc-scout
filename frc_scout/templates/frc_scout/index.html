@@ -6,7 +6,42 @@
 
 {% block main_content %}
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-10 col-md-offset-1">
+            <div class="section-header-container">
+                <span class="section-header-text">Scouting Tools</span>
+            </div>
+            {# TODO add profile changing pages #}
+            <a class="btn btn-success btn-super" href="#">Scout a Match</a>
+            <a class="btn btn-success btn-super" href="#">Pit Scout a Team</a>
+        </div>
+        <div class="col-md-10 col-md-offset-1">
+            <div class="section-header-container">
+                <span class="section-header-text">Results Tools</span>
+            </div>
+            {# TODO add profile changing pages #}
+            <a class="btn btn-primary btn-super" href="#">View Team Averages</a>
+        </div>
+        {% if user.userprofile.team_manager %}
+        <p>you da man(ager)</p>
+        {% endif %}
+        <div class="col-md-10 col-md-offset-1">
+            <div class="section-header-container">
+                <span class="section-header-text">Account Tools</span>
+            </div>
+            {# TODO add profile changing pages #}
+            <a class="btn btn-warning btn-super" href="#">Update Profile</a>
+            <a class="btn btn-warning btn-super" href="#">Change Password</a>
+            <a class="btn btn-warning btn-super" href="{% url 'frc_scout:logout' %}">Log Out</a>
         </div>
     </div>
 {% endblock %}
+
+{% block extra_js %}
+    <script type="text/javascript">
+        $("[href=#]").click(function() {
+            alert($(this) + ' not yet implemented!!');
+        })
+    </script>
+{% endblock %}
+
+{% block footer %}{% include 'frc_scout/footer.html' %}{% endblock %}

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head lang="en">
+    <title>{% block title %}{% endblock %}</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -16,19 +17,25 @@
     {% compress css %}
         <link rel="stylesheet" type="text/css" href="{% static 'frc_scout/css/paper.theme.min.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'frc_scout/css/twitter-typeahead.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'frc_scout/css/style.css' %}"
     {% endcompress %}
-
-    <title>{% block title %}{% endblock %}</title>
 </head>
 <body>
 {% block nav %}{% endblock %}
 <div class="container">
+    {% if messages %}
+        <br>
+    {% endif %}
+
     {% for message in messages %}
         <div class="alert alert-{{ message.tags }}">{{ message }}</div>
     {% endfor %}
     {% block main_content %}{% endblock %}
     <!-- ¯\_(ツ)_/¯ -->
 </div>
+
+{% block footer %}{% endblock %}
+
 </body>
 {% block extra_js %}{% endblock %}
 </html>

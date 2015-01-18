@@ -10,11 +10,13 @@ from django.templatetags.static import static
 
 from frc_scout.views.loc_list import locations
 
+
 def index(request):
     if request.user.is_authenticated():
         context = {
             'user': request.user,
-            'nav_title': "Home"
+            'nav_title': "Home",
+            'location': request.session.get('location')
         }
         return render(request, 'frc_scout/index.html', context)
     else:
@@ -45,7 +47,7 @@ def login_view(request):
                 else:
                     messages.error(request, "Please enter a valid event location.")
             else:
-                messages.error(request, "Your account has been disabled. Check with your team manager.")
+                messages.error(request, "Your account has been disabled (or has not yet been enabled). Check with your team manager.")
         else:
             messages.error(request, "Your credentials did not match a user, try again.")
 
@@ -88,6 +90,10 @@ def create_account(request):
         if created:
             user.userprofile.team_manager = True
             user.userprofile.approved = True
+
+        # Otherwise, they must be approved
+        else:
+            user.is_active = False
 
         user.userprofile.save()
 
