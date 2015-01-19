@@ -8,17 +8,34 @@
 
 {% block main_content %}
 
+    {% if unapproved_scouts %}
+        <h5 style="color: firebrick; margin-bottom: 20px;"><span class="glyphicon glyphicon-info-sign" style="vertical-align: text-top;">
+    </span> Your team has unapproved scouts.</h5>
+    {% endif %}
+
     <table class="table table-bordered">
         <tr>
             <th>Name</th>
             <th>Approved</th>
             <th>Team Manager</th>
+            <th>Other Actions</th>
         </tr>
         {% for scout in scouts %}
             <tr>
                 <td>{{ scout.first_name }}  {{ scout.last_name }}</td>
-                <td style="width: 120px;"><input id="{{ scout.id }}" data-update="approved" type="checkbox"{% if scout.userprofile.approved %} checked{% endif %}></td>
-                <td style="width: 120px;"><input id="{{ scout.id }}" data-update="team_manager" type="checkbox"{% if scout.userprofile.team_manager %} checked{% endif %}></td>
+                <td><input type="checkbox" id="{{ scout.id }}" class="style2" data-update="approved"{% if scout.userprofile.approved %} checked{% endif %}></td>
+                <td><input type="checkbox" id="{{ scout.id }}" class="style2" data-update="team_manager"{% if scout.userprofile.team_manager %} checked{% endif %}></td>
+                <td>
+                    <div class="dropdown">
+                        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+                            Actions
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Report Fraud</a></li>
+                        </ul>
+                    </div>
+                </td>
             </tr>
         {% endfor %}
     </table>
@@ -26,13 +43,18 @@
 
 {% block extra_js %}
     <script type="text/javascript">
-        $("input[type=checkbox]").click(function() {
+
+        $("input[type=checkbox]").bootstrapSwitch({
+            onText: "YES",
+            offText: "NO",
+            size: "medium"
+        })
+
+        $("input[type=checkbox]").on('switchChange.bootstrapSwitch', function() {
             var scout_id = this.id;
             var action = $(this).data('update');
 
             var sender = $(this);
-
-            sender.parent().append("<img src='{% static 'frc_scout/img/loading.gif' %}' style='width:20px; margin-left:10px;'>");
 
             $.ajax({
                 type: "POST",
@@ -43,14 +65,9 @@
                     'action': action
                 },
                 success: function(response) {
-                    console.log(response);
-                    window.setTimeout(function() {
-                        sender.parent().find('img').remove();
-                    }, 500);
                 },
                 error: function(response) {
                     console.log("error:" + response.statusCode());
-                    sender.parent().find('img').remove();
                 }
             })
         })

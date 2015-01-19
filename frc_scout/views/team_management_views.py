@@ -13,10 +13,13 @@ def view_scouts(request):
 
     scouts = User.objects.filter(userprofile__team=team).exclude(id=request.user.id)
 
+    unapproved_scouts = User.objects.filter(userprofile__team=team, userprofile__approved=False).exclude(id=request.user.id)
+
     context = {
         'location': request.session.get('location'),
         'scouts': scouts,
-        'nav_title': 'Manage Scouts'
+        'nav_title': 'Manage Scouts',
+        'unapproved_scouts': unapproved_scouts
     }
 
     return render(request, 'frc_scout/manage/view_scouts.html', context)
