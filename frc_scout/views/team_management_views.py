@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.http.response import Http404
+from django.http.response import Http404, HttpResponse
 from django.shortcuts import render
 
 
@@ -28,4 +28,19 @@ def update_scouts(request):
         raise Http404
 
     if request.method == "POST":
-        pass
+        scout_id = request.POST.get('scout_id')
+        action = request.POST.get('action')
+
+        scout = User.objects.get(id=scout_id)
+
+        if action == "team_manager":
+            scout.userprofile.team_manager = not scout.userprofile.team_manager
+
+        elif action == "approved":
+            scout.userprofile.approved = not scout.userprofile.approved
+
+        scout.userprofile.save()
+
+        return HttpResponse(status=200)
+
+    raise Http404

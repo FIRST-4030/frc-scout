@@ -25,38 +25,39 @@
 {% endblock %}
 
 {% block extra_js %}
-<script type="text/javascript">
+    <script type="text/javascript">
 
-var gs;
+        var gs, p;
 
-$("input[type=checkbox]").click(function() {
-    var scout_id = this.id;
-    var action = $(this).data('update');
+        $("input[type=checkbox]").click(function() {
+            var scout_id = this.id;
+            var action = $(this).data('update');
 
-    var sender = $(this);
-    gs = sender;
+            var sender = $(this);
 
-    sender.parent().append("<img src='{% static 'frc_scout/img/loading.gif' %}' style='width:20px; margin-left:10px;'>");
+            sender.parent().append("<img src='{% static 'frc_scout/img/loading.gif' %}' style='width:20px; margin-left:10px;'>");
 
-    $.ajax({
-        type: "POST",
-        url: "{% url 'frc_scout:update_scouts' %}",
-        data: {
-            'csrfmiddlewaretoken': $.cookie('csrftoken'),
-            'scout_id': scout_id,
-            'action': action
-        },
-        success: function(response) {
-            console.log(response);
-            sender.parent().remove('img');
-        },
-        error: function(response) {
-            console.log("error:" + response.statusCode().toString());
-            sender.parent().remove('img');
-        }
-    })
-})
-</script>
+            $.ajax({
+                type: "POST",
+                url: "{% url 'frc_scout:update_scouts' %}",
+                data: {
+                    'csrfmiddlewaretoken': $.cookie('csrftoken'),
+                    'scout_id': scout_id,
+                    'action': action
+                },
+                success: function(response) {
+                    console.log(response);
+                    window.setTimeout(function() {
+                        sender.parent().find('img').remove();
+                    }, 500);
+                },
+                error: function(response) {
+                    console.log("error:" + response.statusCode());
+                    sender.parent().find('img').remove();
+                }
+            })
+        })
+    </script>
 {% endblock %}
 
 {% block footer %}{% include 'frc_scout/footer.html' %}{% endblock %}
