@@ -1,0 +1,62 @@
+{% extends 'frc_scout/base.html' %}
+
+{% load staticfiles %}
+
+{% block title %}FRC Scout - Manage Scouts{% endblock %}
+
+{% block nav %}{% include 'frc_scout/nav.html' %}{% endblock %}
+
+{% block main_content %}
+
+    <table class="table table-bordered">
+        <tr>
+            <th>Name</th>
+            <th>Approved</th>
+            <th>Team Manager</th>
+        </tr>
+        {% for scout in scouts %}
+            <tr>
+                <td>{{ scout.first_name }}  {{ scout.last_name }}</td>
+                <td style="width: 120px;"><input id="{{ scout.id }}" data-update="approved" type="checkbox"{% if scout.userprofile.approved %} checked{% endif %}></td>
+                <td style="width: 120px;"><input id="{{ scout.id }}" data-update="team_manager" type="checkbox"{% if scout.userprofile.team_manager %} checked{% endif %}></td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
+
+{% block extra_js %}
+<script type="text/javascript">
+
+var gs;
+
+$("input[type=checkbox]").click(function() {
+    var scout_id = this.id;
+    var action = $(this).data('update');
+
+    var sender = $(this);
+    gs = sender;
+
+    sender.parent().append("<img src='{% static 'frc_scout/img/loading.gif' %}' style='width:20px; margin-left:10px;'>");
+
+    $.ajax({
+        type: "POST",
+        url: "{% url 'frc_scout:update_scouts' %}",
+        data: {
+            'csrfmiddlewaretoken': $.cookie('csrftoken'),
+            'scout_id': scout_id,
+            'action': action
+        },
+        success: function(response) {
+            console.log(response);
+            sender.parent().remove('img');
+        },
+        error: function(response) {
+            console.log("error:" + response.statusCode().toString());
+            sender.parent().remove('img');
+        }
+    })
+})
+</script>
+{% endblock %}
+
+{% block footer %}{% include 'frc_scout/footer.html' %}{% endblock %}

@@ -17,4 +17,8 @@ urlpatterns = patterns(
     url(r'^json/team_exists/$', views.check_if_team_exists, name='check_if_team_exists'),
     url(r'^json/username_exists/$', views.check_if_username_exists, name='check_if_username_exists'),
 
+    # Team management views
+    url(r'^manage/scouts/$', views.view_scouts, name='view_scouts'),
+    url(r'^manage/scouts/update$', views.update_scouts, name='update_scouts'),
+
 )

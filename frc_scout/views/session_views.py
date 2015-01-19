@@ -1,12 +1,11 @@
 from django.contrib.auth import authenticate, logout, login
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
-from django.http.response import HttpResponseRedirect, HttpResponse
+from django.http.response import HttpResponseRedirect
 from django.shortcuts import render
 from django.contrib import messages
 from frc_scout.models import Team, UserProfile
 from django.db import IntegrityError
-from django.templatetags.static import static
 
 from frc_scout.views.loc_list import locations
 
@@ -84,7 +83,7 @@ def create_account(request):
 
         user.userprofile = UserProfile()
 
-        user.userprofile.team, created = Team.objects.get_or_create(team_number=team_number)
+        user.userprofile.team, created = Team.objects.get_or_create(team_number=team_number, id=team_number)
 
         # If the team is newly created, the user is the manager
         if created:
