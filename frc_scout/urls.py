@@ -19,6 +19,9 @@ urlpatterns = patterns(
 
     # Team management views
     url(r'^manage/scouts/$', views.view_scouts, name='view_scouts'),
-    url(r'^manage/scouts/update$', views.update_scouts, name='update_scouts'),
+    url(r'^manage/scouts/update/$', views.update_scouts, name='update_scouts'),
+
+    # Account views
+    url(r'^account/profile/$', views.update_profile, name='update_profile'),
 
 )

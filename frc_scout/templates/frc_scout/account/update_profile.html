@@ -1,0 +1,19 @@
+{% extends 'frc_scout/base.html' %}
+
+{% block title %}Update Profile{% endblock %}
+
+{% block nav %}{% include 'frc_scout/nav.html' %}{% endblock %}
+
+{% block main_content %}
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+            First name: <a class="editable" data-type="text">{{ user.first_name }}</a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+
+{% endblock %}
+
+{% block footer %}{% include 'frc_scout/footer.html' %}{% endblock %}

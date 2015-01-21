@@ -36,7 +36,7 @@ def login_view(request):
         user = authenticate(username=username, password=password)
 
         if user is not None:
-            if user.is_active:
+            if user.is_active and user.userprofile.approved:
                 if location in locations:
                     login(request, user)
 
@@ -46,7 +46,8 @@ def login_view(request):
                 else:
                     messages.error(request, "Please enter a valid event location.")
             else:
-                messages.error(request, "Your account has been disabled (or has not yet been enabled). Check with your team manager.")
+                messages.error(request, "Your account has been disabled "
+                                        "(or has not yet been enabled). Check with your team manager.")
         else:
             messages.error(request, "Your credentials did not match a user, try again.")
 
@@ -83,7 +84,7 @@ def create_account(request):
 
         user.userprofile = UserProfile()
 
-        user.userprofile.team, created = Team.objects.get_or_create(team_number=team_number, id=team_number)
+        user.userprofile.team, created = Team.objects.get_or_create(team_number=team_number)
 
         # If the team is newly created, the user is the manager
         if created:
