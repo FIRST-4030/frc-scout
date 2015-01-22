@@ -1,12 +1,11 @@
 from django.contrib.auth import authenticate, logout, login
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
-from django.http.response import HttpResponseRedirect, HttpResponse
+from django.http.response import HttpResponseRedirect
 from django.shortcuts import render
 from django.contrib import messages
 from frc_scout.models import Team, UserProfile
 from django.db import IntegrityError
-from django.templatetags.static import static
 
 from frc_scout.views.loc_list import locations
 
@@ -37,7 +36,7 @@ def login_view(request):
         user = authenticate(username=username, password=password)
 
         if user is not None:
-            if user.is_active:
+            if user.is_active and user.userprofile.approved:
                 if location in locations:
                     login(request, user)
 
@@ -47,7 +46,8 @@ def login_view(request):
                 else:
                     messages.error(request, "Please enter a valid event location.")
             else:
-                messages.error(request, "Your account has been disabled (or has not yet been enabled). Check with your team manager.")
+                messages.error(request, "Your account has been disabled "
+                                        "(or has not yet been enabled). Check with your team manager.")
         else:
             messages.error(request, "Your credentials did not match a user, try again.")
 
