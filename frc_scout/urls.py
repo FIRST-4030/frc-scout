@@ -24,4 +24,5 @@ urlpatterns = patterns(
     # Account views
     url(r'^account/profile/$', views.update_profile, name='update_profile'),
 
+
 )
