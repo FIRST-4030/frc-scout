@@ -22,3 +22,15 @@ def update_profile(request):
         }
         return render(request, 'frc_scout/account/update_profile.html', context)
 
+
+@login_required
+def update_password(request):
+    if request.method == "POST":
+        pass
+
+    else:
+        context = {
+            'nav_title': "Update Password",
+            'location': request.session.get('location')
+        }
+        return render(request, 'frc_scout/account/update_password.html', context)

@@ -23,6 +23,6 @@ urlpatterns = patterns(
 
     # Account views
     url(r'^account/profile/$', views.update_profile, name='update_profile'),
-
+    url(r'^account/password/$', views.update_password, name='update_password'),
 
 )
