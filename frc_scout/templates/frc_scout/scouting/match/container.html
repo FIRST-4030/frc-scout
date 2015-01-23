@@ -1,0 +1,140 @@
+{% extends 'frc_scout/base.html' %}
+
+{% load staticfiles %}
+
+{% block title %}Scouting{% endblock %}
+
+{% block main_content %}
+    <!-- PREMATCH -->
+    <div class="container-fluid" style="display: none;" id="prematch">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Pre-Match</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <input id="team_number" class="form-control input-x-lg" placeholder="Team Number">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <input id="match_number" class="form-control input-x-lg" placeholder="Match Number">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <h3 style="color: #666666;">Location: {{ request.session.location }}</h3>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-md-12">
+                <button class="btn btn-extra-high btn-primary btn-lg max-width">autonomous &nbsp;<span class="glyphicon glyphicon-arrow-right"></span></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- AUTONOMOUS -->
+    <div class="container-fluid" style="display: block;" id="autonomous_main">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Autonomous</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <h3>Totes</h3>
+                <div class="row">
+                    <div class="col-xs-8">
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width">Stacked Yellow</button>
+                    </div>
+                    <div class="col-xs-2">
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning">&mdash;</button>
+                    </div>
+                    <div class="col-xs-2 text-center">
+                        <h4 class="vertical-align-center">0</h4>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-8">
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width">Moved Yellow</button>
+                    </div>
+                    <div class="col-xs-2">
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning">&mdash;</button>
+                    </div>
+                    <div class="col-xs-2 text-center">
+                        <h4 class="vertical-align-center" class="vertical-align-center">0</h4>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-8">
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width">Acquired Grey</button>
+                    </div>
+                    <div class="col-xs-2">
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning">&mdash;</button>
+                    </div>
+                    <div class="col-xs-2 text-center">
+                        <h4 class="vertical-align-center">0</h4>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6">
+                <h3>Bins</h3>
+                <div class="row">
+                    <div class="col-xs-8">
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width">Acquired Step</button>
+                    </div>
+                    <div class="col-xs-2">
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning">&mdash;</button>
+                    </div>
+                    <div class="col-xs-2 text-center">
+                        <h4 class="vertical-align-center">0</h4>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-8">
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width">Acquired Ground</button>
+                    </div>
+                    <div class="col-xs-2">
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning">&mdash;</button>
+                    </div>
+                    <div class="col-xs-2 text-center">
+                        <h4 class="vertical-align-center">0</h4>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-8">
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width">Moved</button>
+                    </div>
+                    <div class="col-xs-2">
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning">&mdash;</button>
+                    </div>
+                    <div class="col-xs-2 text-center">
+                        <h4 class="vertical-align-center">0</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-sm-6">
+                <button style="margin-top: 5px; margin-bottom: 5px;" class="btn btn-extra-high btn-info btn-lg max-width">Fouls & Other</button>
+            </div>
+            <div class="col-sm-6">
+                <button style="margin-top: 5px; margin-bottom: 5px;" class="btn btn-extra-high btn-success btn-lg max-width">teleoperated  &nbsp;<span class="glyphicon glyphicon-arrow-right"></span></button>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+
+{% block extra_js %}
+
+{% endblock %}

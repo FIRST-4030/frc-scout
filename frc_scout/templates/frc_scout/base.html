@@ -26,7 +26,7 @@
 </head>
 <body>
 {% block nav %}{% endblock %}
-<div class="container">
+<div class="container{% if fluid %}-fluid{% endif %}">
     {% if messages %}
         <br>
     {% endif %}
@@ -37,6 +37,7 @@
     {% block main_content %}{% endblock %}
     <!-- ¯\_(ツ)_/¯ -->
 </div>
+
 
 {% block footer %}{% endblock %}
 

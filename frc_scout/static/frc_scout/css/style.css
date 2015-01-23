@@ -24,18 +24,39 @@
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 body {
-  /* Margin bottom by footer height */
-  margin-bottom: 60px;
+    /* Margin bottom by footer height */
+    margin-bottom: 60px;
 }
 .footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  /* Set the fixed height of the footer here */
-  height: 60px;
-  /*background-color: #f5f5f5;*/
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    /* Set the fixed height of the footer here */
+    height: 60px;
+    /*background-color: #f5f5f5;*/
+}
+
+.input-x-lg {
+    height: 72px;
+    font-size: 32px !important;
+}
+
+.btn-lg-text {
+    font-size: 18px;
+}
+
+.max-width {
+    width: 100%;
+}
+
+@media (min-width: 768px) {
+    .btn-extra-high {
+        height: 90px;
+        margin-top: 5px;
+        margin-bottom: 5px;
+    }
 }
