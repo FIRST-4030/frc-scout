@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http.response import HttpResponse
 from django.shortcuts import render
@@ -25,12 +26,26 @@ def update_profile(request):
 
 @login_required
 def update_password(request):
-    if request.method == "POST":
-        pass
+    context = {
+        'nav_title': "Update Password",
+        'location': request.session.get('location')
+    }
 
-    else:
-        context = {
-            'nav_title': "Update Password",
-            'location': request.session.get('location')
-        }
-        return render(request, 'frc_scout/account/update_password.html', context)
+    if request.method == "POST":
+        old_password = request.POST.get('old_password')
+        password = request.POST.get('new_password')
+        password_repeat = request.POST.get('new_password_repeat')
+
+        if password != password_repeat:
+            messages.error(request, "Your passwords did not match. Please try again.")
+            return render(request, 'frc_scout/account/update_password.html', context)
+
+        if not request.user.check_password(old_password):
+            messages.error(request, "Your old password was entered incorrectly. Please try again.")
+            return render(request, 'frc_scout/account/update_password.html', context)
+
+        request.user.set_password(password)
+        request.user.save()
+        messages.success(request, "Password updated successfully.")
+
+    return render(request, 'frc_scout/account/update_password.html', context)
