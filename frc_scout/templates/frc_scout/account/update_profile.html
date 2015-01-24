@@ -1,0 +1,36 @@
+{% extends 'frc_scout/base.html' %}
+
+{% block title %}Update Profile{% endblock %}
+
+{% block nav %}{% include 'frc_scout/nav.html' %}{% endblock %}
+
+{% block main_content %}
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <p><strong>Click information to update.</strong></p>
+            First Name: <a href="#" class="editable" data-type="text" data-pk="first_name">{{ user.first_name }}</a>
+            <br>
+            Last Name: <a href="#" class="editable" data-type="text" data-pk="last_name">{{ user.last_name }}</a>
+            <br>
+            Email Address: <a href="#" class="editable" data-type="email" data-pk="email">{{ user.email }}</a>
+
+            <br>
+            <h6><a href="{% url 'frc_scout:update_password' %}">Update Password</a></h6>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+    <script type="text/javascript">
+        $(".editable").editable({
+            url: "{% url 'frc_scout:update_profile' %}",
+            type: 'POST',
+            mode: 'inline',
+            params: {
+                'csrfmiddlewaretoken': $.cookie('csrftoken')
+            }
+        });
+    </script>
+{% endblock %}
+
+{% block footer %}{% include 'frc_scout/footer.html' %}{% endblock %}

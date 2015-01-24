@@ -1,7 +1,7 @@
 
 DEBUG = True
 
-COMPRESS_ENABLED = True
+COMPRESS_ENABLED = False
 
 # Make these unique, and don't share it with anybody.
 SECRET_KEY = "03a12404-490c-470a-af1c-b5dad3e6k18356a-b7fe-411b-b880-a7b5c04e23f2790587b7-8984-48a9-poop-a3f9b6b3b8a1"
