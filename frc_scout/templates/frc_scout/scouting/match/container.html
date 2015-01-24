@@ -5,8 +5,19 @@
 {% block title %}Scouting{% endblock %}
 
 {% block main_content %}
+
+    <!-- ERRORS -->
+
+    <div class="container-fluid">
+        <div class="alert alert-warning collapse alert-dismissible" role="alert" id="alert" style="margin-top: 10px;">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <p><strong>Please correct the following errors:</strong></p>
+            <span id="alert-text"></span>
+        </div>
+    </div>
+
     <!-- PREMATCH -->
-    <div class="container-fluid" style="display: none;" id="prematch">
+    <div class="container-fluid" style="display: block;" id="prematch">
         <div class="row">
             <div class="col-md-12">
                 <h2>Pre-Match</h2>
@@ -30,13 +41,13 @@
         <br>
         <div class="row">
             <div class="col-md-12">
-                <button class="btn btn-extra-high btn-primary btn-lg max-width">autonomous &nbsp;<span class="glyphicon glyphicon-arrow-right"></span></button>
+                <button class="btn btn-extra-high btn-primary btn-lg max-width" onclick="saveAndContinue('prematch', 'autonomous');">autonomous &nbsp;<span class="glyphicon glyphicon-arrow-right"></span></button>
             </div>
         </div>
     </div>
 
     <!-- AUTONOMOUS -->
-    <div class="container-fluid" style="display: block;" id="autonomous_main">
+    <div class="container-fluid" style="display: none;" id="autonomous">
         <div class="row">
             <div class="col-md-12">
                 <h2>Autonomous</h2>
@@ -53,7 +64,7 @@
                         <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning">&mdash;</button>
                     </div>
                     <div class="col-xs-2 text-center">
-                        <h4 class="vertical-align-center">0</h4>
+                        <h4 class="button-state-text">0</h4>
                     </div>
                 </div>
 
@@ -65,7 +76,7 @@
                         <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning">&mdash;</button>
                     </div>
                     <div class="col-xs-2 text-center">
-                        <h4 class="vertical-align-center" class="vertical-align-center">0</h4>
+                        <h4 class="button-state-text">0</h4>
                     </div>
                 </div>
 
@@ -77,7 +88,7 @@
                         <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning">&mdash;</button>
                     </div>
                     <div class="col-xs-2 text-center">
-                        <h4 class="vertical-align-center">0</h4>
+                        <h4 class="button-state-text">0</h4>
                     </div>
                 </div>
             </div>
@@ -92,7 +103,7 @@
                         <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning">&mdash;</button>
                     </div>
                     <div class="col-xs-2 text-center">
-                        <h4 class="vertical-align-center">0</h4>
+                        <h4 class="button-state-text">0</h4>
                     </div>
                 </div>
 
@@ -104,7 +115,7 @@
                         <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning">&mdash;</button>
                     </div>
                     <div class="col-xs-2 text-center">
-                        <h4 class="vertical-align-center">0</h4>
+                        <h4 class="button-state-text">0</h4>
                     </div>
                 </div>
 
@@ -116,7 +127,7 @@
                         <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning">&mdash;</button>
                     </div>
                     <div class="col-xs-2 text-center">
-                        <h4 class="vertical-align-center">0</h4>
+                        <h4 class="button-state-text">0</h4>
                     </div>
                 </div>
             </div>
@@ -136,5 +147,74 @@
 
 
 {% block extra_js %}
+    <script type="text/javascript">
 
+        var stages = [
+            'prematch',
+            'autonomous',
+            'teleoperated',
+            'end'
+        ];
+
+        var pageMatchNumber;
+
+        function setupNewMatch() {
+            for(var i = 0;; i++) {
+                if (localStorage["match" + i.toString()] === undefined) {
+                    pageMatchNumber = i;
+                    localStorage["match" + pageMatchNumber.toString()] = JSON.stringify({});
+                    break;
+                }
+            }
+        }
+
+        $(function() {
+            setupNewMatch();
+            console.log("new match: " + pageMatchNumber)
+            $("#alert").alert('close');
+        });
+
+        function saveAndContinue(fromStage, toStage) {
+
+            var errorMessage = [];
+            var stageVariables = null;
+
+            if(fromStage == "prematch") {
+                var teamNumber = parseInt($("#team_number").val());
+                var matchNumber = parseInt($("#match_number").val());
+
+
+                if(isNaN(teamNumber)) {
+                    errorMessage.push("Team number is required and must be a number.");
+                }
+
+                if(isNaN(matchNumber)) {
+                    errorMessage.push("Match number is required and must be a number.");
+                }
+
+                stageVariables = {
+                    teamNumber: teamNumber,
+                    matchNumber: matchNumber
+                }
+            }
+
+            if(errorMessage.length !== 0) {
+                $("#alert-text").html(errorMessage.join('<br>'));
+                $("#alert").show();
+                return;
+            }
+
+            $("#alert").alert('close');
+
+            var localStorageVariables = $.parseJSON(localStorage["match" + pageMatchNumber]);
+
+            localStorageVariables[fromStage] = stageVariables;
+
+            localStorage['match' + pageMatchNumber] = JSON.stringify(localStorageVariables);
+
+            $("#" + fromStage).hide();
+            $("#" + toStage).show();
+        }
+
+    </script>
 {% endblock %}
