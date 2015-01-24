@@ -35,20 +35,13 @@ function searcher(query, cb) {
     substrRegex = new RegExp(query, 'i');
     $.each(Object.keys(locations), function(i, str) {
         if (substrRegex.test(str)) {
-            matches.push({value:str});
+            matches.push({value: str});
         }
     });
     cb(matches);
 }
 
 $(function() { {% load staticfiles %}
-    /*$.getJSON('{% static 'frc_scout/js/locations.json' %}')
-    .done(function(json) {
-        locations = json.locations;
-        })
-    .fail(function(json) {
-        console.log("abject failure! couldn't load the locations list.");
-        });*/
     $('.typeahead').typeahead({
         highlight: true
     }, {
