@@ -1,0 +1,82 @@
+{% extends 'frc_scout/base.html' %}
+
+{% load staticfiles %}
+
+{% block title %}FRC Scout - Manage Scouts{% endblock %}
+
+{% block nav %}{% include 'frc_scout/nav.html' %}{% endblock %}
+
+{% block main_content %}
+
+    {% if unapproved_scouts %}
+        <h5 style="color: firebrick; margin-bottom: 20px;"><span class="glyphicon glyphicon-info-sign" style="vertical-align: text-top;">
+    </span> Your team has unapproved scouts.</h5>
+    {% endif %}
+
+    <p>New scouts will require the approval of a team manager in order to login and begin scouting.</p>
+    <table class="table table-bordered">
+        <tr>
+            <th>Name</th>
+            <th>Email Address</th>
+            <th>Join Date</th>
+            <th>Approved</th>
+            <th>Team Manager</th>
+            <th>Other Actions</th>
+        </tr>
+        {% for scout in scouts %}
+            <tr>
+                <td>{{ scout.first_name }}  {{ scout.last_name }}</td>
+                <td><a href="mailto:{{ scout.email }}">{{ scout.email }}</a></td>
+                <td>{{ scout.date_joined|date:"M d, Y" }}</td>
+                <td><input type="checkbox" id="{{ scout.id }}" class="style2" data-update="approved"{% if scout.userprofile.approved %} checked{% endif %}></td>
+                <td><input type="checkbox" id="{{ scout.id }}" class="style2" data-update="team_manager"{% if scout.userprofile.team_manager %} checked{% endif %}></td>
+                <td>
+                    <div class="dropdown">
+                        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+                            Actions
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Report Fraud</a></li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
+
+{% block extra_js %}
+    <script type="text/javascript">
+
+        $("input[type=checkbox]").bootstrapSwitch({
+            onText: "YES",
+            offText: "NO",
+            size: "medium"
+        })
+
+        $("input[type=checkbox]").on('switchChange.bootstrapSwitch', function() {
+            var scout_id = this.id;
+            var action = $(this).data('update');
+
+            var sender = $(this);
+
+            $.ajax({
+                type: "POST",
+                url: "{% url 'frc_scout:update_scouts' %}",
+                data: {
+                    'csrfmiddlewaretoken': $.cookie('csrftoken'),
+                    'scout_id': scout_id,
+                    'action': action
+                },
+                success: function(response) {
+                },
+                error: function(response) {
+                    console.log("error:" + response.statusCode());
+                }
+            })
+        })
+    </script>
+{% endblock %}
+
+{% block footer %}{% include 'frc_scout/footer.html' %}{% endblock %}
