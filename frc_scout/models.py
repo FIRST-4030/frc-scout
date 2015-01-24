@@ -4,6 +4,12 @@ from django.db import models
 # Create your models here.
 from django.utils import timezone
 
+class Location(models.Model):
+    name = models.TextField()
+
+    def __str__(self):
+        return self.name
+
 
 class Team(models.Model):
     team_number = models.IntegerField(max_length=5)
@@ -37,7 +43,7 @@ class Match(models.Model):
     scout = models.ForeignKey(User)
     match_number = models.IntegerField()
     timestamp = models.DateTimeField(default=get_current_time)
-    # TODO add location
+    location = models.ForeignKey(Location)
 
     # Autonomous
     auto_start_x = models.DecimalField(max_digits=8, decimal_places=8)
@@ -93,9 +99,3 @@ class BinStack(models.Model):
     match = models.ForeignKey(Match)
     height = models.IntegerField(default=1)
 
-
-class Location(models.Model):
-    name = models.TextField()
-
-    def __str__(self):
-        return self.name
