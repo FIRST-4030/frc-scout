@@ -106,7 +106,7 @@ locations = [
     "FIM District - Lansing Event",
     "FIM District - Troy Event",
     "MAR District - North Brunswick Event",
-    "in Michigan District Championship",
+    "FIRST in Michigan District Championship",
     "Mid-Atlantic Robotics District Championship",
     "NE FIRST District Championship"
 ]

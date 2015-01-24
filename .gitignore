@@ -2,4 +2,7 @@ venv/
 .idea/
 __pycache__/
 dev.db
+frc_scout_2015/static/CACHE/
+*.swp
+*.swo
 *.pyc
