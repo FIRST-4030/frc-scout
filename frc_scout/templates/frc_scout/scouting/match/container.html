@@ -9,15 +9,15 @@
     <!-- ERRORS -->
 
     <div class="container-fluid">
-        <div class="alert alert-warning collapse alert-dismissible" role="alert" id="alert" style="margin-top: 10px;">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <div class="alert alert-warning alert-dismissible" role="alert" id="alert" style="margin-top: 10px;">
+            <button type="button" class="close" onclick="$('#alert').hide();" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <p><strong>Please correct the following errors:</strong></p>
             <span id="alert-text"></span>
         </div>
     </div>
 
     <!-- PREMATCH -->
-    <div class="container-fluid" style="display: block;" id="prematch">
+    <div class="container-fluid stage" style="display: none;" id="prematch">
         <div class="row">
             <div class="col-md-12">
                 <h2>Pre-Match</h2>
@@ -35,7 +35,7 @@
         </div>
         <div class="row">
             <div class="col-md-12">
-                <h3 style="color: #666666;">Location: {{ request.session.location }}</h3>
+                <h3 style="color: #666666;">Location: {{ request.session.location_name }}</h3>
             </div>
         </div>
         <br>
@@ -47,7 +47,7 @@
     </div>
 
     <!-- AUTONOMOUS -->
-    <div class="container-fluid" style="display: none;" id="autonomous">
+    <div class="container-fluid stage" style="display: none;" id="autonomous">
         <div class="row">
             <div class="col-md-12">
                 <h2>Autonomous</h2>
@@ -58,37 +58,37 @@
                 <h3>Totes</h3>
                 <div class="row">
                     <div class="col-xs-8">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width">Stacked Yellow</button>
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="auto-stacked-yellow-tote" data-operation="add">Stacked Yellow</button>
                     </div>
                     <div class="col-xs-2">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning">&mdash;</button>
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning btn-add-subtract" data-name="auto-stacked-yellow-tote" data-operation="subtract">&mdash;</button>
                     </div>
                     <div class="col-xs-2 text-center">
-                        <h4 class="button-state-text">0</h4>
+                        <h4 class="button-state-text" id="auto-stacked-yellow-tote-text">0</h4>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-xs-8">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width">Moved Yellow</button>
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="auto-moved-yellow-tote" data-operation="add">Moved Yellow</button>
                     </div>
                     <div class="col-xs-2">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning">&mdash;</button>
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning btn-add-subtract" data-name="auto-moved-yellow-tote" data-operation="subtract">&mdash;</button>
                     </div>
                     <div class="col-xs-2 text-center">
-                        <h4 class="button-state-text">0</h4>
+                        <h4 class="button-state-text" id="auto-moved-yellow-tote-text">0</h4>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-xs-8">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width">Acquired Grey</button>
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="auto-acquired-grey-tote" data-operation="add">Acquired Grey</button>
                     </div>
                     <div class="col-xs-2">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning">&mdash;</button>
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning btn-add-subtract" data-name="auto-acquired-grey-tote" data-operation="subtract">&mdash;</button>
                     </div>
                     <div class="col-xs-2 text-center">
-                        <h4 class="button-state-text">0</h4>
+                        <h4 class="button-state-text" id="auto-acquired-grey-tote-text">0</h4>
                     </div>
                 </div>
             </div>
@@ -97,37 +97,37 @@
                 <h3>Bins</h3>
                 <div class="row">
                     <div class="col-xs-8">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width">Acquired Step</button>
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="auto-acquired-step-bin" data-operation="add">Acquired Step</button>
                     </div>
                     <div class="col-xs-2">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning">&mdash;</button>
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning btn-add-subtract" data-name="auto-acquired-step-bin" data-operation="subtract">&mdash;</button>
                     </div>
                     <div class="col-xs-2 text-center">
-                        <h4 class="button-state-text">0</h4>
+                        <h4 class="button-state-text" id="auto-acquired-step-bin-text">0</h4>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-xs-8">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width">Acquired Ground</button>
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="auto-acquired-ground-bin" data-operation="add">Acquired Ground</button>
                     </div>
                     <div class="col-xs-2">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning">&mdash;</button>
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning btn-add-subtract" data-name="auto-acquired-ground-bin" data-operation="subtract">&mdash;</button>
                     </div>
                     <div class="col-xs-2 text-center">
-                        <h4 class="button-state-text">0</h4>
+                        <h4 class="button-state-text" id="auto-acquired-ground-bin-text">0</h4>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-xs-8">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width">Moved</button>
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="auto-moved-bin" data-operation="add">Moved</button>
                     </div>
                     <div class="col-xs-2">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning">&mdash;</button>
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning btn-add-subtract" data-name="auto-moved-bin" data-operation="subtract">&mdash;</button>
                     </div>
                     <div class="col-xs-2 text-center">
-                        <h4 class="button-state-text">0</h4>
+                        <h4 class="button-state-text" id="auto-moved-bin-text">0</h4>
                     </div>
                 </div>
             </div>
@@ -149,34 +149,39 @@
 {% block extra_js %}
     <script type="text/javascript">
 
-        var stages = [
-            'prematch',
-            'autonomous',
-            'teleoperated',
-            'end'
-        ];
+        $(function() {
+            /* If there's no hash setup a new match */
+            if(window.location.hash === "") {
+                setupNewMatch();
+                console.log("new match: " + localStorage.pageMatchID);
+                window.location.hash = "prematch";
 
-        var pageMatchNumber;
+                /* otherwise grab the old one and reuse it */
+            } else {
+                $("#" + window.location.hash.substring(1)).show();
+            }
+
+            $("#alert").hide();
+        });
 
         function setupNewMatch() {
+            /* Iterate through all matches currently in localStorage until we find an empty one */
             for(var i = 0;; i++) {
                 if (localStorage["match" + i.toString()] === undefined) {
-                    pageMatchNumber = i;
-                    localStorage["match" + pageMatchNumber.toString()] = JSON.stringify({});
+                    /* Then set our current match to a new one, storing the new one in localStorage */
+                    localStorage.pageMatchID = i;
+                    localStorage["match" + localStorage.pageMatchID.toString()] = JSON.stringify({});
                     break;
                 }
             }
         }
 
-        $(function() {
-            setupNewMatch();
-            console.log("new match: " + pageMatchNumber)
-            $("#alert").alert('close');
-        });
-
         function saveAndContinue(fromStage, toStage) {
 
+            // assume no errors
             var errorMessage = [];
+
+            // no variables for now
             var stageVariables = null;
 
             if(fromStage == "prematch") {
@@ -198,23 +203,55 @@
                 }
             }
 
+            // show alerts and bail if they exist
             if(errorMessage.length !== 0) {
                 $("#alert-text").html(errorMessage.join('<br>'));
                 $("#alert").show();
                 return;
             }
 
-            $("#alert").alert('close');
+            // otherwise hide any active alerts
+            $("#alert").hide();
 
-            var localStorageVariables = $.parseJSON(localStorage["match" + pageMatchNumber]);
+            // pull current things out of localStorage for our match ID
+            var localStorageVariables = $.parseJSON(localStorage["match" + localStorage.pageMatchID]);
 
+            // append our current values to the array that we get
             localStorageVariables[fromStage] = stageVariables;
 
-            localStorage['match' + pageMatchNumber] = JSON.stringify(localStorageVariables);
+            // push it back to localStorage
+            localStorage['match' + localStorage.pageMatchID] = JSON.stringify(localStorageVariables);
 
+            // hide our current stage
             $("#" + fromStage).hide();
-            $("#" + toStage).show();
+
+            // change hash triggering the next stage to show
+            window.location.hash = toStage;
         }
+
+        window.onhashchange = function() {
+            console.log('new hash: ' + window.location.hash);
+            $(".stage").hide();
+            $("#" + window.location.hash.substring(1)).show();
+        }
+
+        /*
+        universal function that will add/subtract things from labels appended with -text from their respective buttons
+         */
+        $(".btn-add-subtract").click(function() {
+            var sender = $(this);
+            var name = sender.data('name');
+
+            if(sender.data('operation') === "add") {
+                $("#" + name + "-text").text(parseInt($("#" + name + "-text").text()) + 1);
+            }
+
+            else if(sender.data('operation' == "subtract")) {
+                if(parseInt($("#" + name + "-text").text()) > 0) {
+                    $("#" + name + "-text").text(parseInt($("#" + name + "-text").text()) - 1);
+                }
+            }
+        })
 
     </script>
 {% endblock %}
