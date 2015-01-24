@@ -92,3 +92,7 @@ class ToteStack(models.Model):
 class BinStack(models.Model):
     match = models.ForeignKey(Match)
     height = models.IntegerField(default=1)
+
+
+class Location(models.Model):
+    name = models.TextField()

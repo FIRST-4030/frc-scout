@@ -28,12 +28,12 @@
 
 {% block extra_js %}
 <script type="text/javascript">
-var locations;
+var locations = $.parseJSON('{{ location_list | safe }}');
 function searcher(query, cb) {
     var matches, substrRegex;
     matches = [];
     substrRegex = new RegExp(query, 'i');
-    $.each(locations, function(i, str) {
+    $.each(Object.keys(locations), function(i, str) {
         if (substrRegex.test(str)) {
             matches.push({value:str});
         }
@@ -42,13 +42,13 @@ function searcher(query, cb) {
 }
 
 $(function() { {% load staticfiles %}
-    $.getJSON('{% static 'frc_scout/js/locations.json' %}')
+    /*$.getJSON('{% static 'frc_scout/js/locations.json' %}')
     .done(function(json) {
         locations = json.locations;
         })
     .fail(function(json) {
         console.log("abject failure! couldn't load the locations list.");
-        });
+        });*/
     $('.typeahead').typeahead({
         highlight: true
     }, {
