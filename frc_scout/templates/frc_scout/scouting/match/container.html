@@ -135,12 +135,32 @@
         <br>
         <div class="row">
             <div class="col-sm-6">
-                <button style="margin-top: 5px; margin-bottom: 5px;" class="btn btn-extra-high btn-info btn-lg max-width">Fouls & Other</button>
+                <button style="margin-top: 5px; margin-bottom: 5px;" class="btn btn-extra-high btn-info btn-lg max-width" onclick="saveAndContinue('autonomous', 'autonomous_fouls_and_other');">Fouls & Other</button>
             </div>
             <div class="col-sm-6">
-                <button style="margin-top: 5px; margin-bottom: 5px;" class="btn btn-extra-high btn-success btn-lg max-width">teleoperated  &nbsp;<span class="glyphicon glyphicon-arrow-right"></span></button>
+                <button style="margin-top: 5px; margin-bottom: 5px;" class="btn btn-extra-high btn-success btn-lg max-width" onclick="saveAndContinue('autonomous', 'teleoperated');">teleoperated  &nbsp;<span class="glyphicon glyphicon-arrow-right"></span></button>
             </div>
         </div>
+    </div>
+
+    <!-- AUTONOMOUS FOULS & OTHER -->
+    <div class="container-fluid stage" id="autonomous_fouls_and_other">
+        <div class="row">
+            <div class="col-md-12" style="margin-top: 3vh;">
+                <button class="btn btn-lg btn-warning" style="height: 30vh; margin-top: 1vh; margin-bottom: 1vh;">foo</button>
+            </div>
+            <div class="col-md-12">
+                <button class="btn btn-lg btn-warning" style="height: 30vh; margin-top: 1vh; margin-bottom: 1vh;">foo</button>
+            </div>
+            <div class="col-md-12">
+                <button class="btn btn-lg btn-warning" style="height: 30vh;">foo</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TELEOPERATED -->
+    <div class="container-fluid stage" id="teleoperated">
+        <h1>TELEOP</h1>
     </div>
 
 {% endblock %}
@@ -158,6 +178,7 @@
 
                 /* otherwise grab the old one and reuse it */
             } else {
+                $(".stage").hide();
                 $("#" + window.location.hash.substring(1)).show();
             }
 
@@ -176,6 +197,9 @@
             }
         }
 
+        /*
+         This function handles stage changes and will be able to deal with page refreshes eventually
+         */
         function saveAndContinue(fromStage, toStage) {
 
             // assume no errors
@@ -183,6 +207,10 @@
 
             // no variables for now
             var stageVariables = null;
+
+            /**
+             * FROM STAGES
+             **/
 
             if(fromStage == "prematch") {
                 var teamNumber = parseInt($("#team_number").val());
@@ -202,6 +230,36 @@
                     matchNumber: matchNumber
                 }
             }
+
+            else if(fromStage == "autonomous") {
+                // totes
+                var autoStackedYellowTotes = parseInt($("#auto-stacked-yellow-tote-text").text());
+                var autoMovedYellowTotes = parseInt($("#auto-moved-yellow-tote-text").text());
+                var autoAcquiredGreyTotes = parseInt($("#auto-acquired-grey-tote-text").text());
+
+                // bins
+                var autoAcquiredStepBins = parseInt($("#auto-acquired-step-bin-text").text());
+                var autoAcquiredGroundBins = parseInt($("#auto-acquired-ground-bin-text").text());
+                var autoMovedBins = parseInt($("#auto-moved-bin-text").text());
+
+                stageVariables = {
+                    autoStackedYellowTotes: autoStackedYellowTotes,
+                    autoMovedYellowTotes: autoMovedYellowTotes,
+                    autoAcquiredGreyTotes: autoAcquiredGreyTotes,
+
+                    autoAcquiredStepBins: autoAcquiredStepBins,
+                    autoAcquiredGroundBins: autoAcquiredGroundBins,
+                    autoMovedBins: autoMovedBins
+                }
+
+                $.each(stageVariables, function(index, variable) {
+                    if(isNaN(variable)) {
+                        errorMessage.push("One or more of your variables are not numbers, what are you doing?");
+                        return false;
+                    }
+                })
+            }
+
 
             // show alerts and bail if they exist
             if(errorMessage.length !== 0) {
@@ -232,11 +290,46 @@
         window.onhashchange = function() {
             console.log('new hash: ' + window.location.hash);
             $(".stage").hide();
+
+            openStage(window.location.hash.substring(1));
             $("#" + window.location.hash.substring(1)).show();
         }
 
+        window.onload = function() {
+            console.log('reloaded: ' + window.location.hash);
+            $(".stage").hide();
+
+            openStage(window.location.hash.substring(1));
+            $("#" + window.location.hash.substring(1)).show();
+        }
+
+        function openStage(stage) {
+            /**
+             * TO STAGES
+             **/
+
+            var storedVariables = $.parseJSON(localStorage["match" + localStorage.pageMatchID]);
+
+            if(stage === "prematch") {
+                $("#team_number").val(storedVariables.prematch.teamNumber);
+                $("#match_number").val(storedVariables.prematch.matchNumber);
+            }
+
+            else if(stage === "autonomous") {
+                // totes
+                $("#auto-stacked-yellow-tote-text").text(storedVariables.autonomous.autoStackedYellowTotes);
+                $("#auto-moved-yellow-tote-text").text(storedVariables.autonomous.autoMovedYellowTotes);
+                $("#auto-acquired-grey-tote-text").text(storedVariables.autonomous.autoAcquiredGreyTotes);
+
+                // bins
+                $("#auto-acquired-step-bin-text").text(storedVariables.autonomous.autoAcquiredStepBins);
+                $("#auto-acquired-ground-bin-text").text(storedVariables.autonomous.autoAcquiredGroundBins);
+                $("#auto-moved-bin-text").text(storedVariables.autonomous.autoMovedBins);
+            }
+        }
+
         /*
-        universal function that will add/subtract things from labels appended with -text from their respective buttons
+         universal function that will add/subtract things from labels appended with -text from their respective buttons
          */
         $(".btn-add-subtract").click(function() {
             var sender = $(this);
