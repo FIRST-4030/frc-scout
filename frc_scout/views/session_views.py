@@ -31,6 +31,8 @@ def login_view(request):
     for loc in Location.objects.all():
         location_list[loc.name] = loc.id
 
+    
+
     context = {
         'location_list': json.dumps(location_list)
     }

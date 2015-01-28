@@ -46,6 +46,6 @@ def check_if_username_exists(request):
 def get_locations(request):
     location_list = {}
     for loc in Location.objects.all():
-        location_list[loc.name] = loc.id
+        location_list.update({'location': loc.name})
 
     return HttpResponse(json.dumps(location_list), content_type='application/json')
