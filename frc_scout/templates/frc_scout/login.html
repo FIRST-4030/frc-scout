@@ -27,27 +27,36 @@
 {% endblock %}
 
 {% block extra_js %}
-<script type="text/javascript">
-var locations = $.parseJSON('{% url 'frc_scout:get_locations' %}');
-function searcher(query, cb) {
-    var matches, substrRegex;
-    matches = [];
-    substrRegex = new RegExp(query, 'i');
-    $.each(Object.keys(locations), function(i, str) {
-        if (substrRegex.test(str)) {
-            matches.push({value: str});
+    <script type="text/javascript">
+        var locations = $.parseJSON('{% url 'frc_scout:get_locations' %}');
+        function searcher(query, cb) {
+            var matches, substrRegex;
+            matches = [];
+            substrRegex = new RegExp(query, 'i');
+            $.each(Object.keys(locations), function(i, str) {
+                if (substrRegex.test(str)) {
+                    matches.push({value: str});
+                }
+            });
+            cb(matches);
         }
-    });
-    cb(matches);
-}
 
-$(function() { {% load staticfiles %}
-    $('.typeahead').typeahead({
-        highlight: true
-    }, {
-        name: 'events',
-        source: searcher
-    });
-});
-</script>
+
+        var locations = new Bloodhound({
+            datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+            queryTokenizer: Bloodhound.tokenizers.whitespace,
+            remote: '{% url 'frc_scout:get_locations' %}'
+        });
+
+        locations.initialize();
+
+        $(function() { {% load staticfiles %}
+            $('.typeahead').typeahead({
+                highlight: true
+            }, {
+                name: 'events',
+                source: locations.ttAdapter()
+            });
+        });
+    </script>
 {% endblock %}
