@@ -28,6 +28,21 @@
                 <input id="team_number" class="form-control input-x-lg" placeholder="Team Number">
             </div>
         </div>
+        <br>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="btn-group max-width" data-toggle="buttons">
+                    <label class="btn btn-lg btn-extra-high btn-danger btn-extra-high">
+                        <input type="radio" name="redAlliance">
+                        Red Alliance
+                    </label>
+                    <label class="btn btn-lg btn-extra-high btn-primary btn-extra-high">
+                        <input type="radio" name="blueAlliance">
+                        Blue Alliance
+                    </label>
+                </div>
+            </div>
+        </div>
         <div class="row">
             <div class="col-md-12">
                 <input id="match_number" class="form-control input-x-lg" placeholder="Match Number">
@@ -146,14 +161,14 @@
     <!-- AUTONOMOUS FOULS & OTHER -->
     <div class="container-fluid stage" id="autonomous_fouls_and_other">
         <div class="row">
-            <div class="col-md-12" style="margin-top: 3vh;">
-                <button class="btn btn-lg btn-warning" style="height: 30vh; margin-top: 1vh; margin-bottom: 1vh;">foo</button>
+            <div class="col-md-12" style="margin-top: 2vh;">
+                <button id="auto_fouls" onclick="saveAndContinue('autonomous_fouls_and_other', 'autonomous', this);" class="btn btn-lg btn-warning max-width" style="height: 30vh; margin-top: 1vh; margin-bottom: 1vh; font-size: 30px;">fouls</button>
             </div>
             <div class="col-md-12">
-                <button class="btn btn-lg btn-warning" style="height: 30vh; margin-top: 1vh; margin-bottom: 1vh;">foo</button>
+                <button id="auto_interference" onclick="saveAndContinue('autonomous_fouls_and_other', 'autonomous', this);" class="btn btn-lg btn-info max-width" style="height: 30vh; margin-top: 1vh; margin-bottom: 1vh; font-size: 30px;">interference</button>
             </div>
             <div class="col-md-12">
-                <button class="btn btn-lg btn-warning" style="height: 30vh;">foo</button>
+                <button id="auto_no_auto" onclick="saveAndContinue('autonomous_fouls_and_other', 'autonomous', this);" class="btn btn-lg btn-primary max-width" style="height: 30vh; margin-top: 1vh; font-size: 30px;">no auto</button>
             </div>
         </div>
     </div>
@@ -175,7 +190,7 @@
                 setupNewMatch();
                 console.log("new match: " + localStorage.pageMatchID);
                 window.location.hash = "prematch";
-
+                $("#" + window.location.hash.substring(1)).show();
                 /* otherwise grab the old one and reuse it */
             } else {
                 $(".stage").hide();
@@ -200,7 +215,9 @@
         /*
          This function handles stage changes and will be able to deal with page refreshes eventually
          */
-        function saveAndContinue(fromStage, toStage) {
+        function saveAndContinue(fromStage, toStage, sender) {
+
+            var storedVariables = $.parseJSON(localStorage["match" + localStorage.pageMatchID]);
 
             // assume no errors
             var errorMessage = [];
@@ -260,6 +277,31 @@
                 })
             }
 
+            else if(fromStage === "autonomous_fouls_and_other") {
+
+                var id = sender.id;
+
+                if(storedVariables['autonomous_fouls_and_other'] === null) {
+                    storedVariables['autonomous_fouls_and_other'] = {
+                        'autoFouls': 0,
+                        'autoInterference': 0,
+                        'autoNoAuto': false
+                    }
+                }
+
+                if(id === "auto_fouls") {
+                    storedVariables['autonomous_fouls_and_other'].autoFouls += 1;
+                }
+                else if(id === "auto_interference") {
+                    storedVariables['autonomous_fouls_and_other'].autoInterference += 1;
+                }
+                else if(id === "auto_no_auto") {
+                    storedVariables['autonomous_fouls_and_other'].autoNoAuto = true;
+                }
+
+                stageVariables = storedVariables['autonomous_fouls_and_other'];
+            }
+
 
             // show alerts and bail if they exist
             if(errorMessage.length !== 0) {
@@ -310,21 +352,27 @@
 
             var storedVariables = $.parseJSON(localStorage["match" + localStorage.pageMatchID]);
 
+
+
             if(stage === "prematch") {
-                $("#team_number").val(storedVariables.prematch.teamNumber);
-                $("#match_number").val(storedVariables.prematch.matchNumber);
+                try {
+                    $("#team_number").val(storedVariables.prematch.teamNumber);
+                    $("#match_number").val(storedVariables.prematch.matchNumber);
+                } catch(e) {}
             }
 
             else if(stage === "autonomous") {
                 // totes
-                $("#auto-stacked-yellow-tote-text").text(storedVariables.autonomous.autoStackedYellowTotes);
-                $("#auto-moved-yellow-tote-text").text(storedVariables.autonomous.autoMovedYellowTotes);
-                $("#auto-acquired-grey-tote-text").text(storedVariables.autonomous.autoAcquiredGreyTotes);
+                try {
+                    $("#auto-stacked-yellow-tote-text").text(storedVariables.autonomous.autoStackedYellowTotes);
+                    $("#auto-moved-yellow-tote-text").text(storedVariables.autonomous.autoMovedYellowTotes);
+                    $("#auto-acquired-grey-tote-text").text(storedVariables.autonomous.autoAcquiredGreyTotes);
 
-                // bins
-                $("#auto-acquired-step-bin-text").text(storedVariables.autonomous.autoAcquiredStepBins);
-                $("#auto-acquired-ground-bin-text").text(storedVariables.autonomous.autoAcquiredGroundBins);
-                $("#auto-moved-bin-text").text(storedVariables.autonomous.autoMovedBins);
+                    // bins
+                    $("#auto-acquired-step-bin-text").text(storedVariables.autonomous.autoAcquiredStepBins);
+                    $("#auto-acquired-ground-bin-text").text(storedVariables.autonomous.autoAcquiredGroundBins);
+                    $("#auto-moved-bin-text").text(storedVariables.autonomous.autoMovedBins);
+                } catch(e) {}
             }
         }
 

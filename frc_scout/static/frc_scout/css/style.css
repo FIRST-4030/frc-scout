@@ -33,3 +33,17 @@
         font-size: 64px;
     }
 }
+
+
+.input-x-lg {
+    height: 72px;
+    font-size: 32px !important;
+}
+
+.btn-lg-text {
+    font-size: 18px;
+}
+
+.max-width {
+    width: 100%;
+}
