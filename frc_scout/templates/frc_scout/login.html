@@ -28,7 +28,7 @@
 
 {% block extra_js %}
 <script type="text/javascript">
-var locations = $.parseJSON('{{ location_list | safe }}');
+var locations = $.parseJSON('{% url 'frc_scout:get_locations' %}');
 function searcher(query, cb) {
     var matches, substrRegex;
     matches = [];
