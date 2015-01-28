@@ -28,35 +28,37 @@
 
 {% block extra_js %}
     <script type="text/javascript">
-{#        var locations = $.parseJSON('{% url 'frc_scout:get_locations' %}');#}
-{#        function searcher(query, cb) {#}
-{#            var matches, substrRegex;#}
-{#            matches = [];#}
-{#            substrRegex = new RegExp(query, 'i');#}
-{#            $.each(Object.keys(locations), function(i, str) {#}
-{#                if (substrRegex.test(str)) {#}
-{#                    matches.push({value: str});#}
-{#                }#}
-{#            });#}
-{#            cb(matches);#}
-{#        }#}
 
 
-        var locations = new Bloodhound({
-            datumTokenizer: Bloodhound.tokenizers.obj.whitespace('location'),
-            queryTokenizer: Bloodhound.tokenizers.whitespace,
-            prefetch: '{% url 'frc_scout:get_locations' %}'
-        });
+        (function() {
+            $.getJSON( '{% url 'frc_scout:get_locations' %}', {
+                format: "json"
+            })
+                    .done(function( data ) {
+                        function searcher(query, cb) {
+                            var matches, substrRegex;
+                            matches = [];
+                            substrRegex = new RegExp(query, 'i');
+                            $.each(Object.keys(data), function(i, str) {
+                                if (substrRegex.test(str)) {
+                                    matches.push({value: str});
+                                }
+                            });
+                            cb(matches);
+                        }
 
-        locations.initialize();
+                        $('.typeahead').typeahead({
+                            highlight: true
+                        }, {
+                            name: 'events',
+                            source: searcher
+                        });
+                    });
+        })();
+
 
         $(function() { {% load staticfiles %}
-            $('.typeahead').typeahead({
-                highlight: true
-            }, {
-                name: 'events',
-                source: locations.ttAdapter()
-            });
+
         });
     </script>
 {% endblock %}
