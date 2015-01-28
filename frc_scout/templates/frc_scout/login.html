@@ -28,18 +28,18 @@
 
 {% block extra_js %}
     <script type="text/javascript">
-        var locations = $.parseJSON('{% url 'frc_scout:get_locations' %}');
-        function searcher(query, cb) {
-            var matches, substrRegex;
-            matches = [];
-            substrRegex = new RegExp(query, 'i');
-            $.each(Object.keys(locations), function(i, str) {
-                if (substrRegex.test(str)) {
-                    matches.push({value: str});
-                }
-            });
-            cb(matches);
-        }
+{#        var locations = $.parseJSON('{% url 'frc_scout:get_locations' %}');#}
+{#        function searcher(query, cb) {#}
+{#            var matches, substrRegex;#}
+{#            matches = [];#}
+{#            substrRegex = new RegExp(query, 'i');#}
+{#            $.each(Object.keys(locations), function(i, str) {#}
+{#                if (substrRegex.test(str)) {#}
+{#                    matches.push({value: str});#}
+{#                }#}
+{#            });#}
+{#            cb(matches);#}
+{#        }#}
 
 
         var locations = new Bloodhound({
