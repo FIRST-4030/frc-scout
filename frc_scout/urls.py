@@ -25,4 +25,8 @@ urlpatterns = patterns(
     url(r'^account/profile/$', views.update_profile, name='update_profile'),
     url(r'^account/password/$', views.update_password, name='update_password'),
 
+    # FOR TESTING
+    url(r'^view/$', views.get_view, name='get_view'),
+
+
 )

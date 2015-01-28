@@ -21,21 +21,29 @@
     padding-right: 10px;
 }
 
-/* Sticky footer styles
--------------------------------------------------- */
-html {
-  position: relative;
-  min-height: 100%;
+@media (min-width: 768px) {
+    .btn-extra-high {
+        height: 90px;
+        margin-top: 5px;
+        margin-bottom: 5px;
+    }
+
+    .button-state-text {
+        margin-top: 18px;
+        font-size: 64px;
+    }
 }
-body {
-  /* Margin bottom by footer height */
-  margin-bottom: 60px;
+
+
+.input-x-lg {
+    height: 72px;
+    font-size: 32px !important;
 }
-.footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  /* Set the fixed height of the footer here */
-  height: 60px;
-  /*background-color: #f5f5f5;*/
+
+.btn-lg-text {
+    font-size: 18px;
+}
+
+.max-width {
+    width: 100%;
 }
