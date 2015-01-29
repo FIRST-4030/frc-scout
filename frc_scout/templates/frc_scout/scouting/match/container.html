@@ -291,7 +291,7 @@
 
                 var id = sender.id;
 
-                if(storedVariables['autonomous_fouls_and_other'] === null) {
+                if(storedVariables['autonomous_fouls_and_other'] === undefined) {
                     storedVariables['autonomous_fouls_and_other'] = {
                         'autoFouls': 0,
                         'autoInterference': 0,
