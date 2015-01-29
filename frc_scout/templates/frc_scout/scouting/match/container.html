@@ -422,6 +422,7 @@
             }
 
             if(stage === "prematch") {
+                $('title').text('Scouting: Prematch');
                 try {
                     $("#team_number").val(storedVariables.prematch.teamNumber);
                     $("#match_number").val(storedVariables.prematch.matchNumber);
@@ -429,6 +430,7 @@
             }
 
             else if(stage === "autonomous") {
+            $('title').text('Scouting: Autonomous');
                 // moved to zone
                 $("#auto_moved_to_alliance_zone").bootstrapSwitch({
                     'offText': "NO",
