@@ -4,6 +4,25 @@
 
 {% block title %}Scouting{% endblock %}
 
+{% block extra_css %}
+    <style type="text/css">
+        ::-webkit-input-placeholder { /* WebKit browsers */
+            color:    #666666 !important;
+        }
+        :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+            color:    #666666 !important;
+            opacity:  1;
+        }
+        ::-moz-placeholder { /* Mozilla Firefox 19+ */
+            color:    #666666 !important;
+            opacity:  1;
+        }
+        :-ms-input-placeholder { /* Internet Explorer 10+ */
+            color:    #666666 !important;
+        }
+    </style>
+{% endblock %}
+
 {% block main_content %}
 
     <!-- ERRORS -->
@@ -14,13 +33,13 @@
             <span id="alert-text"></span>
         </div>
     </div>
-	
-	<!-- LOADING SCREEN -->
-	<div class="container" id="loading">
+
+    <!-- LOADING SCREEN -->
+    <div class="container" id="loading">
         <h1>
             Loading...
         </h1>
-	</div>
+    </div>
 
     <!-- PREMATCH -->
     <div class="container-fluid stage" style="display: none;" id="prematch">
@@ -215,7 +234,7 @@
         $(function() {
             // always hide the loading thing once js is run
             $("#loading").hide();
-            
+
             /* If there's no hash setup a new match */
             if(window.location.hash === "") {
                 setupNewMatch();
@@ -444,7 +463,7 @@
 
             else if(sender.data('operation' == "subtract")) {
                 if(parseInt(target.text()) > 0) {
-                   target.text(parseInt(target.text()) - 1);
+                    target.text(parseInt(target.text()) - 1);
                 }
             }
         })

@@ -23,6 +23,8 @@
         <link rel="stylesheet" type="text/css" href="{% static 'frc_scout/css/bootstrap-editable.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'frc_scout/css/style.css' %}">
     {% endcompress %}
+
+    {% block extra_css %}{% endblock %}
 </head>
 <body>
 {% block nav %}{% endblock %}
