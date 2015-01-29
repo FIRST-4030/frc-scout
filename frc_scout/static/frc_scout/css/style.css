@@ -26,6 +26,7 @@
         height: 90px;
         margin-top: 5px;
         margin-bottom: 5px;
+
     }
 
     .button-state-text {
@@ -46,4 +47,14 @@
 
 .max-width {
     width: 100%;
+}
+
+#background {
+   position: absolute;
+   top: 0;
+   left: 0;
+   bottom: 0;
+   right: 0;
+   z-index: -1;
+   overflow: hidden;
 }

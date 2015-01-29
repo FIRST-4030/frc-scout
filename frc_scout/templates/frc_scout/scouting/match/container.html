@@ -7,7 +7,6 @@
 {% block main_content %}
 
     <!-- ERRORS -->
-
     <div class="container-fluid">
         <div class="alert alert-warning alert-dismissible" role="alert" id="alert" style="margin-top: 10px;">
             <button type="button" class="close" onclick="$('#alert').hide();" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -20,7 +19,7 @@
     <div class="container-fluid stage" style="display: none;" id="prematch">
         <div class="row">
             <div class="col-md-12">
-                <h2>Pre-Match</h2>
+                <h2>Pre-Match<span class="team-number"></span></h2>
             </div>
         </div>
         <div class="row">
@@ -32,17 +31,18 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="btn-group max-width" data-toggle="buttons">
-                    <label class="btn btn-lg btn-extra-high btn-danger btn-extra-high">
-                        <input type="radio" name="redAlliance">
+                    <label class="btn btn-lg btn-danger alliance-toggle" style="width: 50%;" id="red_alliance">
+                        <input type="radio">
                         Red Alliance
                     </label>
-                    <label class="btn btn-lg btn-extra-high btn-primary btn-extra-high">
-                        <input type="radio" name="blueAlliance">
+                    <label class="btn btn-lg btn-primary alliance-toggle" style="width: 50%;" id="blue_alliance">
+                        <input type="radio">
                         Blue Alliance
                     </label>
                 </div>
             </div>
         </div>
+        <br>
         <div class="row">
             <div class="col-md-12">
                 <input id="match_number" class="form-control input-x-lg" placeholder="Match Number">
@@ -65,7 +65,7 @@
     <div class="container-fluid stage" style="display: none;" id="autonomous">
         <div class="row">
             <div class="col-md-12">
-                <h2>Autonomous</h2>
+                <h2>Autonomous<span class="team-number"></span></h2>
             </div>
         </div>
         <div class="row">
@@ -175,7 +175,7 @@
 
     <!-- TELEOPERATED -->
     <div class="container-fluid stage" id="teleoperated">
-        <h1>TELEOP</h1>
+        <h1>TELEOP<span class="team-number"></span></h1>
     </div>
 
 {% endblock %}
@@ -183,6 +183,27 @@
 
 {% block extra_js %}
     <script type="text/javascript">
+
+        var backgroundColorRed = "rgb(255, 236, 236)";
+        var backgroundColorBlue = "rgb(232, 237, 255)";
+
+        $(".alliance-toggle").click(function() {
+            var id = this.id;
+
+            if(id === "blue_alliance") {
+                $("body").css("background-color", backgroundColorBlue);
+            }
+
+            else if(id === "red_alliance") {
+                $("body").css("background-color", backgroundColorRed);
+            }
+
+            localStorage.allianceColor = id;
+        });
+
+        $("#team_number").keyup(function() {
+            $(".team-number").text(": " + $("#team_number").val());
+        });
 
         $(function() {
             /* If there's no hash setup a new match */
@@ -202,6 +223,7 @@
 
         function setupNewMatch() {
             /* Iterate through all matches currently in localStorage until we find an empty one */
+            localStorage.allianceColor = undefined;
             for(var i = 0;; i++) {
                 if (localStorage["match" + i.toString()] === undefined) {
                     /* Then set our current match to a new one, storing the new one in localStorage */
@@ -233,13 +255,16 @@
                 var teamNumber = parseInt($("#team_number").val());
                 var matchNumber = parseInt($("#match_number").val());
 
-
                 if(isNaN(teamNumber)) {
                     errorMessage.push("Team number is required and must be a number.");
                 }
 
                 if(isNaN(matchNumber)) {
                     errorMessage.push("Match number is required and must be a number.");
+                }
+
+                if(!($("#red_alliance").hasClass('active') || $("#blue_alliance").hasClass('active'))) {
+                    errorMessage.push("Alliance color is required.");
                 }
 
                 stageVariables = {
@@ -352,7 +377,19 @@
 
             var storedVariables = $.parseJSON(localStorage["match" + localStorage.pageMatchID]);
 
+            try {
+                $(".team-number").text(": " + storedVariables.prematch.teamNumber);
+            } catch(e) {}
 
+            if(localStorage.allianceColor === "blue_alliance") {
+                $("body").css("background-color", backgroundColorBlue);
+                $("#blue_alliance").addClass('active');
+            }
+
+            else if(localStorage.allianceColor === "red_alliance") {
+                $("body").css("background-color", backgroundColorRed);
+                $("#red_alliance").addClass('active');
+            }
 
             if(stage === "prematch") {
                 try {
