@@ -8,12 +8,19 @@
 
     <!-- ERRORS -->
     <div class="container-fluid">
-        <div class="alert alert-warning alert-dismissible" role="alert" id="alert" style="margin-top: 10px;">
+        <div class="alert alert-warning alert-dismissible" role="alert" id="alert" style="margin-top: 10px; display: none;">
             <button type="button" class="close" onclick="$('#alert').hide();" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <p><strong>Please correct the following errors:</strong></p>
             <span id="alert-text"></span>
         </div>
     </div>
+	
+	<!-- LOADING SCREEN -->
+	<div class="container" id="loading">
+        <h1>
+            Loading...
+        </h1>
+	</div>
 
     <!-- PREMATCH -->
     <div class="container-fluid stage" style="display: none;" id="prematch">
@@ -159,7 +166,7 @@
     </div>
 
     <!-- AUTONOMOUS FOULS & OTHER -->
-    <div class="container-fluid stage" id="autonomous_fouls_and_other">
+    <div class="container-fluid stage" id="autonomous_fouls_and_other" style="display: none;">
         <div class="row">
             <div class="col-md-12" style="margin-top: 2vh;">
                 <button id="auto_fouls" onclick="saveAndContinue('autonomous_fouls_and_other', 'autonomous', this);" class="btn btn-lg btn-warning max-width" style="height: 30vh; margin-top: 1vh; margin-bottom: 1vh; font-size: 30px;">fouls</button>
@@ -174,8 +181,8 @@
     </div>
 
     <!-- TELEOPERATED -->
-    <div class="container-fluid stage" id="teleoperated">
-        <h1>TELEOP<span class="team-number"></span></h1>
+    <div class="container-fluid stage" id="teleoperated" style="display:none;">
+        <h1>TELEOP</h1>
     </div>
 
 {% endblock %}
@@ -206,6 +213,9 @@
         });
 
         $(function() {
+            // always hide the loading thing once js is run
+            $("#loading").hide();
+            
             /* If there's no hash setup a new match */
             if(window.location.hash === "") {
                 setupNewMatch();
@@ -306,7 +316,7 @@
 
                 var id = sender.id;
 
-                if(storedVariables['autonomous_fouls_and_other'] === null) {
+                if(storedVariables['autonomous_fouls_and_other'] === undefined) {
                     storedVariables['autonomous_fouls_and_other'] = {
                         'autoFouls': 0,
                         'autoInterference': 0,

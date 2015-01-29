@@ -14,7 +14,7 @@
                 <div class="form-group">
                     <input type="text" class="form-control" placeholder="Username" name="username" required>
                     <input type="password" class="form-control" placeholder="Password" name="password" required>
-                    <input type="text" class="typeahead form-control" placeholder="Event Location" name="location" required>
+                    <input type="text" id='location' class="typeahead form-control" placeholder="Loading event locations..." name="location" required="true" disabled="true">
                 </div>
                 <br>
                 <div class="form-group">
@@ -27,27 +27,41 @@
 {% endblock %}
 
 {% block extra_js %}
-<script type="text/javascript">
-var locations = $.parseJSON('{{ location_list | safe }}');
-function searcher(query, cb) {
-    var matches, substrRegex;
-    matches = [];
-    substrRegex = new RegExp(query, 'i');
-    $.each(Object.keys(locations), function(i, str) {
-        if (substrRegex.test(str)) {
-            matches.push({value: str});
-        }
-    });
-    cb(matches);
-}
+    <script type="text/javascript">
 
-$(function() { {% load staticfiles %}
-    $('.typeahead').typeahead({
-        highlight: true
-    }, {
-        name: 'events',
-        source: searcher
-    });
-});
-</script>
+
+        (function() {
+            $.getJSON( '{% url 'frc_scout:get_locations' %}', {
+                format: "json"
+            })
+                    .done(function( data ) {
+                        function searcher(query, cb) {
+                            var matches, substrRegex;
+                            matches = [];
+                            substrRegex = new RegExp(query, 'i');
+                            $.each(Object.keys(data), function(i, str) {
+                                if (substrRegex.test(str)) {
+                                    matches.push({value: str});
+                                }
+                            });
+                            cb(matches);
+                        }
+                
+                		$("#location").prop('disabled', false);
+                		$("#location").prop('placeholder', "Event Location");
+
+                        $('.typeahead').typeahead({
+                            highlight: true
+                        }, {
+                            name: 'events',
+                            source: searcher
+                        });
+                    });
+        })();
+
+
+        $(function() { {% load staticfiles %}
+
+        });
+    </script>
 {% endblock %}

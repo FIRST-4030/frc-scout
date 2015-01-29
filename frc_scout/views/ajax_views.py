@@ -1,7 +1,8 @@
 import json
 from django.http.response import HttpResponse
-from frc_scout.models import Team
+from frc_scout.models import Team, Location
 from django.contrib.auth.models import User
+
 
 def check_if_team_exists(request):
     team_exists = False
@@ -40,3 +41,11 @@ def check_if_username_exists(request):
     }
 
     return HttpResponse(json.dumps(response), content_type='application/json')
+
+
+def get_locations(request):
+    location_list = {}
+    for loc in Location.objects.all():
+        location_list[loc.name] = loc.id
+
+    return HttpResponse(json.dumps(location_list), content_type='application/json')

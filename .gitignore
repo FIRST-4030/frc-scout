@@ -6,3 +6,6 @@ frc_scout_2015/static/CACHE/
 *.swp
 *.swo
 *.pyc
+frc_scout_2015/local_settings.py
+sourcelair.txt
+db.sqlite3
