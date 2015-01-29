@@ -29,5 +29,6 @@ urlpatterns = patterns(
     # FOR TESTING
     url(r'^view/$', views.get_view, name='get_view'),
 
-
+    # Scouting views
+    url(r'^scouting/match/$', views.match_scouting, name='match_scouting'),
 )
