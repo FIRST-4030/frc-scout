@@ -86,7 +86,7 @@
                         <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning btn-add-subtract" data-name="auto-stacked-yellow-tote" data-operation="subtract">&mdash;</button>
                     </div>
                     <div class="col-xs-2 text-center">
-                        <h4 class="button-state-text" id="auto-stacked-yellow-tote-text">0</h4>
+                        <h4 class="button-state-text" id="auto-stacked-yellow-tote-text" data-max="3">0</h4>
                     </div>
                 </div>
 
@@ -98,7 +98,7 @@
                         <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning btn-add-subtract" data-name="auto-moved-yellow-tote" data-operation="subtract">&mdash;</button>
                     </div>
                     <div class="col-xs-2 text-center">
-                        <h4 class="button-state-text" id="auto-moved-yellow-tote-text">0</h4>
+                        <h4 class="button-state-text" id="auto-moved-yellow-tote-text" data-max="3">0</h4>
                     </div>
                 </div>
 
@@ -125,7 +125,7 @@
                         <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning btn-add-subtract" data-name="auto-acquired-step-bin" data-operation="subtract">&mdash;</button>
                     </div>
                     <div class="col-xs-2 text-center">
-                        <h4 class="button-state-text" id="auto-acquired-step-bin-text">0</h4>
+                        <h4 class="button-state-text" id="auto-acquired-step-bin-text" data-max="4">0</h4>
                     </div>
                 </div>
 
@@ -137,7 +137,7 @@
                         <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning btn-add-subtract" data-name="auto-acquired-ground-bin" data-operation="subtract">&mdash;</button>
                     </div>
                     <div class="col-xs-2 text-center">
-                        <h4 class="button-state-text" id="auto-acquired-ground-bin-text">0</h4>
+                        <h4 class="button-state-text" id="auto-acquired-ground-bin-text" data-max="3">0</h4>
                     </div>
                 </div>
 
@@ -157,10 +157,10 @@
         <br>
         <div class="row">
             <div class="col-sm-6">
-                <button style="margin-top: 5px; margin-bottom: 5px;" class="btn btn-extra-high btn-info btn-lg max-width" onclick="saveAndContinue('autonomous', 'autonomous_fouls_and_other');">Fouls & Other</button>
+                <button style="margin-top: 5px; margin-bottom: 5px;" class="btn btn-extra-high btn-danger btn-lg max-width" onclick="saveAndContinue('autonomous', 'autonomous_fouls_and_other');">Fouls & Other</button>
             </div>
             <div class="col-sm-6">
-                <button style="margin-top: 5px; margin-bottom: 5px;" class="btn btn-extra-high btn-success btn-lg max-width" onclick="saveAndContinue('autonomous', 'teleoperated');">teleoperated  &nbsp;<span class="glyphicon glyphicon-arrow-right"></span></button>
+                <button style="margin-top: 5px; margin-bottom: 5px;" class="btn btn-extra-high btn-primary btn-lg max-width" onclick="saveAndContinue('autonomous', 'teleoperated');">teleoperated  &nbsp;<span class="glyphicon glyphicon-arrow-right"></span></button>
             </div>
         </div>
     </div>
@@ -182,7 +182,7 @@
 
     <!-- TELEOPERATED -->
     <div class="container-fluid stage" id="teleoperated" style="display:none;">
-        <h1>TELEOP</h1>
+        <h1>TELEOP<span class="team-number"></span></h1>
     </div>
 
 {% endblock %}
@@ -430,13 +430,21 @@
             var sender = $(this);
             var name = sender.data('name');
 
+            var target = $("#" + name + "-text");
+
+            if(target.data('max')) {
+                var max = parseInt(target.data('max'));
+            }
+
             if(sender.data('operation') === "add") {
-                $("#" + name + "-text").text(parseInt($("#" + name + "-text").text()) + 1);
+                if(typeof max !== 'undefined' && parseInt(target.text()) < max || typeof max === 'undefined') {
+                    target.text(parseInt(target.text()) + 1);
+                }
             }
 
             else if(sender.data('operation' == "subtract")) {
-                if(parseInt($("#" + name + "-text").text()) > 0) {
-                    $("#" + name + "-text").text(parseInt($("#" + name + "-text").text()) - 1);
+                if(parseInt(target.text()) > 0) {
+                   target.text(parseInt(target.text()) - 1);
                 }
             }
         })
