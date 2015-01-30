@@ -30,7 +30,7 @@ class UserProfile(models.Model):
     approved = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.user.username
+        return self.user.username + " - " + self.user.get_full_name() + " - " + str(self.team.team_number)
 
 
 def get_current_time():
