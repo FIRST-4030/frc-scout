@@ -176,6 +176,17 @@ function saveAndContinue(fromStage, toStage, sender) {
         stageVariables = storedVariables['autonomous_fouls_and_other'];
     }
 
+    else if(fromStage === "teleoperated_picked_up_totes") {
+        var id = sender.id;
+
+        if(id === "picked_up_ground_upright_totes") {
+            if(storedVariables['teleoperated_picked_up_totes'].pickedUpGroundUprightTotes === undefined) {
+                storedVariables['teleoperated_picked_up_totes'].pickedUpGroundUprightTotes = 1;
+            } else {
+                storedVariables['teleoperated_picked_up_totes'].pickedUpGroundUprightTotes += 1;
+            }
+        }
+    }
 
     // show alerts and bail if they exist
     if(errorMessage.length !== 0) {

@@ -219,7 +219,120 @@
 
     <!-- TELEOPERATED -->
     <div class="container-fluid stage" id="teleoperated" style="display:none;">
-        <h1>TELEOP<span class="team-number"></span></h1>
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Teleoperated<span class="team-number"></span></h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4">
+                <h3>Totes</h3>
+                <div class="row">
+                    <div class="col-xs-7">
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width">picked up</button>
+                    </div>
+                    <div class="col-xs-3">
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-danger max-width">&mdash;</button>
+                    </div>
+                    <div class="col-xs-2">
+                        <h4 class="button-state-text" id="auto-stacked-yellow-tote-text" data-max="3">0</h4>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-7">
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width">stacked</button>
+                    </div>
+                    <div class="col-xs-3">
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-danger max-width">&mdash;</button>
+                    </div>
+                    <div class="col-xs-2">
+                        <h4 class="button-state-text" id="auto-stacked-yellow-tote-text" data-max="3">0</h4>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-4">
+                <h3>Bins</h3>
+                <div class="row">
+                    <div class="col-xs-7">
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width">picked up</button>
+                    </div>
+                    <div class="col-xs-3">
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-danger max-width">&mdash;</button>
+                    </div>
+                    <div class="col-xs-2">
+                        <h4 class="button-state-text" id="auto-stacked-yellow-tote-text" data-max="3">0</h4>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-7">
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width">stacked</button>
+                    </div>
+                    <div class="col-xs-3">
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-danger max-width">&mdash;</button>
+                    </div>
+                    <div class="col-xs-2">
+                        <h4 class="button-state-text" id="auto-stacked-yellow-tote-text" data-max="3">0</h4>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-4">
+                <h3>Litter</h3>
+                <div class="row">
+                    <div class="col-xs-7">
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width">pushed</button>
+                    </div>
+                    <div class="col-xs-3">
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-danger max-width">&mdash;</button>
+                    </div>
+                    <div class="col-xs-2">
+                        <h4 class="button-state-text" id="auto-stacked-yellow-tote-text" data-max="3">0</h4>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-7">
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width">in bin</button>
+                    </div>
+                    <div class="col-xs-3">
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-danger max-width">&mdash;</button>
+                    </div>
+                    <div class="col-xs-2">
+                        <h4 class="button-state-text" id="auto-stacked-yellow-tote-text" data-max="3">0</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <h3>Totes in possession: <span id="totes_in_possession">0</span></h3>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-sm-6">
+                <button style="margin-top: 5px; margin-bottom: 5px;" class="btn btn-extra-high btn-danger btn-lg max-width" onclick="//saveAndContinue('autonomous', 'autonomous_fouls_and_other');">Fouls & Other</button>
+            </div>
+
+            <div class="col-sm-6">
+                <button style="margin-top: 5px; margin-bottom: 5px;" class="btn btn-extra-high btn-primary btn-lg max-width" onclick="//saveAndContinue('autonomous', 'teleoperated');">end match  &nbsp;<span class="glyphicon glyphicon-arrow-right"></span></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TELEOPERATED PICKED UP TOTES -->
+    <div class="container-fluid stage" id="teleoperated_picked_up_totes">
+        <div class="row">
+            <div class="col-md-6">
+                <button class="btn btn-lg btn-info max-width input-x-lg " id="picked_up_ground_upright_totes" style="height: 45vh; margin-top: 2vh; margin-bottom: 1vh;">from ground upright</button>
+                <button class="btn btn-lg btn-success max-width input-x-lg" id="picked_up_upside_down_totes" style="height: 45vh; margin-top: 1vh; margin-bottom: 1vh;">upside down</button>
+            </div>
+
+            <div class="col-md-6">
+                <button class="btn btn-lg btn-primary max-width input-x-lg" id="picked_up_sideways_totes" style="height: 45vh; margin-top: 2vh; margin-bottom: 1vh;">side</button>
+                <button class="btn btn-lg btn-warning max-width input-x-lg" id="picked_up_human_station_totes" style="height: 45vh; margin-top: 1vh; margin-bottom: 1vh;">human station</button>
+            </div>
+        </div>
     </div>
 
 {% endblock %}
