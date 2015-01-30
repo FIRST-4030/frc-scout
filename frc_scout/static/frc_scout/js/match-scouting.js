@@ -219,7 +219,7 @@ function saveAndContinue(fromStage, toStage, sender) {
 
         storedVariables['teleoperated_picked_up_totes'].lastChange = id;
 
-        
+
 
         $("#tele_picked_up_totes").text(parseInt($("#tele_picked_up_totes").text()) + 1);
 
