@@ -111,15 +111,15 @@ function saveAndContinue(fromStage, toStage, sender) {
         }
 
         stageVariables = {
-            teamNumber: teamNumber,
-            matchNumber: matchNumber
+            team_number: teamNumber,
+            match_number: matchNumber
         }
     }
 
     else if(fromStage == "autonomous_starting_location") {
         stageVariables = {
-            autoStartXPosition: xPosition,
-            autoStartYPosition: yPosition
+            auto_start_x: xPosition,
+            auto_start_y: yPosition
         }
     }
 
@@ -134,13 +134,13 @@ function saveAndContinue(fromStage, toStage, sender) {
         var autoAcquiredGroundBins = parseInt($("#auto-acquired-ground-bin-text").text());
 
         stageVariables = {
-            autoStackedYellowTotes: autoStackedYellowTotes,
-            autoMovedYellowTotes: autoMovedYellowTotes,
-            autoAcquiredGreyTotes: autoAcquiredGreyTotes,
+            auto_yellow_stacked_totes: autoStackedYellowTotes,
+            auto_yellow_moved_totes: autoMovedYellowTotes,
+            auto_grey_acquired_totes: autoAcquiredGreyTotes,
 
-            autoAcquiredStepBins: autoAcquiredStepBins,
-            autoAcquiredGroundBins: autoAcquiredGroundBins,
-            autoMovedToAllianceZone: $("#auto_moved_to_alliance_zone").bootstrapSwitch('state')
+            auto_step_center_acquired_bins: autoAcquiredStepBins,
+            auto_ground_acquired_bins: autoAcquiredGroundBins,
+            auto_moved_to_auto_zone: $("#auto_moved_to_alliance_zone").bootstrapSwitch('state')
         }
 
         $.each(stageVariables, function(index, variable) {
@@ -157,71 +157,59 @@ function saveAndContinue(fromStage, toStage, sender) {
 
         if(storedVariables['autonomous_fouls_and_other'] === undefined) {
             storedVariables['autonomous_fouls_and_other'] = {
-                'autoFouls': 0,
-                'autoInterference': 0,
-                'autoNoAuto': false
+                'auto_fouls': 0,
+                'auto_interference': 0,
+                'auto_no_auto': false
             }
         }
 
-        if(id === "auto_fouls") {
-            storedVariables['autonomous_fouls_and_other'].autoFouls += 1;
-        }
-        else if(id === "auto_interference") {
-            storedVariables['autonomous_fouls_and_other'].autoInterference += 1;
-        }
-        else if(id === "auto_no_auto") {
-            storedVariables['autonomous_fouls_and_other'].autoNoAuto = true;
+        // auto_no_auto is the only thing that's not a number
+        if(id !== "auto_no_auto") {
+            storedVariables['autonomous_fouls_and_other'][id] += 1;
+        } else {
+            storedVariables['autonomous_fouls_and_other'][id] = true;
         }
 
+        // push to stage variables
         stageVariables = storedVariables['autonomous_fouls_and_other'];
     }
 
     else if(fromStage === "teleoperated_picked_up_totes") {
         var id = sender.id;
 
-        console.log(id);
-
+        /*
+         Create the variable store if it doesn't yet exist
+         */
         if(storedVariables['teleoperated_picked_up_totes'] === undefined) {
-            storedVariables['teleoperated_picked_up_totes'] = {};
+            storedVariables['teleoperated_picked_up_totes'] = {
+                tele_picked_up_ground_upright_totes: 0,
+                tele_picked_up_upside_down_totes: 0,
+                tele_picked_up_sideways_totes: 0,
+                tele_picked_up_human_station_totes: 0
+            };
         }
 
-        if(id === "picked_up_ground_upright_totes") {
-            if(storedVariables['teleoperated_picked_up_totes'].pickedUpGroundUprightTotes === undefined) {
-                storedVariables['teleoperated_picked_up_totes'].pickedUpGroundUprightTotes = 1;
-            } else {
-                storedVariables['teleoperated_picked_up_totes'].pickedUpGroundUprightTotes += 1;
-            }
-        }
+        /*
+         Add 1 to the sender's variable, the button's ID is the same as the one in localStorage
+         */
+        storedVariables['teleoperated_picked_up_totes'][id] += 1;
 
-        else if(id === "picked_up_upside_down_totes") {
-            if(storedVariables['teleoperated_picked_up_totes'].pickedUpUpsideDownToes === undefined) {
-                storedVariables['teleoperated_picked_up_totes'].pickedUpUpsideDownToes = 1;
-            } else {
-                storedVariables['teleoperated_picked_up_totes'].pickedUpUpsideDownToes += 1;
-            }
-        }
-
-        else if(id === "picked_up_sideways_totes") {
-            if(storedVariables['teleoperated_picked_up_totes'].pickedUpSidewaysTotes === undefined) {
-                storedVariables['teleoperated_picked_up_totes'].pickedUpSidewaysTotes = 1;
-            } else {
-                storedVariables['teleoperated_picked_up_totes'].pickedUpSidewaysTotes += 1;
-            }
-        }
-
-        else if(id === "picked_up_human_station_totes") {
-            if(storedVariables['teleoperated_picked_up_totes'].pickedUpHumanStationTotes === undefined) {
-                storedVariables['teleoperated_picked_up_totes'].pickedUpHumanStationTotes = 1;
-            } else {
-                storedVariables['teleoperated_picked_up_totes'].pickedUpHumanStationTotes += 1;
-            }
-        }
-
+        /*
+         For undoing things
+         */
         storedVariables['teleoperated_picked_up_totes'].lastChange = id;
+        $("#tele_picked_up_totes_subtract_button").prop('disabled', false);
 
 
+        var totalThings = 0;
 
-        $("#tele_picked_up_totes").text(parseInt($("#tele_picked_up_totes").text()) + 1);
+        $.each(storedVariables['teleoperated_picked_up_totes'], function(key, value) {
+            if(!isNaN(value)) {
+                totalThings += value;
+            }
+        });
+
+        $("#tele_picked_up_totes").text(totalThings);
 
         stageVariables = storedVariables['teleoperated_picked_up_totes'];
     }
@@ -259,7 +247,7 @@ function openStage(stage) {
     var storedVariables = getMatchData();
 
     try {
-        $(".team-number").text(": " + storedVariables.prematch.teamNumber);
+        $(".team-number").text(": " + storedVariables.prematch.team_number);
     } catch(e) {}
 
     if(localStorage.allianceColor === "blue_alliance") {
@@ -275,8 +263,8 @@ function openStage(stage) {
     if(stage === "prematch") {
         $('title').text('Scouting: Prematch');
         try {
-            $("#team_number").val(storedVariables.prematch.teamNumber);
-            $("#match_number").val(storedVariables.prematch.matchNumber);
+            $("#team_number").val(storedVariables.prematch.team_number);
+            $("#match_number").val(storedVariables.prematch.match_number);
         } catch(e) {}
     }
 
@@ -290,15 +278,15 @@ function openStage(stage) {
 
         // totes
         try {
-            $("#auto-stacked-yellow-tote-text").text(storedVariables.autonomous.autoStackedYellowTotes);
-            $("#auto-moved-yellow-tote-text").text(storedVariables.autonomous.autoMovedYellowTotes);
-            $("#auto-acquired-grey-tote-text").text(storedVariables.autonomous.autoAcquiredGreyTotes);
+            $("#auto-stacked-yellow-tote-text").text(storedVariables.autonomous.auto_yellow_stacked_totes);
+            $("#auto-moved-yellow-tote-text").text(storedVariables.autonomous.auto_yellow_moved_totes);
+            $("#auto-acquired-grey-tote-text").text(storedVariables.autonomous.auto_grey_acquired_totes);
 
             // bins
-            $("#auto-acquired-step-bin-text").text(storedVariables.autonomous.autoAcquiredStepBins);
-            $("#auto-acquired-ground-bin-text").text(storedVariables.autonomous.autoAcquiredGroundBins);
+            $("#auto-acquired-step-bin-text").text(storedVariables.autonomous.auto_step_center_acquired_bins);
+            $("#auto-acquired-ground-bin-text").text(storedVariables.autonomous.auto_ground_acquired_bins);
 
-            if(storedVariables.autonomous.autoMovedToAllianceZone) {
+            if(storedVariables.autonomous.auto_moved_to_auto_zone) {
                 $("#auto_moved_to_alliance_zone").bootstrapSwitch('state', true);
             }
         } catch(e) {}
@@ -306,6 +294,15 @@ function openStage(stage) {
 
     else if(stage === "teleoperated") {
         $('title').text('Scouting: Teleoperated');
+
+        /*
+         Update totals for picked up totes
+         */
+        $("#tele_picked_up_totes").text(sumNumInDict(storedVariables['teleoperated_picked_up_totes']));
+
+        if(storedVariables['teleoperated_picked_up_totes'].lastChange !== undefined) {
+            $("#tele_picked_up_totes_subtract_button").prop('disabled', false);
+        }
     }
 
     $("#" + window.location.hash.substring(1)).show();
@@ -313,6 +310,34 @@ function openStage(stage) {
 
 function getMatchData() {
     return $.parseJSON(localStorage["match" + localStorage.pageMatchID]);
+}
+
+function setMatchData(stage, name, value) {
+    var data  = getMatchData();
+
+    data[stage][name] = value;
+
+    localStorage["match" + localStorage.pageMatchID] = JSON.stringify(data);
+}
+
+/*
+ Sum together all the values in dictionaries that are numbers
+ */
+function sumNumInDict(array) {
+    var totalThings = 0;
+
+    /*
+     Iterate over in any manner IFF it's not undefined
+     */
+    if(array !== undefined) {
+        $.each(array, function(key, value) {
+            if(!isNaN(value)) {
+                totalThings += value;
+            }
+        });
+    }
+
+    return totalThings;
 }
 
 /*
@@ -354,4 +379,29 @@ $("#auto_start_image").click(function(event) {
     saveAndContinue('autonomous_starting_location', 'autonomous');
 });
 
+/*
+ Undo last thing from tele_picked_up_totes
+ */
+
+$("#tele_picked_up_totes_subtract_button").click(function() {
+    var variables = getMatchData()['teleoperated_picked_up_totes'];
+
+    var lastChange = variables.lastChange;
+
+    /*
+     only subtract if it exists and is > 0 (otherwise errors)
+     */
+
+    if(variables.lastChange !== undefined) {
+        if (variables[lastChange] > 0) {
+            setMatchData("teleoperated_picked_up_totes", lastChange, variables[lastChange] - 1);
+            setMatchData("teleoperated_picked_up_totes", 'lastChange', undefined);
+
+            $("#tele_picked_up_totes_subtract_button").prop('disabled', true);
+        }
+    }
+
+    $("#tele_picked_up_totes").text(sumNumInDict(getMatchData()['teleoperated_picked_up_totes']));
+
+});
 
