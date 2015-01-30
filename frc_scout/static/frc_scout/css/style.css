@@ -49,3 +49,15 @@
     width: 100%;
 }
 
+body {
+    padding-bottom: 20px;
+}
+
+.auto-location-image {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+
+    height: 75vh;
+    max-width: 100%;
+}
