@@ -300,8 +300,10 @@ function openStage(stage) {
          */
         $("#tele_picked_up_totes").text(sumNumInDict(storedVariables['teleoperated_picked_up_totes']));
 
-        if(storedVariables['teleoperated_picked_up_totes'].lastChange !== undefined) {
-            $("#tele_picked_up_totes_subtract_button").prop('disabled', false);
+        if(storedVariables['teleoperated_picked_up_totes'] !== undefined) {
+            if(storedVariables['teleoperated_picked_up_totes'].lastChange !== undefined) {
+                $("#tele_picked_up_totes_subtract_button").prop('disabled', false);
+            }
         }
     }
 

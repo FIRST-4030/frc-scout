@@ -53,6 +53,16 @@
     font-size: 32px !important;
 }
 
+.btn-group-tall {
+    height: 120px;
+    width: 20%;
+}
+
+.btn-group-tall > span {
+    font-size: 48px;
+    padding-top: 10px;
+}
+
 .btn-lg-text {
     font-size: 18px;
 }
