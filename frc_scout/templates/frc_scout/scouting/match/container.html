@@ -229,13 +229,13 @@
                 <h3>Totes</h3>
                 <div class="row">
                     <div class="col-xs-7">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width">picked up</button>
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width" onclick="saveAndContinue('teleoperated', 'teleoperated_picked_up_totes');">picked up</button>
                     </div>
                     <div class="col-xs-3">
                         <button class="btn btn-extra-high btn-lg btn-lg-text btn-danger max-width">&mdash;</button>
                     </div>
                     <div class="col-xs-2">
-                        <h4 class="button-state-text" id="auto-stacked-yellow-tote-text" data-max="3">0</h4>
+                        <h4 class="button-state-text" id="tele_picked_up_totes">0</h4>
                     </div>
                 </div>
                 <div class="row">
@@ -324,13 +324,13 @@
     <div class="container-fluid stage" id="teleoperated_picked_up_totes">
         <div class="row">
             <div class="col-md-6">
-                <button class="btn btn-lg btn-info max-width input-x-lg " id="picked_up_ground_upright_totes" style="height: 45vh; margin-top: 2vh; margin-bottom: 1vh;">from ground upright</button>
-                <button class="btn btn-lg btn-success max-width input-x-lg" id="picked_up_upside_down_totes" style="height: 45vh; margin-top: 1vh; margin-bottom: 1vh;">upside down</button>
+                <button class="btn btn-lg btn-info max-width input-x-lg " id="picked_up_ground_upright_totes" style="height: 45vh; margin-top: 2vh; margin-bottom: 1vh;" onclick="saveAndContinue('teleoperated_picked_up_totes', 'teleoperated', this);">from ground upright</button>
+                <button class="btn btn-lg btn-success max-width input-x-lg" id="picked_up_upside_down_totes" style="height: 45vh; margin-top: 1vh; margin-bottom: 1vh;" onclick="saveAndContinue('teleoperated_picked_up_totes', 'teleoperated', this);">upside down</button>
             </div>
 
             <div class="col-md-6">
-                <button class="btn btn-lg btn-primary max-width input-x-lg" id="picked_up_sideways_totes" style="height: 45vh; margin-top: 2vh; margin-bottom: 1vh;">side</button>
-                <button class="btn btn-lg btn-warning max-width input-x-lg" id="picked_up_human_station_totes" style="height: 45vh; margin-top: 1vh; margin-bottom: 1vh;">human station</button>
+                <button class="btn btn-lg btn-primary max-width input-x-lg" id="picked_up_sideways_totes" style="height: 45vh; margin-top: 2vh; margin-bottom: 1vh;" onclick="saveAndContinue('teleoperated_picked_up_totes', 'teleoperated', this);">side</button>
+                <button class="btn btn-lg btn-warning max-width input-x-lg" id="picked_up_human_station_totes" style="height: 45vh; margin-top: 1vh; margin-bottom: 1vh;" onclick="saveAndContinue('teleoperated_picked_up_totes', 'teleoperated', this);">human station</button>
             </div>
         </div>
     </div>

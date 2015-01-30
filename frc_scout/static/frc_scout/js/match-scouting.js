@@ -179,6 +179,12 @@ function saveAndContinue(fromStage, toStage, sender) {
     else if(fromStage === "teleoperated_picked_up_totes") {
         var id = sender.id;
 
+        console.log(id);
+
+        if(storedVariables['teleoperated_picked_up_totes'] === undefined) {
+            storedVariables['teleoperated_picked_up_totes'] = {};
+        }
+
         if(id === "picked_up_ground_upright_totes") {
             if(storedVariables['teleoperated_picked_up_totes'].pickedUpGroundUprightTotes === undefined) {
                 storedVariables['teleoperated_picked_up_totes'].pickedUpGroundUprightTotes = 1;
@@ -186,6 +192,38 @@ function saveAndContinue(fromStage, toStage, sender) {
                 storedVariables['teleoperated_picked_up_totes'].pickedUpGroundUprightTotes += 1;
             }
         }
+
+        else if(id === "picked_up_upside_down_totes") {
+            if(storedVariables['teleoperated_picked_up_totes'].pickedUpUpsideDownToes === undefined) {
+                storedVariables['teleoperated_picked_up_totes'].pickedUpUpsideDownToes = 1;
+            } else {
+                storedVariables['teleoperated_picked_up_totes'].pickedUpUpsideDownToes += 1;
+            }
+        }
+
+        else if(id === "picked_up_sideways_totes") {
+            if(storedVariables['teleoperated_picked_up_totes'].pickedUpSidewaysTotes === undefined) {
+                storedVariables['teleoperated_picked_up_totes'].pickedUpSidewaysTotes = 1;
+            } else {
+                storedVariables['teleoperated_picked_up_totes'].pickedUpSidewaysTotes += 1;
+            }
+        }
+
+        else if(id === "picked_up_human_station_totes") {
+            if(storedVariables['teleoperated_picked_up_totes'].pickedUpHumanStationTotes === undefined) {
+                storedVariables['teleoperated_picked_up_totes'].pickedUpHumanStationTotes = 1;
+            } else {
+                storedVariables['teleoperated_picked_up_totes'].pickedUpHumanStationTotes += 1;
+            }
+        }
+
+        storedVariables['teleoperated_picked_up_totes'].lastChange = id;
+
+        
+
+        $("#tele_picked_up_totes").text(parseInt($("#tele_picked_up_totes").text()) + 1);
+
+        stageVariables = storedVariables['teleoperated_picked_up_totes'];
     }
 
     // show alerts and bail if they exist
@@ -264,6 +302,10 @@ function openStage(stage) {
                 $("#auto_moved_to_alliance_zone").bootstrapSwitch('state', true);
             }
         } catch(e) {}
+    }
+
+    else if(stage === "teleoperated") {
+        $('title').text('Scouting: Teleoperated');
     }
 
     $("#" + window.location.hash.substring(1)).show();
