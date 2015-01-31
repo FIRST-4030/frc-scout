@@ -177,19 +177,19 @@
 
                 <div class="row">
                     <div class="col-xs-8">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="auto-moved-bin" data-operation="add">Moved</button>
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="auto-moved-bin" data-operation="add">Moved Bin</button>
                     </div>
                     <div class="col-xs-2">
                         <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning btn-add-subtract" data-name="auto-moved-bin" data-operation="subtract">&mdash;</button>
                     </div>
                     <div class="col-xs-2 text-center">
-                        <h4 class="button-state-text" id="auto-moved-bin-text">0</h4>
+                        <h4 class="button-state-text" id="auto-moved-bin-text" data-max="7">0</h4>
                     </div>
                 </div>
 
                 <div class="row" style="margin-top:10px;">
                     <div class="col-xs-7">
-                        <span class='btn-lg-text'>MOVED TO ALLIANCE ZONE</span>
+                        <span class='btn-lg-text'>ENDED IN ALLIANCE ZONE</span>
                     </div>
                     <div class='col-xs-5 text-right'>
                         <input type="checkbox" id="auto_moved_to_alliance_zone">
@@ -349,10 +349,10 @@
     <div class="container-fluid stage" id="teleoperated_stacked_totes" style="display:none;">
         <div class="row">
             <div class="col-md-12">
-                <h3>Height Before Addition</h3>
+                <h3>Totes Stacked On Top Of</h3>
                 <div class="btn-group max-width" data-toggle="buttons" id="start_height">
                     <label class="btn btn-info btn-group-tall-6">
-                        <input type="radio" name="options" data-height="0"><span>0</span>
+                        <input type="radio" name="options" data-height="0"><span style="font-size: 24px; margin-top: 10px;">New<br>Stack</span>
                     </label>
                     <label class="btn btn-info btn-group-tall-6">
                         <input type="radio" name="options" data-height="1"><span>1</span>
@@ -374,8 +374,8 @@
         </div>
         <div class="row">
             <div class="col-md-12">
-                <h3>Height After Addition</h3>
-                <div class="btn-group max-width" data-toggle="buttons" id="end_height">
+                <h3>Totes Added To Stack</h3>
+                <div class="btn-group max-width" data-toggle="buttons" id="totes_added">
                     <label class="btn btn-info btn-group-tall-6">
                         <input type="radio" name="options" data-height="1"><span>1</span>
                     </label>

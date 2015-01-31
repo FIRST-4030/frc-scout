@@ -40,9 +40,9 @@
 
 {% block extra_js %}
     <script type="text/javascript">
-        $("[href=#]").click(function() {
-            alert($(this) + ' not yet implemented!!');
-        })
+        $(function() {
+            $("a[href=#]").attr('disabled', true);
+        });
     </script>
 {% endblock %}
 

@@ -212,10 +212,10 @@ function saveAndContinue(fromStage, toStage, sender) {
 
     else if(fromStage === "teleoperated_stacked_totes") {
         var startHeight = $("#start_height").find('.active > input').data('height');
-        var endHeight = $("#end_height").find('.active > input').data('height');
+        var endHeight = $("#totes_added").find('.active > input').data('height');
 
         $("#start_height").find('.active').removeClass('active');
-        $("#end_height").find('.active').removeClass('active');
+        $("#totes_added").find('.active').removeClass('active');
 
         if(isNaN(startHeight) || isNaN(endHeight)) {
             errorMessage.push("Both start and end height are required.");
@@ -236,7 +236,7 @@ function saveAndContinue(fromStage, toStage, sender) {
              */
             stageVariables.push({
                 start_height: startHeight,
-                end_height: endHeight,
+                totes_added: endHeight,
                 coop_stack: $("#coop_stack").bootstrapSwitch('state')
             });
 

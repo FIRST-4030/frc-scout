@@ -89,7 +89,7 @@ class Match(models.Model):
 class ToteStack(models.Model):
     match = models.ForeignKey(Match)
     start_height = models.IntegerField(default=0)
-    end_height = models.IntegerField(default=1)
+    totes_added = models.IntegerField(default=0)
     x = models.DecimalField(max_digits=8, decimal_places=8)
     y = models.DecimalField(max_digits=8, decimal_places=8)
     coop_stack = models.BooleanField(default=False)
