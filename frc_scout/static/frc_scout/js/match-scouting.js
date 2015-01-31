@@ -214,26 +214,85 @@ function saveAndContinue(fromStage, toStage, sender) {
         stageVariables = storedVariables['teleoperated_picked_up_totes'];
     }
 
-    // show alerts and bail if they exist
+    else if(fromStage === "teleoperated_stacked_totes") {
+        var startHeight = $("#start_height").find('.active > input').data('height');
+        var endHeight = $("#end_height").find('.active > input').data('height');
+
+        if(isNaN(startHeight) || isNaN(endHeight)) {
+            errorMessage.push("Both start and end height are required.");
+        } else if(startHeight >= endHeight) {
+            errorMessage.push("End height must be greater than start height.");
+        } else {
+            stageVariables = []
+            /*
+             re-append all past arrays to be re-committed to localStorage
+             */
+            if (storedVariables['teleoperated_stacked_totes'] !== undefined && storedVariables['teleoperated_stacked_totes'] !== null) {
+                $.each(storedVariables['teleoperated_stacked_totes'], function (aVar) {
+                    stageVariables.push(aVar);
+                });
+            }
+
+            /*
+             then add our current one
+             */
+            stageVariables.push({
+                start_height: startHeight,
+                end_height: endHeight
+            })
+        }
+
+    }
+
+    else if(fromStage === "teleoperated_stacked_totes_location") {
+        stageVariables = []
+
+        /*
+         add things to the latest one
+         */
+
+        var latestIndex = storedVariables['teleoperated_stacked_totes'].length - 1;
+
+        storedVariables['teleoperated_stacked_totes'][latestIndex] += {
+            x: xPosition,
+            y: yPosition
+        }
+        
+        /*
+         re-append all past arrays to be re-committed to localStorage
+         */
+        if (storedVariables['teleoperated_stacked_totes'] !== undefined && storedVariables['teleoperated_stacked_totes'] !== null) {
+            $.each(storedVariables['teleoperated_stacked_totes'], function (index, value) {
+                stageVariables.push(value);
+            });
+        }
+
+        console.log(stageVariables);
+
+        // hacky way to make the right variable in localStorage be changed
+        fromStage = "teleoperated_stacked_totes";
+    }
+
+// show alerts and bail if they exist
     if(errorMessage.length !== 0) {
         $("#alert-text").html(errorMessage.join('<br>'));
         $("#alert").show();
         return;
     }
 
-    // otherwise hide any active alerts
+// otherwise hide any active alerts
     $("#alert").hide();
 
-    // append our current values to the array that we get
+// append our current values to the array that we get
     storedVariables[fromStage] = stageVariables;
 
-    // push it back to localStorage
+// push it back to localStorage
     localStorage['match' + localStorage.pageMatchID] = JSON.stringify(storedVariables);
 
-    // hide our current stage
+// hide our current stage
     $("#" + fromStage).hide();
 
-    // change hash triggering the next stage to show
+// change hash triggering the next stage to show
     window.location.hash = toStage;
 }
 
@@ -379,6 +438,18 @@ $("#auto_start_image").click(function(event) {
     yPosition = (event.pageY - image.offset().top) / image.height();
 
     saveAndContinue('autonomous_starting_location', 'autonomous');
+});
+
+/*
+ Get the relative coordinates from teleop location image
+ */
+$("#teleoperated_stacked_totes_image").click(function(event) {
+    var image = $(this);
+
+    xPosition = (event.pageX - image.offset().left) / image.width();
+    yPosition = (event.pageY - image.offset().top) / image.height();
+
+    saveAndContinue('teleoperated_stacked_totes_location', 'teleoperated');
 });
 
 /*

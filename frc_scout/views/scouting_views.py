@@ -20,3 +20,4 @@ def match_scouting(request):
     }
 
     return render(request, 'frc_scout/scouting/match/container.html', context)
+

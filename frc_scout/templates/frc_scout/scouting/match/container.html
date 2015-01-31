@@ -240,7 +240,7 @@
                 </div>
                 <div class="row">
                     <div class="col-xs-7">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width">stacked</button>
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width" onclick="saveAndContinue('teleoperated', 'teleoperated_stacked_totes');">stacked</button>
                     </div>
                     <div class="col-xs-3">
                         <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning max-width">&mdash;</button>
@@ -341,42 +341,65 @@
             <div class="col-md-12">
                 <h3>Height Before Addition</h3>
                 <div class="btn-group max-width" data-toggle="buttons" id="start_height">
-                    <label class="btn btn-primary btn-group-tall">
+                    <label class="btn btn-info btn-group-tall-6">
+                        <input type="radio" name="options" data-height="0"><span>0</span>
+                    </label>
+                    <label class="btn btn-info btn-group-tall-6">
                         <input type="radio" name="options" data-height="1"><span>1</span>
                     </label>
-                    <label class="btn btn-primary btn-group-tall">
+                    <label class="btn btn-info btn-group-tall-6">
                         <input type="radio" name="options" data-height="2"><span>2</span>
                     </label>
-                    <label class="btn btn-primary btn-group-tall">
+                    <label class="btn btn-info btn-group-tall-6">
                         <input type="radio" name="options" data-height="3"><span>3</span>
                     </label>
-                     <label class="btn btn-primary btn-group-tall">
+                    <label class="btn btn-info btn-group-tall-6">
                         <input type="radio" name="options" data-height="4"><span>4</span>
                     </label>
-                     <label class="btn btn-primary btn-group-tall">
+                    <label class="btn btn-info btn-group-tall-6">
                         <input type="radio" name="options" data-height="5"><span>5</span>
                     </label>
                 </div>
             </div>
+        </div>
+        <div class="row">
             <div class="col-md-12">
                 <h3>Height After Addition</h3>
                 <div class="btn-group max-width" data-toggle="buttons" id="end_height">
-                    <label class="btn btn-primary btn-group-tall">
+                    <label class="btn btn-info btn-group-tall-6">
                         <input type="radio" name="options" data-height="1"><span>1</span>
                     </label>
-                    <label class="btn btn-primary btn-group-tall">
+                    <label class="btn btn-info btn-group-tall-6">
                         <input type="radio" name="options" data-height="2"><span>2</span>
                     </label>
-                    <label class="btn btn-primary btn-group-tall">
+                    <label class="btn btn-info btn-group-tall-6">
                         <input type="radio" name="options" data-height="3"><span>3</span>
                     </label>
-                     <label class="btn btn-primary btn-group-tall">
+                    <label class="btn btn-info btn-group-tall-6">
                         <input type="radio" name="options" data-height="4"><span>4</span>
                     </label>
-                     <label class="btn btn-primary btn-group-tall">
+                    <label class="btn btn-info btn-group-tall-6">
                         <input type="radio" name="options" data-height="5"><span>5</span>
                     </label>
+                    <label class="btn btn-info btn-group-tall-6">
+                        <input type="radio" name="options" data-height="6"><span>6</span>
+                    </label>
                 </div>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-md-12">
+                <button class="btn btn-lg btn-extra-high btn-primary max-width" onclick="saveAndContinue('teleoperated_stacked_totes', 'teleoperated_stacked_totes_location');">Continue <span class="glyphicon glyphicon-arrow-right"></span></button>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid stage" style="display:none;" id="teleoperated_stacked_totes_location">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Stack Location<span class="team-number"></span></h2>
+
+                <img src="{% static "frc_scout/img/starting_location.png" %}" class="auto-location-image" id="teleoperated_stacked_totes_image">
             </div>
         </div>
     </div>
