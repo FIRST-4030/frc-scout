@@ -29,13 +29,13 @@
 @media (min-width: 768px) {
     .btn-extra-high {
         height: 90px;
-        margin-top: 5px;
-        margin-bottom: 5px;
+        margin-top: 0px;
+        margin-bottom: 0px;
 
     }
 
     .button-state-text {
-        margin-top: 18px;
+        margin-top: 12px;
         font-size: 64px;
     }
 }
@@ -82,4 +82,8 @@ body {
 
     height: 75vh;
     max-width: 100%;
+}
+
+.three-column {
+    margin-left: -10px;
 }

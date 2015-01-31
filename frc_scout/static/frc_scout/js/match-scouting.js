@@ -9,7 +9,7 @@ $(function() {
     $("#loading").hide();
 
     /* If there's no hash setup a new match */
-    if(window.location.hash === "" || localStorage.pageMatchID === undefined) {
+    if(window.location.hash === "" || localStorage.pageMatchID === (undefined || null)) {
         setupNewMatch();
         console.log("new match: " + localStorage.pageMatchID);
         window.location.hash = "prematch";
@@ -68,7 +68,7 @@ function setupNewMatch() {
     /* Iterate through all matches currently in localStorage until we find an empty one */
     localStorage.allianceColor = undefined;
     for(var i = 0;; i++) {
-        if (localStorage["match" + i.toString()] === undefined) {
+        if (localStorage["match" + i.toString()] === (undefined || null)) {
             /* Then set our current match to a new one, storing the new one in localStorage */
             localStorage.pageMatchID = i;
             localStorage["match" + localStorage.pageMatchID.toString()] = JSON.stringify({});
@@ -132,6 +132,7 @@ function saveAndContinue(fromStage, toStage, sender) {
         // bins
         var autoAcquiredStepBins = parseInt($("#auto-acquired-step-bin-text").text());
         var autoAcquiredGroundBins = parseInt($("#auto-acquired-ground-bin-text").text());
+        var autoMovedBins = parseInt($("#auto-moved-bin-text").text());
 
         stageVariables = {
             auto_yellow_stacked_totes: autoStackedYellowTotes,
@@ -140,6 +141,7 @@ function saveAndContinue(fromStage, toStage, sender) {
 
             auto_step_center_acquired_bins: autoAcquiredStepBins,
             auto_ground_acquired_bins: autoAcquiredGroundBins,
+            auto_moved_bins: autoMovedBins,
             auto_moved_to_auto_zone: $("#auto_moved_to_alliance_zone").bootstrapSwitch('state')
         }
 
@@ -155,7 +157,7 @@ function saveAndContinue(fromStage, toStage, sender) {
 
         var id = sender.id;
 
-        if(storedVariables['autonomous_fouls_and_other'] === undefined) {
+        if(storedVariables['autonomous_fouls_and_other'] === (undefined || null)) {
             storedVariables['autonomous_fouls_and_other'] = {
                 'auto_fouls': 0,
                 'auto_interference': 0,
@@ -180,7 +182,7 @@ function saveAndContinue(fromStage, toStage, sender) {
         /*
          Create the variable store if it doesn't yet exist
          */
-        if(storedVariables['teleoperated_picked_up_totes'] === undefined) {
+        if(storedVariables['teleoperated_picked_up_totes'] === (undefined || null)) {
             storedVariables['teleoperated_picked_up_totes'] = {
                 tele_picked_up_ground_upright_totes: 0,
                 tele_picked_up_upside_down_totes: 0,
@@ -201,13 +203,7 @@ function saveAndContinue(fromStage, toStage, sender) {
         $("#tele_picked_up_totes_subtract_button").prop('disabled', false);
 
 
-        var totalThings = 0;
-
-        $.each(storedVariables['teleoperated_picked_up_totes'], function(key, value) {
-            if(!isNaN(value)) {
-                totalThings += value;
-            }
-        });
+        var totalThings = sumNumInDict(storedVariables['teleoperated_picked_up_totes']);
 
         $("#tele_picked_up_totes").text(totalThings);
 
@@ -218,19 +214,21 @@ function saveAndContinue(fromStage, toStage, sender) {
         var startHeight = $("#start_height").find('.active > input').data('height');
         var endHeight = $("#end_height").find('.active > input').data('height');
 
+        $("#start_height").find('.active').removeClass('active');
+        $("#end_height").find('.active').removeClass('active');
+
         if(isNaN(startHeight) || isNaN(endHeight)) {
             errorMessage.push("Both start and end height are required.");
         } else if(startHeight >= endHeight) {
             errorMessage.push("End height must be greater than start height.");
         } else {
-            stageVariables = []
             /*
              re-append all past arrays to be re-committed to localStorage
              */
-            if (storedVariables['teleoperated_stacked_totes'] !== undefined && storedVariables['teleoperated_stacked_totes'] !== null) {
-                $.each(storedVariables['teleoperated_stacked_totes'], function (aVar) {
-                    stageVariables.push(aVar);
-                });
+            if(storedVariables['teleoperated_stacked_totes'] !== undefined) {
+                stageVariables = storedVariables['teleoperated_stacked_totes'];
+            } else {
+                stageVariables = [];
             }
 
             /*
@@ -238,14 +236,17 @@ function saveAndContinue(fromStage, toStage, sender) {
              */
             stageVariables.push({
                 start_height: startHeight,
-                end_height: endHeight
-            })
+                end_height: endHeight,
+                coop_stack: $("#coop_stack").bootstrapSwitch('state')
+            });
+
+            $("#tele_stacked_totes_text").text(stageVariables.length);
+
         }
 
     }
 
     else if(fromStage === "teleoperated_stacked_totes_location") {
-        stageVariables = []
 
         /*
          add things to the latest one
@@ -253,25 +254,113 @@ function saveAndContinue(fromStage, toStage, sender) {
 
         var latestIndex = storedVariables['teleoperated_stacked_totes'].length - 1;
 
-        storedVariables['teleoperated_stacked_totes'][latestIndex] += {
-            x: xPosition,
-            y: yPosition
-        }
-        
-        /*
-         re-append all past arrays to be re-committed to localStorage
-         */
-        if (storedVariables['teleoperated_stacked_totes'] !== undefined && storedVariables['teleoperated_stacked_totes'] !== null) {
-            $.each(storedVariables['teleoperated_stacked_totes'], function (index, value) {
-                stageVariables.push(value);
-            });
-        }
+        storedVariables['teleoperated_stacked_totes'][latestIndex].x = xPosition;
+        storedVariables['teleoperated_stacked_totes'][latestIndex].y = yPosition;
 
-        console.log(stageVariables);
+        stageVariables = storedVariables['teleoperated_stacked_totes'];
 
         // hacky way to make the right variable in localStorage be changed
         fromStage = "teleoperated_stacked_totes";
     }
+
+    else if(fromStage === "teleoperated_picked_up_bins") {
+        if(storedVariables['teleoperated_picked_up_bins'] === (undefined || null)) {
+            storedVariables['teleoperated_picked_up_bins'] = {
+                tele_picked_up_sideways_bins: 0,
+                tele_picked_up_upright_bins: 0,
+                tele_picked_up_center_step_bins: 0
+            }
+        }
+
+        var id = sender.id;
+
+        storedVariables['teleoperated_picked_up_bins'][id] += 1;
+
+        /*
+         For undoing things
+         */
+        storedVariables['teleoperated_picked_up_bins'].lastChange = id;
+        $("#tele_picked_up_bin_subtract").prop('disabled', false);
+
+
+        var totalThings = sumNumInDict(storedVariables['teleoperated_picked_up_bins']);
+
+        $("#tele_picked_up_bins_text").text(totalThings);
+
+        stageVariables = storedVariables['teleoperated_picked_up_bins'];
+
+        /*
+         For undoing things
+         */
+        storedVariables['teleoperated_picked_up_bins'].lastChange = id;
+        $("#tele_picked_up_bins_subtract").prop('disabled', false);
+    }
+
+    else if(fromStage === "teleoperated_stacked_bins") {
+        var startHeight = $("#bin_stack_height").find('.active > input').data('height');
+
+        $("#bin_stack_height").find('.active').removeClass('active');
+
+        if(isNaN(startHeight)) {
+            errorMessage.push("Start height is required.");
+        } else {
+            /*
+             re-append all past arrays to be re-committed to localStorage
+             */
+            if(storedVariables['teleoperated_stacked_bins'] !== undefined && storedVariables['teleoperated_stacked_bins'] !== null) {
+                stageVariables = storedVariables['teleoperated_stacked_bins'];
+            } else {
+                stageVariables = [];
+            }
+
+            /*
+             then add our current one
+             */
+            stageVariables.push(startHeight);
+
+            $("#tele_stacked_bins_text").text(stageVariables.length);
+
+        }
+    }
+
+    else if(fromStage === "teleoperated") {
+        var pushedLitter = parseInt($("#tele_pushed_litter-text").text());
+        var placedInBinLitter = parseInt($("#tele_placed_in_bin_litter-text").text());
+
+        if(isNaN(pushedLitter) || isNaN(placedInBinLitter)) {
+            errorMessage.push("This error should never occur unless you mess with the page, try refreshing it ;)");
+        } else {
+            stageVariables = {
+                tele_pushed_litter: pushedLitter,
+                tele_placed_in_bin_litter: placedInBinLitter
+            };
+        }
+    }
+
+    else if(fromStage === "teleoperated_fouls_and_other") {
+
+        var id = sender.id;
+
+        if(storedVariables['teleoperated_fouls_and_other'] === (undefined || null)) {
+            storedVariables['teleoperated_fouls_and_other'] = {
+                'tele_fouls': 0,
+                'tele_knocked_over_stacks': 0,
+                'tele_dead_bot': false,
+                'tele_shooter_jam': 0
+            }
+        }
+
+        // auto_no_auto is the only thing that's not a number
+        if(id !== "tele_dead_bot") {
+            storedVariables['teleoperated_fouls_and_other'][id] += 1;
+        } else {
+            storedVariables['teleoperated_fouls_and_other'][id] = true;
+        }
+
+        // push to stage variables
+        stageVariables = storedVariables['teleoperated_fouls_and_other'];
+    }
+
 
 // show alerts and bail if they exist
     if(errorMessage.length !== 0) {
@@ -344,6 +433,7 @@ function openStage(stage) {
             // bins
             $("#auto-acquired-step-bin-text").text(storedVariables.autonomous.auto_step_center_acquired_bins);
             $("#auto-acquired-ground-bin-text").text(storedVariables.autonomous.auto_ground_acquired_bins);
+            $("#auto-moved-bin-text").text(storedVariables.autonomous.auto_moved_bins);
 
             if(storedVariables.autonomous.auto_moved_to_auto_zone) {
                 $("#auto_moved_to_alliance_zone").bootstrapSwitch('state', true);
@@ -364,6 +454,48 @@ function openStage(stage) {
                 $("#tele_picked_up_totes_subtract_button").prop('disabled', false);
             }
         }
+
+        if(storedVariables['teleoperated_stacked_totes'] !== undefined) {
+            $("#tele_stacked_totes_text").text(storedVariables['teleoperated_stacked_totes'].length);
+        }
+
+        if(storedVariables['teleoperated_picked_up_bins'] !== undefined) {
+            $("#tele_picked_up_bins_text").text(sumNumInDict(storedVariables['teleoperated_picked_up_bins']));
+        }
+
+        if(storedVariables['teleoperated_picked_up_bins'] !== undefined) {
+            if(storedVariables['teleoperated_picked_up_bins'].lastChange !== undefined) {
+                $("#tele_picked_up_totes_subtract").prop('disabled', false);
+            }
+        }
+
+        if(storedVariables['teleoperated_stacked_bins'] !== undefined) {
+            $("#tele_stacked_bins_text").text(storedVariables['teleoperated_stacked_bins'].length);
+        }
+
+        try {
+            $("#tele_pushed_litter-text").text(storedVariables['teleoperated'].tele_pushed_litter);
+            $("#tele_placed_in_bin_litter-text").text(storedVariables['teleoperated'].tele_placed_in_bin_litter);
+        } catch(e) {}
+
+    }
+
+    else if(stage === "teleoperated_stacked_totes") {
+        $("#coop_stack").bootstrapSwitch({
+            onText: "YES",
+            offText: "NO"
+        })
+    }
+
+    else if(stage === "teleoperated_fouls_and_other") {
+        if(storedVariables['teleoperated_fouls_and_other'].tele_dead_bot !== (null || undefined)) {
+            if(storedVariables['teleoperated_fouls_and_other'].tele_dead_bot) {
+                //$("#tele_dead_bot").text("resurrected bot");
+                $("#died_during_match_text").show();
+                //} else {
+                //    $("#tele_dead_bot").text("dead bot");
+            }
+        }
     }
 
     $("#" + window.location.hash.substring(1)).show();
@@ -377,6 +509,14 @@ function setMatchData(stage, name, value) {
     var data  = getMatchData();
 
     data[stage][name] = value;
+
+    localStorage["match" + localStorage.pageMatchID] = JSON.stringify(data);
+}
+
+function setMatchDataArray(stage, value) {
+    var data = getMatchData();
+
+    data[stage] = value;
 
     localStorage["match" + localStorage.pageMatchID] = JSON.stringify(data);
 }
@@ -478,3 +618,48 @@ $("#tele_picked_up_totes_subtract_button").click(function() {
 
 });
 
+/*
+ Undo last thing from tele_picked_up_bins
+ */
+
+$("#tele_picked_up_bins_subtract").click(function() {
+    var variables = getMatchData()['teleoperated_picked_up_bins'];
+
+    var lastChange = variables.lastChange;
+
+    /*
+     only subtract if it exists and is > 0 (otherwise errors)
+     */
+
+    if(variables.lastChange !== undefined) {
+        if (variables[lastChange] > 0) {
+            setMatchData("teleoperated_picked_up_bins", lastChange, variables[lastChange] - 1);
+            setMatchData("teleoperated_picked_up_bins", 'lastChange', undefined);
+
+            $("#tele_picked_up_bins_subtract").prop('disabled', true);
+        }
+    }
+
+    $("#tele_picked_up_bins_text").text(sumNumInDict(getMatchData()['teleoperated_picked_up_bins']));
+
+});
+
+$("#tele_stacked_totes_subtract").click(function() {
+    var data = getMatchData()['teleoperated_stacked_totes'];
+
+    data = data.slice(0, -1);
+
+    setMatchDataArray('teleoperated_stacked_totes', data);
+
+    $("#tele_stacked_totes_text").text(data.length);
+});
+
+$("#tele_stacked_bins_subtract").click(function() {
+    var data = getMatchData()['teleoperated_stacked_bins'];
+
+    data = data.slice(0, -1);
+
+    setMatchDataArray('teleoperated_stacked_bins', data);
+
+    $("#tele_stacked_bins_text").text(data.length);
+});
