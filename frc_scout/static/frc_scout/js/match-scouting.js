@@ -9,7 +9,7 @@ $(function() {
     $("#loading").hide();
 
     /* If there's no hash setup a new match */
-    if(window.location.hash === "" || localStorage.pageMatchID === (undefined || null)) {
+    if(window.location.hash === "" || localStorage.pageMatchID === undefined) {
         setupNewMatch();
         console.log("new match: " + localStorage.pageMatchID);
         window.location.hash = "prematch";
@@ -68,7 +68,7 @@ function setupNewMatch() {
     /* Iterate through all matches currently in localStorage until we find an empty one */
     localStorage.allianceColor = undefined;
     for(var i = 0;; i++) {
-        if (localStorage["match" + i.toString()] === (undefined || null)) {
+        if (localStorage["match" + i.toString()] === undefined) {
             /* Then set our current match to a new one, storing the new one in localStorage */
             localStorage.pageMatchID = i;
             localStorage["match" + localStorage.pageMatchID.toString()] = JSON.stringify({});
@@ -384,7 +384,6 @@ function saveAndContinue(fromStage, toStage, sender) {
 // change hash triggering the next stage to show
     window.location.hash = toStage;
 }
-
 
 function openStage(stage) {
     /**
