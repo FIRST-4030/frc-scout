@@ -78,7 +78,7 @@ function setupNewMatch() {
 }
 
 /*
- This function handles stage changes and will be able to deal with page refreshes eventually
+ This function handles stage changes (will persist after page refresh)
  */
 function saveAndContinue(fromStage, toStage, sender) {
 
@@ -208,6 +208,22 @@ function saveAndContinue(fromStage, toStage, sender) {
         $("#tele_picked_up_totes").text(totalThings);
 
         stageVariables = storedVariables['teleoperated_picked_up_totes'];
+
+
+        /*
+         Update totes in possession
+         */
+
+        console.log('starting');
+
+        if(localStorage.totesInPossession) {
+            var currentTotes = localStorage.totesInPossession;
+            localStorage.totesInPossession = parseInt(currentTotes) + 1;
+        } else {
+            localStorage.totesInPossession = 1;
+        }
+
+        $("#totes_in_possession").text(localStorage.totesInPossession);
     }
 
     else if(fromStage === "teleoperated_stacked_totes") {
@@ -219,8 +235,6 @@ function saveAndContinue(fromStage, toStage, sender) {
 
         if(isNaN(startHeight) || isNaN(endHeight)) {
             errorMessage.push("Both start and end height are required.");
-        } else if(startHeight >= endHeight) {
-            errorMessage.push("End height must be greater than start height.");
         } else {
             /*
              re-append all past arrays to be re-committed to localStorage
@@ -256,6 +270,20 @@ function saveAndContinue(fromStage, toStage, sender) {
 
         storedVariables['teleoperated_stacked_totes'][latestIndex].x = xPosition;
         storedVariables['teleoperated_stacked_totes'][latestIndex].y = yPosition;
+
+        var removedFromPossession = storedVariables['teleoperated_stacked_totes'][latestIndex].totes_added;
+
+        console.log(removedFromPossession);
+
+        var final = localStorage.totesInPossession - removedFromPossession;
+
+        if(final >= 0) {
+            localStorage.totesInPossession  = final;
+        } else {
+            localStorage.totesInPossession = 0;
+        }
+
+        $("#totes_in_possession").text(localStorage.totesInPossession);
 
         stageVariables = storedVariables['teleoperated_stacked_totes'];
 
@@ -294,6 +322,7 @@ function saveAndContinue(fromStage, toStage, sender) {
          */
         storedVariables['teleoperated_picked_up_bins'].lastChange = id;
         $("#tele_picked_up_bins_subtract").prop('disabled', false);
+
     }
 
     else if(fromStage === "teleoperated_stacked_bins") {
@@ -475,7 +504,10 @@ function openStage(stage) {
         try {
             $("#tele_pushed_litter-text").text(storedVariables['teleoperated'].tele_pushed_litter);
             $("#tele_placed_in_bin_litter-text").text(storedVariables['teleoperated'].tele_placed_in_bin_litter);
+            $("#totes_in_possession").text(localStorage.totesInPossession);
+
         } catch(e) {}
+
 
     }
 
@@ -487,11 +519,13 @@ function openStage(stage) {
     }
 
     else if(stage === "teleoperated_fouls_and_other") {
-        if(storedVariables['teleoperated_fouls_and_other'].tele_dead_bot) {
-            //$("#tele_dead_bot").text("resurrected bot");
-            $("#died_during_match_text").show();
-            //} else {
-            //    $("#tele_dead_bot").text("dead bot");
+        if(storedVariables['teleoperated_fouls_and_other']) {
+            if (storedVariables['teleoperated_fouls_and_other'].tele_dead_bot) {
+                //$("#tele_dead_bot").text("resurrected bot");
+                $("#died_during_match_text").show();
+                //} else {
+                //    $("#tele_dead_bot").text("dead bot");
+            }
         }
     }
 
@@ -613,6 +647,9 @@ $("#tele_picked_up_totes_subtract_button").click(function() {
 
     $("#tele_picked_up_totes").text(sumNumInDict(getMatchData()['teleoperated_picked_up_totes']));
 
+    localStorage.totesInPossession  = localStorage.totesInPossession - 1;
+    $("#totes_in_possession").text(localStorage.totesInPossession);
+
 });
 
 /*
@@ -644,11 +681,19 @@ $("#tele_picked_up_bins_subtract").click(function() {
 $("#tele_stacked_totes_subtract").click(function() {
     var data = getMatchData()['teleoperated_stacked_totes'];
 
-    data = data.slice(0, -1);
 
-    setMatchDataArray('teleoperated_stacked_totes', data);
+        var lastIndex = data[data.length - 1];
 
-    $("#tele_stacked_totes_text").text(data.length);
+    if(lastIndex) {
+        data = data.slice(0, -1);
+
+        localStorage.totesInPossession = localStorage.totesInPossession - lastIndex.totes_added;
+        $("#totes_in_possession").text(localStorage.totesInPossession);
+
+        setMatchDataArray('teleoperated_stacked_totes', data);
+
+        $("#tele_stacked_totes_text").text(data.length);
+    }
 });
 
 $("#tele_stacked_bins_subtract").click(function() {
@@ -659,4 +704,25 @@ $("#tele_stacked_bins_subtract").click(function() {
     setMatchDataArray('teleoperated_stacked_bins', data);
 
     $("#tele_stacked_bins_text").text(data.length);
+});
+
+/*
+ Clarify coloration for tote stack height
+ */
+$(".start-height-group-wrapper").click(function() {
+    var startHeight = $(this).find('input').data('height');
+    var maxHeight = 6 - startHeight;
+
+
+    $.each($("[name=totes_added_group]"), function() {
+        var sender = $(this);
+
+        if(sender.data('height') > maxHeight) {
+            sender.parent('label').attr('disabled', true);
+        } else {
+            sender.parent('label').attr('disabled', false);
+        }
+
+    })
+
 });
