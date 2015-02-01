@@ -29,7 +29,7 @@
     <div class="container-fluid">
         <div class="alert alert-warning alert-dismissible" role="alert" id="alert" style="margin-top: 10px; display: none;">
             <button type="button" class="close" onclick="$('#alert').hide();" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <p><strong>Please correct the following errors:</strong></p>
+            <p id="correct_errors"><strong>Please correct the following errors:</strong></p>
             <span id="alert-text"></span>
         </div>
     </div>
@@ -529,11 +529,11 @@
     <div class="container-fluid stage" id="finish" style="display: none;">
     <div class="row">
         <div class="col-md-12">
-            <h2>Finish Scouting</h2>
+            <h2>Finish Scouting<span class="team-number"></span></h2>
         </div>
     </div>
 
-    <div id="offline_message">
+    <div id="offline_message" style="display: none;">
         <div class="row">
             <div class="col-md-12">
                 <div class="well">
@@ -546,10 +546,25 @@
 
         <div class="row">
             <div class="col-sm-3">
-                <button class="btn btn-danger max-width btn-lg btn-extra-high"><span class="glyphicon glyphicon-exclamation-sign"></span> discard data</button>
+                <button class="btn btn-danger max-width btn-lg btn-extra-high" onclick="discardData();"><span class="glyphicon glyphicon-exclamation-sign"></span> discard data</button>
             </div>
             <div class="col-sm-9">
                 <button class="btn btn-primary max-width btn-lg btn-extra-high" style="height: 90px;" onclick="saveAndContinue('finish', 'prematch');"><span class="glyphicon glyphicon-floppy-disk"></span> save offline</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="online_message" style="display: none;">
+        <div class="well">
+            <h4><span class="glyphicon glyphicon-check"></span> Ready to submit data.</h4>
+            <h6>If you have pending matches stored locally, they will also be submitted at this time.</h6>
+        </div>
+        <div class="row">
+            <div class="col-sm-3">
+                <button class="btn btn-danger max-width btn-lg btn-extra-high" onclick="discardData();"><span class="glyphicon glyphicon-exclamation-sign"></span> discard data</button>
+            </div>
+            <div class="col-sm-9">
+                <button class="btn btn-success max-width btn-lg btn-extra-high" style="height: 90px;" onclick="saveAndContinue('finish', 'prematch');"><span class="glyphicon glyphicon-upload"></span> submit to database</button>
             </div>
         </div>
     </div>

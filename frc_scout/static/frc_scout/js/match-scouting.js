@@ -65,8 +65,12 @@ $(window).on('load hashchange', function() {
  This will create a match ID in localStorage and save it to localStorage.pageMatchID
  */
 function setupNewMatch() {
-    /* Iterate through all matches currently in localStorage until we find an empty one */
+    console.log('setting up new match');
     localStorage.allianceColor = undefined;
+    localStorage.totesInPossession = undefined;
+
+    /* Iterate through all matches currently in localStorage until we find an empty one */
+    $("#team-number").text("");
     for(var i = 0;; i++) {
         if (!localStorage["match" + i.toString()]) {
             /* Then set our current match to a new one, storing the new one in localStorage */
@@ -410,8 +414,7 @@ function saveAndContinue(fromStage, toStage, sender) {
 
 // show alerts and bail if they exist
     if(errorMessage.length !== 0) {
-        $("#alert-text").html(errorMessage.join('<br>'));
-        $("#alert").show();
+        showErrorMessages(errorMessage, true);
         return;
     }
 
@@ -428,11 +431,6 @@ function saveAndContinue(fromStage, toStage, sender) {
     $("#" + fromStage).hide();
 
     if(fromStage === 'finish' && stageVariables.scouting_complete) {
-        console.log('setting up new match');
-        localStorage.allianceColor = undefined;
-        localStorage.totesInPossession = undefined;
-        $("#team-number").text("");
-
         setupNewMatch();
     }
 
@@ -440,18 +438,36 @@ function saveAndContinue(fromStage, toStage, sender) {
     window.location.hash = toStage;
 }
 
+function showErrorMessages(messages, correctErrors) {
+    $("#alert-text").html(messages.join('<br>'));
+    $("#alert").show();
+
+    if(correctErrors) {
+        $("#correct_errors").show();
+    } else {
+        $("#correct_errors").hide();
+    }
+}
+
 function openStage(stage) {
     /**
      * TO STAGES
      **/
 
+    $("#alert").hide();
+
+    if(!getMatchData()) {
+        window.location.hash = "prematch";
+    }
 
     // pull things out of localStorage as JSON
     var storedVariables = getMatchData();
 
     try {
         $(".team-number").text(": " + storedVariables.prematch.team_number);
-    } catch(e) {}
+    } catch(e) {
+        $(".team-number").text("");
+    }
 
     if(localStorage.allianceColor) {
         if(localStorage.allianceColor === "blue_alliance") {
@@ -470,12 +486,6 @@ function openStage(stage) {
 
     if(stage === "prematch") {
         $('title').text('Scouting: Prematch');
-
-        if(storedVariables['finish']) {
-            if(storedVariables['finish'].scouting_complete === true) {
-                setupNewMatch();
-            }
-        }
 
         try {
             $("#team_number").val(storedVariables.prematch.team_number);
@@ -598,11 +608,23 @@ function openStage(stage) {
         }
     }
 
+    else if(stage === "finish") {
+        if(navigator.onLine) {
+            $("#online_message").show();
+        } else {
+            $("#offline_message").show();
+        }
+    }
+
     $("#" + window.location.hash.substring(1)).show();
 }
 
 function getMatchData() {
-    return $.parseJSON(localStorage["match" + localStorage.pageMatchID]);
+    try {
+        return $.parseJSON(localStorage["match" + localStorage.pageMatchID]);
+    } catch(e) {
+        return {};
+    }
 }
 
 function setMatchData(stage, name, value) {
@@ -809,4 +831,16 @@ function getPendingMatches() {
     }
 
     return pendingMatches;
+}
+
+function discardData() {
+    if(confirm("Are you sure? This will delete your data IRREVERSIBLY.")) {
+        if(prompt("Enter the scouted team's number to confirm your choice") === getMatchData().prematch.team_number.toString()) {
+            localStorage.removeItem("match" + localStorage.pageMatchID);
+            setupNewMatch();
+            window.location.hash = "prematch";
+        } else {
+            showErrorMessages(['Match deletion cancelled.'], false);
+        }
+    }
 }
