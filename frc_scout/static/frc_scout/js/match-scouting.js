@@ -522,11 +522,6 @@ function openStage(stage) {
             $("#auto-acquired-ground-bin-text").text(storedVariables.autonomous.auto_ground_acquired_bins);
             $("#auto-moved-bin-text").text(storedVariables.autonomous.auto_moved_bins);
 
-            if(storedVariables.autonomous.auto_moved_to_auto_zone) {
-                $("#auto_moved_to_alliance_zone").bootstrapSwitch('state', true);
-            } else {
-                $("#auto_moved_to_alliance_zone").bootstrapSwitch('state', false);
-            }
         } catch(e) {
             $("#auto-stacked-yellow-tote-text").text(0);
             $("#auto-moved-yellow-tote-text").text(0);
@@ -536,6 +531,14 @@ function openStage(stage) {
             $("#auto-acquired-step-bin-text").text(0);
             $("#auto-acquired-ground-bin-text").text(0);
             $("#auto-moved-bin-text").text(0);
+        }
+
+        if(storedVariables.autonomous) {
+            if(storedVariables.autonomous.auto_moved_to_auto_zone) {
+                $("#auto_moved_to_alliance_zone").bootstrapSwitch('state', true);
+            }
+        } else {
+            $("#auto_moved_to_alliance_zone").bootstrapSwitch('state', false);
         }
     }
 
@@ -594,13 +597,12 @@ function openStage(stage) {
 
         if(storedVariables['teleoperated_fouls_and_other']) {
             if (storedVariables['teleoperated_fouls_and_other'].tele_dead_bot) {
-                //$("#tele_dead_bot").text("resurrected bot");
                 $("#died_during_match_text").show();
-                //} else {
-                //    $("#tele_dead_bot").text("dead bot");
             } else {
                 $("#died_during_match_text").hide();
             }
+        } else {
+            $("#died_during_match_text").hide();
         }
     }
 
@@ -850,8 +852,8 @@ function getPendingMatches() {
 }
 
 function discardData() {
-    if(confirm("Are you sure? This will delete your data IRREVERSIBLY.")) {
-        if(prompt("Enter the scouted team's number to confirm your choice") === getMatchData().prematch.team_number.toString()) {
+    if(confirm("Are you sure? This will delete your data IRREVERSIBLY!")) {
+        if(prompt("Enter the scouted team's number to confirm your choice:") === getMatchData().prematch.team_number.toString()) {
             localStorage.removeItem("match" + localStorage.pageMatchID);
             setupNewMatch();
             window.location.hash = "prematch";
