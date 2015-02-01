@@ -500,36 +500,69 @@
         </div>
         <div class="row">
             <div class="col-md-12">
-                <textarea class="form-control" rows="3" id="tele_foul_context" placeholder="Please comment on any fouls that occurred during the match."></textarea>
+                <h5>Please comment on any fouls that occurred during the match.</h5>
+                <textarea class="form-control background-white" rows="2" id="tele_foul_context"></textarea>
             </div>
         </div>
         <br>
         <div class="row">
             <div class="col-md-12">
-                <textarea class="form-control" rows="3" id="tele_foul_context" placeholder="Miscellaneous comments about the match. These are private to your team."></textarea>
+                <h5>Miscellaneous comments about the match. These are private to your team.</h5>
+                <textarea class="form-control background-white" rows="2" id="tele_private_comments"></textarea>
             </div>
         </div>
         <br>
         <div class="row">
             <div class="col-md-12">
-                <textarea class="form-control" rows="3" id="tele_foul_context" placeholder="Miscellaneous comments about the match. These are public, remember gracious professionalism!"></textarea>
+                <h5>Miscellaneous comments about the match. These are public, remember gracious professionalism!</h5>
+                <textarea class="form-control background-white" rows="2" id="tele_public_comments"></textarea>
             </div>
         </div>
         <Br>
         <div class="row">
             <div class="col-md-12">
-                <h4>Finish scouting and...</h4>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-3">
-                <button class="btn btn-danger max-width btn-lg btn-extra-high"><span class="glyphicon glyphicon-exclamation-sign"></span> Discard Data</button>
-            </div>
-            <div class="col-sm-9">
-                <button class="btn btn-success max-width btn-lg btn-extra-high"><span class="glyphicon glyphicon-upload"></span> Submit to database</button>
+                <button style="margin-top: 5px; margin-bottom: 5px;" class="btn btn-extra-high btn-primary btn-lg max-width" onclick="saveAndContinue('postmatch', 'finish');">finish scouting  &nbsp;<span class="glyphicon glyphicon-arrow-right"></span></button>
             </div>
         </div>
     </div>
+
+    <div class="container-fluid stage" id="finish" style="display: none;">
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Finish Scouting</h2>
+        </div>
+    </div>
+
+    <div id="offline_message">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="well">
+                    <h4><span class="glyphicon glyphicon-exclamation-sign"></span> You are offline.</h4>
+                    <h6>You may save your scouting data locally and submit it at a later time.</h6>
+                    <h6>You will be redirected to restart scouting so the page will remain loaded.</h6>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-3">
+                <button class="btn btn-danger max-width btn-lg btn-extra-high"><span class="glyphicon glyphicon-exclamation-sign"></span> discard data</button>
+            </div>
+            <div class="col-sm-9">
+                <button class="btn btn-primary max-width btn-lg btn-extra-high" style="height: 90px;" onclick="saveAndContinue('finish', 'prematch');"><span class="glyphicon glyphicon-floppy-disk"></span> save offline</button>
+            </div>
+        </div>
+    </div>
+
+
+
+    {##}
+    {#        <div class="row">#}
+    {##}
+    {#            <div class="col-sm-6">#}
+    {#                <button class="btn btn-success max-width btn-lg btn-extra-high"><span class="glyphicon glyphicon-upload"></span> Submit to database</button>#}
+    {#            </div>#}
+    {#        </div>#}
 
 {% endblock %}
 

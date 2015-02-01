@@ -390,6 +390,23 @@ function saveAndContinue(fromStage, toStage, sender) {
         stageVariables = storedVariables['teleoperated_fouls_and_other'];
     }
 
+    else if(fromStage === "postmatch") {
+        var teleFoulContext = $("#tele_foul_context").val();
+        var telePrivateComments = $("#tele_private_comments").val();
+        var telePublicComments = $("#tele_public_comments").val();
+
+        stageVariables = {
+            tele_foul_context: teleFoulContext,
+            tele_private_comments: telePrivateComments,
+            tele_public_comments: telePublicComments
+        }
+    }
+
+    else if(fromStage === "finish") {
+        stageVariables = {
+            scouting_complete: true
+        }
+    }
 
 // show alerts and bail if they exist
     if(errorMessage.length !== 0) {
@@ -410,6 +427,15 @@ function saveAndContinue(fromStage, toStage, sender) {
 // hide our current stage
     $("#" + fromStage).hide();
 
+    if(fromStage === 'finish' && stageVariables.scouting_complete) {
+        console.log('setting up new match');
+        localStorage.allianceColor = undefined;
+        localStorage.totesInPossession = undefined;
+        $("#team-number").text("");
+
+        setupNewMatch();
+    }
+
 // change hash triggering the next stage to show
     window.location.hash = toStage;
 }
@@ -419,6 +445,7 @@ function openStage(stage) {
      * TO STAGES
      **/
 
+
     // pull things out of localStorage as JSON
     var storedVariables = getMatchData();
 
@@ -426,22 +453,37 @@ function openStage(stage) {
         $(".team-number").text(": " + storedVariables.prematch.team_number);
     } catch(e) {}
 
-    if(localStorage.allianceColor === "blue_alliance") {
-        $("body").css("background-color", backgroundColorBlue);
-        $("#blue_alliance").addClass('active');
-    }
-
-    else if(localStorage.allianceColor === "red_alliance") {
-        $("body").css("background-color", backgroundColorRed);
-        $("#red_alliance").addClass('active');
+    if(localStorage.allianceColor) {
+        if(localStorage.allianceColor === "blue_alliance") {
+            $("body").css("background-color", backgroundColorBlue);
+            $("#blue_alliance").addClass('active');
+        }
+        else if(localStorage.allianceColor === "red_alliance") {
+            $("body").css("background-color", backgroundColorRed);
+            $("#red_alliance").addClass('active');
+        } else {
+            $("body").css("background-color", "white");
+        }
+    } else {
+        $("body").css("background-color", "white");
     }
 
     if(stage === "prematch") {
         $('title').text('Scouting: Prematch');
+
+        if(storedVariables['finish']) {
+            if(storedVariables['finish'].scouting_complete === true) {
+                setupNewMatch();
+            }
+        }
+
         try {
             $("#team_number").val(storedVariables.prematch.team_number);
             $("#match_number").val(storedVariables.prematch.match_number);
-        } catch(e) {}
+        } catch(e) {
+            $("#team_number").val("");
+            $("#match_number").val("");
+        }
     }
 
     else if(stage === "autonomous") {
@@ -465,8 +507,19 @@ function openStage(stage) {
 
             if(storedVariables.autonomous.auto_moved_to_auto_zone) {
                 $("#auto_moved_to_alliance_zone").bootstrapSwitch('state', true);
+            } else {
+                $("#auto_moved_to_alliance_zone").bootstrapSwitch('state', false);
             }
-        } catch(e) {}
+        } catch(e) {
+            $("#auto-stacked-yellow-tote-text").text(0);
+            $("#auto-moved-yellow-tote-text").text(0);
+            $("#auto-acquired-grey-tote-text").text(0);
+
+            // bins
+            $("#auto-acquired-step-bin-text").text(0);
+            $("#auto-acquired-ground-bin-text").text(0);
+            $("#auto-moved-bin-text").text(0);
+        }
     }
 
     else if(stage === "teleoperated") {
@@ -480,25 +533,35 @@ function openStage(stage) {
         if(storedVariables['teleoperated_picked_up_totes']) {
             if(storedVariables['teleoperated_picked_up_totes'].lastChange) {
                 $("#tele_picked_up_totes_subtract_button").prop('disabled', false);
+            } else {
+                $("#tele_picked_up_totes_subtract_button").prop('disabled', true);
             }
         }
 
         if(storedVariables['teleoperated_stacked_totes']) {
             $("#tele_stacked_totes_text").text(storedVariables['teleoperated_stacked_totes'].length);
+        } else {
+            $("#tele_stacked_totes_text").text(0);
         }
 
         if(storedVariables['teleoperated_picked_up_bins']) {
             $("#tele_picked_up_bins_text").text(sumNumInDict(storedVariables['teleoperated_picked_up_bins']));
+        } else {
+            $("#tele_picked_up_bins_text").text(0);
         }
 
         if(storedVariables['teleoperated_picked_up_bins']) {
             if(storedVariables['teleoperated_picked_up_bins'].lastChange) {
                 $("#tele_picked_up_totes_subtract").prop('disabled', false);
+            } else {
+                $("#tele_picked_up_totes_subtract").prop('disabled', true);
             }
         }
 
         if(storedVariables['teleoperated_stacked_bins']) {
             $("#tele_stacked_bins_text").text(storedVariables['teleoperated_stacked_bins'].length);
+        } else {
+            $("#tele_stacked_bins_text").text(0);
         }
 
         try {
@@ -506,7 +569,11 @@ function openStage(stage) {
             $("#tele_placed_in_bin_litter-text").text(storedVariables['teleoperated'].tele_placed_in_bin_litter);
             $("#totes_in_possession").text(localStorage.totesInPossession);
 
-        } catch(e) {}
+        } catch(e) {
+            $("#tele_pushed_litter-text").text(0);
+            $("#tele_placed_in_bin_litter-text").text(0);
+            $("#totes_in_possession").text(0);
+        }
 
 
     }
@@ -525,6 +592,8 @@ function openStage(stage) {
                 $("#died_during_match_text").show();
                 //} else {
                 //    $("#tele_dead_bot").text("dead bot");
+            } else {
+                $("#died_during_match_text").hide();
             }
         }
     }
@@ -682,7 +751,7 @@ $("#tele_stacked_totes_subtract").click(function() {
     var data = getMatchData()['teleoperated_stacked_totes'];
 
 
-        var lastIndex = data[data.length - 1];
+    var lastIndex = data[data.length - 1];
 
     if(lastIndex) {
         data = data.slice(0, -1);
@@ -726,3 +795,18 @@ $(".start-height-group-wrapper").click(function() {
     })
 
 });
+
+function getPendingMatches() {
+    var pendingMatches = [];
+
+    for(var i = 0;; i++) {
+        if (localStorage["match" + i.toString()]) {
+            pendingMatches.push($.parseJSON(localStorage["match" + i.toString()]));
+        }
+        else {
+            break;
+        }
+    }
+
+    return pendingMatches;
+}

@@ -40,6 +40,13 @@
     }
 }
 
+@media (max-width: 768px) {
+    .btn-extra-high {
+        margin-top: 5px;
+        margin-bottom: 5px;
+    }
+}
+
 @media (max-width: 970px) {
     .btn-grid {
         height: 22vh !important;
@@ -86,4 +93,10 @@ body {
 
 .three-column {
     margin-left: -10px;
+}
+
+.background-white {
+    background-color: white;
+    padding: 10px !important;
+    border-radius: 2px !important;
 }
