@@ -124,7 +124,7 @@ function saveAndContinue(fromStage, toStage, sender) {
         stageVariables = {
             auto_start_x: xPosition,
             auto_start_y: yPosition
-        }
+        };
     }
 
     else if(fromStage == "autonomous") {
@@ -220,7 +220,7 @@ function saveAndContinue(fromStage, toStage, sender) {
 
         console.log('starting');
 
-        if(localStorage.totesInPossession) {
+        if(!isNaN(localStorage.totesInPossession)) {
             var currentTotes = localStorage.totesInPossession;
             localStorage.totesInPossession = parseInt(currentTotes) + 1;
         } else {
@@ -380,7 +380,7 @@ function saveAndContinue(fromStage, toStage, sender) {
                 'tele_knocked_over_stacks': 0,
                 'tele_dead_bot': false,
                 'tele_shooter_jam': 0
-            }
+            };
         }
 
         // auto_no_auto is the only thing that's not a number
@@ -441,6 +441,8 @@ function saveAndContinue(fromStage, toStage, sender) {
 function showErrorMessages(messages, correctErrors) {
     $("#alert-text").html(messages.join('<br>'));
     $("#alert").show();
+    
+    console.log('pushing errors');
 
     if(correctErrors) {
         $("#correct_errors").show();
@@ -493,6 +495,11 @@ function openStage(stage) {
         } catch(e) {
             $("#team_number").val("");
             $("#match_number").val("");
+        }
+        
+        $(".alliance-toggle").removeClass('active');
+        if(localStorage.allianceColor) {
+            $("#" + localStorage.allianceColor).addClass('active');
         }
     }
 
@@ -585,17 +592,6 @@ function openStage(stage) {
             $("#totes_in_possession").text(0);
         }
 
-
-    }
-
-    else if(stage === "teleoperated_stacked_totes") {
-        $("#coop_stack").bootstrapSwitch({
-            onText: "YES",
-            offText: "NO"
-        })
-    }
-
-    else if(stage === "teleoperated_fouls_and_other") {
         if(storedVariables['teleoperated_fouls_and_other']) {
             if (storedVariables['teleoperated_fouls_and_other'].tele_dead_bot) {
                 //$("#tele_dead_bot").text("resurrected bot");
@@ -606,6 +602,17 @@ function openStage(stage) {
                 $("#died_during_match_text").hide();
             }
         }
+    }
+
+    else if(stage === "teleoperated_stacked_totes") {
+        $("#coop_stack").bootstrapSwitch({
+            onText: "YES",
+            offText: "NO"
+        })
+    }
+
+    else if(stage === "teleoperated_fouls_and_other") {
+
     }
 
     else if(stage === "finish") {
@@ -778,7 +785,16 @@ $("#tele_stacked_totes_subtract").click(function() {
     if(lastIndex) {
         data = data.slice(0, -1);
 
-        localStorage.totesInPossession = localStorage.totesInPossession - lastIndex.totes_added;
+        var subtract = localStorage.totesInPossession - lastIndex.totes_added;
+
+        /*
+        Can't be < 0
+        */
+        if(subtract > 0) {
+            localStorage.totesInPossession = subtract;
+        } else {
+            localStorage.totesInPossession = 0;
+        }
         $("#totes_in_possession").text(localStorage.totesInPossession);
 
         setMatchDataArray('teleoperated_stacked_totes', data);
