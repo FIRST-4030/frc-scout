@@ -1,16 +1,5 @@
 from django.shortcuts import render
-
-
-# For testing views
-def get_view(request):
-    name = request.GET.get('page')
-
-    context = {
-        'fluid': True
-    }
-
-    return render(request, 'frc_scout/scouting/' + name, context)
-
+from django.http import Http404, HttpResponse
 
 # Match Scouting
 def match_scouting(request):
@@ -21,3 +10,10 @@ def match_scouting(request):
 
     return render(request, 'frc_scout/scouting/match/container.html', context)
 
+
+def submit_match_scouting_data(request):
+    if request.method != "POST":
+        raise Http404
+    else:
+        data = request.POST.get('data')
+        return HttpResponse(data)
