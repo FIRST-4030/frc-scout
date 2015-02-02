@@ -418,7 +418,19 @@ function saveAndContinue(fromStage, toStage, sender) {
             pendingMatches.push(storedVariables);
 
             $.ajax({
-                url: '/scouting/match'
+                url: '/scouting/match/submit/',
+                method: "POST",
+                data: {
+                    csrfmiddlewaretoken: $.cookie('csrftoken'),
+                    data: JSON.stringify(pendingMatches)
+                },
+                success: function() {
+                    clearPendingMatches();
+                },
+                error: function() {
+                    errorMessage.push("Data update failed, please try again.");
+                    userCorrectionRequired = false;
+                }
             })
         }
     }
@@ -452,7 +464,7 @@ function saveAndContinue(fromStage, toStage, sender) {
 function showErrorMessages(messages, correctErrors) {
     $("#alert-text").html(messages.join('<br>'));
     $("#alert").show();
-    
+
     console.log('pushing errors');
 
     if(correctErrors) {
@@ -507,7 +519,7 @@ function openStage(stage) {
             $("#team_number").val("");
             $("#match_number").val("");
         }
-        
+
         $(".alliance-toggle").removeClass('active');
         if(localStorage.allianceColor) {
             $("#" + localStorage.allianceColor).addClass('active');
@@ -801,8 +813,8 @@ $("#tele_stacked_totes_subtract").click(function() {
         var subtract = localStorage.totesInPossession - lastIndex.totes_added;
 
         /*
-        Can't be < 0
-        */
+         Can't be < 0
+         */
         if(subtract > 0) {
             localStorage.totesInPossession = subtract;
         } else {
@@ -860,6 +872,17 @@ function getPendingMatches() {
     }
 
     return pendingMatches;
+}
+
+function clearPendingMatches() {
+    for(var i = 0;; i++) {
+        if (localStorage["match" + i.toString()]) {
+            localStorage.removeItem("match" + i.toString());
+        }
+        else {
+            break;
+        }
+    }
 }
 
 function discardData() {
