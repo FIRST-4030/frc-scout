@@ -549,7 +549,7 @@
                 <button class="btn btn-danger max-width btn-lg btn-extra-high" onclick="discardData();"><span class="glyphicon glyphicon-exclamation-sign"></span> discard data</button>
             </div>
             <div class="col-sm-9">
-                <button class="btn btn-primary max-width btn-lg btn-extra-high" style="height: 90px;" onclick="saveAndContinue('finish', 'prematch');"><span class="glyphicon glyphicon-floppy-disk"></span> save offline</button>
+                <button class="btn btn-primary max-width btn-lg btn-extra-high" style="height: 90px;" onclick="saveAndContinue('finish', 'prematch', this);" id="save_data"><span class="glyphicon glyphicon-floppy-disk"></span> save offline</button>
             </div>
         </div>
     </div>
@@ -564,7 +564,7 @@
                 <button class="btn btn-danger max-width btn-lg btn-extra-high" onclick="discardData();"><span class="glyphicon glyphicon-exclamation-sign"></span> discard data</button>
             </div>
             <div class="col-sm-9">
-                <button class="btn btn-success max-width btn-lg btn-extra-high" style="height: 90px;" onclick="saveAndContinue('finish', 'prematch');"><span class="glyphicon glyphicon-upload"></span> submit to database</button>
+                <button class="btn btn-success max-width btn-lg btn-extra-high" style="height: 90px;" onclick="saveAndContinue('finish', 'prematch', this);" id="upload_data"><span class="glyphicon glyphicon-upload"></span> submit to database</button>
             </div>
         </div>
     </div>

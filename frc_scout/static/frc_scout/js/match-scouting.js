@@ -90,6 +90,7 @@ function saveAndContinue(fromStage, toStage, sender) {
 
     // assume no errors
     var errorMessage = [];
+    var userCorrectionRequired = true;
 
     // no variables for now
     var stageVariables = undefined;
@@ -410,11 +411,21 @@ function saveAndContinue(fromStage, toStage, sender) {
         stageVariables = {
             scouting_complete: true
         }
+
+        if(sender.id === "upload_data") {
+            var pendingMatches = getPendingMatches();
+
+            pendingMatches.push(storedVariables);
+
+            $.ajax({
+                url: '/scouting/match'
+            })
+        }
     }
 
 // show alerts and bail if they exist
     if(errorMessage.length !== 0) {
-        showErrorMessages(errorMessage, true);
+        showErrorMessages(errorMessage, userCorrectionRequired);
         return;
     }
 
