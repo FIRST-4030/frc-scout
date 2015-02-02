@@ -118,7 +118,7 @@ function saveAndContinue(fromStage, toStage, sender) {
         stageVariables = {
             team_number: teamNumber,
             match_number: matchNumber
-        }
+        };
     }
 
     else if(fromStage == "autonomous_starting_location") {
@@ -148,14 +148,14 @@ function saveAndContinue(fromStage, toStage, sender) {
             auto_ground_acquired_bins: autoAcquiredGroundBins,
             auto_moved_bins: autoMovedBins,
             auto_moved_to_auto_zone: $("#auto_moved_to_alliance_zone").bootstrapSwitch('state')
-        }
+        };
 
         $.each(stageVariables, function(index, variable) {
             if(isNaN(variable)) {
                 errorMessage.push("One or more of your variables are not numbers, what are you doing?");
                 return false;
             }
-        })
+        });
     }
 
     else if(fromStage === "autonomous_fouls_and_other") {
@@ -167,7 +167,7 @@ function saveAndContinue(fromStage, toStage, sender) {
                 'auto_fouls': 0,
                 'auto_interference': 0,
                 'auto_no_auto': false
-            }
+            };
         }
 
         // auto_no_auto is the only thing that's not a number
@@ -221,7 +221,7 @@ function saveAndContinue(fromStage, toStage, sender) {
 
         console.log('starting');
 
-        if(!isNaN(localStorage.totesInPossession)) {
+        if(!isNaN(localStorage.totesInPossession) || localStorage.totesInPossession === undefined) {
             var currentTotes = localStorage.totesInPossession;
             localStorage.totesInPossession = parseInt(currentTotes) + 1;
         } else {
@@ -302,7 +302,7 @@ function saveAndContinue(fromStage, toStage, sender) {
                 tele_picked_up_sideways_bins: 0,
                 tele_picked_up_upright_bins: 0,
                 tele_picked_up_center_step_bins: 0
-            }
+            };
         }
 
         var id = sender.id;
@@ -404,7 +404,7 @@ function saveAndContinue(fromStage, toStage, sender) {
             tele_foul_context: teleFoulContext,
             tele_private_comments: telePrivateComments,
             tele_public_comments: telePublicComments
-        }
+        };
     }
 
     else if(fromStage === "finish") {
@@ -432,7 +432,7 @@ function saveAndContinue(fromStage, toStage, sender) {
                     userCorrectionRequired = false;
                 }
             })
-        }
+        };
     }
 
 // show alerts and bail if they exist
@@ -610,7 +610,6 @@ function openStage(stage) {
         try {
             $("#tele_pushed_litter-text").text(storedVariables['teleoperated'].tele_pushed_litter);
             $("#tele_placed_in_bin_litter-text").text(storedVariables['teleoperated'].tele_placed_in_bin_litter);
-            $("#totes_in_possession").text(localStorage.totesInPossession);
 
         } catch(e) {
             $("#tele_pushed_litter-text").text(0);
@@ -627,6 +626,12 @@ function openStage(stage) {
         } else {
             $("#died_during_match_text").hide();
         }
+
+        if(!isNaN(localStorage.totesInPossession)) {
+            $("#totes_in_possession").text(localStorage.totesInPossession);
+        } else {
+            $("#totes_in_possession").text(0);
+        }
     }
 
     else if(stage === "teleoperated_stacked_totes") {
@@ -634,6 +639,12 @@ function openStage(stage) {
             onText: "YES",
             offText: "NO"
         })
+
+        if(localStorage.totesInPossession) {
+            $("#totes_added").find('input[data-height=' + localStorage.totesInPossession + "]").parent('label').addClass('active');
+        } else {
+            $("#totes_added").find('input').parent('label').removeClass('active');
+        }
     }
 
     else if(stage === "teleoperated_fouls_and_other") {
