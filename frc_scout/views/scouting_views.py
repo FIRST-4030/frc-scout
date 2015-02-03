@@ -20,10 +20,5 @@ def submit_match_scouting_data(request):
 
         parsed_data = json.loads(data)
 
-        # prematch = parsed_data.prematch
-        # autonomous_starting_location = parsed_data.autonomous_starting_location
-        # autonomous = parsed_data.autonomous
-        # teleoperated = parsed_data.teleoperated
-        # postmatch = parsed_data.postmatch
+        return HttpResponse(str("YIPPEE WE GOT SOME DATA! %i matches in fact" % len(parsed_data)))
 
-        return HttpResponse(parsed_data)

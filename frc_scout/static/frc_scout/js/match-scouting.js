@@ -62,7 +62,7 @@ $(window).on('load hashchange', function() {
 });
 
 window.onbeforeunload = function() {
-    return "Are you sure you want to leave the page? If your internet connection is spotty, you may be unable to scout again";
+    return "Are you sure you want to leave the page? If your internet connection is spotty, you may be unable to scout again.";
 }
 
 /*
@@ -470,6 +470,7 @@ function submitData() {
 
             window.setTimeout(function() {
                 setupNewMatch();
+                $("#in_progress_message").hide();
                 $("#finished_message").show();
             }, 2000);
 
@@ -676,9 +677,14 @@ function openStage(stage) {
 
     else if (stage === "finish") {
 
+        /**
+         * HIDE ALL THE THINGS
+         */
         $("#in_progress_message").hide();
         $("#in_progress_loading").hide();
         $("#finished_message").hide();
+        $("#online_message").hide();
+        $("#offline_message").hide();
 
         if (navigator.onLine) {
             $("#online_message").show();
