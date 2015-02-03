@@ -672,7 +672,9 @@ function openStage(stage) {
     }
 
     else if (stage === "teleoperated_fouls_and_other") {
-
+        /*
+         Nothing to speak of
+         */
     }
 
     else if (stage === "finish") {
