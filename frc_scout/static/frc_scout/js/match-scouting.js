@@ -61,6 +61,10 @@ $(window).on('load hashchange', function() {
     openStage(window.location.hash.substring(1));
 });
 
+window.onbeforeunload = function() {
+    return "Are you sure you want to leave the page? If your internet connection is spotty, you may be unable to scout again";
+}
+
 /*
  This will create a match ID in localStorage and save it to localStorage.pageMatchID
  */
@@ -403,35 +407,8 @@ function saveAndContinue(fromStage, toStage, sender) {
         stageVariables = {
             tele_foul_context: teleFoulContext,
             tele_private_comments: telePrivateComments,
-            tele_public_comments: telePublicComments
-        };
-    }
-
-    else if(fromStage === "finish") {
-        stageVariables = {
+            tele_public_comments: telePublicComments,
             scouting_complete: true
-        }
-
-        if(sender.id === "upload_data") {
-            var pendingMatches = getPendingMatches();
-
-            pendingMatches.push(storedVariables);
-
-            $.ajax({
-                url: '/scouting/match/submit/',
-                method: "POST",
-                data: {
-                    csrfmiddlewaretoken: $.cookie('csrftoken'),
-                    data: JSON.stringify(pendingMatches)
-                },
-                success: function() {
-                    clearPendingMatches();
-                },
-                error: function() {
-                    errorMessage.push("Data update failed, please try again.");
-                    userCorrectionRequired = false;
-                }
-            })
         };
     }
 
@@ -453,10 +430,6 @@ function saveAndContinue(fromStage, toStage, sender) {
 // hide our current stage
     $("#" + fromStage).hide();
 
-    if(fromStage === 'finish' && stageVariables.scouting_complete) {
-        setupNewMatch();
-    }
-
 // change hash triggering the next stage to show
     window.location.hash = toStage;
 }
@@ -474,6 +447,50 @@ function showErrorMessages(messages, correctErrors) {
     }
 }
 
+function submitData() {
+    var pendingMatches = getPendingMatches();
+
+    pendingMatches.push(getMatchData());
+    $("#online_message").hide();
+    $("#in_progress_message").show();
+
+    $.ajax({
+        url: '/scouting/match/submit/',
+        method: "POST",
+        data: {
+            csrfmiddlewaretoken: $.cookie('csrftoken'),
+            data: JSON.stringify(pendingMatches)
+        },
+        success: function() {
+            clearPendingMatches();
+
+            $("#saved").hide();
+            $("#submitted").show();
+            $("#in_progress_loading").fadeIn(1000);
+
+            window.setTimeout(function() {
+                setupNewMatch();
+                $("#finished_message").show();
+            }, 2000);
+
+        },
+        error: function() {
+            showErrorMessages(["Data submission failed."], false);
+            $("#in_progress_message").hide();
+            $("#online_message").hide();
+            $("#offline_message").show();
+        }
+    });
+}
+
+function saveDataOffline() {
+    $("#submitted").hide();
+    $("#in_progress_message").hide();
+    $("#saved").show();
+    setupNewMatch();
+    window.location.hash = "prematch";
+}
+
 function openStage(stage) {
     /**
      * TO STAGES
@@ -481,8 +498,14 @@ function openStage(stage) {
 
     $("#alert").hide();
 
-    if(!getMatchData()) {
+    if (!getMatchData()) {
         window.location.hash = "prematch";
+    }
+
+    if(getMatchData()) {
+        if($.isEmptyObject(getMatchData()) || getMatchData() === undefined || getMatchData() === null) {
+            window.location.hash = "prematch";
+        }
     }
 
     // pull things out of localStorage as JSON
@@ -490,16 +513,16 @@ function openStage(stage) {
 
     try {
         $(".team-number").text(": " + storedVariables.prematch.team_number);
-    } catch(e) {
+    } catch (e) {
         $(".team-number").text("");
     }
 
-    if(localStorage.allianceColor) {
-        if(localStorage.allianceColor === "blue_alliance") {
+    if (localStorage.allianceColor) {
+        if (localStorage.allianceColor === "blue_alliance") {
             $("body").css("background-color", backgroundColorBlue);
             $("#blue_alliance").addClass('active');
         }
-        else if(localStorage.allianceColor === "red_alliance") {
+        else if (localStorage.allianceColor === "red_alliance") {
             $("body").css("background-color", backgroundColorRed);
             $("#red_alliance").addClass('active');
         } else {
@@ -509,24 +532,24 @@ function openStage(stage) {
         $("body").css("background-color", "white");
     }
 
-    if(stage === "prematch") {
+    if (stage === "prematch") {
         $('title').text('Scouting: Prematch');
 
         try {
             $("#team_number").val(storedVariables.prematch.team_number);
             $("#match_number").val(storedVariables.prematch.match_number);
-        } catch(e) {
+        } catch (e) {
             $("#team_number").val("");
             $("#match_number").val("");
         }
 
         $(".alliance-toggle").removeClass('active');
-        if(localStorage.allianceColor) {
+        if (localStorage.allianceColor) {
             $("#" + localStorage.allianceColor).addClass('active');
         }
     }
 
-    else if(stage === "autonomous") {
+    else if (stage === "autonomous") {
         $('title').text('Scouting: Autonomous');
         // moved to zone
         $("#auto_moved_to_alliance_zone").bootstrapSwitch({
@@ -545,7 +568,7 @@ function openStage(stage) {
             $("#auto-acquired-ground-bin-text").text(storedVariables.autonomous.auto_ground_acquired_bins);
             $("#auto-moved-bin-text").text(storedVariables.autonomous.auto_moved_bins);
 
-        } catch(e) {
+        } catch (e) {
             $("#auto-stacked-yellow-tote-text").text(0);
             $("#auto-moved-yellow-tote-text").text(0);
             $("#auto-acquired-grey-tote-text").text(0);
@@ -556,8 +579,8 @@ function openStage(stage) {
             $("#auto-moved-bin-text").text(0);
         }
 
-        if(storedVariables.autonomous) {
-            if(storedVariables.autonomous.auto_moved_to_auto_zone) {
+        if (storedVariables.autonomous) {
+            if (storedVariables.autonomous.auto_moved_to_auto_zone) {
                 $("#auto_moved_to_alliance_zone").bootstrapSwitch('state', true);
             }
         } else {
@@ -565,7 +588,7 @@ function openStage(stage) {
         }
     }
 
-    else if(stage === "teleoperated") {
+    else if (stage === "teleoperated") {
         $('title').text('Scouting: Teleoperated');
 
         /*
@@ -573,35 +596,35 @@ function openStage(stage) {
          */
         $("#tele_picked_up_totes").text(sumNumInDict(storedVariables['teleoperated_picked_up_totes']));
 
-        if(storedVariables['teleoperated_picked_up_totes']) {
-            if(storedVariables['teleoperated_picked_up_totes'].lastChange) {
+        if (storedVariables['teleoperated_picked_up_totes']) {
+            if (storedVariables['teleoperated_picked_up_totes'].lastChange) {
                 $("#tele_picked_up_totes_subtract_button").prop('disabled', false);
             } else {
                 $("#tele_picked_up_totes_subtract_button").prop('disabled', true);
             }
         }
 
-        if(storedVariables['teleoperated_stacked_totes']) {
+        if (storedVariables['teleoperated_stacked_totes']) {
             $("#tele_stacked_totes_text").text(storedVariables['teleoperated_stacked_totes'].length);
         } else {
             $("#tele_stacked_totes_text").text(0);
         }
 
-        if(storedVariables['teleoperated_picked_up_bins']) {
+        if (storedVariables['teleoperated_picked_up_bins']) {
             $("#tele_picked_up_bins_text").text(sumNumInDict(storedVariables['teleoperated_picked_up_bins']));
         } else {
             $("#tele_picked_up_bins_text").text(0);
         }
 
-        if(storedVariables['teleoperated_picked_up_bins']) {
-            if(storedVariables['teleoperated_picked_up_bins'].lastChange) {
+        if (storedVariables['teleoperated_picked_up_bins']) {
+            if (storedVariables['teleoperated_picked_up_bins'].lastChange) {
                 $("#tele_picked_up_totes_subtract").prop('disabled', false);
             } else {
                 $("#tele_picked_up_totes_subtract").prop('disabled', true);
             }
         }
 
-        if(storedVariables['teleoperated_stacked_bins']) {
+        if (storedVariables['teleoperated_stacked_bins']) {
             $("#tele_stacked_bins_text").text(storedVariables['teleoperated_stacked_bins'].length);
         } else {
             $("#tele_stacked_bins_text").text(0);
@@ -611,13 +634,13 @@ function openStage(stage) {
             $("#tele_pushed_litter-text").text(storedVariables['teleoperated'].tele_pushed_litter);
             $("#tele_placed_in_bin_litter-text").text(storedVariables['teleoperated'].tele_placed_in_bin_litter);
 
-        } catch(e) {
+        } catch (e) {
             $("#tele_pushed_litter-text").text(0);
             $("#tele_placed_in_bin_litter-text").text(0);
             $("#totes_in_possession").text(0);
         }
 
-        if(storedVariables['teleoperated_fouls_and_other']) {
+        if (storedVariables['teleoperated_fouls_and_other']) {
             if (storedVariables['teleoperated_fouls_and_other'].tele_dead_bot) {
                 $("#died_during_match_text").show();
             } else {
@@ -627,51 +650,56 @@ function openStage(stage) {
             $("#died_during_match_text").hide();
         }
 
-        if(!isNaN(localStorage.totesInPossession)) {
+        if (!isNaN(localStorage.totesInPossession)) {
             $("#totes_in_possession").text(localStorage.totesInPossession);
         } else {
             $("#totes_in_possession").text(0);
         }
     }
 
-    else if(stage === "teleoperated_stacked_totes") {
+    else if (stage === "teleoperated_stacked_totes") {
         $("#coop_stack").bootstrapSwitch({
             onText: "YES",
             offText: "NO"
         })
 
-        if(localStorage.totesInPossession) {
+        if (localStorage.totesInPossession) {
             $("#totes_added").find('input[data-height=' + localStorage.totesInPossession + "]").parent('label').addClass('active');
         } else {
             $("#totes_added").find('input').parent('label').removeClass('active');
         }
     }
 
-    else if(stage === "teleoperated_fouls_and_other") {
+    else if (stage === "teleoperated_fouls_and_other") {
 
     }
 
-    else if(stage === "finish") {
-        if(navigator.onLine) {
+    else if (stage === "finish") {
+
+        $("#in_progress_message").hide();
+        $("#in_progress_loading").hide();
+        $("#finished_message").hide();
+
+        if (navigator.onLine) {
             $("#online_message").show();
         } else {
             $("#offline_message").show();
         }
-    }
 
+    }
     $("#" + window.location.hash.substring(1)).show();
 }
 
 function getMatchData() {
     try {
         return $.parseJSON(localStorage["match" + localStorage.pageMatchID]);
-    } catch(e) {
+    } catch (e) {
         return {};
     }
 }
 
 function setMatchData(stage, name, value) {
-    var data  = getMatchData();
+    var data = getMatchData();
 
     data[stage][name] = value;
 
@@ -695,9 +723,9 @@ function sumNumInDict(array) {
     /*
      Iterate over in any manner IFF it's not undefined
      */
-    if(array) {
-        $.each(array, function(key, value) {
-            if(!isNaN(value)) {
+    if (array) {
+        $.each(array, function (key, value) {
+            if (!isNaN(value)) {
                 totalThings += value;
             }
         });
@@ -709,24 +737,24 @@ function sumNumInDict(array) {
 /*
  universal function that will add/subtract things from labels appended with -text from their respective buttons
  */
-$(".btn-add-subtract").click(function() {
+$(".btn-add-subtract").click(function () {
     var sender = $(this);
     var name = sender.data('name');
 
     var target = $("#" + name + "-text");
 
-    if(target.data('max')) {
+    if (target.data('max')) {
         var max = parseInt(target.data('max'));
     }
 
-    if(sender.data('operation') === "add") {
-        if(typeof max !== 'undefined' && parseInt(target.text()) < max || typeof max === 'undefined') {
+    if (sender.data('operation') === "add") {
+        if (typeof max !== 'undefined' && parseInt(target.text()) < max || typeof max === 'undefined') {
             target.text(parseInt(target.text()) + 1);
         }
     }
 
-    else if(sender.data('operation' == "subtract")) {
-        if(parseInt(target.text()) > 0) {
+    else if (sender.data('operation' == "subtract")) {
+        if (parseInt(target.text()) > 0) {
             target.text(parseInt(target.text()) - 1);
         }
     }
@@ -736,7 +764,7 @@ var xPosition, yPosition;
 /*
  Get the relative coordinates from start image
  */
-$("#auto_start_image").click(function(event) {
+$("#auto_start_image").click(function (event) {
     var image = $(this);
 
     xPosition = (event.pageX - image.offset().left) / image.width();
@@ -748,7 +776,7 @@ $("#auto_start_image").click(function(event) {
 /*
  Get the relative coordinates from teleop location image
  */
-$("#teleoperated_stacked_totes_image").click(function(event) {
+$("#teleoperated_stacked_totes_image").click(function (event) {
     var image = $(this);
 
     xPosition = (event.pageX - image.offset().left) / image.width();
@@ -761,7 +789,7 @@ $("#teleoperated_stacked_totes_image").click(function(event) {
  Undo last thing from tele_picked_up_totes
  */
 
-$("#tele_picked_up_totes_subtract_button").click(function() {
+$("#tele_picked_up_totes_subtract_button").click(function () {
     var variables = getMatchData()['teleoperated_picked_up_totes'];
 
     var lastChange = variables.lastChange;
@@ -770,7 +798,7 @@ $("#tele_picked_up_totes_subtract_button").click(function() {
      only subtract if it exists and is > 0 (otherwise errors)
      */
 
-    if(variables.lastChange) {
+    if (variables.lastChange) {
         if (variables[lastChange] > 0) {
             setMatchData("teleoperated_picked_up_totes", lastChange, variables[lastChange] - 1);
             setMatchData("teleoperated_picked_up_totes", 'lastChange', undefined);
@@ -781,7 +809,7 @@ $("#tele_picked_up_totes_subtract_button").click(function() {
 
     $("#tele_picked_up_totes").text(sumNumInDict(getMatchData()['teleoperated_picked_up_totes']));
 
-    localStorage.totesInPossession  = localStorage.totesInPossession - 1;
+    localStorage.totesInPossession = localStorage.totesInPossession - 1;
     $("#totes_in_possession").text(localStorage.totesInPossession);
 
 });
@@ -790,7 +818,7 @@ $("#tele_picked_up_totes_subtract_button").click(function() {
  Undo last thing from tele_picked_up_bins
  */
 
-$("#tele_picked_up_bins_subtract").click(function() {
+$("#tele_picked_up_bins_subtract").click(function () {
     var variables = getMatchData()['teleoperated_picked_up_bins'];
 
     var lastChange = variables.lastChange;
@@ -799,7 +827,7 @@ $("#tele_picked_up_bins_subtract").click(function() {
      only subtract if it exists and is > 0 (otherwise errors)
      */
 
-    if(variables.lastChange) {
+    if (variables.lastChange) {
         if (variables[lastChange] > 0) {
             setMatchData("teleoperated_picked_up_bins", lastChange, variables[lastChange] - 1);
             setMatchData("teleoperated_picked_up_bins", 'lastChange', undefined);
@@ -812,13 +840,13 @@ $("#tele_picked_up_bins_subtract").click(function() {
 
 });
 
-$("#tele_stacked_totes_subtract").click(function() {
+$("#tele_stacked_totes_subtract").click(function () {
     var data = getMatchData()['teleoperated_stacked_totes'];
 
 
     var lastIndex = data[data.length - 1];
 
-    if(lastIndex) {
+    if (lastIndex) {
         data = data.slice(0, -1);
 
         var subtract = localStorage.totesInPossession - lastIndex.totes_added;
@@ -826,7 +854,7 @@ $("#tele_stacked_totes_subtract").click(function() {
         /*
          Can't be < 0
          */
-        if(subtract > 0) {
+        if (subtract > 0) {
             localStorage.totesInPossession = subtract;
         } else {
             localStorage.totesInPossession = 0;
@@ -839,7 +867,7 @@ $("#tele_stacked_totes_subtract").click(function() {
     }
 });
 
-$("#tele_stacked_bins_subtract").click(function() {
+$("#tele_stacked_bins_subtract").click(function () {
     var data = getMatchData()['teleoperated_stacked_bins'];
 
     data = data.slice(0, -1);
@@ -852,15 +880,15 @@ $("#tele_stacked_bins_subtract").click(function() {
 /*
  Clarify coloration for tote stack height
  */
-$(".start-height-group-wrapper").click(function() {
+$(".start-height-group-wrapper").click(function () {
     var startHeight = $(this).find('input').data('height');
     var maxHeight = 6 - startHeight;
 
 
-    $.each($("[name=totes_added_group]"), function() {
+    $.each($("[name=totes_added_group]"), function () {
         var sender = $(this);
 
-        if(sender.data('height') > maxHeight) {
+        if (sender.data('height') > maxHeight) {
             sender.parent('label').attr('disabled', true);
         } else {
             sender.parent('label').attr('disabled', false);
@@ -873,7 +901,7 @@ $(".start-height-group-wrapper").click(function() {
 function getPendingMatches() {
     var pendingMatches = [];
 
-    for(var i = 0;; i++) {
+    for (var i = 0; ; i++) {
         if (localStorage["match" + i.toString()]) {
             pendingMatches.push($.parseJSON(localStorage["match" + i.toString()]));
         }
@@ -886,7 +914,7 @@ function getPendingMatches() {
 }
 
 function clearPendingMatches() {
-    for(var i = 0;; i++) {
+    for (var i = 0; ; i++) {
         if (localStorage["match" + i.toString()]) {
             localStorage.removeItem("match" + i.toString());
         }
@@ -897,11 +925,14 @@ function clearPendingMatches() {
 }
 
 function discardData() {
-    if(confirm("Are you sure? This will delete your data IRREVERSIBLY!")) {
-        if(prompt("Enter the scouted team's number to confirm your choice:") === getMatchData().prematch.team_number.toString()) {
+    if (confirm("Are you sure? This will delete your data IRREVERSIBLY!")) {
+        if (prompt("Enter the scouted team's number to confirm your choice:") === getMatchData().prematch.team_number.toString()) {
             localStorage.removeItem("match" + localStorage.pageMatchID);
             setupNewMatch();
-            window.location.hash = "prematch";
+            $("#offline_message").hide();
+            $("#online_message").hide();
+            $("#in_progress_message").hide();
+            $("#finished_message").show();
         } else {
             showErrorMessages(['Match deletion cancelled.'], false);
         }

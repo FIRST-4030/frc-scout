@@ -501,21 +501,21 @@
         <div class="row">
             <div class="col-md-12">
                 <h5>Please comment on any fouls that occurred during the match.</h5>
-                <textarea class="form-control background-white" rows="2" id="tele_foul_context"></textarea>
+                <textarea class="form-control background-white" rows="1" id="tele_foul_context"></textarea>
             </div>
         </div>
         <br>
         <div class="row">
             <div class="col-md-12">
                 <h5>Miscellaneous comments about the match. These are private to your team.</h5>
-                <textarea class="form-control background-white" rows="2" id="tele_private_comments"></textarea>
+                <textarea class="form-control background-white" rows="1" id="tele_private_comments"></textarea>
             </div>
         </div>
         <br>
         <div class="row">
             <div class="col-md-12">
                 <h5>Miscellaneous comments about the match. These are public, remember gracious professionalism!</h5>
-                <textarea class="form-control background-white" rows="2" id="tele_public_comments"></textarea>
+                <textarea class="form-control background-white" rows="1" id="tele_public_comments"></textarea>
             </div>
         </div>
         <Br>
@@ -527,25 +527,56 @@
     </div>
 
     <div class="container-fluid stage" id="finish" style="display: none;">
-    <div class="row">
-        <div class="col-md-12">
-            <h2>Finish Scouting<span class="team-number"></span></h2>
-        </div>
-    </div>
-
-    <div id="offline_message" style="display: none;">
         <div class="row">
             <div class="col-md-12">
-                <div class="well">
-                    <h4><span class="glyphicon glyphicon-exclamation-sign"></span> You are offline.</h4>
-                    <h6>You may save your scouting data locally and submit it at a later time.</h6>
-                    <h6>You will be redirected to restart scouting so the page will remain loaded.</h6>
-                    <div class="row">
-                        <div class="col-sm-3">
-                            <button class="btn btn-danger max-width btn-lg btn-extra-high" onclick="discardData();"><span class="glyphicon glyphicon-exclamation-sign"></span> discard data</button>
+                <h2>Finish Scouting<span class="team-number"></span></h2>
+            </div>
+            <div class="row">
+                <div class='col-md-12'>
+                    <div class="well">
+                        <div id="offline_message" style="display: none;">
+                            <h4><span class="glyphicon glyphicon-exclamation-sign"></span> You are offline.</h4>
+                            <h6>You may save your scouting data locally and submit it at a later time.</h6>
+                            <h6>You will be redirected to restart scouting so the page will remain loaded.</h6>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <button class="btn btn-danger max-width btn-lg btn-extra-high" onclick="discardData();"><span class="glyphicon glyphicon-exclamation-sign"></span> discard data</button>
+                                </div>
+                                <div class="col-sm-9">
+                                    <button class="btn btn-primary max-width btn-lg btn-extra-high" style="height: 90px;" onclick="saveDataOffline();" id="save_data"><span class="glyphicon glyphicon-floppy-disk"></span> save offline</button>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-sm-9">
-                            <button class="btn btn-primary max-width btn-lg btn-extra-high" style="height: 90px;" onclick="saveAndContinue('finish', 'prematch', this);" id="save_data"><span class="glyphicon glyphicon-floppy-disk"></span> save offline</button>
+
+                        <div id="online_message" style="display: none;">
+                            <h4><span class="glyphicon glyphicon-check"></span> Ready to submit data.</h4>
+                            <h6>If you have pending matches stored locally, they will also be submitted at this time.</h6>
+                            <br>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <button class="btn btn-danger max-width btn-lg btn-extra-high" onclick="discardData();"><span class="glyphicon glyphicon-exclamation-sign"></span> discard data</button>
+                                </div>
+                                <div class="col-sm-9">
+                                    <button class="btn btn-success max-width btn-lg btn-extra-high" style="height: 90px;" onclick="submitData();" id="upload_data"><span class="glyphicon glyphicon-upload"></span> submit to database</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="in_progress_message">
+                            <h4>Submitting data... <span id="in_progress_loading" style="display: none;">done.</span></h4>
+                        </div>
+
+                        <div id="finished_message" style="display: none;">
+                            <h4><span class="glyphicon glyphicon-saved"></span> Your data has been <span id="submitted">submitted</span><span id="saved">saved</span> successfully.</h4>
+                            <br>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <button onclick="saveAndContinue('finish', 'prematch');" class="btn btn-primary max-width btn-lg btn-extra-high"><span class="glyphicon glyphicon-share-alt"></span> Scout another match</button>
+                                </div>
+                                <div class="col-sm-6">
+                                    <button onclick="window.location = '{% url 'frc_scout:index' %}';" class="btn btn-info max-width btn-lg btn-extra-high"><span class="glyphicon glyphicon-arrow-up"></span> Return home</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -553,36 +584,6 @@
         </div>
     </div>
 
-    <div id="online_message" style="display: none;">
-        <div class="well">
-            <h4><span class="glyphicon glyphicon-check"></span> Ready to submit data.</h4>
-            <h6>If you have pending matches stored locally, they will also be submitted at this time.</h6>
-            <br>
-            <div class="row">
-                <div class="col-sm-3">
-                    <button class="btn btn-danger max-width btn-lg btn-extra-high" onclick="discardData();"><span class="glyphicon glyphicon-exclamation-sign"></span> discard data</button>
-                </div>
-                <div class="col-sm-9">
-                    <button class="btn btn-success max-width btn-lg btn-extra-high" style="height: 90px;" onclick="saveAndContinue('finish', 'prematch', this);" id="upload_data"><span class="glyphicon glyphicon-upload"></span> submit to database</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="finished_message">
-        <div class="well">
-            <h4><span class="glyphicon glyphicon-saved"></span> Your data has been submitted successfully.</h4>
-            <br>
-            <div class="row">
-                <div class="col-sm-6">
-                    <button class="btn btn-primary max-width btn-lg btn-extra-high"><span class="glyphicon glyphicon-share-alt"></span> Scout another match</button>
-                </div>
-                <div class="col-sm-6">
-                    <button class="btn btn-info max-width btn-lg btn-extra-high"><span class="glyphicon glyphicon-arrow-up"></span> Return home</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
 {% endblock %}
 

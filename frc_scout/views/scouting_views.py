@@ -1,3 +1,4 @@
+import json
 from django.shortcuts import render
 from django.http import Http404, HttpResponse
 
@@ -16,4 +17,13 @@ def submit_match_scouting_data(request):
         raise Http404
     else:
         data = request.POST.get('data')
-        return HttpResponse(data)
+
+        parsed_data = json.loads(data)
+
+        # prematch = parsed_data.prematch
+        # autonomous_starting_location = parsed_data.autonomous_starting_location
+        # autonomous = parsed_data.autonomous
+        # teleoperated = parsed_data.teleoperated
+        # postmatch = parsed_data.postmatch
+
+        return HttpResponse(parsed_data)
