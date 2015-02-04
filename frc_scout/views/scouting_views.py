@@ -4,6 +4,9 @@ from django.http import Http404, HttpResponse
 
 
 # Match Scouting
+from frc_scout.models import Match
+
+
 def match_scouting(request):
 
     context = {
@@ -19,7 +22,15 @@ def submit_match_scouting_data(request):
     else:
         data = request.POST.get('data')
 
-        parsed_data = json.loads(data)
+        matches = json.loads(data)
 
-        return HttpResponse(str("YIPPEE WE GOT SOME DATA! %i matches in fact" % len(parsed_data)))
+        for match in matches:
+            prematch = match['prematch']
+
+            match_object = Match()
+
+            for prematch_attr in prematch:
+                setattr(match_object, prematch_attr, prematch.get(prematch_attr))
+
+            
 

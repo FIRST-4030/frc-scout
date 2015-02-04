@@ -46,7 +46,7 @@
         margin-bottom: 5px;
     }
 
-    #upload_data {
+    #upload_data, #save_data {
         height: 90px;
     }
 }

@@ -493,11 +493,10 @@ function submitData() {
 }
 
 function saveDataOffline() {
+    setupNewMatch();
     $("#submitted").hide();
     $("#in_progress_message").hide();
     $("#saved").show();
-    setupNewMatch();
-    window.location.hash = "prematch";
 }
 
 function openStage(stage) {
