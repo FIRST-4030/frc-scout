@@ -28,7 +28,7 @@
 
 @media (min-width: 768px) {
     .btn-extra-high {
-        height: 75px;
+        height: 70px;
         margin-top: 2px;
         margin-bottom: 2px;
 
@@ -65,13 +65,13 @@
 }
 
 .btn-group-tall-6 {
-    height: 120px;
+    height: 105px;
     width: 16.7%;
 }
 
 .btn-group-tall-6 > span {
-    font-size: 60px;
-    padding-top: 10px;
+    font-size: 55px;
+    padding-top: 0px;
 }
 
 .btn-lg-text {
@@ -90,6 +90,7 @@ body {
     margin-left: auto;
     margin-right: auto;
     display: block;
+    margin-top: 10px;
 
     height: 75vh;
     max-width: 100%;

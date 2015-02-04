@@ -107,12 +107,12 @@ function saveAndContinue(fromStage, toStage, sender) {
         var teamNumber = parseInt($("#team_number").val());
         var matchNumber = parseInt($("#match_number").val());
 
-        if(isNaN(teamNumber)) {
-            errorMessage.push("Team number is required and must be a number.");
+        if(isNaN(teamNumber) || teamNumber < 1) {
+            errorMessage.push("Team number is required and must be a number of one or greater.");
         }
 
-        if(isNaN(matchNumber)) {
-            errorMessage.push("Match number is required and must be a number.");
+        if(isNaN(matchNumber) || matchNumber < 1) {
+            errorMessage.push("Match number is required and must be a number of one or greater.");
         }
 
         if(!($("#red_alliance").hasClass('active') || $("#blue_alliance").hasClass('active'))) {
@@ -450,7 +450,6 @@ function showErrorMessages(messages, correctErrors) {
 function submitData() {
     var pendingMatches = getPendingMatches();
 
-    pendingMatches.push(getMatchData());
     $("#online_message").hide();
     $("#in_progress_message").show();
 
