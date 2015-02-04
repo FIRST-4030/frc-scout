@@ -28,15 +28,15 @@
 
 @media (min-width: 768px) {
     .btn-extra-high {
-        height: 90px;
-        margin-top: 0px;
-        margin-bottom: 0px;
+        height: 75px;
+        margin-top: 2px;
+        margin-bottom: 2px;
 
     }
 
     .button-state-text {
-        margin-top: 12px;
-        font-size: 64px;
+        margin-top: 10px;
+        font-size: 50px;
     }
 }
 
@@ -44,6 +44,10 @@
     .btn-extra-high {
         margin-top: 5px;
         margin-bottom: 5px;
+    }
+
+    #upload_data {
+        height: 90px;
     }
 }
 
