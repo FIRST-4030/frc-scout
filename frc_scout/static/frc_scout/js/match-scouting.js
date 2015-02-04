@@ -130,6 +130,10 @@ function saveAndContinue(fromStage, toStage, sender) {
             auto_start_x: xPosition,
             auto_start_y: yPosition
         };
+
+        if(!confirm("Confirm autonomous starting location.")) {
+            return false;
+        }
     }
 
     else if(fromStage == "autonomous") {
@@ -274,6 +278,11 @@ function saveAndContinue(fromStage, toStage, sender) {
         /*
          add things to the latest one
          */
+
+
+        if(!confirm("Confirm teleoperated stacked totes location.")) {
+            return false;
+        }
 
         var latestIndex = storedVariables['teleoperated_stacked_totes'].length - 1;
 
@@ -828,7 +837,14 @@ $("#tele_picked_up_totes_subtract_button").click(function () {
 
     $("#tele_picked_up_totes").text(sumNumInDict(getMatchData()['teleoperated_picked_up_totes']));
 
-    localStorage.totesInPossession = localStorage.totesInPossession - 1;
+    if(localStorage.totesInPossession) {
+        if(localStorage.totesInPossession > 0) {
+            localStorage.totesInPossession = localStorage.totesInPossession - 1;
+        } else {
+            localStorage.totesInPossession = 0;
+        }
+    }
+
     $("#totes_in_possession").text(localStorage.totesInPossession);
 
 });
@@ -957,3 +973,14 @@ function discardData() {
         }
     }
 }
+
+$("button[data-name=auto-moved-bin]").click(function() {
+    var sum = parseInt($("#auto-acquired-step-bin-text").text()) + parseInt($("#auto-acquired-ground-bin-text").text());
+
+    var thisSum = parseInt($("#auto-moved-bin-text").text());
+    console.log(sum + " " + thisSum);
+
+    if(thisSum > sum) {
+        $("#auto-moved-bin-text").text(parseInt($("#auto-moved-bin-text").text()) - 1);
+    }
+})
