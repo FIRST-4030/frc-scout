@@ -677,6 +677,18 @@ function openStage(stage) {
          */
     }
 
+    else if (stage === "postmatch") {
+        if(storedVariables['postmatch']) {
+            $("#tele_foul_context").val(storedVariables['postmatch'].tele_foul_context);
+            $("#tele_private_comments").val(storedVariables['postmatch'].tele_private_comments);
+            $("#tele_public_comments").val(storedVariables['postmatch'].tele_public_comments);
+        } else {
+            $("#tele_foul_context").val("");
+            $("#tele_private_comments").val("");
+            $("#tele_public_comments").val("");
+        }
+    }
+
     else if (stage === "finish") {
 
         /**

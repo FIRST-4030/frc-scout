@@ -4,6 +4,8 @@ from django.db import models
 # Create your models here.
 from django.utils import timezone
 
+User._meta.get_field('email')._unique = True
+
 class Location(models.Model):
     name = models.TextField()
 

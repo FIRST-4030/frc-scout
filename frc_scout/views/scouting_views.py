@@ -2,6 +2,7 @@ import json
 from django.shortcuts import render
 from django.http import Http404, HttpResponse
 
+
 # Match Scouting
 def match_scouting(request):
 
