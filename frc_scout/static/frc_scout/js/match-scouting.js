@@ -476,10 +476,20 @@ function submitData() {
             $("#submitted").show();
             $("#in_progress_loading").fadeIn(1000);
 
-            window.setTimeout(function() {
+            window.setTimeout(function(response) {
                 setupNewMatch();
                 $("#in_progress_message").hide();
                 $("#finished_message").show();
+
+                if(response !== undefined) {
+                    json = $.parseJSON(response);
+                    $("#submit_errors").show();
+
+                    $.each(json, function(key, value) {
+                        $("#submit_errors_list").append('<li>Team: ' + value['team_number'] + ", Match: " + value['match_number'] + "</li>");
+                    })
+                }
+
             }, 2000);
 
         },
@@ -706,6 +716,8 @@ function openStage(stage) {
         $("#finished_message").hide();
         $("#online_message").hide();
         $("#offline_message").hide();
+        $("#submit_errors").hide();
+        $("#submit_errors_list").text("");
 
         if (navigator.onLine) {
             $("#online_message").show();

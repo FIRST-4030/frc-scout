@@ -79,7 +79,7 @@
         </div>
         <div class="row">
             <div class="col-md-12">
-                <h3 style="color: #666666;">Location: {{ request.session.location_name }}</h3>
+                <h3 style="color: #666666;">Location: <span id='location'>{{ request.session.location_name }}</span></h3>
             </div>
         </div>
         <br>
@@ -573,6 +573,12 @@
 
                         <div id="finished_message" style="display: none;">
                             <h4><span class="glyphicon glyphicon-saved"></span> Your data has been <span id="submitted">submitted</span><span id="saved">saved</span> successfully.</h4>
+                            <div id="submit_errors">
+                                <h6>However, the following matches were unable to be saved due to incomplete data collection:</h6>
+                                <ul id="submit_errors_list">
+                                </ul>
+                            </div>
+                            <h6>However, t</h6>
                             <br>
                             <div class="row">
                                 <div class="col-sm-6">

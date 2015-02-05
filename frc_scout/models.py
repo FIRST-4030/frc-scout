@@ -6,6 +6,7 @@ from django.utils import timezone
 
 User._meta.get_field('email')._unique = True
 
+
 class Location(models.Model):
     name = models.TextField()
 
@@ -41,7 +42,7 @@ def get_current_time():
 
 class Match(models.Model):
     # References
-    team = models.ForeignKey(Team)
+    team_number = models.IntegerField(max_length=5)
     scout = models.ForeignKey(User)
     match_number = models.IntegerField()
     timestamp = models.DateTimeField(default=get_current_time)
@@ -87,6 +88,9 @@ class Match(models.Model):
     tele_foul_context = models.TextField()
     tele_misc_comments = models.TextField()
 
+    def __str__(self):
+        return str("Team: %i | Match: %i | Location: %s" % (self.team_number, self.match_number, self.location.name))
+
 
 class ToteStack(models.Model):
     match = models.ForeignKey(Match)
@@ -96,8 +100,14 @@ class ToteStack(models.Model):
     y = models.DecimalField(max_digits=8, decimal_places=8)
     coop_stack = models.BooleanField(default=False)
 
+    def __str__(self):
+        return str("Team: %i | Match: %i | Location: %s" % (self.match.team_number, self.match.match_number, self.match.location.name))
+
 
 class BinStack(models.Model):
     match = models.ForeignKey(Match)
     height = models.IntegerField(default=1)
+
+    def __str__(self):
+        return str("Team: %i | Match: %i | Location: %s" % (self.match.team_number, self.match.match_number, self.match.location.name))
 
