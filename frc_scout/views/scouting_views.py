@@ -129,7 +129,9 @@ def submit_match_scouting_data(request):
                     bin_stack = BinStack()
 
                     setattr(bin_stack, 'match', match_object)
-                    setattr(bin_stack, 'height', stacked_bins['height'])
+                    setattr(bin_stack, 'height', stacked_bins)
+
+                    bin_stack.save()
 
         if len(errors) != 0:
             return HttpResponse(json.dumps(errors), status=200)

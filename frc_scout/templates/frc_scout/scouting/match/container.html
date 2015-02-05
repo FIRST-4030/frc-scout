@@ -84,7 +84,10 @@
         </div>
         <br>
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-sm-6">
+                <button class="btn btn-extra-high btn-info btn-lg max-width" onclick="window.location = '{% url 'frc_scout:index' %}';"><span class="glyphicon glyphicon-arrow-left"></span> return home</button>
+            </div>
+            <div class="col-sm-6">
                 <button class="btn btn-extra-high btn-primary btn-lg max-width" onclick="saveAndContinue('prematch', 'autonomous_starting_location');">autonomous &nbsp;<span class="glyphicon glyphicon-arrow-right"></span></button>
             </div>
         </div>
@@ -578,7 +581,6 @@
                                 <ul id="submit_errors_list">
                                 </ul>
                             </div>
-                            <h6>However, t</h6>
                             <br>
                             <div class="row">
                                 <div class="col-sm-6">
