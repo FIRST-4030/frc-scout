@@ -5,7 +5,7 @@ from django.http import Http404, HttpResponse
 
 
 # Match Scouting
-from frc_scout.models import Match, Location, ToteStack, BinStack
+from frc_scout.models import Match, Location, ToteStack, ContainerStack
 
 
 def match_scouting(request):
@@ -29,109 +29,109 @@ def submit_match_scouting_data(request):
 
         for match in matches:
 
-            #
-            # All variables that are NOT in separate database tables
-            #
+            if match:
 
-            location = Location.objects.get(id=request.session.get('location_id'))
+                #
+                # All variables that are NOT in separate database tables
+                #
 
-            match_object = Match(scout=request.user, location=location)
+                location = Location.objects.get(id=request.session.get('location_id'))
 
-            # PRE-MATCH
-            if 'prematch' in match:
-                prematch = match['prematch']
+                match_object = Match(scout=request.user, location=location)
 
-                for prematch_attr in prematch:
-                    setattr(match_object, prematch_attr, prematch.get(prematch_attr))
+                # PRE-MATCH
+                if 'prematch' in match:
+                    prematch = match['prematch']
 
-            # AUTO START LOCATION
-            if 'autonomous_starting_location' in match:
-                auto_starting_location = match['autonomous_starting_location']
+                    for prematch_attr in prematch:
+                        setattr(match_object, prematch_attr, prematch.get(prematch_attr))
 
-                for auto_start_attr in auto_starting_location:
-                    setattr(match_object, auto_start_attr, auto_starting_location.get(auto_start_attr))
+                # AUTO START LOCATION
+                if 'autonomous_starting_location' in match:
+                    auto_starting_location = match['autonomous_starting_location']
 
-            # AUTONOMOUS
-            if 'autonomous' in match:
-                auto = match['autonomous']
+                    for auto_start_attr in auto_starting_location:
+                        setattr(match_object, auto_start_attr, auto_starting_location.get(auto_start_attr))
 
-                for auto_attr in auto:
-                    setattr(match_object, auto_attr, auto.get(auto_attr))
+                # AUTONOMOUS
+                if 'autonomous' in match:
+                    auto = match['autonomous']
 
-            # AUTONOMOUS FOULS AND OTHER
-            if 'autonomous_fouls_and_other' in match:
-                auto_fouls_other = match['autonomous_fouls_and_other']
+                    for auto_attr in auto:
+                        setattr(match_object, auto_attr, auto.get(auto_attr))
 
-                for auto_fouls_other_attr in auto_fouls_other:
-                    setattr(match_object, auto_fouls_other_attr, auto_fouls_other.get(auto_fouls_other_attr))
+                # AUTONOMOUS FOULS AND OTHER
+                if 'autonomous_fouls_and_other' in match:
+                    auto_fouls_other = match['autonomous_fouls_and_other']
 
-            # TELEOPERATED
-            if 'teleoperated' in match:
-                tele = match['teleoperated']
+                    for auto_fouls_other_attr in auto_fouls_other:
+                        setattr(match_object, auto_fouls_other_attr, auto_fouls_other.get(auto_fouls_other_attr))
 
-                for tele_attr in tele:
-                    setattr(match_object, tele_attr, tele.get(tele_attr))
+                # TELEOPERATED
+                if 'teleoperated' in match:
+                    tele = match['teleoperated']
 
-            # TELEOPERATED PICKED UP TOTES
-            if 'teleoperated_picked_up_totes' in match:
-                tele_picked_up_totes = match['teleoperated_picked_up_totes']
+                    for tele_attr in tele:
+                        setattr(match_object, tele_attr, tele.get(tele_attr))
 
-                for tele_picked_up_totes_attr in tele_picked_up_totes:
-                    setattr(match_object, tele_picked_up_totes_attr, tele_picked_up_totes.get(tele_picked_up_totes_attr))
+                # TELEOPERATED PICKED UP TOTES
+                if 'teleoperated_picked_up_totes' in match:
+                    tele_picked_up_totes = match['teleoperated_picked_up_totes']
 
-            # TELEOPERATED PICKED UP BINS
-            if 'teleoperated_picked_up_bins' in match:
-                tele_picked_up_bins = match['teleoperated_picked_up_bins']
+                    for tele_picked_up_totes_attr in tele_picked_up_totes:
+                        setattr(match_object, tele_picked_up_totes_attr, tele_picked_up_totes.get(tele_picked_up_totes_attr))
 
-                for tele_picked_up_bins_attr in tele_picked_up_bins:
-                    setattr(match_object, tele_picked_up_bins_attr, tele_picked_up_bins.get(tele_picked_up_bins_attr))
+                # TELEOPERATED PICKED UP BINS
+                if 'teleoperated_picked_up_containers' in match:
+                    tele_picked_up_containers = match['teleoperated_picked_up_containers']
 
-            # TELEOPERATED FOULS AND OTHER
-            if 'teleoperated_fouls_and_other' in match:
-                tele_fouls_other = match['teleoperated_fouls_and_other']
+                    for tele_picked_up_containers_attr in tele_picked_up_containers:
+                        setattr(match_object, tele_picked_up_containers_attr, tele_picked_up_containers.get(tele_picked_up_containers_attr))
 
-                for tele_fouls_other_attr in tele_fouls_other:
-                    setattr(match_object, tele_fouls_other_attr, tele_fouls_other.get(tele_fouls_other_attr))
+                # TELEOPERATED FOULS AND OTHER
+                if 'teleoperated_fouls_and_other' in match:
+                    tele_fouls_other = match['teleoperated_fouls_and_other']
 
-            # POSTMATCH
-            if 'postmatch' in match:
-                postmatch = match['postmatch']
+                    for tele_fouls_other_attr in tele_fouls_other:
+                        setattr(match_object, tele_fouls_other_attr, tele_fouls_other.get(tele_fouls_other_attr))
 
-                for postmatch_attr in postmatch:
-                    setattr(match_object, postmatch_attr, postmatch.get(postmatch_attr))
+                # POSTMATCH
+                if 'postmatch' in match:
+                    postmatch = match['postmatch']
 
-            try:
-                match_object.save()
-            except IntegrityError:
-                errors.append({
-                    'team_number': match['prematch']['team_number'],
-                    'match_number': match['prematch']['match_number'],
+                    for postmatch_attr in postmatch:
+                        setattr(match_object, postmatch_attr, postmatch.get(postmatch_attr))
 
-                })
+                try:
+                    match_object.save()
+                except IntegrityError:
+                    errors.append({
+                        'team_number': match['prematch']['team_number'],
+                        'match_number': match['prematch']['match_number'],
 
-            match_object.save()
+                    })
 
-            if 'teleoperated_stacked_totes' in match:
-                for stacked_totes in match['teleoperated_stacked_totes']:
-                    tote_stack = ToteStack()
+                if 'teleoperated_stacked_totes' in match:
+                    for stacked_totes in match['teleoperated_stacked_totes']:
+                        tote_stack = ToteStack()
 
-                    setattr(tote_stack, 'match', match_object)
-                    setattr(tote_stack, 'start_height', stacked_totes['start_height'])
-                    setattr(tote_stack, 'toted_added', stacked_totes['totes_added'])
-                    setattr(tote_stack, 'x', stacked_totes['x'])
-                    setattr(tote_stack, 'y', stacked_totes['y'])
-                    setattr(tote_stack, 'coop_stack', stacked_totes['coop_stack'])
+                        setattr(tote_stack, 'match', match_object)
+                        setattr(tote_stack, 'start_height', stacked_totes['start_height'])
+                        setattr(tote_stack, 'toted_added', stacked_totes['totes_added'])
+                        setattr(tote_stack, 'x', stacked_totes['x'])
+                        setattr(tote_stack, 'y', stacked_totes['y'])
+                        setattr(tote_stack, 'coop_stack', stacked_totes['coop_stack'])
 
-                    tote_stack.save()
+                        tote_stack.save()
 
-            if 'teleoperated_stacked_bins' in match:
-                for stacked_bins in match['teleoperated_stacked_bins']:
-                    bin_stack = BinStack()
+                if 'teleoperated_stacked_containers' in match:
+                    for stacked_containers in match['teleoperated_stacked_containers']:
+                        bin_stack = ContainerStack()
 
-                    setattr(bin_stack, 'match', match_object)
-                    setattr(bin_stack, 'height', stacked_bins)
-
-                    bin_stack.save()
+                        setattr(bin_stack, 'match', match_object)
+                        setattr(bin_stack, 'height', stacked_containers)
+    
+                        bin_stack.save()
 
         if len(errors) != 0:
             return HttpResponse(json.dumps(errors), status=200)

@@ -56,9 +56,9 @@ class Match(models.Model):
     auto_yellow_moved_totes = models.IntegerField(default=0)
     auto_grey_acquired_totes = models.IntegerField(default=0)
 
-    auto_step_center_acquired_bins = models.IntegerField(default=0)
-    auto_ground_acquired_bins = models.IntegerField(default=0)
-    auto_moved_bins = models.IntegerField(default=0)
+    auto_step_center_acquired_containers = models.IntegerField(default=0)
+    auto_ground_acquired_containers = models.IntegerField(default=0)
+    auto_moved_containers = models.IntegerField(default=0)
 
     auto_moved_to_auto_zone = models.BooleanField(default=False)
     auto_no_auto = models.BooleanField(default=False)
@@ -72,12 +72,12 @@ class Match(models.Model):
     tele_picked_up_sideways_totes = models.IntegerField(default=0)
     tele_picked_up_human_station_totes = models.IntegerField(default=0)
 
-    tele_picked_up_sideways_bins = models.IntegerField(default=0)
-    tele_picked_up_upright_bins = models.IntegerField(default=0)
-    tele_picked_up_center_step_bins = models.IntegerField(default=0)
+    tele_picked_up_sideways_containers = models.IntegerField(default=0)
+    tele_picked_up_upright_containers = models.IntegerField(default=0)
+    tele_picked_up_center_step_containers = models.IntegerField(default=0)
 
     tele_pushed_litter = models.IntegerField(default=0)
-    tele_placed_in_bin_litter = models.IntegerField(default=0)
+    tele_placed_in_container_litter = models.IntegerField(default=0)
 
     tele_fouls = models.IntegerField(default=0)
     tele_knocked_over_stacks = models.IntegerField(default=0)
@@ -86,7 +86,7 @@ class Match(models.Model):
     tele_shooter_jam = models.BooleanField(default=False)
 
     tele_foul_context = models.TextField()
-    tele_misc_comments = models.TextField()
+    tele_public_comments = models.TextField()
 
     def __str__(self):
         return str("Team: %i | Match: %i | Location: %s" % (self.team_number, self.match_number, self.location.name))
@@ -104,7 +104,7 @@ class ToteStack(models.Model):
         return str("Team: %i | Match: %i | Location: %s" % (self.match.team_number, self.match.match_number, self.match.location.name))
 
 
-class BinStack(models.Model):
+class ContainerStack(models.Model):
     match = models.ForeignKey(Match)
     height = models.IntegerField(default=1)
 

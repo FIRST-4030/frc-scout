@@ -121,7 +121,7 @@
                 <h3>Totes</h3>
                 <div class="row">
                     <div class="col-xs-8">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="auto-moved-yellow-tote" data-operation="add">Moved Yellow</button>
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="auto-moved-yellow-tote" data-operation="add">Yellow Tote in Zone</button>
                     </div>
                     <div class="col-xs-2">
                         <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning btn-add-subtract" data-name="auto-moved-yellow-tote" data-operation="subtract">&mdash;</button>
@@ -157,48 +157,48 @@
             </div>
 
             <div class="col-sm-6">
-                <h3>Bins</h3>
+                <h3>Containers</h3>
                 <div class="row">
                     <div class="col-xs-8">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="auto-acquired-step-bin" data-operation="add">Acquired Step</button>
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="auto-acquired-step-container" data-operation="add">Acquired From Step</button>
                     </div>
                     <div class="col-xs-2">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning btn-add-subtract" data-name="auto-acquired-step-bin" data-operation="subtract">&mdash;</button>
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning btn-add-subtract" data-name="auto-acquired-step-container" data-operation="subtract">&mdash;</button>
                     </div>
                     <div class="col-xs-2 text-center">
-                        <h4 class="button-state-text" id="auto-acquired-step-bin-text" data-max="4">0</h4>
+                        <h4 class="button-state-text" id="auto-acquired-step-container-text" data-max="4">0</h4>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-xs-8">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="auto-acquired-ground-bin" data-operation="add">Acquired Ground</button>
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="auto-acquired-ground-container" data-operation="add">Acquired From Ground</button>
                     </div>
                     <div class="col-xs-2">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning btn-add-subtract" data-name="auto-acquired-ground-bin" data-operation="subtract">&mdash;</button>
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning btn-add-subtract" data-name="auto-acquired-ground-container" data-operation="subtract">&mdash;</button>
                     </div>
                     <div class="col-xs-2 text-center">
-                        <h4 class="button-state-text" id="auto-acquired-ground-bin-text" data-max="3">0</h4>
+                        <h4 class="button-state-text" id="auto-acquired-ground-container-text" data-max="3">0</h4>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-xs-8">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="auto-moved-bin" data-operation="add">Moved Bin</button>
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="auto-moved-container" data-operation="add">Moved To Zone</button>
                     </div>
                     <div class="col-xs-2">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning btn-add-subtract" data-name="auto-moved-bin" data-operation="subtract">&mdash;</button>
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning btn-add-subtract" data-name="auto-moved-container" data-operation="subtract">&mdash;</button>
                     </div>
                     <div class="col-xs-2 text-center">
-                        <h4 class="button-state-text" id="auto-moved-bin-text" data-max="7">0</h4>
+                        <h4 class="button-state-text" id="auto-moved-container-text" data-max="7">0</h4>
                     </div>
                 </div>
 
                 <div class="row" style="margin-top:10px;">
-                    <div class="col-xs-7">
-                        <span class='btn-lg-text'>ENDED IN AUTO ZONE</span>
+                    <div class="col-xs-8">
+                        <span class='btn-lg-text'>ROBOT ENDED IN AUTO ZONE</span>
                     </div>
-                    <div class='col-xs-5 text-right'>
+                    <div class='col-xs-4 text-right'>
                         <input type="checkbox" id="auto_moved_to_alliance_zone">
                     </div>
                 </div>
@@ -266,27 +266,27 @@
             </div>
 
             <div class="col-sm-4">
-                <h3>Bins</h3>
+                <h3>Containers</h3>
                 <div class="row">
                     <div class="col-xs-7">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width" onclick="saveAndContinue('teleoperated', 'teleoperated_picked_up_bins');">picked up</button>
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width" onclick="saveAndContinue('teleoperated', 'teleoperated_picked_up_containers');">picked up</button>
                     </div>
                     <div class="col-xs-3">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning max-width" id="tele_picked_up_bins_subtract" disabled="true">&mdash;</button>
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning max-width" id="tele_picked_up_containers_subtract" disabled="true">&mdash;</button>
                     </div>
                     <div class="col-xs-2">
-                        <h4 class="button-state-text three-column" id="tele_picked_up_bins_text" data-max="3">0</h4>
+                        <h4 class="button-state-text three-column" id="tele_picked_up_containers_text" data-max="3">0</h4>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-xs-7">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width" onclick="saveAndContinue('teleoperated', 'teleoperated_stacked_bins');">stacked</button>
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width" onclick="saveAndContinue('teleoperated', 'teleoperated_stacked_containers');">stacked</button>
                     </div>
                     <div class="col-xs-3">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning max-width" id="tele_stacked_bins_subtract">&mdash;</button>
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning max-width" id="tele_stacked_containers_subtract">&mdash;</button>
                     </div>
                     <div class="col-xs-2">
-                        <h4 class="button-state-text three-column" id="tele_stacked_bins_text" data-max="3">0</h4>
+                        <h4 class="button-state-text three-column" id="tele_stacked_containers_text" data-max="3">0</h4>
                     </div>
                 </div>
             </div>
@@ -306,13 +306,13 @@
                 </div>
                 <div class="row">
                     <div class="col-xs-7">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="tele_placed_in_bin_litter" data-operation="add">in bin</button>
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="tele_placed_in_container_litter" data-operation="add">in container</button>
                     </div>
                     <div class="col-xs-3">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning max-width btn-add-subtract" data-name="tele_placed_in_bin_litter" data-operatio="subtract">&mdash;</button>
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning max-width btn-add-subtract" data-name="tele_placed_in_container_litter" data-operatio="subtract">&mdash;</button>
                     </div>
                     <div class="col-xs-2">
-                        <h4 class="button-state-text three-column" id="tele_placed_in_bin_litter-text" data-max="7">0</h4>
+                        <h4 class="button-state-text three-column" id="tele_placed_in_container_litter-text" data-max="7">0</h4>
                     </div>
                 </div>
             </div>
@@ -434,26 +434,26 @@
     </div>
 
     <!-- TELEOPERATED PICKED UP BINS -->
-    <div class="container-fluid stage" style="display: none;" id="teleoperated_picked_up_bins">
+    <div class="container-fluid stage" style="display: none;" id="teleoperated_picked_up_containers">
         <div class="row">
             <div class="col-md-12" style="margin-top: 2vh;">
-                <button id="tele_picked_up_sideways_bins" onclick="saveAndContinue('teleoperated_picked_up_bins', 'teleoperated', this);" class="btn btn-lg btn-warning max-width" style="height: 30vh; margin-top: 1vh; margin-bottom: 1vh; font-size: 30px;">side</button>
+                <button id="tele_picked_up_sideways_containers" onclick="saveAndContinue('teleoperated_picked_up_containers', 'teleoperated', this);" class="btn btn-lg btn-warning max-width" style="height: 30vh; margin-top: 1vh; margin-bottom: 1vh; font-size: 30px;">side</button>
             </div>
             <div class="col-md-12">
-                <button id="tele_picked_up_upright_bins" onclick="saveAndContinue('teleoperated_picked_up_bins', 'teleoperated', this);" class="btn btn-lg btn-info max-width" style="height: 30vh; margin-top: 1vh; margin-bottom: 1vh; font-size: 30px;">upright</button>
+                <button id="tele_picked_up_upright_containers" onclick="saveAndContinue('teleoperated_picked_up_containers', 'teleoperated', this);" class="btn btn-lg btn-info max-width" style="height: 30vh; margin-top: 1vh; margin-bottom: 1vh; font-size: 30px;">upright</button>
             </div>
             <div class="col-md-12">
-                <button id="tele_picked_up_center_step_bins" onclick="saveAndContinue('teleoperated_picked_up_bins', 'teleoperated', this);" class="btn btn-lg btn-primary max-width" style="height: 30vh; margin-top: 1vh; font-size: 30px;">center/step</button>
+                <button id="tele_picked_up_center_step_containers" onclick="saveAndContinue('teleoperated_picked_up_containers', 'teleoperated', this);" class="btn btn-lg btn-primary max-width" style="height: 30vh; margin-top: 1vh; font-size: 30px;">center/step</button>
             </div>
         </div>
     </div>
 
     <!-- TELEOPERATED STACKED BINS -->
-    <div class="container-fluid stage" style="display: none;" id="teleoperated_stacked_bins">
+    <div class="container-fluid stage" style="display: none;" id="teleoperated_stacked_containers">
         <div class="row">
             <div class="col-md-12">
                 <h3>Totes Stacked On Top Of</h3>
-                <div class="btn-group max-width" data-toggle="buttons" id="bin_stack_height">
+                <div class="btn-group max-width" data-toggle="buttons" id="container_stack_height">
                     <label class="btn btn-info btn-group-tall-6">
                         <input type="radio" name="options" data-height="1"><span>1</span>
                     </label>
@@ -478,7 +478,7 @@
         <br>
         <div class="row">
             <div class="col-md-12">
-                <button class="btn btn-lg btn-extra-high btn-primary max-width" onclick="saveAndContinue('teleoperated_stacked_bins', 'teleoperated');">Continue <span class="glyphicon glyphicon-arrow-right"></span></button>
+                <button class="btn btn-lg btn-extra-high btn-primary max-width" onclick="saveAndContinue('teleoperated_stacked_containers', 'teleoperated');">Continue <span class="glyphicon glyphicon-arrow-right"></span></button>
             </div>
         </div>
     </div>

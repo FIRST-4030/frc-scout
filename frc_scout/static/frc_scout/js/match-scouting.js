@@ -1,4 +1,4 @@
-var backgroundColorRed = "rgb(255, 221, 221)";
+var backgroundColorRed = "rgb(255, 158, 158)";
 var backgroundColorBlue = "rgb(199, 208, 255)";
 
 /*
@@ -142,19 +142,19 @@ function saveAndContinue(fromStage, toStage, sender) {
         var autoMovedYellowTotes = parseInt($("#auto-moved-yellow-tote-text").text());
         var autoAcquiredGreyTotes = parseInt($("#auto-acquired-grey-tote-text").text());
 
-        // bins
-        var autoAcquiredStepBins = parseInt($("#auto-acquired-step-bin-text").text());
-        var autoAcquiredGroundBins = parseInt($("#auto-acquired-ground-bin-text").text());
-        var autoMovedBins = parseInt($("#auto-moved-bin-text").text());
+        // containers
+        var autoAcquiredStepContainers = parseInt($("#auto-acquired-step-container-text").text());
+        var autoAcquiredGroundContainers = parseInt($("#auto-acquired-ground-container-text").text());
+        var autoMovedContainers = parseInt($("#auto-moved-container-text").text());
 
         stageVariables = {
             auto_yellow_stacked_totes: autoStackedYellowTotes,
             auto_yellow_moved_totes: autoMovedYellowTotes,
             auto_grey_acquired_totes: autoAcquiredGreyTotes,
 
-            auto_step_center_acquired_bins: autoAcquiredStepBins,
-            auto_ground_acquired_bins: autoAcquiredGroundBins,
-            auto_moved_bins: autoMovedBins,
+            auto_step_center_acquired_containers: autoAcquiredStepContainers,
+            auto_ground_acquired_containers: autoAcquiredGroundContainers,
+            auto_moved_containers: autoMovedContainers,
             auto_moved_to_auto_zone: $("#auto_moved_to_alliance_zone").bootstrapSwitch('state')
         };
 
@@ -309,44 +309,44 @@ function saveAndContinue(fromStage, toStage, sender) {
         fromStage = "teleoperated_stacked_totes";
     }
 
-    else if(fromStage === "teleoperated_picked_up_bins") {
-        if(!storedVariables['teleoperated_picked_up_bins']) {
-            storedVariables['teleoperated_picked_up_bins'] = {
-                tele_picked_up_sideways_bins: 0,
-                tele_picked_up_upright_bins: 0,
-                tele_picked_up_center_step_bins: 0
+    else if(fromStage === "teleoperated_picked_up_containers") {
+        if(!storedVariables['teleoperated_picked_up_containers']) {
+            storedVariables['teleoperated_picked_up_containers'] = {
+                tele_picked_up_sideways_containers: 0,
+                tele_picked_up_upright_containers: 0,
+                tele_picked_up_center_step_containers: 0
             };
         }
 
         var id = sender.id;
 
-        storedVariables['teleoperated_picked_up_bins'][id] += 1;
+        storedVariables['teleoperated_picked_up_containers'][id] += 1;
 
         /*
          For undoing things
          */
-        storedVariables['teleoperated_picked_up_bins'].lastChange = id;
-        $("#tele_picked_up_bin_subtract").prop('disabled', false);
+        storedVariables['teleoperated_picked_up_containers'].lastChange = id;
+        $("#tele_picked_up_container_subtract").prop('disabled', false);
 
 
-        var totalThings = sumNumInDict(storedVariables['teleoperated_picked_up_bins']);
+        var totalThings = sumNumInDict(storedVariables['teleoperated_picked_up_containers']);
 
-        $("#tele_picked_up_bins_text").text(totalThings);
+        $("#tele_picked_up_containers_text").text(totalThings);
 
-        stageVariables = storedVariables['teleoperated_picked_up_bins'];
+        stageVariables = storedVariables['teleoperated_picked_up_containers'];
 
         /*
          For undoing things
          */
-        storedVariables['teleoperated_picked_up_bins'].lastChange = id;
-        $("#tele_picked_up_bins_subtract").prop('disabled', false);
+        storedVariables['teleoperated_picked_up_containers'].lastChange = id;
+        $("#tele_picked_up_containers_subtract").prop('disabled', false);
 
     }
 
-    else if(fromStage === "teleoperated_stacked_bins") {
-        var startHeight = $("#bin_stack_height").find('.active > input').data('height');
+    else if(fromStage === "teleoperated_stacked_containers") {
+        var startHeight = $("#container_stack_height").find('.active > input').data('height');
 
-        $("#bin_stack_height").find('.active').removeClass('active');
+        $("#container_stack_height").find('.active').removeClass('active');
 
         if(isNaN(startHeight)) {
             errorMessage.push("Start height is required.");
@@ -354,8 +354,8 @@ function saveAndContinue(fromStage, toStage, sender) {
             /*
              re-append all past arrays to be re-committed to localStorage
              */
-            if(storedVariables['teleoperated_stacked_bins']) {
-                stageVariables = storedVariables['teleoperated_stacked_bins'];
+            if(storedVariables['teleoperated_stacked_containers']) {
+                stageVariables = storedVariables['teleoperated_stacked_containers'];
             } else {
                 stageVariables = [];
             }
@@ -365,21 +365,21 @@ function saveAndContinue(fromStage, toStage, sender) {
              */
             stageVariables.push(startHeight);
 
-            $("#tele_stacked_bins_text").text(stageVariables.length);
+            $("#tele_stacked_containers_text").text(stageVariables.length);
 
         }
     }
 
     else if(fromStage === "teleoperated") {
         var pushedLitter = parseInt($("#tele_pushed_litter-text").text());
-        var placedInBinLitter = parseInt($("#tele_placed_in_bin_litter-text").text());
+        var placedInContainerLitter = parseInt($("#tele_placed_in_container_litter-text").text());
 
-        if(isNaN(pushedLitter) || isNaN(placedInBinLitter)) {
+        if(isNaN(pushedLitter) || isNaN(placedInContainerLitter)) {
             errorMessage.push("This error should never occur unless you mess with the page, try refreshing it ;)");
         } else {
             stageVariables = {
                 tele_pushed_litter: pushedLitter,
-                tele_placed_in_bin_litter: placedInBinLitter
+                tele_placed_in_container_litter: placedInContainerLitter
             };
         }
     }
@@ -581,20 +581,20 @@ function openStage(stage) {
             $("#auto-moved-yellow-tote-text").text(storedVariables.autonomous.auto_yellow_moved_totes);
             $("#auto-acquired-grey-tote-text").text(storedVariables.autonomous.auto_grey_acquired_totes);
 
-            // bins
-            $("#auto-acquired-step-bin-text").text(storedVariables.autonomous.auto_step_center_acquired_bins);
-            $("#auto-acquired-ground-bin-text").text(storedVariables.autonomous.auto_ground_acquired_bins);
-            $("#auto-moved-bin-text").text(storedVariables.autonomous.auto_moved_bins);
+            // containers
+            $("#auto-acquired-step-container-text").text(storedVariables.autonomous.auto_step_center_acquired_containers);
+            $("#auto-acquired-ground-container-text").text(storedVariables.autonomous.auto_ground_acquired_containers);
+            $("#auto-moved-container-text").text(storedVariables.autonomous.auto_moved_containers);
 
         } catch (e) {
             $("#auto-stacked-yellow-tote-text").text(0);
             $("#auto-moved-yellow-tote-text").text(0);
             $("#auto-acquired-grey-tote-text").text(0);
 
-            // bins
-            $("#auto-acquired-step-bin-text").text(0);
-            $("#auto-acquired-ground-bin-text").text(0);
-            $("#auto-moved-bin-text").text(0);
+            // containers
+            $("#auto-acquired-step-container-text").text(0);
+            $("#auto-acquired-ground-container-text").text(0);
+            $("#auto-moved-container-text").text(0);
         }
 
         if (storedVariables.autonomous) {
@@ -628,33 +628,33 @@ function openStage(stage) {
             $("#tele_stacked_totes_text").text(0);
         }
 
-        if (storedVariables['teleoperated_picked_up_bins']) {
-            $("#tele_picked_up_bins_text").text(sumNumInDict(storedVariables['teleoperated_picked_up_bins']));
+        if (storedVariables['teleoperated_picked_up_containers']) {
+            $("#tele_picked_up_containers_text").text(sumNumInDict(storedVariables['teleoperated_picked_up_containers']));
         } else {
-            $("#tele_picked_up_bins_text").text(0);
+            $("#tele_picked_up_containers_text").text(0);
         }
 
-        if (storedVariables['teleoperated_picked_up_bins']) {
-            if (storedVariables['teleoperated_picked_up_bins'].lastChange) {
+        if (storedVariables['teleoperated_picked_up_containers']) {
+            if (storedVariables['teleoperated_picked_up_containers'].lastChange) {
                 $("#tele_picked_up_totes_subtract").prop('disabled', false);
             } else {
                 $("#tele_picked_up_totes_subtract").prop('disabled', true);
             }
         }
 
-        if (storedVariables['teleoperated_stacked_bins']) {
-            $("#tele_stacked_bins_text").text(storedVariables['teleoperated_stacked_bins'].length);
+        if (storedVariables['teleoperated_stacked_containers']) {
+            $("#tele_stacked_containers_text").text(storedVariables['teleoperated_stacked_containers'].length);
         } else {
-            $("#tele_stacked_bins_text").text(0);
+            $("#tele_stacked_containers_text").text(0);
         }
 
         try {
             $("#tele_pushed_litter-text").text(storedVariables['teleoperated'].tele_pushed_litter);
-            $("#tele_placed_in_bin_litter-text").text(storedVariables['teleoperated'].tele_placed_in_bin_litter);
+            $("#tele_placed_in_container_litter-text").text(storedVariables['teleoperated'].tele_placed_in_container_litter);
 
         } catch (e) {
             $("#tele_pushed_litter-text").text(0);
-            $("#tele_placed_in_bin_litter-text").text(0);
+            $("#tele_placed_in_container_litter-text").text(0);
             $("#totes_in_possession").text(0);
         }
 
@@ -679,7 +679,9 @@ function openStage(stage) {
         $("#coop_stack").bootstrapSwitch({
             onText: "YES",
             offText: "NO"
-        })
+        });
+
+        $("#coop_stack").bootstrapSwitch('state', false);
 
         if (localStorage.totesInPossession) {
             $("#totes_added").find('input[data-height=' + localStorage.totesInPossession + "]").parent('label').addClass('active');
@@ -861,11 +863,11 @@ $("#tele_picked_up_totes_subtract_button").click(function () {
 });
 
 /*
- Undo last thing from tele_picked_up_bins
+ Undo last thing from tele_picked_up_containers
  */
 
-$("#tele_picked_up_bins_subtract").click(function () {
-    var variables = getMatchData()['teleoperated_picked_up_bins'];
+$("#tele_picked_up_containers_subtract").click(function () {
+    var variables = getMatchData()['teleoperated_picked_up_containers'];
 
     var lastChange = variables.lastChange;
 
@@ -875,14 +877,14 @@ $("#tele_picked_up_bins_subtract").click(function () {
 
     if (variables.lastChange) {
         if (variables[lastChange] > 0) {
-            setMatchData("teleoperated_picked_up_bins", lastChange, variables[lastChange] - 1);
-            setMatchData("teleoperated_picked_up_bins", 'lastChange', undefined);
+            setMatchData("teleoperated_picked_up_containers", lastChange, variables[lastChange] - 1);
+            setMatchData("teleoperated_picked_up_containers", 'lastChange', undefined);
 
-            $("#tele_picked_up_bins_subtract").prop('disabled', true);
+            $("#tele_picked_up_containers_subtract").prop('disabled', true);
         }
     }
 
-    $("#tele_picked_up_bins_text").text(sumNumInDict(getMatchData()['teleoperated_picked_up_bins']));
+    $("#tele_picked_up_containers_text").text(sumNumInDict(getMatchData()['teleoperated_picked_up_containers']));
 
 });
 
@@ -913,14 +915,14 @@ $("#tele_stacked_totes_subtract").click(function () {
     }
 });
 
-$("#tele_stacked_bins_subtract").click(function () {
-    var data = getMatchData()['teleoperated_stacked_bins'];
+$("#tele_stacked_containers_subtract").click(function () {
+    var data = getMatchData()['teleoperated_stacked_containers'];
 
     data = data.slice(0, -1);
 
-    setMatchDataArray('teleoperated_stacked_bins', data);
+    setMatchDataArray('teleoperated_stacked_containers', data);
 
-    $("#tele_stacked_bins_text").text(data.length);
+    $("#tele_stacked_containers_text").text(data.length);
 });
 
 /*
@@ -985,13 +987,13 @@ function discardData() {
     }
 }
 
-$("button[data-name=auto-moved-bin]").click(function() {
-    var sum = parseInt($("#auto-acquired-step-bin-text").text()) + parseInt($("#auto-acquired-ground-bin-text").text());
+$("button[data-name=auto-moved-container]").click(function() {
+    var sum = parseInt($("#auto-acquired-step-container-text").text()) + parseInt($("#auto-acquired-ground-container-text").text());
 
-    var thisSum = parseInt($("#auto-moved-bin-text").text());
+    var thisSum = parseInt($("#auto-moved-container-text").text());
     console.log(sum + " " + thisSum);
 
     if(thisSum > sum) {
-        $("#auto-moved-bin-text").text(parseInt($("#auto-moved-bin-text").text()) - 1);
+        $("#auto-moved-container-text").text(parseInt($("#auto-moved-container-text").text()) - 1);
     }
 })
