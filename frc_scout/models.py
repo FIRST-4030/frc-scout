@@ -111,3 +111,26 @@ class ContainerStack(models.Model):
     def __str__(self):
         return str("Team: %i | Match: %i | Location: %s" % (self.match.team_number, self.match.match_number, self.match.location.name))
 
+
+class PitScoutData(models.Model):
+    scout = models.ForeignKey(User)
+    location = models.ForeignKey(Location)
+    team_number = models.IntegerField(max_length=5)
+    team_name = models.TextField(max_length=64, default=None)
+    team_website = models.TextField(max_length=128, default=None)
+
+    # autonomous
+    can_move_totes = models.BooleanField(default=None)
+    can_move_containers = models.BooleanField(default=None)
+    can_acquire_containers = models.BooleanField(default=None)
+
+    # teleoperated
+    tote_stack_capacity = models.IntegerField(max_length=3, default=None)
+
+    # human interaction
+    human_tote_loading = models.BooleanField(default=None)
+    human_litter_loading = models.BooleanField(default=None)
+
+    # maneuvering
+    has_turret = models.BooleanField(default=None)
+    has_strafing = models.BooleanField(default=None)

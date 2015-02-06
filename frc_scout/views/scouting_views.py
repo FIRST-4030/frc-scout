@@ -17,6 +17,15 @@ def match_scouting(request):
     return render(request, 'frc_scout/scouting/match/container.html', context)
 
 
+def pit_scouting(request):
+
+    context = {
+        'fluid': False
+    }
+
+    return render(request, 'frc_scout/scouting/pit/container.html', context)
+
+
 def submit_match_scouting_data(request):
     if request.method != "POST":
         raise Http404
@@ -137,3 +146,7 @@ def submit_match_scouting_data(request):
             return HttpResponse(json.dumps(errors), status=200)
         else:
             return HttpResponse(status=200)
+
+
+def submit_pit_scouting_data(request):
+    return HttpResponse()

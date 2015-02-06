@@ -1,7 +1,9 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.contrib.sessions.models import Session
 from django.http.response import Http404, HttpResponse
 from django.shortcuts import render
+from django.utils import timezone
 
 
 @login_required
@@ -13,7 +15,9 @@ def view_scouts(request):
 
     scouts = User.objects.filter(userprofile__team=team).exclude(id=request.user.id)
 
-    unapproved_scouts = User.objects.filter(userprofile__team=team, userprofile__approved=False).exclude(id=request.user.id)
+    unapproved_scouts = User.objects\
+        .filter(userprofile__team=team, userprofile__approved=False)\
+        .exclude(id=request.user.id)
 
     context = {
         'location': request.session.get('location'),
@@ -23,6 +27,7 @@ def view_scouts(request):
     }
 
     return render(request, 'frc_scout/manage/view_scouts.html', context)
+
 
 
 @login_required

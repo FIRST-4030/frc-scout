@@ -46,8 +46,12 @@ def login_view(request):
             user = authenticate(username=username, password=password)
 
             if user is None:
-                email = User.objects.get(email=username)
-                user = authenticate(username=email.username, password=password)
+                try:
+                    email = User.objects.get(email=username)
+
+                    user = authenticate(username=email.username, password=password)
+                except User.DoesNotExist:
+                    user = None
 
             location = Location.objects.get(name=location_name).id
 
