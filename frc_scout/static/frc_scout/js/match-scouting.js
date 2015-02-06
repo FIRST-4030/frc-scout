@@ -454,6 +454,8 @@ function showErrorMessages(messages, correctErrors) {
     } else {
         $("#correct_errors").hide();
     }
+
+    window.scrollTo(0, 1);
 }
 
 function submitData() {
@@ -811,7 +813,13 @@ $("#auto_start_image").click(function (event) {
     xPosition = (event.pageX - image.offset().left) / image.width();
     yPosition = (event.pageY - image.offset().top) / image.height();
 
-    saveAndContinue('autonomous_starting_location', 'autonomous');
+    if((yPosition > 0.18 && yPosition < 0.4) || yPosition > 0.62) {
+        saveAndContinue('autonomous_starting_location', 'autonomous');
+    } else {
+        showErrorMessages(["Invalid starting location."], false);
+    }
+
+
 });
 
 /*
@@ -823,7 +831,12 @@ $("#teleoperated_stacked_totes_image").click(function (event) {
     xPosition = (event.pageX - image.offset().left) / image.width();
     yPosition = (event.pageY - image.offset().top) / image.height();
 
-    saveAndContinue('teleoperated_stacked_totes_location', 'teleoperated');
+    if(yPosition < 0.09 || (yPosition > 0.3 && yPosition < 0.4 && xPosition < 0.58) || (yPosition > 0.63 && yPosition < 0.73 && xPosition > 0.42)) {
+        saveAndContinue('teleoperated_stacked_totes_location', 'teleoperated');
+    } else {
+        showErrorMessages(["Invalid tote stack location."], false);
+    }
+
 });
 
 /*

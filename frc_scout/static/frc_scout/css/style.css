@@ -94,6 +94,8 @@ body {
 
     height: 75vh;
     max-width: 100%;
+
+    background-color: cyan;
 }
 
 .three-column {
