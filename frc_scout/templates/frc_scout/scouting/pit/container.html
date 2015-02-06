@@ -32,10 +32,17 @@
     </style>
 {% endblock %}
 
+{% block nav %}{% include 'frc_scout/nav.html' %}{% endblock %}
+
 {% block main_content %}
-    <h2>Pit Scouting</h2>
-    <h5>The team number is the only required field here &mdash; fill out what you know.</h5>
-    <form class="form-horizontal" id="pit_scout_form" onsubmit="submitForm(); return false;">
+    <h6>The team number, and any other attribute, are the only required fields here &mdash; fill out what you know.</h6>
+    <div class="alert alert-success" style="display: none;" id="success_message">
+        <h6><span class="glyphicon glyphicon-check"></span>&nbsp; Data submitted successfully, you may now enter more.</h6>
+    </div>
+    <div class="alert alert-warning" style="display: none;" id="insufficient_message">
+        <h6><span class="glyphicon glyphicon-exclamation-sign"></span>&nbsp; You must enter some attribute <strong>other than team number</strong> &mdash; otherwise your data is useless!</h6>
+    </div>
+    <form onclick="$('#success_message, #insufficient_message').slideUp(200);" class="form-horizontal" id="pit_scout_form" onsubmit="submitForm(); return false;">
         <fieldset>
             <legend>Basic Information</legend>
             <div class="form-group">
@@ -175,23 +182,30 @@
         function submitForm() {
             var formData = getFormData();
 
-            $("#submit_button").button('loading');
+            if(Object.keys(getFormData()).length > 1) {
 
-            $.ajax({
-                url: '{% url "frc_scout:submit_pit_scouting_data" %}',
-                type: "POST",
-                data: {
-                    csrfmiddlewaretoken: $.cookie('csrftoken'),
-                    data: JSON.stringify(formData)
-                },
-                success: function() {
-                    window.setTimeout(function() {
-                        $("#submit_button").button('reset');
-                        clearForm();
-                        window.scrollTo(0, 1);
-                    }, 2000);
-                }
-            })
+                $("#submit_button").button('loading');
+
+                $.ajax({
+                    url: '{% url "frc_scout:submit_pit_scouting_data" %}',
+                    type: "POST",
+                    data: {
+                        csrfmiddlewaretoken: $.cookie('csrftoken'),
+                        data: JSON.stringify(formData)
+                    },
+                    success: function() {
+                        window.setTimeout(function() {
+                            $("#submit_button").button('reset');
+                            clearForm();
+                            window.scrollTo(0, 1);
+                            $("#success_message").show();
+                        }, 2000);
+                    }
+                })
+            } else {
+                window.scrollTo(0, 1);
+                $("#insufficient_message").show();
+            }
         }
 
         function clearForm() {
@@ -203,5 +217,8 @@
                 $(this).bootstrapSwitch('indeterminate', true);
             })
         }
+
     </script>
 {% endblock %}
+
+{% block footer %}{% include 'frc_scout/footer.html' %}{% endblock %}

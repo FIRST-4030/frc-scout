@@ -28,7 +28,6 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User)
 
     team = models.ForeignKey(Team, null=True)
-
     team_manager = models.BooleanField(default=False)
     approved = models.BooleanField(default=False)
 
@@ -116,21 +115,29 @@ class PitScoutData(models.Model):
     scout = models.ForeignKey(User)
     location = models.ForeignKey(Location)
     team_number = models.IntegerField(max_length=5)
-    team_name = models.TextField(max_length=64, default=None)
-    team_website = models.TextField(max_length=128, default=None)
+    team_name = models.TextField(max_length=64, default=None, null=True)
+    team_website = models.TextField(max_length=128, default=None, null=True)
 
     # autonomous
-    can_move_totes = models.BooleanField(default=None)
-    can_move_containers = models.BooleanField(default=None)
-    can_acquire_containers = models.BooleanField(default=None)
+    can_move_totes = models.NullBooleanField(null=True)
+    can_move_containers = models.NullBooleanField(null=True)
+    can_acquire_containers = models.NullBooleanField(null=True)
 
     # teleoperated
-    tote_stack_capacity = models.IntegerField(max_length=3, default=None)
+    tote_stack_capacity = models.IntegerField(max_length=3, default=None, null=True)
 
     # human interaction
-    human_tote_loading = models.BooleanField(default=None)
-    human_litter_loading = models.BooleanField(default=None)
+    human_tote_loading = models.NullBooleanField(null=True)
+    human_litter_loading = models.NullBooleanField(null=True)
 
     # maneuvering
-    has_turret = models.BooleanField(default=None)
-    has_strafing = models.BooleanField(default=None)
+    has_turret = models.NullBooleanField(null=True)
+    has_strafing = models.NullBooleanField(null=True)
+
+    def __str__(self):
+        rt = self.scout.get_short_name() + " | " + str(self.location.name) + " | " + str(self.team_number)
+
+        if self.scout.userprofile.team.team_number == self.team_number:
+            rt += " (SELF)"
+
+        return rt

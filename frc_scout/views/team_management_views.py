@@ -15,8 +15,8 @@ def view_scouts(request):
 
     scouts = User.objects.filter(userprofile__team=team).exclude(id=request.user.id)
 
-    unapproved_scouts = User.objects\
-        .filter(userprofile__team=team, userprofile__approved=False)\
+    unapproved_scouts = User.objects \
+        .filter(userprofile__team=team, userprofile__approved=False) \
         .exclude(id=request.user.id)
 
     context = {
@@ -46,6 +46,9 @@ def update_scouts(request):
 
         elif action == "approved":
             scout.userprofile.approved = not scout.userprofile.approved
+
+        elif action == "banned":
+            scout.userprofile.banned = not scout.userprofile.banned
 
         scout.userprofile.save()
 

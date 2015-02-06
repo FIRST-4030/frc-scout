@@ -5,7 +5,7 @@ from django.http import Http404, HttpResponse
 
 
 # Match Scouting
-from frc_scout.models import Match, Location, ToteStack, ContainerStack
+from frc_scout.models import Match, Location, ToteStack, ContainerStack, PitScoutData
 
 
 def match_scouting(request):
@@ -20,7 +20,8 @@ def match_scouting(request):
 def pit_scouting(request):
 
     context = {
-        'fluid': False
+        'fluid': False,
+        'nav_title': "Pit Scouting"
     }
 
     return render(request, 'frc_scout/scouting/pit/container.html', context)
@@ -149,4 +150,17 @@ def submit_match_scouting_data(request):
 
 
 def submit_pit_scouting_data(request):
-    return HttpResponse()
+    if request.method != "POST":
+        return HttpResponse(status=403)
+
+    else:
+        data = json.loads(request.POST.get('data'))
+
+        data_object = PitScoutData(scout=request.user,
+                                   location=Location.objects.get(id=request.session.get('location_id')))
+        for name in data:
+            setattr(data_object, name, data.get(name))
+
+        data_object.save()
+
+        return HttpResponse(status=200)
