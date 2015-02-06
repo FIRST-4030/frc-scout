@@ -4,6 +4,9 @@ from django.db import models
 # Create your models here.
 from django.utils import timezone
 
+User._meta.get_field('email')._unique = True
+
+
 class Location(models.Model):
     name = models.TextField()
 
@@ -25,12 +28,11 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User)
 
     team = models.ForeignKey(Team, null=True)
-
     team_manager = models.BooleanField(default=False)
     approved = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.user.username
+        return self.user.username + " - " + self.user.get_full_name() + " - " + str(self.team.team_number)
 
 
 def get_current_time():
@@ -39,7 +41,7 @@ def get_current_time():
 
 class Match(models.Model):
     # References
-    team = models.ForeignKey(Team)
+    team_number = models.IntegerField(max_length=5)
     scout = models.ForeignKey(User)
     match_number = models.IntegerField()
     timestamp = models.DateTimeField(default=get_current_time)
@@ -53,9 +55,9 @@ class Match(models.Model):
     auto_yellow_moved_totes = models.IntegerField(default=0)
     auto_grey_acquired_totes = models.IntegerField(default=0)
 
-    auto_step_center_acquired_bins = models.IntegerField(default=0)
-    auto_ground_acquired_bins = models.IntegerField(default=0)
-    auto_moved_bins = models.IntegerField(default=0)
+    auto_step_center_acquired_containers = models.IntegerField(default=0)
+    auto_ground_acquired_containers = models.IntegerField(default=0)
+    auto_moved_containers = models.IntegerField(default=0)
 
     auto_moved_to_auto_zone = models.BooleanField(default=False)
     auto_no_auto = models.BooleanField(default=False)
@@ -69,12 +71,12 @@ class Match(models.Model):
     tele_picked_up_sideways_totes = models.IntegerField(default=0)
     tele_picked_up_human_station_totes = models.IntegerField(default=0)
 
-    tele_picked_up_sideways_bins = models.IntegerField(default=0)
-    tele_picked_up_upright_bins = models.IntegerField(default=0)
-    tele_picked_up_center_step_bins = models.IntegerField(default=0)
+    tele_picked_up_sideways_containers = models.IntegerField(default=0)
+    tele_picked_up_upright_containers = models.IntegerField(default=0)
+    tele_picked_up_center_step_containers = models.IntegerField(default=0)
 
     tele_pushed_litter = models.IntegerField(default=0)
-    tele_placed_in_bin_litter = models.IntegerField(default=0)
+    tele_placed_in_container_litter = models.IntegerField(default=0)
 
     tele_fouls = models.IntegerField(default=0)
     tele_knocked_over_stacks = models.IntegerField(default=0)
@@ -83,19 +85,59 @@ class Match(models.Model):
     tele_shooter_jam = models.BooleanField(default=False)
 
     tele_foul_context = models.TextField()
-    tele_misc_comments = models.TextField()
+    tele_public_comments = models.TextField()
+
+    def __str__(self):
+        return str("Team: %i | Match: %i | Location: %s" % (self.team_number, self.match_number, self.location.name))
 
 
 class ToteStack(models.Model):
     match = models.ForeignKey(Match)
     start_height = models.IntegerField(default=0)
-    end_height = models.IntegerField(default=1)
+    totes_added = models.IntegerField(default=0)
     x = models.DecimalField(max_digits=8, decimal_places=8)
     y = models.DecimalField(max_digits=8, decimal_places=8)
     coop_stack = models.BooleanField(default=False)
 
+    def __str__(self):
+        return str("Team: %i | Match: %i | Location: %s" % (self.match.team_number, self.match.match_number, self.match.location.name))
 
-class BinStack(models.Model):
+
+class ContainerStack(models.Model):
     match = models.ForeignKey(Match)
     height = models.IntegerField(default=1)
 
+    def __str__(self):
+        return str("Team: %i | Match: %i | Location: %s" % (self.match.team_number, self.match.match_number, self.match.location.name))
+
+
+class PitScoutData(models.Model):
+    scout = models.ForeignKey(User)
+    location = models.ForeignKey(Location)
+    team_number = models.IntegerField(max_length=5)
+    team_name = models.TextField(max_length=64, default=None, null=True)
+    team_website = models.TextField(max_length=128, default=None, null=True)
+
+    # autonomous
+    can_move_totes = models.NullBooleanField(null=True)
+    can_move_containers = models.NullBooleanField(null=True)
+    can_acquire_containers = models.NullBooleanField(null=True)
+
+    # teleoperated
+    tote_stack_capacity = models.IntegerField(max_length=3, default=None, null=True)
+
+    # human interaction
+    human_tote_loading = models.NullBooleanField(null=True)
+    human_litter_loading = models.NullBooleanField(null=True)
+
+    # maneuvering
+    has_turret = models.NullBooleanField(null=True)
+    has_strafing = models.NullBooleanField(null=True)
+
+    def __str__(self):
+        rt = self.scout.get_short_name() + " | " + str(self.location.name) + " | " + str(self.team_number)
+
+        if self.scout.userprofile.team.team_number == self.team_number:
+            rt += " (SELF)"
+
+        return rt

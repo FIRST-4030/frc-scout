@@ -26,8 +26,10 @@ urlpatterns = patterns(
     url(r'^account/profile/$', views.update_profile, name='update_profile'),
     url(r'^account/password/$', views.update_password, name='update_password'),
 
-    # FOR TESTING
-    url(r'^view/$', views.get_view, name='get_view'),
+    # Scouting views
+    url(r'^scouting/match/$', views.match_scouting, name='match_scouting'),
+    url(r'^scouting/match/submit/$', views.submit_match_scouting_data, name='submit_match_scouting_data'),
 
-
+    url(r'^scouting/pit/$', views.pit_scouting, name='pit_scouting'),
+    url(r'^scouting/pit/submit/$', views.submit_pit_scouting_data, name='submit_pit_scouting_data'),
 )

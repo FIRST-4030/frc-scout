@@ -4,66 +4,107 @@
 
 {% block title %}Scouting{% endblock %}
 
+{% block extra_css %}
+    <style type="text/css">
+        ::-webkit-input-placeholder { /* WebKit browsers */
+            color:    #666666 !important;
+        }
+        :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+            color:    #666666 !important;
+            opacity:  1;
+        }
+        ::-moz-placeholder { /* Mozilla Firefox 19+ */
+            color:    #666666 !important;
+            opacity:  1;
+        }
+        :-ms-input-placeholder { /* Internet Explorer 10+ */
+            color:    #666666 !important;
+        }
+
+        h2 {
+            margin-bottom: -2px;
+        }
+    </style>
+{% endblock %}
+
 {% block main_content %}
 
     <!-- ERRORS -->
-
     <div class="container-fluid">
         <div class="alert alert-warning alert-dismissible" role="alert" id="alert" style="margin-top: 10px; display: none;">
             <button type="button" class="close" onclick="$('#alert').hide();" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <p><strong>Please correct the following errors:</strong></p>
+            <p id="correct_errors"><strong>Please correct the following errors:</strong></p>
             <span id="alert-text"></span>
         </div>
     </div>
-	
-	<!-- LOADING SCREEN -->
-	<div class="container" id="loading">
+
+    <!-- LOADING SCREEN -->
+    <div class="container" id="loading">
         <h1>
             Loading...
         </h1>
-	</div>
+    </div>
 
     <!-- PREMATCH -->
     <div class="container-fluid stage" style="display: none;" id="prematch">
         <div class="row">
             <div class="col-md-12">
-                <h2>Pre-Match</h2>
+                <h2>Pre-Match<span class="team-number"></span></h2>
             </div>
         </div>
         <div class="row">
             <div class="col-md-12">
-                <input id="team_number" class="form-control input-x-lg" placeholder="Team Number">
+                <input id="team_number" class="form-control input-x-lg" placeholder="Team Number" type="number">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <input id="match_number" class="form-control input-x-lg" placeholder="Match Number" type='number'>
             </div>
         </div>
         <br>
         <div class="row">
             <div class="col-md-12">
                 <div class="btn-group max-width" data-toggle="buttons">
-                    <label class="btn btn-lg btn-extra-high btn-danger btn-extra-high">
-                        <input type="radio" name="redAlliance">
-                        Red Alliance
+                    <label class="btn btn-lg btn-danger alliance-toggle" style="width: 50%;" id="red_alliance">
+                        <input type="radio">
+                        Red
                     </label>
-                    <label class="btn btn-lg btn-extra-high btn-primary btn-extra-high">
-                        <input type="radio" name="blueAlliance">
-                        Blue Alliance
+                    <label class="btn btn-lg btn-primary alliance-toggle" style="width: 50%;" id="blue_alliance">
+                        <input type="radio">
+                        Blue
                     </label>
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-md-12">
-                <input id="match_number" class="form-control input-x-lg" placeholder="Match Number">
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <h3 style="color: #666666;">Location: {{ request.session.location_name }}</h3>
+                <h3 style="color: #666666;">Location: <span id='location'>{{ request.session.location_name }}</span></h3>
             </div>
         </div>
         <br>
         <div class="row">
+            <div class="col-sm-6">
+                <button class="btn btn-extra-high btn-info btn-lg max-width" onclick="window.location = '{% url 'frc_scout:index' %}';"><span class="glyphicon glyphicon-arrow-left"></span> return home</button>
+            </div>
+            <div class="col-sm-6">
+                <button class="btn btn-extra-high btn-primary btn-lg max-width" onclick="saveAndContinue('prematch', 'autonomous_starting_location');">autonomous &nbsp;<span class="glyphicon glyphicon-arrow-right"></span></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- AUTONOMOUS STARTING LOCATION -->
+    <div class="container-fluid stage" style="display: none;" id="autonomous_starting_location">
+        <div class="row">
             <div class="col-md-12">
-                <button class="btn btn-extra-high btn-primary btn-lg max-width" onclick="saveAndContinue('prematch', 'autonomous');">autonomous &nbsp;<span class="glyphicon glyphicon-arrow-right"></span></button>
+                <h2>Autonomous Start<span class="team-number"></span></h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div>
+                    <img src="{% static "frc_scout/img/start_zone.png" %}" class="auto-location-image" id="auto_start_image">
+                </div>
             </div>
         </div>
     </div>
@@ -72,12 +113,24 @@
     <div class="container-fluid stage" style="display: none;" id="autonomous">
         <div class="row">
             <div class="col-md-12">
-                <h2>Autonomous</h2>
+                <h2>Autonomous<span class="team-number"></span></h2>
             </div>
         </div>
         <div class="row">
             <div class="col-sm-6">
                 <h3>Totes</h3>
+                <div class="row">
+                    <div class="col-xs-8">
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="auto-moved-yellow-tote" data-operation="add">Yellow Tote in Zone</button>
+                    </div>
+                    <div class="col-xs-2">
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning btn-add-subtract" data-name="auto-moved-yellow-tote" data-operation="subtract">&mdash;</button>
+                    </div>
+                    <div class="col-xs-2 text-center">
+                        <h4 class="button-state-text" id="auto-moved-yellow-tote-text" data-max="3">0</h4>
+                    </div>
+                </div>
+
                 <div class="row">
                     <div class="col-xs-8">
                         <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="auto-stacked-yellow-tote" data-operation="add">Stacked Yellow</button>
@@ -86,19 +139,7 @@
                         <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning btn-add-subtract" data-name="auto-stacked-yellow-tote" data-operation="subtract">&mdash;</button>
                     </div>
                     <div class="col-xs-2 text-center">
-                        <h4 class="button-state-text" id="auto-stacked-yellow-tote-text">0</h4>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-xs-8">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="auto-moved-yellow-tote" data-operation="add">Moved Yellow</button>
-                    </div>
-                    <div class="col-xs-2">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning btn-add-subtract" data-name="auto-moved-yellow-tote" data-operation="subtract">&mdash;</button>
-                    </div>
-                    <div class="col-xs-2 text-center">
-                        <h4 class="button-state-text" id="auto-moved-yellow-tote-text">0</h4>
+                        <h4 class="button-state-text" id="auto-stacked-yellow-tote-text" data-max="3">0</h4>
                     </div>
                 </div>
 
@@ -116,51 +157,65 @@
             </div>
 
             <div class="col-sm-6">
-                <h3>Bins</h3>
+                <h3>Containers</h3>
                 <div class="row">
                     <div class="col-xs-8">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="auto-acquired-step-bin" data-operation="add">Acquired Step</button>
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="auto-acquired-step-container" data-operation="add">Acquired From Step</button>
                     </div>
                     <div class="col-xs-2">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning btn-add-subtract" data-name="auto-acquired-step-bin" data-operation="subtract">&mdash;</button>
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning btn-add-subtract" data-name="auto-acquired-step-container" data-operation="subtract">&mdash;</button>
                     </div>
                     <div class="col-xs-2 text-center">
-                        <h4 class="button-state-text" id="auto-acquired-step-bin-text">0</h4>
+                        <h4 class="button-state-text" id="auto-acquired-step-container-text" data-max="4">0</h4>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-xs-8">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="auto-acquired-ground-bin" data-operation="add">Acquired Ground</button>
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="auto-acquired-ground-container" data-operation="add">Acquired From Ground</button>
                     </div>
                     <div class="col-xs-2">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning btn-add-subtract" data-name="auto-acquired-ground-bin" data-operation="subtract">&mdash;</button>
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning btn-add-subtract" data-name="auto-acquired-ground-container" data-operation="subtract">&mdash;</button>
                     </div>
                     <div class="col-xs-2 text-center">
-                        <h4 class="button-state-text" id="auto-acquired-ground-bin-text">0</h4>
+                        <h4 class="button-state-text" id="auto-acquired-ground-container-text" data-max="3">0</h4>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-xs-8">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="auto-moved-bin" data-operation="add">Moved</button>
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="auto-moved-container" data-operation="add">Moved To Zone</button>
                     </div>
                     <div class="col-xs-2">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning btn-add-subtract" data-name="auto-moved-bin" data-operation="subtract">&mdash;</button>
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning btn-add-subtract" data-name="auto-moved-container" data-operation="subtract">&mdash;</button>
                     </div>
                     <div class="col-xs-2 text-center">
-                        <h4 class="button-state-text" id="auto-moved-bin-text">0</h4>
+                        <h4 class="button-state-text" id="auto-moved-container-text" data-max="7">0</h4>
+                    </div>
+                </div>
+
+                <div class="row" style="margin-top:10px;">
+                    <div class="col-xs-8">
+                        <span class='btn-lg-text'>ROBOT ENDED IN AUTO ZONE</span>
+                    </div>
+                    <div class='col-xs-4 text-right'>
+                        <input type="checkbox" id="auto_moved_to_alliance_zone">
                     </div>
                 </div>
             </div>
         </div>
         <br>
         <div class="row">
-            <div class="col-sm-6">
-                <button style="margin-top: 5px; margin-bottom: 5px;" class="btn btn-extra-high btn-info btn-lg max-width" onclick="saveAndContinue('autonomous', 'autonomous_fouls_and_other');">Fouls & Other</button>
+            <div class="col-sm-4">
+                <button style="margin-top: -10px; margin-bottom: 5px; height: 75px;" class="btn btn-extra-high btn-info btn-lg max-width" onclick="saveAndContinue('autonomous', 'prematch');"><span class="glyphicon glyphicon-arrow-left"></span>&nbsp; Prematch</button>
             </div>
-            <div class="col-sm-6">
-                <button style="margin-top: 5px; margin-bottom: 5px;" class="btn btn-extra-high btn-success btn-lg max-width" onclick="saveAndContinue('autonomous', 'teleoperated');">teleoperated  &nbsp;<span class="glyphicon glyphicon-arrow-right"></span></button>
+
+            <div class="col-sm-4">
+                <button style="margin-top: -10px; margin-bottom: 5px; height: 75px;" class="btn btn-extra-high btn-danger btn-lg max-width" onclick="saveAndContinue('autonomous', 'autonomous_fouls_and_other');">Fouls & Other</button>
+            </div>
+
+            <div class="col-sm-4">
+                <button style="margin-top: -10px; margin-bottom: 5px; height: 75px;" class="btn btn-extra-high btn-primary btn-lg max-width" onclick="saveAndContinue('autonomous', 'teleoperated');">teleoperated  &nbsp;<span class="glyphicon glyphicon-arrow-right"></span></button>
             </div>
         </div>
     </div>
@@ -182,227 +237,383 @@
 
     <!-- TELEOPERATED -->
     <div class="container-fluid stage" id="teleoperated" style="display:none;">
-        <h1>TELEOP</h1>
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Teleoperated<span class="team-number"></span></h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4">
+                <h3>Totes</h3>
+                <div class="row">
+                    <div class="col-xs-7">
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width" onclick="saveAndContinue('teleoperated', 'teleoperated_picked_up_totes');">picked up</button>
+                    </div>
+                    <div class="col-xs-3">
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning max-width" id="tele_picked_up_totes_subtract_button" disabled="true">&mdash;</button>
+                    </div>
+                    <div class="col-xs-2">
+                        <h4 class="button-state-text three-column" id="tele_picked_up_totes">0</h4>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-7">
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width" onclick="saveAndContinue('teleoperated', 'teleoperated_stacked_totes');">stacked</button>
+                    </div>
+                    <div class="col-xs-3">
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning max-width" id="tele_stacked_totes_subtract">&mdash;</button>
+                    </div>
+                    <div class="col-xs-2">
+                        <h4 class="button-state-text three-column" id="tele_stacked_totes_text">0</h4>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-4">
+                <h3>Containers</h3>
+                <div class="row">
+                    <div class="col-xs-7">
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width" onclick="saveAndContinue('teleoperated', 'teleoperated_picked_up_containers');">picked up</button>
+                    </div>
+                    <div class="col-xs-3">
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning max-width" id="tele_picked_up_containers_subtract" disabled="true">&mdash;</button>
+                    </div>
+                    <div class="col-xs-2">
+                        <h4 class="button-state-text three-column" id="tele_picked_up_containers_text" data-max="3">0</h4>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-7">
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width" onclick="saveAndContinue('teleoperated', 'teleoperated_stacked_containers');">stacked</button>
+                    </div>
+                    <div class="col-xs-3">
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning max-width" id="tele_stacked_containers_subtract">&mdash;</button>
+                    </div>
+                    <div class="col-xs-2">
+                        <h4 class="button-state-text three-column" id="tele_stacked_containers_text" data-max="3">0</h4>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-4">
+                <h3>Litter</h3>
+                <div class="row">
+                    <div class="col-xs-7">
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="tele_pushed_litter" data-operation="add">pushed</button>
+                    </div>
+                    <div class="col-xs-3">
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning max-width btn-add-subtract" data-name="tele_pushed_litter" data-operation="subtract">&mdash;</button>
+                    </div>
+                    <div class="col-xs-2">
+                        <h4 class="button-state-text three-column" id="tele_pushed_litter-text" data-max="20">0</h4>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-7">
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="tele_placed_in_container_litter" data-operation="add">in container</button>
+                    </div>
+                    <div class="col-xs-3">
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning max-width btn-add-subtract" data-name="tele_placed_in_container_litter" data-operatio="subtract">&mdash;</button>
+                    </div>
+                    <div class="col-xs-2">
+                        <h4 class="button-state-text three-column" id="tele_placed_in_container_litter-text" data-max="7">0</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <h3>Totes in possession: <span id="totes_in_possession">0</span></h3>
+            </div>
+            <div class="col-sm-6 text-right" id="died_during_match_text" style="display: none;">
+                <h3 style="color: darkred;">Robot died during match</h3>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-sm-4">
+                <button style="margin-top: 5px; margin-bottom: 5px;" class="btn btn-extra-high btn-info btn-lg max-width" onclick="saveAndContinue('teleoperated', 'autonomous');"><span class="glyphicon glyphicon-arrow-left"></span>&nbsp; autoNomoUs</button>
+            </div>
+            <div class="col-sm-4">
+                <button style="margin-top: 5px; margin-bottom: 5px;" class="btn btn-extra-high btn-danger btn-lg max-width" onclick="saveAndContinue('teleoperated', 'teleoperated_fouls_and_other');">Fouls & Other</button>
+            </div>
+
+            <div class="col-sm-4">
+                <button style="margin-top: 5px; margin-bottom: 5px;" class="btn btn-extra-high btn-primary btn-lg max-width" onclick="saveAndContinue('teleoperated', 'postmatch');">end match  &nbsp;<span class="glyphicon glyphicon-arrow-right"></span></button>
+            </div>
+        </div>
     </div>
+
+    <!-- TELEOPERATED PICKED UP TOTES -->
+    <div class="container-fluid stage" id="teleoperated_picked_up_totes" style="display:none;">
+        <div class="row">
+            <div class="col-sm-6">
+                <button class="btn btn-lg btn-info max-width btn-grid" id="tele_picked_up_ground_upright_totes" style="margin-top: 2vh; margin-bottom: 1vh;" onclick="saveAndContinue('teleoperated_picked_up_totes', 'teleoperated', this);">ground upright</button>
+                <button class="btn btn-lg btn-success max-width btn-grid" id="tele_picked_up_upside_down_totes" style="margin-top: 1vh; margin-bottom: 1vh;" onclick="saveAndContinue('teleoperated_picked_up_totes', 'teleoperated', this);">upside down</button>
+            </div>
+
+            <div class="col-sm-6">
+                <button class="btn btn-lg btn-primary max-width btn-grid" id="tele_picked_up_sideways_totes" style="margin-top: 2vh; margin-bottom: 1vh;" onclick="saveAndContinue('teleoperated_picked_up_totes', 'teleoperated', this);">side</button>
+                <button class="btn btn-lg btn-warning max-width btn-grid" id="tele_picked_up_human_station_totes" style="margin-top: 1vh; margin-bottom: 1vh;" onclick="saveAndContinue('teleoperated_picked_up_totes', 'teleoperated', this);">human station</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TELEOPERATED STACKED TOTES -->
+    <div class="container-fluid stage" id="teleoperated_stacked_totes" style="display:none;">
+        <div class="row">
+            <div class="col-md-12">
+                <h3>Totes Stacked On Top Of</h3>
+                <div class="btn-group max-width" data-toggle="buttons" id="start_height">
+                    <label class="btn btn-info btn-group-tall-6 start-height-group-wrapper">
+                        <input type="radio" name="start_height_group" data-height="0"><span style="font-size: 24px; margin-top: 10px;">New<br>Stack</span>
+                    </label>
+                    <label class="btn btn-info btn-group-tall-6 start-height-group-wrapper">
+                        <input type="radio" name="start_height_group" data-height="1"><span>1</span>
+                    </label>
+                    <label class="btn btn-info btn-group-tall-6 start-height-group-wrapper">
+                        <input type="radio" name="start_height_group" data-height="2"><span>2</span>
+                    </label>
+                    <label class="btn btn-info btn-group-tall-6 start-height-group-wrapper">
+                        <input type="radio" name="start_height_group" data-height="3"><span>3</span>
+                    </label>
+                    <label class="btn btn-info btn-group-tall-6 start-height-group-wrapper">
+                        <input type="radio" name="start_height_group" data-height="4"><span>4</span>
+                    </label>
+                    <label class="btn btn-info btn-group-tall-6 start-height-group-wrapper">
+                        <input type="radio" name="start_height_group" data-height="5"><span>5</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <h3>Totes Added To Stack</h3>
+                <div class="btn-group max-width" data-toggle="buttons" id="totes_added">
+                    <label class="btn btn-info btn-group-tall-6">
+                        <input type="radio" name="totes_added_group" data-height="1"><span>1</span>
+                    </label>
+                    <label class="btn btn-info btn-group-tall-6">
+                        <input type="radio" name="totes_added_group" data-height="2"><span>2</span>
+                    </label>
+                    <label class="btn btn-info btn-group-tall-6">
+                        <input type="radio" name="totes_added_group" data-height="3"><span>3</span>
+                    </label>
+                    <label class="btn btn-info btn-group-tall-6">
+                        <input type="radio" name="totes_added_group" data-height="4"><span>4</span>
+                    </label>
+                    <label class="btn btn-info btn-group-tall-6">
+                        <input type="radio" name="totes_added_group" data-height="5"><span>5</span>
+                    </label>
+                    <label class="btn btn-info btn-group-tall-6">
+                        <input type="radio" name="totes_added_group" data-height="6"><span>6</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" style="margin-top: 20px;">
+            <div class="col-sm-6">
+                <span class='btn-lg-text'>COOPERTITION STACK</span>
+            </div>
+            <div class="col-sm-6 text-right">
+                <input type="checkbox" id="coop_stack">
+            </div>
+        </div>
+
+        <br>
+        <div class="row">
+            <div class="col-md-12">
+                <button class="btn btn-lg btn-extra-high btn-primary max-width" onclick="saveAndContinue('teleoperated_stacked_totes', 'teleoperated_stacked_totes_location');">Continue <span class="glyphicon glyphicon-arrow-right"></span></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TELEOPERATED STACKED TOTES LOCATION -->
+    <div class="container-fluid stage" style="display:none;" id="teleoperated_stacked_totes_location">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Stack Location<span class="team-number"></span></h2>
+
+                <img src="{% static "frc_scout/img/tote_score.png" %}" class="auto-location-image" id="teleoperated_stacked_totes_image">
+            </div>
+        </div>
+    </div>
+
+    <!-- TELEOPERATED PICKED UP BINS -->
+    <div class="container-fluid stage" style="display: none;" id="teleoperated_picked_up_containers">
+        <div class="row">
+            <div class="col-md-12" style="margin-top: 2vh;">
+                <button id="tele_picked_up_sideways_containers" onclick="saveAndContinue('teleoperated_picked_up_containers', 'teleoperated', this);" class="btn btn-lg btn-warning max-width" style="height: 30vh; margin-top: 1vh; margin-bottom: 1vh; font-size: 30px;">side</button>
+            </div>
+            <div class="col-md-12">
+                <button id="tele_picked_up_upright_containers" onclick="saveAndContinue('teleoperated_picked_up_containers', 'teleoperated', this);" class="btn btn-lg btn-info max-width" style="height: 30vh; margin-top: 1vh; margin-bottom: 1vh; font-size: 30px;">upright</button>
+            </div>
+            <div class="col-md-12">
+                <button id="tele_picked_up_center_step_containers" onclick="saveAndContinue('teleoperated_picked_up_containers', 'teleoperated', this);" class="btn btn-lg btn-primary max-width" style="height: 30vh; margin-top: 1vh; font-size: 30px;">center/step</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TELEOPERATED STACKED BINS -->
+    <div class="container-fluid stage" style="display: none;" id="teleoperated_stacked_containers">
+        <div class="row">
+            <div class="col-md-12">
+                <h3>Totes Stacked On Top Of</h3>
+                <div class="btn-group max-width" data-toggle="buttons" id="container_stack_height">
+                    <label class="btn btn-info btn-group-tall-6">
+                        <input type="radio" name="options" data-height="1"><span>1</span>
+                    </label>
+                    <label class="btn btn-info btn-group-tall-6">
+                        <input type="radio" name="options" data-height="2"><span>2</span>
+                    </label>
+                    <label class="btn btn-info btn-group-tall-6">
+                        <input type="radio" name="options" data-height="3"><span>3</span>
+                    </label>
+                    <label class="btn btn-info btn-group-tall-6">
+                        <input type="radio" name="options" data-height="4"><span>4</span>
+                    </label>
+                    <label class="btn btn-info btn-group-tall-6">
+                        <input type="radio" name="options" data-height="5"><span>5</span>
+                    </label>
+                    <label class="btn btn-info btn-group-tall-6">
+                        <input type="radio" name="options" data-height="6"><span>6</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-md-12">
+                <button class="btn btn-lg btn-extra-high btn-primary max-width" onclick="saveAndContinue('teleoperated_stacked_containers', 'teleoperated');">Continue <span class="glyphicon glyphicon-arrow-right"></span></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TELEOPERATED FOULS AND OTHER -->
+    <div class="container-fluid stage" id="teleoperated_fouls_and_other" style="display:none;">
+        <div class="row">
+            <div class="col-sm-6">
+                <button class="btn btn-lg btn-info max-width btn-grid" id="tele_fouls" style="margin-top: 2vh; margin-bottom: 1vh;" onclick="saveAndContinue('teleoperated_fouls_and_other', 'teleoperated', this);">fouls</button>
+                <button class="btn btn-lg btn-success max-width btn-grid" id="tele_knocked_over_stacks" style="margin-top: 1vh; margin-bottom: 1vh;" onclick="saveAndContinue('teleoperated_fouls_and_other', 'teleoperated', this);">knocked over stack</button>
+            </div>
+
+            <div class="col-sm-6">
+                <button class="btn btn-lg btn-primary max-width btn-grid" id="tele_dead_bot" style="margin-top: 2vh; margin-bottom: 1vh;" onclick="saveAndContinue('teleoperated_fouls_and_other', 'teleoperated', this);">dead bot</button>
+                <button class="btn btn-lg btn-warning max-width btn-grid" id="tele_shooter_jam" style="margin-top: 1vh; margin-bottom: 1vh;" onclick="saveAndContinue('teleoperated_fouls_and_other', 'teleoperated', this);">fatal jam</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- END GAME -->
+    <div class="container-fluid stage" style="display: none;" id="postmatch">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Post-Match<span class="team-number"></span></h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <h5>Please comment on any fouls that occurred during the match.</h5>
+                <textarea class="form-control background-white" rows="1" id="tele_foul_context"></textarea>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-md-12">
+                <h5>Miscellaneous comments about the match. These are private to your team.</h5>
+                <textarea class="form-control background-white" rows="1" id="tele_private_comments"></textarea>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-md-12">
+                <h5>Miscellaneous comments about the match. These are public, remember gracious professionalism!</h5>
+                <textarea class="form-control background-white" rows="1" id="tele_public_comments"></textarea>
+            </div>
+        </div>
+        <Br>
+        <div class="row">
+            <div class="col-sm-6">
+                <button style="margin-top: 5px; margin-bottom: 5px;" class="btn btn-extra-high btn-info btn-lg max-width" onclick="saveAndContinue('postmatch', 'teleoperated');"><span class="glyphicon glyphicon-arrow-left"></span>&nbsp; teleoperated</button>
+            </div>
+            <div class="col-sm-6">
+                <button style="margin-top: 5px; margin-bottom: 5px;" class="btn btn-extra-high btn-primary btn-lg max-width" onclick="saveAndContinue('postmatch', 'finish');">finish scouting  &nbsp;<span class="glyphicon glyphicon-arrow-right"></span></button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid stage" id="finish" style="display: none;">
+        <div class="row">
+            <div class="col-md-12">
+                <h2 style="margin-bottom: 15px;">Finish Scouting<span class="team-number"></span></h2>
+            </div>
+            <div class="row">
+                <div class='col-md-12'>
+                    <div class="well">
+                        <div id="offline_message" style="display: none;">
+                            <h4><span class="glyphicon glyphicon-exclamation-sign"></span> You are offline.</h4>
+                            <h6>You may save your scouting data locally and submit it at a later time.</h6>
+                            <h6>You will be redirected to restart scouting so the page will remain loaded.</h6>
+                            <br>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <button class="btn btn-danger max-width btn-lg btn-extra-high" onclick="discardData();"><span class="glyphicon glyphicon-exclamation-sign"></span> discard data</button>
+                                </div>
+                                <div class="col-sm-9">
+                                    <button class="btn btn-primary max-width btn-lg btn-extra-high" onclick="saveDataOffline();" id="save_data"><span class="glyphicon glyphicon-floppy-disk"></span> save offline</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="online_message" style="display: none;">
+                            <h4><span class="glyphicon glyphicon-check"></span> Ready to submit data.</h4>
+                            <h6>If you have pending matches stored locally, they will also be submitted at this time.</h6>
+                            <br>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <button class="btn btn-danger max-width btn-lg btn-extra-high" onclick="discardData();"><span class="glyphicon glyphicon-exclamation-sign"></span> discard data</button>
+                                </div>
+                                <div class="col-sm-9">
+                                    <button class="btn btn-success max-width btn-lg btn-extra-high" onclick="submitData();" id="upload_data"><span class="glyphicon glyphicon-upload"></span> submit to database</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="in_progress_message" style="display: none;">
+                            <h4>Submitting data... <span id="in_progress_loading" style="display: none;">done.</span></h4>
+                        </div>
+
+                        <div id="finished_message" style="display: none;">
+                            <h4><span class="glyphicon glyphicon-saved"></span> Your data has been <span id="submitted">submitted</span><span id="saved">saved</span> successfully.</h4>
+                            <div id="submit_errors">
+                                <h6>However, the following matches were unable to be saved due to incomplete data collection:</h6>
+                                <ul id="submit_errors_list">
+                                </ul>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <button onclick="saveAndContinue('finish', 'prematch');" class="btn btn-primary max-width btn-lg btn-extra-high"><span class="glyphicon glyphicon-share-alt"></span> Scout another match</button>
+                                </div>
+                                <div class="col-sm-6">
+                                    <button onclick="window.location = '{% url 'frc_scout:index' %}';" class="btn btn-info max-width btn-lg btn-extra-high"><span class="glyphicon glyphicon-arrow-up"></span> Return home</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
 {% endblock %}
 
 
 {% block extra_js %}
-    <script type="text/javascript">
-
-        $(function() {
-            // always hide the loading thing once js is run
-            $("#loading").hide();
-            
-            /* If there's no hash setup a new match */
-            if(window.location.hash === "") {
-                setupNewMatch();
-                console.log("new match: " + localStorage.pageMatchID);
-                window.location.hash = "prematch";
-                $("#" + window.location.hash.substring(1)).show();
-                /* otherwise grab the old one and reuse it */
-            } else {
-                $(".stage").hide();
-                $("#" + window.location.hash.substring(1)).show();
-            }
-
-            $("#alert").hide();
-        });
-
-        function setupNewMatch() {
-            /* Iterate through all matches currently in localStorage until we find an empty one */
-            for(var i = 0;; i++) {
-                if (localStorage["match" + i.toString()] === undefined) {
-                    /* Then set our current match to a new one, storing the new one in localStorage */
-                    localStorage.pageMatchID = i;
-                    localStorage["match" + localStorage.pageMatchID.toString()] = JSON.stringify({});
-                    break;
-                }
-            }
-        }
-
-        /*
-         This function handles stage changes and will be able to deal with page refreshes eventually
-         */
-        function saveAndContinue(fromStage, toStage, sender) {
-
-            var storedVariables = $.parseJSON(localStorage["match" + localStorage.pageMatchID]);
-
-            // assume no errors
-            var errorMessage = [];
-
-            // no variables for now
-            var stageVariables = null;
-
-            /**
-             * FROM STAGES
-             **/
-
-            if(fromStage == "prematch") {
-                var teamNumber = parseInt($("#team_number").val());
-                var matchNumber = parseInt($("#match_number").val());
-
-
-                if(isNaN(teamNumber)) {
-                    errorMessage.push("Team number is required and must be a number.");
-                }
-
-                if(isNaN(matchNumber)) {
-                    errorMessage.push("Match number is required and must be a number.");
-                }
-
-                stageVariables = {
-                    teamNumber: teamNumber,
-                    matchNumber: matchNumber
-                }
-            }
-
-            else if(fromStage == "autonomous") {
-                // totes
-                var autoStackedYellowTotes = parseInt($("#auto-stacked-yellow-tote-text").text());
-                var autoMovedYellowTotes = parseInt($("#auto-moved-yellow-tote-text").text());
-                var autoAcquiredGreyTotes = parseInt($("#auto-acquired-grey-tote-text").text());
-
-                // bins
-                var autoAcquiredStepBins = parseInt($("#auto-acquired-step-bin-text").text());
-                var autoAcquiredGroundBins = parseInt($("#auto-acquired-ground-bin-text").text());
-                var autoMovedBins = parseInt($("#auto-moved-bin-text").text());
-
-                stageVariables = {
-                    autoStackedYellowTotes: autoStackedYellowTotes,
-                    autoMovedYellowTotes: autoMovedYellowTotes,
-                    autoAcquiredGreyTotes: autoAcquiredGreyTotes,
-
-                    autoAcquiredStepBins: autoAcquiredStepBins,
-                    autoAcquiredGroundBins: autoAcquiredGroundBins,
-                    autoMovedBins: autoMovedBins
-                }
-
-                $.each(stageVariables, function(index, variable) {
-                    if(isNaN(variable)) {
-                        errorMessage.push("One or more of your variables are not numbers, what are you doing?");
-                        return false;
-                    }
-                })
-            }
-
-            else if(fromStage === "autonomous_fouls_and_other") {
-
-                var id = sender.id;
-
-                if(storedVariables['autonomous_fouls_and_other'] === undefined) {
-                    storedVariables['autonomous_fouls_and_other'] = {
-                        'autoFouls': 0,
-                        'autoInterference': 0,
-                        'autoNoAuto': false
-                    }
-                }
-
-                if(id === "auto_fouls") {
-                    storedVariables['autonomous_fouls_and_other'].autoFouls += 1;
-                }
-                else if(id === "auto_interference") {
-                    storedVariables['autonomous_fouls_and_other'].autoInterference += 1;
-                }
-                else if(id === "auto_no_auto") {
-                    storedVariables['autonomous_fouls_and_other'].autoNoAuto = true;
-                }
-
-                stageVariables = storedVariables['autonomous_fouls_and_other'];
-            }
-
-
-            // show alerts and bail if they exist
-            if(errorMessage.length !== 0) {
-                $("#alert-text").html(errorMessage.join('<br>'));
-                $("#alert").show();
-                return;
-            }
-
-            // otherwise hide any active alerts
-            $("#alert").hide();
-
-            // pull current things out of localStorage for our match ID
-            var localStorageVariables = $.parseJSON(localStorage["match" + localStorage.pageMatchID]);
-
-            // append our current values to the array that we get
-            localStorageVariables[fromStage] = stageVariables;
-
-            // push it back to localStorage
-            localStorage['match' + localStorage.pageMatchID] = JSON.stringify(localStorageVariables);
-
-            // hide our current stage
-            $("#" + fromStage).hide();
-
-            // change hash triggering the next stage to show
-            window.location.hash = toStage;
-        }
-
-        window.onhashchange = function() {
-            console.log('new hash: ' + window.location.hash);
-            $(".stage").hide();
-
-            openStage(window.location.hash.substring(1));
-            $("#" + window.location.hash.substring(1)).show();
-        }
-
-        window.onload = function() {
-            console.log('reloaded: ' + window.location.hash);
-            $(".stage").hide();
-
-            openStage(window.location.hash.substring(1));
-            $("#" + window.location.hash.substring(1)).show();
-        }
-
-        function openStage(stage) {
-            /**
-             * TO STAGES
-             **/
-
-            var storedVariables = $.parseJSON(localStorage["match" + localStorage.pageMatchID]);
-
-
-
-            if(stage === "prematch") {
-                try {
-                    $("#team_number").val(storedVariables.prematch.teamNumber);
-                    $("#match_number").val(storedVariables.prematch.matchNumber);
-                } catch(e) {}
-            }
-
-            else if(stage === "autonomous") {
-                // totes
-                try {
-                    $("#auto-stacked-yellow-tote-text").text(storedVariables.autonomous.autoStackedYellowTotes);
-                    $("#auto-moved-yellow-tote-text").text(storedVariables.autonomous.autoMovedYellowTotes);
-                    $("#auto-acquired-grey-tote-text").text(storedVariables.autonomous.autoAcquiredGreyTotes);
-
-                    // bins
-                    $("#auto-acquired-step-bin-text").text(storedVariables.autonomous.autoAcquiredStepBins);
-                    $("#auto-acquired-ground-bin-text").text(storedVariables.autonomous.autoAcquiredGroundBins);
-                    $("#auto-moved-bin-text").text(storedVariables.autonomous.autoMovedBins);
-                } catch(e) {}
-            }
-        }
-
-        /*
-         universal function that will add/subtract things from labels appended with -text from their respective buttons
-         */
-        $(".btn-add-subtract").click(function() {
-            var sender = $(this);
-            var name = sender.data('name');
-
-            if(sender.data('operation') === "add") {
-                $("#" + name + "-text").text(parseInt($("#" + name + "-text").text()) + 1);
-            }
-
-            else if(sender.data('operation' == "subtract")) {
-                if(parseInt($("#" + name + "-text").text()) > 0) {
-                    $("#" + name + "-text").text(parseInt($("#" + name + "-text").text()) - 1);
-                }
-            }
-        })
-
-    </script>
+    {% load compress %}
+    {% compress js %}
+        <script type="text/javascript" src="{% static "frc_scout/js/match-scouting.js" %}"></script>
+    {% endcompress %}
 {% endblock %}

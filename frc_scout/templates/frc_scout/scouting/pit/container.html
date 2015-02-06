@@ -1,0 +1,224 @@
+{% extends 'frc_scout/base.html' %}
+
+{% load staticfiles %}
+
+{% block title %}Pit Scouting{% endblock %}
+
+{% block extra_css %}
+    <style type="text/css">
+        ::-webkit-input-placeholder { /* WebKit browsers */
+            color:    #666666 !important;
+        }
+        :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+            color:    #666666 !important;
+            opacity:  1;
+        }
+        ::-moz-placeholder { /* Mozilla Firefox 19+ */
+            color:    #666666 !important;
+            opacity:  1;
+        }
+        :-ms-input-placeholder { /* Internet Explorer 10+ */
+            color:    #666666 !important;
+        }
+
+        h2 {
+            margin-bottom: -2px;
+        }
+
+        .set-indeterminate {
+            margin-left: 10px;
+            height: 36px;
+        }
+    </style>
+{% endblock %}
+
+{% block nav %}{% include 'frc_scout/nav.html' %}{% endblock %}
+
+{% block main_content %}
+    <h6>The team number, and any other attribute, are the only required fields here &mdash; fill out what you know.</h6>
+    <div class="alert alert-success" style="display: none;" id="success_message">
+        <h6><span class="glyphicon glyphicon-check"></span>&nbsp; Data submitted successfully, you may now enter more.</h6>
+    </div>
+    <div class="alert alert-warning" style="display: none;" id="insufficient_message">
+        <h6><span class="glyphicon glyphicon-exclamation-sign"></span>&nbsp; You must enter some attribute <strong>other than team number</strong> &mdash; otherwise your data is useless!</h6>
+    </div>
+    <form onclick="$('#success_message, #insufficient_message').slideUp(200);" class="form-horizontal" id="pit_scout_form" onsubmit="submitForm(); return false;">
+        <fieldset>
+            <legend>Basic Information</legend>
+            <div class="form-group">
+                <label for="team_number" class="col-lg-2 control-label"><span style="color:firebrick">*</span> Team Number</label>
+                <div class="col-lg-10">
+                    <input type="number" class="form-control" id="team_number" placeholder="Team Number" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="team_name" class="col-lg-2 control-label">Team Name</label>
+                <div class="col-lg-10">
+                    <input type="text" class="form-control" id="team_name" placeholder="Team Name">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="team_name" class="col-lg-2 control-label">Team Website</label>
+                <div class="col-lg-10">
+                    <input type="url" class="form-control" id="team_website" placeholder="Team Website">
+                </div>
+            </div>
+            <legend>Autonomous</legend>
+            <div class="form-group">
+                <label for="can_move_totes" class="col-lg-2 control-label">Can Move Totes</label>
+                <div class="col-lg-10">
+                    <input type="checkbox" class="form-control" id="can_move_totes">
+                    <button type="button" class="btn btn-info set-indeterminate">Unknown</button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="can_move_containers" class="col-lg-2 control-label">Can Move Containers</label>
+                <div class="col-lg-10">
+                    <input type="checkbox" class="form-control" id="can_move_containers">
+                    <button type="button" class="btn btn-info set-indeterminate">Unknown</button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="can_acquire_containers" class="col-lg-2 control-label">Can Acquire Containers</label>
+                <div class="col-lg-10">
+                    <input type="checkbox" class="form-control" id="can_acquire_containers">
+                    <button type="button" class="btn btn-info set-indeterminate">Unknown</button>
+                </div>
+            </div>
+
+            <legend>Teleoperated</legend>
+            <div class="form-group">
+                <label for="tote_stack_capacity" class="col-lg-2 control-label">Tote Stack Capacity</label>
+                <div class="col-lg-10">
+                    <select class="form-control" id="tote_stack_capacity">
+                        <option value="">Unknown</option>
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </div>
+            </div>
+
+            <legend>Human Interaction</legend>
+            <div class="form-group">
+                <label for="human_tote_loading" class="col-lg-2 control-label">Human Can Load Totes</label>
+                <div class="col-lg-10">
+                    <input type="checkbox" class="form-control" id="human_tote_loading">
+                    <button type="button" class="btn btn-info set-indeterminate">Unknown</button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="human_litter_loading" class="col-lg-2 control-label">Human Can Load Litter</label>
+                <div class="col-lg-10">
+                    <input type="checkbox" class="form-control" id="human_litter_loading">
+                    <button type="button" class="btn btn-info set-indeterminate">Unknown</button>
+                </div>
+            </div>
+
+            <legend>Maneuvering</legend>
+            <div class="form-group">
+                <label for="has_turret" class="col-lg-2 control-label">Has Turret</label>
+                <div class="col-lg-10">
+                    <input type="checkbox" class="form-control" id="has_turret">
+                    <button type="button" class="btn btn-info set-indeterminate">Unknown</button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="has_strafing" class="col-lg-2 control-label">Has Strafing</label>
+                <div class="col-lg-10">
+                    <input type="checkbox" class="form-control" id="has_strafing">
+                    <button type="button" class="btn btn-info set-indeterminate">Unknown</button>
+                </div>
+            </div>
+            <br>
+
+            <div class="form-group">
+                <div class="col-lg-10 col-lg-offset-2">
+                    <button id="submit_button" type="submit" class="btn btn-lg btn-primary">Submit</button>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+{% endblock %}
+
+{% block extra_js %}
+    <script type="text/javascript">
+        $("input[type=checkbox]").bootstrapSwitch({
+            'offText': "NO",
+            'onText': "YES",
+            'size': 'large',
+            'indeterminate': true
+        });
+
+        $(".set-indeterminate").click(function() {
+            $(this).prev('.bootstrap-switch').find('input[type=checkbox]').bootstrapSwitch('indeterminate', true);
+        });
+
+        function getFormData() {
+            var data = {}
+
+            $.each($("#pit_scout_form").find('input, select').not('input[type=checkbox]'), function() {
+                if($(this).val() !== "") {
+                    if(!isNaN($(this).val())) {
+                        data[this.id] = parseInt($(this).val());
+                    } else {
+                        data[this.id] = $(this).val();
+                    }
+                }
+            });
+
+            $.each($("#pit_scout_form").find('input[type=checkbox]'), function() {
+                if(!$(this).bootstrapSwitch('indeterminate')) {
+                    data[this.id] = $(this).bootstrapSwitch('state');
+                }
+            })
+
+            return data;
+        }
+
+        function submitForm() {
+            var formData = getFormData();
+
+            if(Object.keys(getFormData()).length > 1) {
+
+                $("#submit_button").button('loading');
+
+                $.ajax({
+                    url: '{% url "frc_scout:submit_pit_scouting_data" %}',
+                    type: "POST",
+                    data: {
+                        csrfmiddlewaretoken: $.cookie('csrftoken'),
+                        data: JSON.stringify(formData)
+                    },
+                    success: function() {
+                        window.setTimeout(function() {
+                            $("#submit_button").button('reset');
+                            clearForm();
+                            window.scrollTo(0, 1);
+                            $("#success_message").show();
+                        }, 2000);
+                    }
+                })
+            } else {
+                window.scrollTo(0, 1);
+                $("#insufficient_message").show();
+            }
+        }
+
+        function clearForm() {
+            $.each($("#pit_scout_form").find('input, select').not('input[type=checkbox]'), function() {
+                $(this).val("");
+            });
+
+            $.each($("#pit_scout_form").find('input[type=checkbox]'), function() {
+                $(this).bootstrapSwitch('indeterminate', true);
+            })
+        }
+
+    </script>
+{% endblock %}
+
+{% block footer %}{% include 'frc_scout/footer.html' %}{% endblock %}

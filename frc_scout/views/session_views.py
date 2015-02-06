@@ -1,3 +1,5 @@
+import json
+
 from django.contrib.auth import authenticate, logout, login
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
@@ -6,10 +8,7 @@ from django.shortcuts import render
 from django.contrib import messages
 from frc_scout.models import Team, UserProfile, Location
 from django.db import IntegrityError
-from django.templatetags.static import static
-import json
 
-from frc_scout.views.loc_list import locations
 
 def index(request):
     if request.user.is_authenticated():
@@ -31,8 +30,6 @@ def login_view(request):
     for loc in Location.objects.all():
         location_list[loc.name] = loc.id
 
-    
-
     context = {
         'location_list': json.dumps(location_list)
     }
@@ -47,6 +44,14 @@ def login_view(request):
             location_name = request.POST.get('location')
 
             user = authenticate(username=username, password=password)
+
+            if user is None:
+                try:
+                    email = User.objects.get(email=username)
+
+                    user = authenticate(username=email.username, password=password)
+                except User.DoesNotExist:
+                    user = None
 
             location = Location.objects.get(name=location_name).id
 
@@ -95,7 +100,7 @@ def create_account(request):
         try:
             user = User.objects.create_user(username, email_address, password, first_name=first_name, last_name=last_name)
         except IntegrityError:
-            messages.error(request, "That username has been taken.")
+            messages.error(request, "That username or email address has already been used.")
             return render(request, 'frc_scout/create_account.html')
 
         user.userprofile = UserProfile()

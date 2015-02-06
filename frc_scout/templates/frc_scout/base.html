@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head lang="en">
+{% load staticfiles %}
     <title>{% block title %}{% endblock %}</title>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
+    <link rel="manifest" href="{% static 'frc_scout/js/android-homescreen-manifest.json' %}">
 
     {% load staticfiles compress %}
 
@@ -23,6 +25,8 @@
         <link rel="stylesheet" type="text/css" href="{% static 'frc_scout/css/bootstrap-editable.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'frc_scout/css/style.css' %}">
     {% endcompress %}
+
+    {% block extra_css %}{% endblock %}
 </head>
 <body>
 {% block nav %}{% endblock %}
