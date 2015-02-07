@@ -818,8 +818,6 @@ $("#auto_start_image").click(function (event) {
     } else {
         showErrorMessages(["Invalid starting location."], false);
     }
-
-
 });
 
 /*
@@ -1008,5 +1006,17 @@ $("button[data-name=auto-moved-container]").click(function() {
 
     if(thisSum > sum) {
         $("#auto-moved-container-text").text(parseInt($("#auto-moved-container-text").text()) - 1);
+    }
+})
+
+$("#totes_in_possession").update(function() {
+    console.log('changed!!!');
+
+    var v = parseInt($("#totes_in_possession").text());
+
+    if(v >= 6) {
+        $("#totes_in_possession").css('color', 'firebrick');
+    } else {
+        $("#totes_in_possession").css('color', 'black');
     }
 })
