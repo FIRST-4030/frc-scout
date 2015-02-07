@@ -506,9 +506,11 @@ function submitData() {
 
 function saveDataOffline() {
     setupNewMatch();
+    $("#offline_message").hide();
     $("#submitted").hide();
     $("#in_progress_message").hide();
     $("#saved").show();
+    $("#finished_message").show();
 }
 
 function openStage(stage) {
