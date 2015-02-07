@@ -515,6 +515,7 @@ function saveDataOffline() {
     $("#finished_message").show();
     $("#saved").show();
     $("#deleted").hide();
+    $("#finished_message").show();
 }
 
 function openStage(stage) {
