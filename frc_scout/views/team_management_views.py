@@ -36,21 +36,40 @@ def update_scouts(request):
         raise Http404
 
     if request.method == "POST":
-        scout_id = request.POST.get('scout_id')
-        action = request.POST.get('action')
 
-        scout = User.objects.get(id=scout_id)
+        if 'scout_id' in request.POST:
 
-        if action == "team_manager":
-            scout.userprofile.team_manager = not scout.userprofile.team_manager
+            print('if')
 
-        elif action == "approved":
-            scout.userprofile.approved = not scout.userprofile.approved
+            scout_id = request.POST.get('scout_id')
+            action = request.POST.get('action')
 
-        elif action == "banned":
-            scout.userprofile.banned = not scout.userprofile.banned
+            scout = User.objects.get(id=scout_id)
 
-        scout.userprofile.save()
+            if action == "team_manager":
+                scout.userprofile.team_manager = not scout.userprofile.team_manager
+
+            elif action == "approved":
+                scout.userprofile.approved = not scout.userprofile.approved
+
+            elif action == "banned":
+                scout.userprofile.banned = not scout.userprofile.banned
+
+            scout.userprofile.save()
+
+        elif 'pk' in request.POST:
+
+            pk = request.POST.get('pk')
+            name = request.POST.get('name')
+            value = request.POST.get('value')
+
+            scout = User.objects.get(id=pk)
+
+            setattr(scout.userprofile, name, value)
+
+            print(scout.userprofile.position)
+
+            scout.userprofile.save()
 
         return HttpResponse(status=200)
 

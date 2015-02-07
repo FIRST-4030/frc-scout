@@ -17,6 +17,7 @@
     <table class="table table-bordered table-responsive">
         <tr>
             <th>Name</th>
+            <th>Scouting Position</th>
             <th>Email Address</th>
             <th>Join Date</th>
             <th>Matches Scouted</th>
@@ -27,6 +28,7 @@
         {% for scout in scouts %}
             <tr>
                 <td>{{ scout.first_name }}  {{ scout.last_name }}</td>
+                <td><a class="editable" href="#" data-pk="{{ scout.id }}" data-name="position">{{ scout.userprofile.position }}</a></td>
                 <td><a href="mailto:{{ scout.email }}">{{ scout.email }}</a></td>
                 <td>{{ scout.date_joined|date:"M d, Y" }}</td>
                 <td>{{ scout.match_set.all|length }}</td>
@@ -68,6 +70,14 @@
                 }
             })
         })
+
+    $(".editable").editable({
+        mode: 'inline',
+        url: "{% url 'frc_scout:update_scouts' %}",
+        params: {
+            'csrfmiddlewaretoken': $.cookie('csrftoken'),
+        }
+    });
     </script>
 {% endblock %}
 
