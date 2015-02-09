@@ -29,4 +29,7 @@ urlpatterns = patterns(
     # Scouting views
     url(r'^scouting/match/$', views.match_scouting, name='match_scouting'),
     url(r'^scouting/match/submit/$', views.submit_match_scouting_data, name='submit_match_scouting_data'),
+
+    # Profile views
+    url(r'^team/(?P<team_number>[0-9]+)/$', views.view_team_profile, name='view_team_profile'),
 )
