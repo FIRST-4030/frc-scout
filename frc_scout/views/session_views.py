@@ -29,7 +29,17 @@ def login_view(request):
     if request.method == "POST":
         username = request.POST.get('username')
         password = request.POST.get('password')
-        location = request.POST.get('location')
+        location_name = request.POST.get('location')
+
+        user = authenticate(username=username, password=password)
+
+        if user is None:
+            try:
+                email = User.objects.get(email=username)
+
+                user = authenticate(username=email.username, password=password)
+            except User.DoesNotExist:
+                user = None
 
         user = authenticate(username=username, password=password)
 

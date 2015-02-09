@@ -237,6 +237,7 @@ function saveAndContinue(fromStage, toStage, sender) {
         }
 
         $("#totes_in_possession").text(localStorage.totesInPossession);
+        updatePossessionColor();
     }
 
     else if(fromStage === "teleoperated_stacked_totes") {
@@ -302,6 +303,7 @@ function saveAndContinue(fromStage, toStage, sender) {
         }
 
         $("#totes_in_possession").text(localStorage.totesInPossession);
+        updatePossessionColor();
 
         stageVariables = storedVariables['teleoperated_stacked_totes'];
 
@@ -476,6 +478,7 @@ function submitData() {
 
             $("#saved").hide();
             $("#submitted").show();
+            $("#deleted").hide()
             $("#in_progress_loading").fadeIn(1000);
 
             window.setTimeout(function(response) {
@@ -506,9 +509,13 @@ function submitData() {
 
 function saveDataOffline() {
     setupNewMatch();
+    $("#offline_message").hide();
     $("#submitted").hide();
     $("#in_progress_message").hide();
+    $("#finished_message").show();
     $("#saved").show();
+    $("#deleted").hide();
+    $("#finished_message").show();
 }
 
 function openStage(stage) {
@@ -658,6 +665,7 @@ function openStage(stage) {
             $("#tele_pushed_litter-text").text(0);
             $("#tele_placed_in_container_litter-text").text(0);
             $("#totes_in_possession").text(0);
+            updatePossessionColor();
         }
 
         if (storedVariables['teleoperated_fouls_and_other']) {
@@ -672,8 +680,10 @@ function openStage(stage) {
 
         if (!isNaN(localStorage.totesInPossession)) {
             $("#totes_in_possession").text(localStorage.totesInPossession);
+            updatePossessionColor();
         } else {
             $("#totes_in_possession").text(0);
+            updatePossessionColor();
         }
     }
 
@@ -818,8 +828,6 @@ $("#auto_start_image").click(function (event) {
     } else {
         showErrorMessages(["Invalid starting location."], false);
     }
-
-
 });
 
 /*
@@ -872,6 +880,7 @@ $("#tele_picked_up_totes_subtract_button").click(function () {
     }
 
     $("#totes_in_possession").text(localStorage.totesInPossession);
+    updatePossessionColor();
 
 });
 
@@ -910,7 +919,7 @@ $("#tele_stacked_totes_subtract").click(function () {
     if (lastIndex) {
         data = data.slice(0, -1);
 
-        var subtract = localStorage.totesInPossession - lastIndex.totes_added;
+        var subtract = localStorage.totesInPossession + lastIndex.totes_added;
 
         /*
          Can't be < 0
@@ -921,6 +930,7 @@ $("#tele_stacked_totes_subtract").click(function () {
             localStorage.totesInPossession = 0;
         }
         $("#totes_in_possession").text(localStorage.totesInPossession);
+        updatePossessionColor();
 
         setMatchDataArray('teleoperated_stacked_totes', data);
 
@@ -993,6 +1003,9 @@ function discardData() {
             $("#offline_message").hide();
             $("#online_message").hide();
             $("#in_progress_message").hide();
+            $("#submitted").hide();
+            $("#saved").hide();
+            $("#deleted").show()
             $("#finished_message").show();
         } else {
             showErrorMessages(['Match deletion cancelled.'], false);
@@ -1010,3 +1023,13 @@ $("button[data-name=auto-moved-container]").click(function() {
         $("#auto-moved-container-text").text(parseInt($("#auto-moved-container-text").text()) - 1);
     }
 })
+
+function updatePossessionColor() {
+    var v = parseInt($("#totes_in_possession").text());
+
+    if(v >= 6) {
+        $("#totes_in_possession_wrapper").css('color', 'firebrick');
+    } else {
+        $("#totes_in_possession_wrapper").css('color', '#444444');
+    }
+}

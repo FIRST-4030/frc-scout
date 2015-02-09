@@ -2,8 +2,8 @@
 from __future__ import unicode_literals
 
 from django.db import models, migrations
-from django.conf import settings
 import frc_scout.models
+from django.conf import settings
 
 
 class Migration(migrations.Migration):
@@ -40,8 +40,8 @@ class Migration(migrations.Migration):
                 ('team_number', models.IntegerField(max_length=5)),
                 ('match_number', models.IntegerField()),
                 ('timestamp', models.DateTimeField(default=frc_scout.models.get_current_time)),
-                ('auto_start_x', models.DecimalField(max_digits=8, decimal_places=8)),
-                ('auto_start_y', models.DecimalField(max_digits=8, decimal_places=8)),
+                ('auto_start_x', models.DecimalField(decimal_places=8, max_digits=8)),
+                ('auto_start_y', models.DecimalField(decimal_places=8, max_digits=8)),
                 ('auto_yellow_stacked_totes', models.IntegerField(default=0)),
                 ('auto_yellow_moved_totes', models.IntegerField(default=0)),
                 ('auto_grey_acquired_totes', models.IntegerField(default=0)),
@@ -75,6 +75,39 @@ class Migration(migrations.Migration):
             bases=(models.Model,),
         ),
         migrations.CreateModel(
+            name='PitScoutData',
+            fields=[
+                ('id', models.AutoField(serialize=False, auto_created=True, primary_key=True, verbose_name='ID')),
+                ('team_number', models.IntegerField(max_length=5)),
+                ('team_name', models.TextField(null=True, max_length=64, default=None)),
+                ('team_website', models.TextField(null=True, max_length=128, default=None)),
+                ('robot_height', models.FloatField(null=True)),
+                ('robot_weight', models.FloatField(null=True)),
+                ('robot_speed', models.FloatField(null=True)),
+                ('driver_1', models.TextField(null=True, max_length=64, default=None)),
+                ('driver_2', models.TextField(null=True, max_length=64, default=None)),
+                ('coach', models.TextField(null=True, max_length=64, default=None)),
+                ('can_move_totes', models.NullBooleanField()),
+                ('can_move_containers', models.NullBooleanField()),
+                ('can_acquire_containers', models.NullBooleanField()),
+                ('auto_start_x', models.FloatField(null=True)),
+                ('auto_start_y', models.FloatField(null=True)),
+                ('tote_stack_capacity', models.IntegerField(null=True, max_length=3, default=None)),
+                ('human_tote_loading', models.NullBooleanField()),
+                ('human_litter_loading', models.NullBooleanField()),
+                ('human_litter_throwing', models.NullBooleanField()),
+                ('has_turret', models.NullBooleanField()),
+                ('has_strafing', models.NullBooleanField()),
+                ('known_strengths', models.TextField(null=True, max_length=256)),
+                ('known_weaknesses', models.TextField(null=True, max_length=256)),
+                ('location', models.ForeignKey(to='frc_scout.Location')),
+                ('scout', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
             name='Team',
             fields=[
                 ('id', models.AutoField(serialize=False, auto_created=True, primary_key=True, verbose_name='ID')),
@@ -91,8 +124,8 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(serialize=False, auto_created=True, primary_key=True, verbose_name='ID')),
                 ('start_height', models.IntegerField(default=0)),
                 ('totes_added', models.IntegerField(default=0)),
-                ('x', models.DecimalField(max_digits=8, decimal_places=8)),
-                ('y', models.DecimalField(max_digits=8, decimal_places=8)),
+                ('x', models.DecimalField(decimal_places=8, max_digits=8)),
+                ('y', models.DecimalField(decimal_places=8, max_digits=8)),
                 ('coop_stack', models.BooleanField(default=False)),
                 ('match', models.ForeignKey(to='frc_scout.Match')),
             ],
@@ -106,7 +139,8 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(serialize=False, auto_created=True, primary_key=True, verbose_name='ID')),
                 ('team_manager', models.BooleanField(default=False)),
                 ('approved', models.BooleanField(default=False)),
-                ('team', models.ForeignKey(to='frc_scout.Team', null=True)),
+                ('position', models.TextField(null=True)),
+                ('team', models.ForeignKey(null=True, to='frc_scout.Team')),
                 ('user', models.OneToOneField(to=settings.AUTH_USER_MODEL)),
             ],
             options={

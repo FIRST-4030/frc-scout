@@ -14,33 +14,27 @@
     {% endif %}
 
     <p>New scouts will require the approval of a team manager in order to login and begin scouting.</p>
-    <table class="table table-bordered">
+    <table class="table table-bordered table-responsive">
         <tr>
             <th>Name</th>
+            <th>Scouting Position</th>
             <th>Email Address</th>
             <th>Join Date</th>
+            <th>Matches Scouted</th>
+            <th>Teams Pit Scouted</th>
             <th>Approved</th>
             <th>Team Manager</th>
-            <th>Other Actions</th>
         </tr>
         {% for scout in scouts %}
             <tr>
                 <td>{{ scout.first_name }}  {{ scout.last_name }}</td>
+                <td><a class="editable" href="#" data-pk="{{ scout.id }}" data-name="position">{{ scout.userprofile.position }}</a></td>
                 <td><a href="mailto:{{ scout.email }}">{{ scout.email }}</a></td>
                 <td>{{ scout.date_joined|date:"M d, Y" }}</td>
+                <td>{{ scout.match_set.all|length }}</td>
+                <td>{{ scout.pitscoutdata_set.all|length }}</td>
                 <td><input type="checkbox" id="{{ scout.id }}" class="style2" data-update="approved"{% if scout.userprofile.approved %} checked{% endif %}></td>
                 <td><input type="checkbox" id="{{ scout.id }}" class="style2" data-update="team_manager"{% if scout.userprofile.team_manager %} checked{% endif %}></td>
-                <td>
-                    <div class="dropdown">
-                        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
-                            Actions
-                            <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Report Fraud</a></li>
-                        </ul>
-                    </div>
-                </td>
             </tr>
         {% endfor %}
     </table>
@@ -76,6 +70,14 @@
                 }
             })
         })
+
+    $(".editable").editable({
+        mode: 'inline',
+        url: "{% url 'frc_scout:update_scouts' %}",
+        params: {
+            'csrfmiddlewaretoken': $.cookie('csrftoken'),
+        }
+    });
     </script>
 {% endblock %}
 

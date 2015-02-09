@@ -28,9 +28,10 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User)
 
     team = models.ForeignKey(Team, null=True)
-
     team_manager = models.BooleanField(default=False)
     approved = models.BooleanField(default=False)
+
+    position = models.TextField(null=True)
 
     def __str__(self):
         return self.user.username + " - " + self.user.get_full_name() + " - " + str(self.team.team_number)
@@ -111,3 +112,49 @@ class ContainerStack(models.Model):
     def __str__(self):
         return str("Team: %i | Match: %i | Location: %s" % (self.match.team_number, self.match.match_number, self.match.location.name))
 
+
+class PitScoutData(models.Model):
+    scout = models.ForeignKey(User)
+    location = models.ForeignKey(Location)
+    team_number = models.IntegerField(max_length=5)
+    team_name = models.TextField(max_length=64, default=None, null=True)
+    team_website = models.TextField(max_length=128, default=None, null=True)
+
+    robot_height = models.FloatField(null=True)
+    robot_weight = models.FloatField(null=True)
+    robot_speed = models.FloatField(null=True)
+
+    driver_1 = models.TextField(max_length=64, default=None, null=True)
+    driver_2 = models.TextField(max_length=64, default=None, null=True)
+    coach = models.TextField(max_length=64, default=None, null=True)
+
+    # autonomous
+    can_move_totes = models.NullBooleanField(null=True)
+    can_move_containers = models.NullBooleanField(null=True)
+    can_acquire_containers = models.NullBooleanField(null=True)
+    auto_start_x = models.FloatField(null=True)
+    auto_start_y = models.FloatField(null=True)
+
+    # teleoperated
+    tote_stack_capacity = models.IntegerField(max_length=3, default=None, null=True)
+
+    # human interaction
+    human_tote_loading = models.NullBooleanField(null=True)
+    human_litter_loading = models.NullBooleanField(null=True)
+    human_litter_throwing = models.NullBooleanField(null=True)
+
+    # maneuvering
+    has_turret = models.NullBooleanField(null=True)
+    has_strafing = models.NullBooleanField(null=True)
+
+    # other
+    known_strengths = models.TextField(max_length=256, null=True)
+    known_weaknesses = models.TextField(max_length=256, null=True)
+
+    def __str__(self):
+        rt = self.scout.get_short_name() + " | " + str(self.location.name) + " | " + str(self.team_number)
+
+        if self.scout.userprofile.team.team_number == self.team_number:
+            rt += " (SELF)"
+
+        return rt
