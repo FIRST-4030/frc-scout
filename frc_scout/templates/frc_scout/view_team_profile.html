@@ -1,0 +1,31 @@
+{% extends 'frc_scout/base.html' %}
+
+{% load staticfiles %}
+
+{% block title %}Team {{ team_number }}'s profile{% endblock %}
+
+{% block nav %}{% include 'frc_scout/nav.html' %}{% endblock %}
+
+{% block main_content %}
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <h3>Team {{ team_number }}'s profile</h3>
+            <div class="section-header-container">
+                <span class="section-header-text">Match averages</span>
+            </div>
+            <div style="padding: 10px 10px;">
+                {% for section in sections %}
+                    <h5>{{ section.name }}</h5>
+                    <div style="padding: 0 10px">
+                        {% for data in section.data %}
+                            {{ data.name }}: <strong>{{ data.value }}</strong><br />
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+            </div>
+            <br />
+            <a href="{% url "frc_scout:view_team_matches" team_number %}">View all matches for this team</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

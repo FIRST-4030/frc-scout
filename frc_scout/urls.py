@@ -34,4 +34,5 @@ urlpatterns = patterns(
 
     # Profile views
     url(r'^team/(?P<team_number>[0-9]+)/$', views.view_team_profile, name='view_team_profile'),
+    url(r'^team/(?P<team_number>[0-9]+)/matches/$', views.view_team_matches, name='view_team_matches'),
 )

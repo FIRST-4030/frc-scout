@@ -45,10 +45,10 @@ def login_view(request):
 
         if user is not None:
             if user.is_active:
-                if location in locations:
+                if location_name in locations:
                     login(request, user)
 
-                    request.session['location'] = location
+                    request.session['location'] = location_name
 
                     return HttpResponseRedirect(reverse('frc_scout:index'))
                 else:

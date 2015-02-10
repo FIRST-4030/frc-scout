@@ -1,0 +1,31 @@
+{% extends 'frc_scout/base.html' %}
+
+{% load staticfiles %}
+
+{% block title %}Scouting{% endblock %}
+
+{% block nav %}{% include 'frc_scout/nav.html' %}{% endblock %}
+
+{% block main_content %}
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <h3>Team {{ team_number }}'s matches</h3>
+            {% for match in matches %}
+                <div class="section-header-container">
+                    <span class="section-header-text">Match {{ match.match_number }}</span><br />
+                </div>
+                <div style="float:right; text-align:right; padding-right:10px;">
+                    <em>{{ match.timestamp }}</em><br />
+                    <em>{{ match.location }}</em>
+                </div>
+                <div style="padding-left:10px;">
+                    <strong>Autonomous</strong><br />
+                    <em>stuff</em><br /><br />
+                    <strong>Teleoperated</strong><br />
+                    Upright totes picked up: {{ match.tele_picked_up_ground_upright_totes }}
+                </div>
+                <div style="clear:both"></div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
