@@ -5,7 +5,22 @@
 {% block nav %}{% include 'frc_scout/nav.html' %}{% endblock %}
 
 {% block main_content %}
+
     <div class="row">
+
+        {% if user.userprofile.message %}
+            <div class="col-md-10 col-md-offset-1">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><span class="glyphicon glyphicon-hand-right"></span>&nbsp; Message from team manager</h3>
+                    </div>
+                    <div class="panel-body">
+                        {{ user.userprofile.message }}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
         <div class="col-md-10 col-md-offset-1">
             <div class="section-header-container">
                 <span class="section-header-text">Scouting</span>

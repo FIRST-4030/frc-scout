@@ -31,7 +31,7 @@ class UserProfile(models.Model):
     team_manager = models.BooleanField(default=False)
     approved = models.BooleanField(default=False)
 
-    position = models.TextField(null=True)
+    message = models.TextField(null=True)
 
     def __str__(self):
         return self.user.username + " - " + self.user.get_full_name() + " - " + str(self.team.team_number)
