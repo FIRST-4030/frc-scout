@@ -709,6 +709,7 @@ function openStage(stage) {
     }
 
     else if (stage === "postmatch") {
+        $('title').text('Scouting: Postmatch');
         if(storedVariables['postmatch']) {
             $("#tele_foul_context").val(storedVariables['postmatch'].tele_foul_context);
             $("#tele_private_comments").val(storedVariables['postmatch'].tele_private_comments);
@@ -721,6 +722,7 @@ function openStage(stage) {
     }
 
     else if (stage === "finish") {
+        $('title').text('Scouting: Finish');
 
         /**
          * HIDE ALL THE THINGS
