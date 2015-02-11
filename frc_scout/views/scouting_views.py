@@ -127,7 +127,7 @@ def submit_match_scouting_data(request):
 
                         setattr(tote_stack, 'match', match_object)
                         setattr(tote_stack, 'start_height', stacked_totes['start_height'])
-                        setattr(tote_stack, 'toted_added', stacked_totes['totes_added'])
+                        setattr(tote_stack, 'totes_added', stacked_totes['totes_added'])
                         setattr(tote_stack, 'x', stacked_totes['x'])
                         setattr(tote_stack, 'y', stacked_totes['y'])
                         setattr(tote_stack, 'coop_stack', stacked_totes['coop_stack'])
