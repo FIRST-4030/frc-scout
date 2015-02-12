@@ -986,7 +986,13 @@ function getPendingMatches() {
 
     for (var i = 0; ; i++) {
         if (localStorage["match" + i.toString()]) {
-            pendingMatches.push($.parseJSON(localStorage["match" + i.toString()]));
+            var match = $.parseJSON(localStorage["match" + i.toString()]);
+
+            if(match.postmatch) {
+                if(match.postmatch.scouting_complete === true) {
+                    pendingMatches.push(match);
+                }
+            }
         }
         else {
             break;

@@ -100,8 +100,10 @@
                 if (localStorage["match" + i.toString()]) {
                     var match = $.parseJSON(localStorage["match" + i.toString()]);
 
-                    if(Object.keys(match).length !== 0) {
-                        pendingMatches.push(match);
+                    if(match.postmatch) {
+                        if(match.postmatch.scouting_complete === true) {
+                            pendingMatches.push(match);
+                        }
                     }
                 }
                 else {
