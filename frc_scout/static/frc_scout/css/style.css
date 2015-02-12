@@ -22,7 +22,7 @@
 }
 
 .btn-grid {
-    height: 45vh !important;
+    height: 40vh !important;
     font-size: 32px ;
 }
 
@@ -53,7 +53,7 @@
 
 @media (max-width: 750px) {
     .btn-grid {
-        height: 21vh !important;
+        height: 18vh !important;
         font-size: 20px;
     }
 }

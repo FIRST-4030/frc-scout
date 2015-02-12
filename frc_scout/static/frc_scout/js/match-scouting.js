@@ -21,6 +21,8 @@ $(function() {
     }
 
     $("#alert").hide();
+
+    $("input[type=checkbox]").bootstrapSwitch('size', 'large');
 });
 
 /*
@@ -439,6 +441,14 @@ function saveAndContinue(fromStage, toStage, sender) {
     localStorage['match' + localStorage.pageMatchID] = JSON.stringify(storedVariables);
 
 // hide our current stage
+    $("#" + fromStage).hide();
+
+// change hash triggering the next stage to show
+    window.location.hash = toStage;
+}
+
+function discardAndChangeStage(fromStage, toStage) {
+    // hide our current stage
     $("#" + fromStage).hide();
 
 // change hash triggering the next stage to show
