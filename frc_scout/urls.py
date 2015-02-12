@@ -32,4 +32,10 @@ urlpatterns = patterns(
 
     url(r'^scouting/pit/$', views.pit_scouting, name='pit_scouting'),
     url(r'^scouting/pit/submit/$', views.submit_pit_scouting_data, name='submit_pit_scouting_data'),
-)
+
+    # Results views
+    # TODO: fix this
+    url(r'^results/averages/$', views.submit_pit_scouting_data, name='submit_pit_scouting_data'),
+    url(r'^results/database/$', views.database_instructions, name='database_instructions'),
+
+    )

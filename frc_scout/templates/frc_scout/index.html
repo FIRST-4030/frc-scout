@@ -33,6 +33,7 @@
                 <span class="section-header-text">Results</span>
             </div>
             <a class="btn btn-primary btn-super" href="#">View Team Averages</a>
+            <a class="btn btn-primary btn-super" href="{% url 'frc_scout:database_instructions' %}">connect to database</a>
         </div>
         {% if user.userprofile.team_manager %}
             <div class="col-md-10 col-md-offset-1">
