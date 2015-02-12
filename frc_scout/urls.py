@@ -17,6 +17,7 @@ urlpatterns = patterns(
     url(r'^json/team_exists/$', views.check_if_team_exists, name='check_if_team_exists'),
     url(r'^json/username_exists/$', views.check_if_username_exists, name='check_if_username_exists'),
     url(r'^json/locations/$', views.get_locations, name='get_locations'),
+    url(r'^json/results/averages/$', views.get_averages, name='get_averages'),
 
     # Team management views
     url(r'^manage/scouts/$', views.view_scouts, name='view_scouts'),
@@ -35,7 +36,6 @@ urlpatterns = patterns(
 
     # Results views
     # TODO: fix this
-    url(r'^results/averages/$', views.submit_pit_scouting_data, name='submit_pit_scouting_data'),
     url(r'^results/database/$', views.database_instructions, name='database_instructions'),
 
     )

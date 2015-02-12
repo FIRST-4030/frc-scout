@@ -27,6 +27,7 @@
             </div>
             <a class="btn btn-success btn-super" href="{% url "frc_scout:match_scouting" %}">Scout a Match</a>
             <a class="btn btn-success btn-super" href="{% url "frc_scout:pit_scouting" %}">Pit Scout a Team</a>
+            <button id="submit_pending" class="btn btn-success btn-super" style="display: none;" onclick="submitData();">Submit Pending match data</button>
         </div>
         <div class="col-md-10 col-md-offset-1">
             <div class="section-header-container">
@@ -58,7 +59,70 @@
     <script type="text/javascript">
         $(function() {
             $("a[href=#]").attr('disabled', true);
+
+            if(getPendingMatches().length !== 0) {
+                $("#submit_pending").show();
+            }
         });
+
+        function submitData() {
+            var pendingMatches = getPendingMatches();
+
+            $("#online_message").hide();
+            $("#in_progress_message").show();
+
+            $.ajax({
+                url: '/scouting/match/submit/',
+                method: "POST",
+                data: {
+                    csrfmiddlewaretoken: $.cookie('csrftoken'),
+                    data: JSON.stringify(pendingMatches)
+                },
+                success: function() {
+                    clearPendingMatches();
+                    $("#submit_pending").html("<span class='glyphicon glyphicon-saved'></span>&nbsp; Data submitted successfully.");
+
+                    window.setTimeout(function() {
+                        $("#submit_pending").fadeOut(500);
+                    }, 2000);
+
+                },
+                error: function() {
+                    console.log("Data submission failed -- please try again.");
+                }
+            });
+        }
+
+        function getPendingMatches() {
+            var pendingMatches = [];
+
+            for (var i = 0; ; i++) {
+                if (localStorage["match" + i.toString()]) {
+                    var match = $.parseJSON(localStorage["match" + i.toString()]);
+
+                    if(Object.keys(match).length !== 0) {
+                        pendingMatches.push(match);
+                    }
+                }
+                else {
+                    break;
+                }
+            }
+
+            return pendingMatches;
+        }
+
+        function clearPendingMatches() {
+            for (var i = 0; ; i++) {
+                if (localStorage["match" + i.toString()]) {
+                    localStorage.removeItem("match" + i.toString());
+                }
+                else {
+                    break;
+                }
+            }
+        }
+
     </script>
 {% endblock %}
 
