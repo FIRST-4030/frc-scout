@@ -21,9 +21,9 @@ def index(request):
             }
 
         try:
-            home_message = SitePreferences.objects.filter(site_url=local_settings.SITE_URL)[0].home_message
-            if home_message:
-                context['home_messages'] = home_message
+            obj = SitePreferences.objects.filter(site_url=local_settings.SITE_URL)
+            if obj:
+                context['home_messages'] = obj[0].home_message
 
         except SitePreferences.DoesNotExist:
             pass
@@ -45,9 +45,9 @@ def login_view(request):
         }
 
     try:
-        login_message = SitePreferences.objects.filter(site_url=local_settings.SITE_URL)[0].login_message
-        if login_message:
-            context['login_messages'] = login_message
+        obj = SitePreferences.objects.filter(site_url=local_settings.SITE_URL)
+        if obj:
+            context['login_messages'] = obj[0].login_message
 
     except SitePreferences.DoesNotExist:
         pass
