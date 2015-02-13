@@ -18,8 +18,13 @@ def index(request):
             'nav_title': "Home",
             'location_id': request.session.get('location'),
             'location_name': request.session.get('location_name'),
-            'home_messages': SitePreferences.objects.filter(site_url=local_settings.SITE_URL)[0].home_message
         }
+
+        try:
+            context['home_messages'] = SitePreferences.objects.filter(site_url=local_settings.SITE_URL)[0].home_message
+        except SitePreferences.DoesNotExist:
+            pass
+
         return render(request, 'frc_scout/index.html', context)
     else:
         return HttpResponseRedirect(reverse('frc_scout:login'))
@@ -34,8 +39,12 @@ def login_view(request):
 
     context = {
         'location_list': json.dumps(location_list),
-        'login_messages': SitePreferences.objects.filter(site_url=local_settings.SITE_URL)[0].login_message
     }
+
+    try:
+        context['login_messages'] = SitePreferences.objects.filter(site_url=local_settings.SITE_URL)[0].login_message
+    except SitePreferences.DoesNotExist:
+        pass
 
     if request.user.is_authenticated():
         return HttpResponseRedirect(reverse('frc_scout:index'))
