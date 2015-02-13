@@ -18,10 +18,13 @@ def index(request):
             'nav_title': "Home",
             'location_id': request.session.get('location'),
             'location_name': request.session.get('location_name'),
-        }
+            }
 
         try:
-            context['home_messages'] = SitePreferences.objects.filter(site_url=local_settings.SITE_URL)[0].home_message
+            home_message = SitePreferences.objects.filter(site_url=local_settings.SITE_URL)[0].home_message
+            if home_message:
+                context['home_messages'] = home_message
+
         except SitePreferences.DoesNotExist:
             pass
 
@@ -39,10 +42,13 @@ def login_view(request):
 
     context = {
         'location_list': json.dumps(location_list),
-    }
+        }
 
     try:
-        context['login_messages'] = SitePreferences.objects.filter(site_url=local_settings.SITE_URL)[0].login_message
+        login_message = SitePreferences.objects.filter(site_url=local_settings.SITE_URL)[0].login_message
+        if login_message:
+            context['login_messages'] = login_message
+
     except SitePreferences.DoesNotExist:
         pass
 
