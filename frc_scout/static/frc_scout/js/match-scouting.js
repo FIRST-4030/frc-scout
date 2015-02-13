@@ -22,7 +22,12 @@ $(function() {
 
     $("#alert").hide();
 
-    $("input[type=checkbox]").bootstrapSwitch('size', 'large');
+    $("input[type=checkbox]").bootstrapSwitch({
+        'size': 'large',
+        'onText': "YES",
+        'offText': "NO"
+
+    });
 });
 
 /*
@@ -266,8 +271,7 @@ function saveAndContinue(fromStage, toStage, sender) {
              */
             stageVariables.push({
                 start_height: startHeight,
-                totes_added: endHeight,
-                coop_stack: $("#coop_stack").bootstrapSwitch('state')
+                totes_added: endHeight
             });
 
             $("#tele_stacked_totes_text").text(stageVariables.length);
@@ -291,6 +295,12 @@ function saveAndContinue(fromStage, toStage, sender) {
 
         storedVariables['teleoperated_stacked_totes'][latestIndex].x = xPosition;
         storedVariables['teleoperated_stacked_totes'][latestIndex].y = yPosition;
+
+        console.log("COOP STACK = " + coopStack);
+
+        storedVariables['teleoperated_stacked_totes'][latestIndex].coop_stack = coopStack;
+
+        coopStack = false;
 
         var removedFromPossession = storedVariables['teleoperated_stacked_totes'][latestIndex].totes_added;
 
@@ -845,6 +855,9 @@ $("#auto_start_image").click(function (event) {
 /*
  Get the relative coordinates from teleop location image
  */
+
+var coopStack = false;
+
 $("#teleoperated_stacked_totes_image").click(function (event) {
     var image = $(this);
 
@@ -852,11 +865,13 @@ $("#teleoperated_stacked_totes_image").click(function (event) {
     yPosition = (event.pageY - image.offset().top) / image.height();
 
     if(yPosition < 0.09 || (yPosition > 0.3 && yPosition < 0.4 && xPosition < 0.58) || (yPosition > 0.63 && yPosition < 0.73 && xPosition > 0.42)) {
+        if(yPosition < 0.09) {
+            coopStack = true;
+        }
         saveAndContinue('teleoperated_stacked_totes_location', 'teleoperated');
     } else {
         showErrorMessages(["Invalid tote stack location."], false);
     }
-
 });
 
 /*

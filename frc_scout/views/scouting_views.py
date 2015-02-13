@@ -5,7 +5,7 @@ from django.http import Http404, HttpResponse
 
 
 # Match Scouting
-from frc_scout.models import Match, Location, ToteStack, ContainerStack, PitScoutData
+from frc_scout.models import Match, Location, ToteStack, ContainerStack, PitScoutData, MatchPrivateComments
 
 
 def match_scouting(request):
@@ -105,6 +105,7 @@ def submit_match_scouting_data(request):
                     for tele_fouls_other_attr in tele_fouls_other:
                         setattr(match_object, tele_fouls_other_attr, tele_fouls_other.get(tele_fouls_other_attr))
 
+                pc = MatchPrivateComments()
                 # POSTMATCH
                 if 'postmatch' in match:
                     postmatch = match['postmatch']
@@ -112,8 +113,13 @@ def submit_match_scouting_data(request):
                     for postmatch_attr in postmatch:
                         setattr(match_object, postmatch_attr, postmatch.get(postmatch_attr))
 
+                    # private comments
+                    pc.comments = postmatch['tele_private_comments']
                 try:
                     match_object.save()
+                    pc.match = match_object
+                    pc.save()
+
                 except IntegrityError:
                     errors.append({
                         'team_number': match['prematch']['team_number'],
@@ -144,7 +150,7 @@ def submit_match_scouting_data(request):
                         bin_stack.save()
 
         if len(errors) != 0:
-            return HttpResponse(json.dumps(errors), status=200)
+            return HttpResponse(json.dumps(errors), status=400)
         else:
             return HttpResponse(status=200)
 

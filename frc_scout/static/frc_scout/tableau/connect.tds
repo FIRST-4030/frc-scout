@@ -1,14 +1,14 @@
 <?xml version='1.0' encoding='utf-8' ?>
 
-<datasource formatted-name='postgres.42045.783954305600' inline='true' source-platform='mac' version='8.3' xmlns:user='http://www.tableausoftware.com/xml/user'>
+<datasource formatted-name='connect' inline='true' source-platform='mac' version='8.3' xmlns:user='http://www.tableausoftware.com/xml/user'>
   <!-- build 8300.15.0114.2230                                -->
   <connection class='postgres' dbname='frc_scout' odbc-native-protocol='yes' port='20568' server='173.193.191.191' username='public_access'>
     <relation join='left' type='join'>
       <clause type='join'>
         <expression op='='>
-          <expression op='[frc_scout_match].[id]'>
+          <expression op='[frc_scout_match].[location_id]'>
           </expression>
-          <expression op='[frc_scout_containerstack].[match_id]'>
+          <expression op='[frc_scout_location].[id]'>
           </expression>
         </expression>
       </clause>
@@ -17,25 +17,36 @@
           <expression op='='>
             <expression op='[frc_scout_match].[id]'>
             </expression>
-            <expression op='[frc_scout_totestack].[match_id]'>
+            <expression op='[frc_scout_containerstack].[match_id]'>
             </expression>
           </expression>
         </clause>
         <relation join='left' type='join'>
           <clause type='join'>
             <expression op='='>
-              <expression op='[frc_scout_match].[team_number]'>
+              <expression op='[frc_scout_match].[id]'>
               </expression>
-              <expression op='[frc_scout_pitscoutdata].[team_number]'>
+              <expression op='[frc_scout_totestack].[match_id]'>
               </expression>
             </expression>
           </clause>
-          <relation name='frc_scout_match' table='[public].[frc_scout_match]' type='table' />
-          <relation name='frc_scout_pitscoutdata' table='[public].[frc_scout_pitscoutdata]' type='table' />
+          <relation join='left' type='join'>
+            <clause type='join'>
+              <expression op='='>
+                <expression op='[frc_scout_match].[team_number]'>
+                </expression>
+                <expression op='[frc_scout_pitscoutdata].[team_number]'>
+                </expression>
+              </expression>
+            </clause>
+            <relation name='frc_scout_match' table='[public].[frc_scout_match]' type='table' />
+            <relation name='frc_scout_pitscoutdata' table='[public].[frc_scout_pitscoutdata]' type='table' />
+          </relation>
+          <relation name='frc_scout_totestack' table='[public].[frc_scout_totestack]' type='table' />
         </relation>
-        <relation name='frc_scout_totestack' table='[public].[frc_scout_totestack]' type='table' />
+        <relation name='frc_scout_containerstack' table='[public].[frc_scout_containerstack]' type='table' />
       </relation>
-      <relation name='frc_scout_containerstack' table='[public].[frc_scout_containerstack]' type='table' />
+      <relation name='frc_scout_location' table='[public].[frc_scout_location]' type='table' />
     </relation>
     <cols>
       <map key='[auto_fouls]' value='[frc_scout_match].[auto_fouls]' />
@@ -66,6 +77,7 @@
       <map key='[human_litter_throwing]' value='[frc_scout_pitscoutdata].[human_litter_throwing]' />
       <map key='[human_tote_loading]' value='[frc_scout_pitscoutdata].[human_tote_loading]' />
       <map key='[id (frc_scout_containerstack)]' value='[frc_scout_containerstack].[id]' />
+      <map key='[id (frc_scout_location)]' value='[frc_scout_location].[id]' />
       <map key='[id (frc_scout_pitscoutdata)]' value='[frc_scout_pitscoutdata].[id]' />
       <map key='[id (frc_scout_totestack)]' value='[frc_scout_totestack].[id]' />
       <map key='[id]' value='[frc_scout_match].[id]' />
@@ -76,6 +88,7 @@
       <map key='[match_id (frc_scout_containerstack)]' value='[frc_scout_containerstack].[match_id]' />
       <map key='[match_id]' value='[frc_scout_totestack].[match_id]' />
       <map key='[match_number]' value='[frc_scout_match].[match_number]' />
+      <map key='[name]' value='[frc_scout_location].[name]' />
       <map key='[robot_height]' value='[frc_scout_pitscoutdata].[robot_height]' />
       <map key='[robot_speed]' value='[frc_scout_pitscoutdata].[robot_speed]' />
       <map key='[robot_weight]' value='[frc_scout_pitscoutdata].[robot_weight]' />
@@ -1195,6 +1208,39 @@
           <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_SLONG&quot;</attribute>
         </attributes>
       </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>id</remote-name>
+        <remote-type>3</remote-type>
+        <local-name>[id (frc_scout_location)]</local-name>
+        <parent-name>[frc_scout_location]</parent-name>
+        <remote-alias>id</remote-alias>
+        <ordinal>75</ordinal>
+        <local-type>integer</local-type>
+        <aggregation>Sum</aggregation>
+        <precision>10</precision>
+        <contains-null>true</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_INTEGER&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_SLONG&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>name</remote-name>
+        <remote-type>130</remote-type>
+        <local-name>[name]</local-name>
+        <parent-name>[frc_scout_location]</parent-name>
+        <remote-alias>name</remote-alias>
+        <ordinal>76</ordinal>
+        <local-type>string</local-type>
+        <aggregation>Count</aggregation>
+        <width>8190</width>
+        <contains-null>true</contains-null>
+        <cast-to-local-type>true</cast-to-local-type>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_WLONGVARCHAR&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_WCHAR&quot;</attribute>
+        </attributes>
+      </metadata-record>
     </metadata-records>
   </connection>
   <aliases enabled='yes' />
@@ -1257,6 +1303,8 @@
   </column>
   <column caption='Id (Frc Scout Containerstack)' datatype='integer' name='[id (frc_scout_containerstack)]' role='dimension' type='ordinal'>
   </column>
+  <column aggregation='Sum' caption='Id (Frc Scout Location)' datatype='integer' name='[id (frc_scout_location)]' role='dimension' type='ordinal'>
+  </column>
   <column caption='Id (Frc Scout Pitscoutdata)' datatype='integer' name='[id (frc_scout_pitscoutdata)]' role='dimension' type='ordinal'>
   </column>
   <column caption='Id (Frc Scout Totestack)' datatype='integer' name='[id (frc_scout_totestack)]' role='dimension' type='ordinal'>
@@ -1276,6 +1324,8 @@
   <column aggregation='Sum' caption='Match Id' datatype='integer' name='[match_id]' role='dimension' type='ordinal'>
   </column>
   <column caption='Match Number' datatype='integer' name='[match_number]' role='dimension' type='ordinal'>
+  </column>
+  <column caption='Name' datatype='string' name='[name]' role='dimension' type='nominal'>
   </column>
   <column caption='Robot Height' datatype='real' name='[robot_height]' role='measure' type='quantitative'>
   </column>
@@ -1350,9 +1400,11 @@
   </folder>
   <folder name='IDs' role='dimensions'>
     <folder-item name='[id (frc_scout_containerstack)]' type='field' />
+    <folder-item name='[id (frc_scout_location)]' type='field' />
     <folder-item name='[id (frc_scout_pitscoutdata)]' type='field' />
     <folder-item name='[id (frc_scout_totestack)]' type='field' />
     <folder-item name='[id]' type='field' />
+    <folder-item name='[location_id]' type='field' />
   </folder>
   <folder name='PitScouting' role='dimensions'>
     <folder-item name='[can_acquire_containers]' type='field' />

@@ -86,11 +86,20 @@ class Match(models.Model):
     tele_dead_bot = models.BooleanField(default=False)
     tele_shooter_jam = models.BooleanField(default=False)
 
-    tele_foul_context = models.TextField()
-    tele_public_comments = models.TextField()
+    tele_foul_context = models.TextField(null=True, blank=True)
+    tele_public_comments = models.TextField(null=True, blank=True)
 
     def __str__(self):
         return str("Team: %i | Match: %i | Location: %s" % (self.team_number, self.match_number, self.location.name))
+
+
+class MatchPrivateComments(models.Model):
+    match = models.OneToOneField(Match)
+    comments = models.TextField(null=True, blank=True)
+
+    def __str__(self):
+        return str("Team: %i | Match: %i | Location: %s" %
+                   (self.match.team_number, self.match.match_number, self.match.location.name))
 
 
 class ToteStack(models.Model):
