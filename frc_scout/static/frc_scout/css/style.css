@@ -107,3 +107,11 @@ body {
     padding: 10px !important;
     border-radius: 2px !important;
 }
+
+.btn-success-darker-1 {
+    background-image: radial-gradient(circle, #2c8c26 80%, #439a46 81%);
+}
+
+.btn-success-darker-2 {
+    background-image: radial-gradient(circle, #187C1C 80%, #439a46 81%);
+}

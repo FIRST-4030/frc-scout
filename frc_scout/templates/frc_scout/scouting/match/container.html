@@ -227,10 +227,10 @@
                 <button id="auto_fouls" onclick="saveAndContinue('autonomous_fouls_and_other', 'autonomous', this);" class="btn btn-lg btn-warning max-width" style="height: 25vh; margin-top: 1vh; margin-bottom: 1vh; font-size: 30px;">fouls</button>
             </div>
             <div class="col-md-12">
-                <button id="auto_interference" onclick="saveAndContinue('autonomous_fouls_and_other', 'autonomous', this);" class="btn btn-lg btn-info max-width" style="height: 25vh; margin-top: 1vh; margin-bottom: 1vh; font-size: 30px;">interference</button>
+                <button id="auto_interference" onclick="saveAndContinue('autonomous_fouls_and_other', 'autonomous', this);" class="btn btn-lg btn-danger max-width" style="height: 25vh; margin-top: 1vh; margin-bottom: 1vh; font-size: 30px;">interference</button>
             </div>
             <div class="col-md-12">
-                <button id="auto_no_auto" onclick="saveAndContinue('autonomous_fouls_and_other', 'autonomous', this);" class="btn btn-lg btn-primary max-width" style="height: 25vh; margin-top: 1vh; font-size: 30px;">no auto</button>
+                <button id="auto_no_auto" onclick="saveAndContinue('autonomous_fouls_and_other', 'autonomous', this);" class="btn btn-lg btn-default max-width" style="height: 25vh; margin-top: 1vh; font-size: 30px;">no auto</button>
             </div>
             <div class="col-md-12">
                 <button class="btn btn-lg btn-info max-width" style="margin-top: 3vh; height: 10vh;" onclick="discardAndChangeStage('autonomous_fouls_and_other', 'autonomous');"><span class="glyphicon glyphicon-arrow-left"></span>&nbsp; autONOMOUS</button>
@@ -351,12 +351,12 @@
     <div class="container-fluid stage" id="teleoperated_picked_up_totes" style="display:none;">
         <div class="row">
             <div class="col-sm-6">
-                <button class="btn btn-lg btn-info max-width btn-grid" id="tele_picked_up_ground_upright_totes" style="margin-top: 2vh; margin-bottom: 1vh;" onclick="saveAndContinue('teleoperated_picked_up_totes', 'teleoperated', this);">ground upright</button>
+                <button class="btn btn-lg btn-default max-width btn-grid" id="tele_picked_up_ground_upright_totes" style="margin-top: 2vh; margin-bottom: 1vh;" onclick="saveAndContinue('teleoperated_picked_up_totes', 'teleoperated', this);">ground upright</button>
                 <button class="btn btn-lg btn-success max-width btn-grid" id="tele_picked_up_upside_down_totes" style="margin-top: 1vh; margin-bottom: 1vh;" onclick="saveAndContinue('teleoperated_picked_up_totes', 'teleoperated', this);">upside down</button>
             </div>
 
             <div class="col-sm-6">
-                <button class="btn btn-lg btn-primary max-width btn-grid" id="tele_picked_up_sideways_totes" style="margin-top: 2vh; margin-bottom: 1vh;" onclick="saveAndContinue('teleoperated_picked_up_totes', 'teleoperated', this);">side</button>
+                <button class="btn btn-lg btn-danger max-width btn-grid" id="tele_picked_up_sideways_totes" style="margin-top: 2vh; margin-bottom: 1vh;" onclick="saveAndContinue('teleoperated_picked_up_totes', 'teleoperated', this);">side</button>
                 <button class="btn btn-lg btn-warning max-width btn-grid" id="tele_picked_up_human_station_totes" style="margin-top: 1vh; margin-bottom: 1vh;" onclick="saveAndContinue('teleoperated_picked_up_totes', 'teleoperated', this);">human station</button>
             </div>
         </div>
@@ -374,23 +374,23 @@
         <div class="row">
             <div class="col-md-12">
                 <h3>Totes Stacked On Top Of</h3>
-                <div class="btn-group max-width" data-toggle="buttons" id="start_height">
-                    <label class="btn btn-info btn-group-tall-6 start-height-group-wrapper">
+                <div class="btn-group btn-default max-width" data-toggle="buttons" id="start_height">
+                    <label class="btn btn-success btn-group-tall-6 start-height-group-wrapper">
                         <input type="radio" name="start_height_group" data-height="0"><span style="font-size: 24px; margin-top: 10px;">New<br>Stack</span>
                     </label>
-                    <label class="btn btn-info btn-group-tall-6 start-height-group-wrapper">
+                    <label class="btn btn-success btn-group-tall-6 start-height-group-wrapper">
                         <input type="radio" name="start_height_group" data-height="1"><span>1</span>
                     </label>
-                    <label class="btn btn-info btn-group-tall-6 start-height-group-wrapper">
+                    <label class="btn btn-success btn-group-tall-6 start-height-group-wrapper">
                         <input type="radio" name="start_height_group" data-height="2"><span>2</span>
                     </label>
-                    <label class="btn btn-info btn-group-tall-6 start-height-group-wrapper">
+                    <label class="btn btn-success btn-group-tall-6 start-height-group-wrapper">
                         <input type="radio" name="start_height_group" data-height="3"><span>3</span>
                     </label>
-                    <label class="btn btn-info btn-group-tall-6 start-height-group-wrapper">
+                    <label class="btn btn-success btn-group-tall-6 start-height-group-wrapper">
                         <input type="radio" name="start_height_group" data-height="4"><span>4</span>
                     </label>
-                    <label class="btn btn-info btn-group-tall-6 start-height-group-wrapper">
+                    <label class="btn btn-success btn-group-tall-6 start-height-group-wrapper">
                         <input type="radio" name="start_height_group" data-height="5"><span>5</span>
                     </label>
                 </div>
@@ -400,22 +400,22 @@
             <div class="col-md-12">
                 <h3>Totes Added To Stack</h3>
                 <div class="btn-group max-width" data-toggle="buttons" id="totes_added">
-                    <label class="btn btn-info btn-group-tall-6">
+                    <label class="btn btn-warning btn-group-tall-6">
                         <input type="radio" name="totes_added_group" data-height="1"><span>1</span>
                     </label>
-                    <label class="btn btn-info btn-group-tall-6">
+                    <label class="btn btn-warning btn-group-tall-6">
                         <input type="radio" name="totes_added_group" data-height="2"><span>2</span>
                     </label>
-                    <label class="btn btn-info btn-group-tall-6">
+                    <label class="btn btn-warning btn-group-tall-6">
                         <input type="radio" name="totes_added_group" data-height="3"><span>3</span>
                     </label>
-                    <label class="btn btn-info btn-group-tall-6">
+                    <label class="btn btn-warning btn-group-tall-6">
                         <input type="radio" name="totes_added_group" data-height="4"><span>4</span>
                     </label>
-                    <label class="btn btn-info btn-group-tall-6">
+                    <label class="btn btn-warning btn-group-tall-6">
                         <input type="radio" name="totes_added_group" data-height="5"><span>5</span>
                     </label>
-                    <label class="btn btn-info btn-group-tall-6">
+                    <label class="btn btn-warning btn-group-tall-6">
                         <input type="radio" name="totes_added_group" data-height="6"><span>6</span>
                     </label>
                 </div>
@@ -451,10 +451,10 @@
                 <button id="tele_picked_up_sideways_containers" onclick="saveAndContinue('teleoperated_picked_up_containers', 'teleoperated', this);" class="btn btn-lg btn-warning max-width" style="height: 25vh; margin-top: 1vh; margin-bottom: 1vh; font-size: 30px;">side</button>
             </div>
             <div class="col-md-12">
-                <button id="tele_picked_up_upright_containers" onclick="saveAndContinue('teleoperated_picked_up_containers', 'teleoperated', this);" class="btn btn-lg btn-info max-width" style="height: 25vh; margin-top: 1vh; margin-bottom: 1vh; font-size: 30px;">upright</button>
+                <button id="tele_picked_up_upright_containers" onclick="saveAndContinue('teleoperated_picked_up_containers', 'teleoperated', this);" class="btn btn-lg btn-success max-width" style="height: 25vh; margin-top: 1vh; margin-bottom: 1vh; font-size: 30px;">upright</button>
             </div>
             <div class="col-md-12">
-                <button id="tele_picked_up_center_step_containers" onclick="saveAndContinue('teleoperated_picked_up_containers', 'teleoperated', this);" class="btn btn-lg btn-primary max-width" style="height: 25vh; margin-top: 1vh; font-size: 30px;">center/step</button>
+                <button id="tele_picked_up_center_step_containers" onclick="saveAndContinue('teleoperated_picked_up_containers', 'teleoperated', this);" class="btn btn-lg btn-danger max-width" style="height: 25vh; margin-top: 1vh; font-size: 30px;">center/step</button>
             </div>
             <div class="col-md-12">
                 <button class="btn btn-lg btn-info max-width" style="margin-top: 3vh; height: 10vh;" onclick="discardAndChangeStage('teleoperated_picked_up_totes', 'teleoperated');"><span class="glyphicon glyphicon-arrow-left"></span>&nbsp; teleoperated</button>
@@ -468,22 +468,22 @@
             <div class="col-md-12">
                 <h3>Totes Stacked On Top Of</h3>
                 <div class="btn-group max-width" data-toggle="buttons" id="container_stack_height">
-                    <label class="btn btn-info btn-group-tall-6">
+                    <label class="btn btn-success btn-group-tall-6">
                         <input type="radio" name="options" data-height="1"><span>1</span>
                     </label>
-                    <label class="btn btn-info btn-group-tall-6">
+                    <label class="btn btn-success btn-group-tall-6">
                         <input type="radio" name="options" data-height="2"><span>2</span>
                     </label>
-                    <label class="btn btn-info btn-group-tall-6">
+                    <label class="btn btn-success btn-group-tall-6">
                         <input type="radio" name="options" data-height="3"><span>3</span>
                     </label>
-                    <label class="btn btn-info btn-group-tall-6">
+                    <label class="btn btn-success btn-group-tall-6">
                         <input type="radio" name="options" data-height="4"><span>4</span>
                     </label>
-                    <label class="btn btn-info btn-group-tall-6">
+                    <label class="btn btn-success btn-group-tall-6">
                         <input type="radio" name="options" data-height="5"><span>5</span>
                     </label>
-                    <label class="btn btn-info btn-group-tall-6">
+                    <label class="btn btn-success btn-group-tall-6">
                         <input type="radio" name="options" data-height="6"><span>6</span>
                     </label>
                 </div>
@@ -504,12 +504,12 @@
     <div class="container-fluid stage" id="teleoperated_fouls_and_other" style="display:none;">
         <div class="row">
             <div class="col-sm-6">
-                <button class="btn btn-lg btn-info max-width btn-grid" id="tele_fouls" style="margin-top: 2vh; margin-bottom: 1vh;" onclick="saveAndContinue('teleoperated_fouls_and_other', 'teleoperated', this);">fouls</button>
+                <button class="btn btn-lg btn-default max-width btn-grid" id="tele_fouls" style="margin-top: 2vh; margin-bottom: 1vh;" onclick="saveAndContinue('teleoperated_fouls_and_other', 'teleoperated', this);">fouls</button>
                 <button class="btn btn-lg btn-success max-width btn-grid" id="tele_knocked_over_stacks" style="margin-top: 1vh; margin-bottom: 1vh;" onclick="saveAndContinue('teleoperated_fouls_and_other', 'teleoperated', this);">knocked over stack</button>
             </div>
 
             <div class="col-sm-6">
-                <button class="btn btn-lg btn-primary max-width btn-grid" id="tele_dead_bot" style="margin-top: 2vh; margin-bottom: 1vh;" onclick="saveAndContinue('teleoperated_fouls_and_other', 'teleoperated', this);">dead bot</button>
+                <button class="btn btn-lg btn-danger max-width btn-grid" id="tele_dead_bot" style="margin-top: 2vh; margin-bottom: 1vh;" onclick="saveAndContinue('teleoperated_fouls_and_other', 'teleoperated', this);">dead bot</button>
                 <button class="btn btn-lg btn-warning max-width btn-grid" id="tele_shooter_jam" style="margin-top: 1vh; margin-bottom: 1vh;" onclick="saveAndContinue('teleoperated_fouls_and_other', 'teleoperated', this);">fatal jam</button>
             </div>
         </div>
