@@ -11,6 +11,16 @@
             <img style="text-align: center; max-width: 300px;" src="{% static 'frc_scout/img/logo_earfuzz_hat.png' %}">
             <br>
             <h2 style="text-align: center;">FRC Scout: Login</h2>
+            {% if login_messages %}
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Information</h3>
+                    </div>
+                    <div class="panel-body">
+                        {{ login_messages }}
+                    </div>
+                </div>
+            {% endif %}
             <form method="post">
                 {% csrf_token %}
 

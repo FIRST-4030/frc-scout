@@ -6,8 +6,9 @@ from django.core.urlresolvers import reverse
 from django.http.response import HttpResponseRedirect
 from django.shortcuts import render
 from django.contrib import messages
-from frc_scout.models import Team, UserProfile, Location
+from frc_scout.models import Team, UserProfile, Location, SitePreferences
 from django.db import IntegrityError
+from frc_scout_2015 import local_settings
 
 
 def index(request):
@@ -16,7 +17,8 @@ def index(request):
             'user': request.user,
             'nav_title': "Home",
             'location_id': request.session.get('location'),
-            'location_name': request.session.get('location_name')
+            'location_name': request.session.get('location_name'),
+            'home_messages': SitePreferences.objects.filter(site_url=local_settings.SITE_URL)[0].home_message
         }
         return render(request, 'frc_scout/index.html', context)
     else:
@@ -31,7 +33,8 @@ def login_view(request):
         location_list[loc.name] = loc.id
 
     context = {
-        'location_list': json.dumps(location_list)
+        'location_list': json.dumps(location_list),
+        'login_messages': SitePreferences.objects.filter(site_url=local_settings.SITE_URL)[0].login_message
     }
 
     if request.user.is_authenticated():

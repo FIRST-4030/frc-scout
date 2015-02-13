@@ -111,7 +111,8 @@ class ToteStack(models.Model):
     coop_stack = models.BooleanField(default=False)
 
     def __str__(self):
-        return str("Team: %i | Match: %i | Location: %s" % (self.match.team_number, self.match.match_number, self.match.location.name))
+        return str("Team: %i | Match: %i | Location: %s" %
+                   (self.match.team_number, self.match.match_number, self.match.location.name))
 
 
 class ContainerStack(models.Model):
@@ -119,7 +120,8 @@ class ContainerStack(models.Model):
     height = models.IntegerField(default=1)
 
     def __str__(self):
-        return str("Team: %i | Match: %i | Location: %s" % (self.match.team_number, self.match.match_number, self.match.location.name))
+        return str("Team: %i | Match: %i | Location: %s" %
+                   (self.match.team_number, self.match.match_number, self.match.location.name))
 
 
 class PitScoutData(models.Model):
@@ -167,3 +169,12 @@ class PitScoutData(models.Model):
             rt += " (SELF)"
 
         return rt
+
+
+class SitePreferences(models.Model):
+    site_url = models.TextField()
+    login_message = models.TextField(blank=True, null=True)
+    home_message = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return self.site_url
