@@ -11,7 +11,7 @@ from frc_scout.models import Match, Location, ToteStack, ContainerStack, PitScou
 def match_scouting(request):
 
     context = {
-        'fluid': True
+        'fluid': True,
     }
 
     return render(request, 'frc_scout/scouting/match/container.html', context)
