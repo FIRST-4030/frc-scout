@@ -73,9 +73,13 @@ def login_view(request):
         if user is not None:
             if user.is_active:
                 if location_name in locations:
+
+                    location = Location.objects.get(name=location_name)
+
                     login(request, user)
 
-                    request.session['location'] = location_name
+                    request.session['location_name'] = location.name
+                    request.session['location_id'] = location.id
 
                     return HttpResponseRedirect(reverse('frc_scout:index'))
                 else:
