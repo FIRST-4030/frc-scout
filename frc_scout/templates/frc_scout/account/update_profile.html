@@ -7,15 +7,21 @@
 {% block main_content %}
     <div class="row">
         <div class="col-md-6 col-md-offset-3">
-            <p><strong>Click information to update.</strong></p>
-            First Name: <a href="#" class="editable" data-type="text" data-pk="first_name">{{ user.first_name }}</a>
-            <br>
-            Last Name: <a href="#" class="editable" data-type="text" data-pk="last_name">{{ user.last_name }}</a>
-            <br>
-            Email Address: <a href="#" class="editable" data-type="email" data-pk="email">{{ user.email }}</a>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Click information to update.</h3>
+                </div>
+                <div class="panel-body">
+                    First Name: <a href="#" class="editable" data-type="text" data-pk="first_name">{{ user.first_name }}</a>
+                    <br>
+                    Last Name: <a href="#" class="editable" data-type="text" data-pk="last_name">{{ user.last_name }}</a>
+                    <br>
+                    Email Address: <a href="#" class="editable" data-type="email" data-pk="email">{{ user.email }}</a>
 
-            <br>
-            <h6><a href="{% url 'frc_scout:update_password' %}">Update Password</a></h6>
+                    <br>
+                    <h6><a href="{% url 'frc_scout:update_password' %}">Update Password</a></h6>
+                </div>
+            </div>
         </div>
     </div>
 {% endblock %}

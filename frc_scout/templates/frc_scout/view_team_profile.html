@@ -1,0 +1,80 @@
+{% extends 'frc_scout/base.html' %}
+
+{% load staticfiles %}
+
+{% block title %}Team {{ team_number }}'s profile{% endblock %}
+
+{% block nav %}{% include 'frc_scout/nav.html' %}{% endblock %}
+
+{% block main_content %}
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            {% if team.team_name %}
+                <h3>{{ team.team_name }}'{% if not pluralized %}s{% endif %} Profile</h3>
+            {% else %}
+                <h3>Team {{ team_number }}'s Profile</h3>
+            {% endif %}
+
+            <div class="section-header-container">
+                <span class="section-header-text">Match averages</span>
+            </div>
+            <div style="padding: 10px 10px;">
+                {% for section in sections %}
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">{{ section.name }}</h3>
+                        </div>
+                        <div class="panel-body">
+                            {% for data in section.data %}
+                                {{ data.name }}: <strong>{{ data.value }}</strong><br />
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+                <a href="{% url "frc_scout:view_team_matches" team_number %}">View all matches for this team</a>
+            </div>
+            <div class="section-header-container">
+                <span class="section-header-text">Public comments</span>
+            </div>
+            <div style="padding: 10px 10px;">
+                {% for match in matches %}
+                    {% if match.tele_public_comments or match.foul_context %}
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">{{ match.location }}: Match {{ match.match_number }}</h3>
+                            </div>
+                            <div class="panel-body">
+                                {% if match.tele_public_comments %}
+                                    <strong>Public Comments:</strong> {{ match.tele_public_comments }}
+                                {% endif %}
+                                <br>
+                                {% if match.tele_foul_context %}
+                                    <strong>Foul Comments:</strong> {{ match.tele_foul_context }}
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <div class="section-header-container">
+                <span class="section-header-text">Private comments</span>
+            </div>
+            <div style="padding: 10px 10px;">
+                {% for match in matches %}
+                    {% if match.matchprivatecomments.comments and match.scout.userprofile.team.team_number == request.user.userprofile.team.team_number %}
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">{{ match.location }}: Match {{ match.match_number }}</h3>
+                            </div>
+                            <div class="panel-body">
+                                {{ match.matchprivatecomments.comments }}
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block footer %}{% include 'frc_scout/footer.html' %}{% endblock %}

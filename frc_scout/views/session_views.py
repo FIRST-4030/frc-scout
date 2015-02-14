@@ -1,5 +1,4 @@
 import json
-
 from django.contrib.auth import authenticate, logout, login
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
@@ -9,6 +8,8 @@ from django.contrib import messages
 from frc_scout.models import Team, UserProfile, Location, SitePreferences
 from django.db import IntegrityError
 from frc_scout_2015 import local_settings
+
+from frc_scout.views.loc_list import locations
 
 
 def index(request):
@@ -55,42 +56,39 @@ def login_view(request):
     if request.user.is_authenticated():
         return HttpResponseRedirect(reverse('frc_scout:index'))
 
-    try:
-        if request.method == "POST":
-            username = request.POST.get('username')
-            password = request.POST.get('password')
-            location_name = request.POST.get('location')
+    if request.method == "POST":
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        location_name = request.POST.get('location')
 
-            user = authenticate(username=username, password=password)
+        user = authenticate(username=username, password=password)
 
-            if user is None:
-                try:
-                    email = User.objects.get(email=username)
+        if user is None:
+            try:
+                email = User.objects.get(email=username)
 
-                    user = authenticate(username=email.username, password=password)
-                except User.DoesNotExist:
-                    user = None
+                user = authenticate(username=email.username, password=password)
+            except User.DoesNotExist:
+                user = None
 
-            location = Location.objects.get(name=location_name).id
+        user = authenticate(username=username, password=password)
 
-            if user is not None:
-                if user.is_active and user.userprofile.approved:
+        if user is not None:
+            if user.is_active:
+                if location_name in locations:
                     login(request, user)
 
-                    request.session['location_name'] = location_name
-                    request.session['location_id'] = location
+                    request.session['location'] = location_name
 
                     return HttpResponseRedirect(reverse('frc_scout:index'))
                 else:
-                    messages.error(request, "Your account has been disabled "
-                                            "(or has not yet been enabled). Check with your team manager.")
+                    messages.error(request, "Please enter a valid event location.")
             else:
-                messages.error(request, "Your credentials did not match a user, try again.")
+                messages.error(request, "Your account has been disabled. Check with your team manager.")
+        else:
+            messages.error(request, "Your credentials did not match a user, try again.")
 
-    except Location.DoesNotExist:
-        messages.error(request, "Please enter a valid event location.")
-
-    return render(request, 'frc_scout/login.html', context)
+    return render(request, 'frc_scout/login.html')
 
 
 # Cannot be named logout(), see above
@@ -118,7 +116,7 @@ def create_account(request):
         try:
             user = User.objects.create_user(username, email_address, password, first_name=first_name, last_name=last_name)
         except IntegrityError:
-            messages.error(request, "That username or email address has already been used.")
+            messages.error(request, "That username has been taken.")
             return render(request, 'frc_scout/create_account.html')
 
         user.userprofile = UserProfile()
@@ -129,10 +127,6 @@ def create_account(request):
         if created:
             user.userprofile.team_manager = True
             user.userprofile.approved = True
-
-        # Otherwise, they must be approved
-        else:
-            user.is_active = False
 
         user.userprofile.save()
 
