@@ -21,6 +21,13 @@ $(function() {
     }
 
     $("#alert").hide();
+
+    $("input[type=checkbox]").bootstrapSwitch({
+        'size': 'large',
+        'onText': "YES",
+        'offText': "NO"
+
+    });
 });
 
 /*
@@ -264,8 +271,7 @@ function saveAndContinue(fromStage, toStage, sender) {
              */
             stageVariables.push({
                 start_height: startHeight,
-                totes_added: endHeight,
-                coop_stack: $("#coop_stack").bootstrapSwitch('state')
+                totes_added: endHeight
             });
 
             $("#tele_stacked_totes_text").text(stageVariables.length);
@@ -289,6 +295,12 @@ function saveAndContinue(fromStage, toStage, sender) {
 
         storedVariables['teleoperated_stacked_totes'][latestIndex].x = xPosition;
         storedVariables['teleoperated_stacked_totes'][latestIndex].y = yPosition;
+
+        console.log("COOP STACK = " + coopStack);
+
+        storedVariables['teleoperated_stacked_totes'][latestIndex].coop_stack = coopStack;
+
+        coopStack = false;
 
         var removedFromPossession = storedVariables['teleoperated_stacked_totes'][latestIndex].totes_added;
 
@@ -439,6 +451,14 @@ function saveAndContinue(fromStage, toStage, sender) {
     localStorage['match' + localStorage.pageMatchID] = JSON.stringify(storedVariables);
 
 // hide our current stage
+    $("#" + fromStage).hide();
+
+// change hash triggering the next stage to show
+    window.location.hash = toStage;
+}
+
+function discardAndChangeStage(fromStage, toStage) {
+    // hide our current stage
     $("#" + fromStage).hide();
 
 // change hash triggering the next stage to show
@@ -709,6 +729,7 @@ function openStage(stage) {
     }
 
     else if (stage === "postmatch") {
+        $('title').text('Scouting: Postmatch');
         if(storedVariables['postmatch']) {
             $("#tele_foul_context").val(storedVariables['postmatch'].tele_foul_context);
             $("#tele_private_comments").val(storedVariables['postmatch'].tele_private_comments);
@@ -721,6 +742,7 @@ function openStage(stage) {
     }
 
     else if (stage === "finish") {
+        $('title').text('Scouting: Finish');
 
         /**
          * HIDE ALL THE THINGS
@@ -833,6 +855,9 @@ $("#auto_start_image").click(function (event) {
 /*
  Get the relative coordinates from teleop location image
  */
+
+var coopStack = false;
+
 $("#teleoperated_stacked_totes_image").click(function (event) {
     var image = $(this);
 
@@ -840,11 +865,13 @@ $("#teleoperated_stacked_totes_image").click(function (event) {
     yPosition = (event.pageY - image.offset().top) / image.height();
 
     if(yPosition < 0.09 || (yPosition > 0.3 && yPosition < 0.4 && xPosition < 0.58) || (yPosition > 0.63 && yPosition < 0.73 && xPosition > 0.42)) {
+        if(yPosition < 0.09) {
+            coopStack = true;
+        }
         saveAndContinue('teleoperated_stacked_totes_location', 'teleoperated');
     } else {
         showErrorMessages(["Invalid tote stack location."], false);
     }
-
 });
 
 /*
@@ -974,7 +1001,13 @@ function getPendingMatches() {
 
     for (var i = 0; ; i++) {
         if (localStorage["match" + i.toString()]) {
-            pendingMatches.push($.parseJSON(localStorage["match" + i.toString()]));
+            var match = $.parseJSON(localStorage["match" + i.toString()]);
+
+            if(match.postmatch) {
+                if(match.postmatch.scouting_complete === true) {
+                    pendingMatches.push(match);
+                }
+            }
         }
         else {
             break;

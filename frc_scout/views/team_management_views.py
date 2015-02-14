@@ -67,8 +67,6 @@ def update_scouts(request):
 
             setattr(scout.userprofile, name, value)
 
-            print(scout.userprofile.position)
-
             scout.userprofile.save()
 
         return HttpResponse(status=200)

@@ -31,7 +31,7 @@ class UserProfile(models.Model):
     team_manager = models.BooleanField(default=False)
     approved = models.BooleanField(default=False)
 
-    position = models.TextField(null=True)
+    message = models.TextField(null=True, blank=True)
 
     def __str__(self):
         return self.user.username + " - " + self.user.get_full_name() + " - " + str(self.team.team_number)
@@ -86,11 +86,20 @@ class Match(models.Model):
     tele_dead_bot = models.BooleanField(default=False, verbose_name="Robot died")
     tele_shooter_jam = models.BooleanField(default=False, verbose_name="Shooter jammed")
 
-    tele_foul_context = models.TextField()
-    tele_public_comments = models.TextField()
+    tele_foul_context = models.TextField(null=True, blank=True)
+    tele_public_comments = models.TextField(null=True, blank=True)
 
     def __str__(self):
         return str("Team: %i | Match: %i | Location: %s" % (self.team_number, self.match_number, self.location.name))
+
+
+class MatchPrivateComments(models.Model):
+    match = models.OneToOneField(Match)
+    comments = models.TextField(null=True, blank=True)
+
+    def __str__(self):
+        return str("Team: %i | Match: %i | Location: %s" %
+                   (self.match.team_number, self.match.match_number, self.match.location.name))
 
 
 class ToteStack(models.Model):
@@ -102,7 +111,8 @@ class ToteStack(models.Model):
     coop_stack = models.BooleanField(default=False)
 
     def __str__(self):
-        return str("Team: %i | Match: %i | Location: %s" % (self.match.team_number, self.match.match_number, self.match.location.name))
+        return str("Team: %i | Match: %i | Location: %s" %
+                   (self.match.team_number, self.match.match_number, self.match.location.name))
 
 
 class ContainerStack(models.Model):
@@ -110,7 +120,8 @@ class ContainerStack(models.Model):
     height = models.IntegerField(default=1)
 
     def __str__(self):
-        return str("Team: %i | Match: %i | Location: %s" % (self.match.team_number, self.match.match_number, self.match.location.name))
+        return str("Team: %i | Match: %i | Location: %s" %
+                   (self.match.team_number, self.match.match_number, self.match.location.name))
 
 
 class PitScoutData(models.Model):
@@ -158,3 +169,12 @@ class PitScoutData(models.Model):
             rt += " (SELF)"
 
         return rt
+
+
+class SitePreferences(models.Model):
+    site_url = models.TextField()
+    login_message = models.TextField(blank=True, null=True)
+    home_message = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return self.site_url

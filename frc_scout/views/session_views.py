@@ -1,27 +1,57 @@
+import json
 from django.contrib.auth import authenticate, logout, login
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
-from django.http.response import HttpResponseRedirect, HttpResponse
+from django.http.response import HttpResponseRedirect
 from django.shortcuts import render
 from django.contrib import messages
-from frc_scout.models import Team, UserProfile
+from frc_scout.models import Team, UserProfile, Location, SitePreferences
 from django.db import IntegrityError
-from django.templatetags.static import static
+from frc_scout_2015 import local_settings
 
 from frc_scout.views.loc_list import locations
+
 
 def index(request):
     if request.user.is_authenticated():
         context = {
-            'user': request.user
-        }
-        return render(request, 'frc_scout/index.html')
+            'user': request.user,
+            'nav_title': "Home",
+            'location_id': request.session.get('location'),
+            'location_name': request.session.get('location_name'),
+            }
+
+        try:
+            obj = SitePreferences.objects.filter(site_url=local_settings.SITE_URL)
+            if obj:
+                context['home_messages'] = obj[0].home_message
+
+        except SitePreferences.DoesNotExist:
+            pass
+
+        return render(request, 'frc_scout/index.html', context)
     else:
         return HttpResponseRedirect(reverse('frc_scout:login'))
 
 
 # Cannot be named login() because it conflicts with django internally and causes an infinite loop
 def login_view(request):
+
+    location_list = {}
+    for loc in Location.objects.all():
+        location_list[loc.name] = loc.id
+
+    context = {
+        'location_list': json.dumps(location_list),
+        }
+
+    try:
+        obj = SitePreferences.objects.filter(site_url=local_settings.SITE_URL)
+        if obj:
+            context['login_messages'] = obj[0].login_message
+
+    except SitePreferences.DoesNotExist:
+        pass
 
     if request.user.is_authenticated():
         return HttpResponseRedirect(reverse('frc_scout:index'))

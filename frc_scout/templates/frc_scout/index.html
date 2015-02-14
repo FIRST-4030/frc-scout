@@ -5,19 +5,49 @@
 {% block nav %}{% include 'frc_scout/nav.html' %}{% endblock %}
 
 {% block main_content %}
+
     <div class="row">
+
+        {% if home_messages %}
+            <div class="col-md-10 col-md-offset-1">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Information</h3>
+                    </div>
+                    <div class="panel-body">
+                        {{ home_messages }}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+        {% if user.userprofile.message %}
+            <div class="col-md-10 col-md-offset-1">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><span class="glyphicon glyphicon-hand-right"></span>&nbsp; Message from team manager</h3>
+                    </div>
+                    <div class="panel-body">
+                        {{ user.userprofile.message }}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
         <div class="col-md-10 col-md-offset-1">
             <div class="section-header-container">
                 <span class="section-header-text">Scouting</span>
             </div>
             <a class="btn btn-success btn-super" href="{% url "frc_scout:match_scouting" %}">Scout a Match</a>
             <a class="btn btn-success btn-super" href="{% url "frc_scout:pit_scouting" %}">Pit Scout a Team</a>
+            <button id="submit_pending" class="btn btn-success btn-super" style="display: none;" onclick="submitData();">Submit Pending match data</button>
         </div>
         <div class="col-md-10 col-md-offset-1">
             <div class="section-header-container">
                 <span class="section-header-text">Results</span>
             </div>
             <a class="btn btn-primary btn-super" href="#">View Team Averages</a>
+            <a class="btn btn-primary btn-super" href="{% url 'frc_scout:database_instructions' %}">connect to database</a>
         </div>
         {% if user.userprofile.team_manager %}
             <div class="col-md-10 col-md-offset-1">
@@ -42,7 +72,72 @@
     <script type="text/javascript">
         $(function() {
             $("a[href=#]").attr('disabled', true);
+
+            if(getPendingMatches().length !== 0) {
+                $("#submit_pending").show();
+            }
         });
+
+        function submitData() {
+            var pendingMatches = getPendingMatches();
+
+            $("#online_message").hide();
+            $("#in_progress_message").show();
+
+            $.ajax({
+                url: '/scouting/match/submit/',
+                method: "POST",
+                data: {
+                    csrfmiddlewaretoken: $.cookie('csrftoken'),
+                    data: JSON.stringify(pendingMatches)
+                },
+                success: function() {
+                    clearPendingMatches();
+                    $("#submit_pending").html("<span class='glyphicon glyphicon-saved'></span>&nbsp; Data submitted successfully.");
+
+                    window.setTimeout(function() {
+                        $("#submit_pending").fadeOut(500);
+                    }, 2000);
+
+                },
+                error: function() {
+                    console.log("Data submission failed -- please try again.");
+                }
+            });
+        }
+
+        function getPendingMatches() {
+            var pendingMatches = [];
+
+            for (var i = 0; ; i++) {
+                if (localStorage["match" + i.toString()]) {
+                    var match = $.parseJSON(localStorage["match" + i.toString()]);
+
+                    if(match.postmatch) {
+                        if(match.postmatch.scouting_complete === true) {
+                            pendingMatches.push(match);
+                        }
+                    }
+                }
+                else {
+                    break;
+                }
+            }
+
+            return pendingMatches;
+        }
+
+        function clearPendingMatches() {
+            for (var i = 0; ; i++) {
+                if (localStorage["match" + i.toString()]) {
+                    localStorage.removeItem("match" + i.toString());
+                }
+                else {
+                    break;
+                }
+            }
+        }
+
     </script>
 {% endblock %}
 

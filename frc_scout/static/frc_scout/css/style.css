@@ -22,7 +22,7 @@
 }
 
 .btn-grid {
-    height: 45vh !important;
+    height: 40vh !important;
     font-size: 32px ;
 }
 
@@ -53,7 +53,7 @@
 
 @media (max-width: 750px) {
     .btn-grid {
-        height: 21vh !important;
+        height: 18vh !important;
         font-size: 20px;
     }
 }
@@ -106,4 +106,12 @@ body {
     background-color: white;
     padding: 10px !important;
     border-radius: 2px !important;
+}
+
+.btn-success-darker-1 {
+    background-image: radial-gradient(circle, #2c8c26 80%, #439a46 81%);
+}
+
+.btn-success-darker-2 {
+    background-image: radial-gradient(circle, #187C1C 80%, #439a46 81%);
 }
