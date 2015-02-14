@@ -10,6 +10,14 @@
     <div class="row">
         <div class="col-md-10 col-md-offset-1">
 
+            {% if request.user.userprofile.team_manager %}
+                {% if request.user.userprofile.team.team_number|floatformat == team_number|floatformat %}
+                    <div class="alert alert-success alert-dismissable">
+                        <p>If you want to update your team profile, you may <a href="{% url 'frc_scout:pit_scouting' %}#{{ team_number }}">pit scout yourself</a> &mdash; your data will take precedence.</p>
+                    </div>
+                {% endif %}
+            {% endif %}
+
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h1 class="panel-title">
@@ -24,9 +32,37 @@
                 </div>
                 <div class="panel-body">
                     {% if aggregate_data.team_website %}
-                        Website: <a target="_blank" href="{{ aggregate_data.team_website }}">{{ aggregate_data.team_website }}</a>
+                        Website: <strong><a target="_blank" href="{{ aggregate_data.team_website }}">{{ aggregate_data.team_website }}</a></strong>
+                        <br>
                     {% endif %}
-
+                    {% if aggregate_data.driver_1 %}
+                        Driver 1: <strong>{{ aggregate_data.driver_1 }}</strong>
+                        <br>
+                    {% endif %}
+                    {% if aggregate_data.driver_2 %}
+                        Driver 2: <strong>{{ aggregate_data.driver_2 }}</strong>
+                        <br>
+                    {% endif %}
+                    {% if aggregate_data.coach %}
+                        Coach: <strong>{{ aggregate_data.coach }}</strong>
+                        <br>
+                    {% endif %}
+                    {% if aggregate_data.robot_height %}
+                        Robot Height: <strong>{{ aggregate_data.robot_height }} in.</strong>
+                        <br>
+                    {% endif %}
+                    {% if aggregate_data.robot_weight %}
+                        Robot Weight: <strong>{{ aggregate_data.robot_weight }} lbs.</strong>
+                        <br>
+                    {% endif %}
+                    {% if aggregate_data.robot_speed %}
+                        Robot Speed: <strong>{{ aggregate_data.robot_speed }} ft/s.</strong>
+                        <br>
+                    {% endif %}
+                    {% if aggregate_data.tote_stack_capacity %}
+                        Tote Stack Capacity: <strong>{{ aggregate_data.tote_stack_capacity }} totes</strong>
+                        <br>
+                    {% endif %}
                 </div>
             </div>
 

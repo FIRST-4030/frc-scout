@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.forms.models import model_to_dict
 from django.http.response import HttpResponse
 from django.shortcuts import render
 from django.db.models import Avg
@@ -86,9 +87,17 @@ def view_team_profile(request, team_number=None):
             if getattr(data, field.name):
                 setattr(aggregate_data, field.name, getattr(data, field.name))
 
+    self_scouted = PitScoutData.objects.filter\
+        (team_number=team_number, scout__userprofile__team__team_number=team_number).order_by('id')
+
+    for data in self_scouted:
+        for field in PitScoutData._meta.fields:
+            if getattr(data, field.name):
+                setattr(aggregate_data, field.name, getattr(data, field.name))
+
     # then pass all the sections/data to the context
     context = {
-        'aggregate_data': aggregate_data,
+        'aggregate_data': model_to_dict(aggregate_data),
         'pluralized': pluralized,
         'team_number': team_number,
         # this converts e.g. {'auto': {'name':'auto', 'data':[{...}]}, ...}

@@ -42,12 +42,13 @@
                 <div class="panel-body">
                     <a class="btn btn-success btn-super" href="{% url "frc_scout:match_scouting" %}">Scout a Match</a>
                     <a class="btn btn-success btn-super" href="{% url "frc_scout:pit_scouting" %}">Pit Scout a Team</a>
+                    <a class="btn btn-success btn-super" href="{% url "frc_scout:view_team_profile" %}">Team Profile</a>
                     <button id="submit_pending" class="btn btn-success btn-super" style="display: none;" onclick="submitData();">Submit Pending match data</button>
                     <form style="display: inline;" onsubmit="window.location = '{% url 'frc_scout:view_team_profile' %}' + $('#team_number').val(); return false;">
                         <div style="display: inline-table;">
                             <div style="display: table-row;">
                                 <div style="display: table-cell;">
-                                    <input type="text" class="form-control" style="max-width: 150px; margin: 10px 10px; height: 50px;" placeholder="Find Team Profile" id="team_number" required>
+                                    <input type="text" class="form-control" style="max-width: 150px; margin: 10px 10px; height: 50px; font-size: 18px;" placeholder="Find Team Profile" id="team_number" required>
                                 </div>
                                 <div style="display: table-cell;">
                                     <button class="btn btn-success btn-super">Go</button>
@@ -65,7 +66,7 @@
                     <h3 class="panel-title">Results</h3>
                 </div>
                 <div class="panel-body">
-{#                    <a class="btn btn-primary btn-super" href="#">View Team Averages</a>#}
+                    {#                    <a class="btn btn-primary btn-super" href="#">View Team Averages</a>#}
                     <a class="btn btn-primary btn-super" href="{% url 'frc_scout:database_instructions' %}">connect to database</a>                </div>
             </div>
         </div>
@@ -78,7 +79,7 @@
                     </div>
                     <div class="panel-body">
                         <a class="btn btn-info btn-super" href="{% url 'frc_scout:view_scouts' %}">Manage Scouts</a>
-{#                        <a class="btn btn-info btn-super" href="{% url 'frc_scout:view_scouts' %}">edit team profile</a>#}
+                        {#                        <a class="btn btn-info btn-super" href="{% url 'frc_scout:view_scouts' %}">edit team profile</a>#}
                     </div>
                 </div>
             </div>
