@@ -3,7 +3,7 @@ from django.http.response import HttpResponse
 from django.shortcuts import render
 from django.db.models import Avg
 
-from frc_scout.models import Match, Team
+from frc_scout.models import Match, Team, PitScoutData
 
 
 @login_required
@@ -76,6 +76,10 @@ def view_team_profile(request, team_number=None):
 
     except Team.DoesNotExist:
         team = None
+
+    pit_scout_data = PitScoutData.objects.filter(team_number=team_number)
+
+
 
     # then pass all the sections/data to the context
     context = {
