@@ -44,6 +44,10 @@ def get_current_time():
 
 class Match(models.Model):
     # References
+
+    scout_team_number = models.IntegerField(max_length=5)
+    scout_name = models.TextField()
+
     team_number = models.IntegerField(max_length=5)
     scout = models.ForeignKey(User)
     match_number = models.IntegerField()

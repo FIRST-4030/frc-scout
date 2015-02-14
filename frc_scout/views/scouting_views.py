@@ -47,7 +47,10 @@ def submit_match_scouting_data(request):
 
                 location = Location.objects.get(id=request.session.get('location_id'))
 
-                match_object = Match(scout=request.user, location=location)
+                match_object = Match(scout=request.user,
+                                     location=location,
+                                     scout_name=request.user.get_full_name(),
+                                     scout_team_number=request.user.userprofile.team.team_number)
 
                 # PRE-MATCH
                 if 'prematch' in match:
