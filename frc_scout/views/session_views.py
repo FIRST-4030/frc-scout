@@ -48,7 +48,7 @@ def login_view(request):
     try:
         obj = SitePreferences.objects.filter(site_url=local_settings.SITE_URL)
         if obj:
-            context['login_messages'] = obj[0].login_message
+            context['login_message'] = obj[0].login_message
 
     except SitePreferences.DoesNotExist:
         pass
@@ -91,7 +91,7 @@ def login_view(request):
     except Location.DoesNotExist:
         messages.error(request, "Please enter a valid event location.")
 
-    return render(request, 'frc_scout/login.html')
+    return render(request, 'frc_scout/login.html', context)
 
 
 # Cannot be named logout(), see above
