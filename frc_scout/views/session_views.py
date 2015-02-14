@@ -66,12 +66,9 @@ def login_view(request):
         if user is None:
             try:
                 email = User.objects.get(email=username)
-
                 user = authenticate(username=email.username, password=password)
             except User.DoesNotExist:
                 user = None
-
-        user = authenticate(username=username, password=password)
 
         if user is not None:
             if user.is_active:
