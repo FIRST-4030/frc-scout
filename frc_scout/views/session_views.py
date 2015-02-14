@@ -56,38 +56,40 @@ def login_view(request):
     if request.user.is_authenticated():
         return HttpResponseRedirect(reverse('frc_scout:index'))
 
-    if request.method == "POST":
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        location_name = request.POST.get('location')
+    try:
+        if request.method == "POST":
+            username = request.POST.get('username')
+            password = request.POST.get('password')
+            location_name = request.POST.get('location')
 
-        user = authenticate(username=username, password=password)
+            user = authenticate(username=username, password=password)
 
-        if user is None:
-            try:
-                email = User.objects.get(email=username)
-                user = authenticate(username=email.username, password=password)
-            except User.DoesNotExist:
-                user = None
+            if user is None:
+                try:
+                    email = User.objects.get(email=username)
 
-        if user is not None:
-            if user.is_active:
-                if location_name in locations:
+                    user = authenticate(username=email.username, password=password)
+                except User.DoesNotExist:
+                    user = None
 
-                    location = Location.objects.get(name=location_name)
+            location = Location.objects.get(name=location_name).id
 
+            if user is not None:
+                if user.is_active and user.userprofile.approved:
                     login(request, user)
 
-                    request.session['location_name'] = location.name
-                    request.session['location_id'] = location.id
+                    request.session['location_name'] = location_name
+                    request.session['location_id'] = location
 
                     return HttpResponseRedirect(reverse('frc_scout:index'))
                 else:
-                    messages.error(request, "Please enter a valid event location.")
+                    messages.error(request, "Your account has been disabled "
+                                            "(or has not yet been enabled). Check with your team manager.")
             else:
-                messages.error(request, "Your account has been disabled. Check with your team manager.")
-        else:
-            messages.error(request, "Your credentials did not match a user, try again.")
+                messages.error(request, "Your credentials did not match a user, try again.")
+
+    except Location.DoesNotExist:
+        messages.error(request, "Please enter a valid event location.")
 
     return render(request, 'frc_scout/login.html')
 
