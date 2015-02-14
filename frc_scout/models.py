@@ -16,7 +16,7 @@ class Location(models.Model):
 
 class Team(models.Model):
     team_number = models.IntegerField(max_length=5)
-    team_name = models.TextField(max_length=100)
+    team_name = models.TextField(max_length=100, null=True, blank=True)
 
     def __str__(self):
         return str(self.team_number) + ": " + self.team_name

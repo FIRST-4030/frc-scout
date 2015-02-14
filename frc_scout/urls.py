@@ -34,7 +34,11 @@ urlpatterns = patterns(
     url(r'^scouting/pit/submit/$', views.submit_pit_scouting_data, name='submit_pit_scouting_data'),
 
     # Profile views
+    url(r'^team/$', views.view_team_profile, name='view_team_profile'),
     url(r'^team/(?P<team_number>[0-9]+)/$', views.view_team_profile, name='view_team_profile'),
+
+    url(r'^team/edit/$', views.edit_team_profile, name='edit_team_profile'),
+
     url(r'^team/(?P<team_number>[0-9]+)/matches/$', views.view_team_matches, name='view_team_matches'),
 
     # Results views
