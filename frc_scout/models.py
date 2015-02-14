@@ -9,6 +9,7 @@ User._meta.get_field('email')._unique = True
 
 class Location(models.Model):
     name = models.TextField()
+    tba_event_code = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -19,7 +20,7 @@ class Team(models.Model):
     team_name = models.TextField(max_length=100, null=True, blank=True)
 
     def __str__(self):
-        return str(self.team_number) + ": " + self.team_name
+        return str(self.team_number) + ": " + str(self.team_name)
 
 
 # Additional user attributes
@@ -127,11 +128,11 @@ class ContainerStack(models.Model):
 class PitScoutData(models.Model):
     scout = models.ForeignKey(User)
     location = models.ForeignKey(Location)
-    team_number = models.IntegerField(max_length=5)
-    team_name = models.TextField(max_length=64, default=None, null=True)
-    team_website = models.TextField(max_length=128, default=None, null=True)
+    team_number = models.IntegerField(max_length=5, verbose_name="Team Number")
+    team_name = models.TextField(max_length=64, default=None, null=True, verbose_name="Team Name")
+    team_website = models.TextField(max_length=128, default=None, null=True, verbose_name="Team Website")
 
-    robot_height = models.FloatField(null=True)
+    robot_height = models.FloatField(null=True, verbose_name="Robot Height")
     robot_weight = models.FloatField(null=True)
     robot_speed = models.FloatField(null=True)
 

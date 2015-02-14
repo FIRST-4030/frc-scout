@@ -243,6 +243,14 @@
             'indeterminate': true
         });
 
+        $(function() {
+           if(window.location.hash) {
+               if(!isNaN(window.location.hash.substr(1))) {
+                   $("#team_number").val(window.location.hash.substr(1));
+               }
+           }
+        });
+
         $(".set-indeterminate").click(function() {
             $(this).prev('.bootstrap-switch').find('input[type=checkbox]').bootstrapSwitch('indeterminate', true);
         });

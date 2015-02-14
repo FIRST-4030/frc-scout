@@ -1,9 +1,10 @@
 from django.contrib.auth.decorators import login_required
+from django.forms.models import model_to_dict
 from django.http.response import HttpResponse
 from django.shortcuts import render
 from django.db.models import Avg
 
-from frc_scout.models import Match, Team
+from frc_scout.models import Match, Team, PitScoutData
 
 
 @login_required
@@ -77,8 +78,26 @@ def view_team_profile(request, team_number=None):
     except Team.DoesNotExist:
         team = None
 
+    pit_scout_data = PitScoutData.objects.filter(team_number=team_number).order_by('id')
+
+    aggregate_data = PitScoutData(team_number=team_number)
+
+    for data in pit_scout_data:
+        for field in PitScoutData._meta.fields:
+            if getattr(data, field.name):
+                setattr(aggregate_data, field.name, getattr(data, field.name))
+
+    self_scouted = PitScoutData.objects.filter\
+        (team_number=team_number, scout__userprofile__team__team_number=team_number).order_by('id')
+
+    for data in self_scouted:
+        for field in PitScoutData._meta.fields:
+            if getattr(data, field.name):
+                setattr(aggregate_data, field.name, getattr(data, field.name))
+
     # then pass all the sections/data to the context
     context = {
+        'aggregate_data': model_to_dict(aggregate_data),
         'pluralized': pluralized,
         'team_number': team_number,
         # this converts e.g. {'auto': {'name':'auto', 'data':[{...}]}, ...}
@@ -87,7 +106,7 @@ def view_team_profile(request, team_number=None):
         # when we iterate over the dictionary)
         'sections': [average_sections[z] for z in sorted(list(average_sections))],
         'team': team,
-        'nav_title': str("%s's Profile" % team_number),
+        'nav_title': str("Profile: %s" % team_number),
         'matches': matches
     }
     return render(request, 'frc_scout/view_team_profile.html', context)
