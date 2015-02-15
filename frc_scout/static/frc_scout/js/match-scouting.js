@@ -55,6 +55,12 @@ $(".alliance-toggle").on('change click', function() {
         localStorage.allianceColor = 'red_alliance';
     }
 
+    setMatchData('prematch', 'team_number', child.val().substr(3));
+
+    if(getMatchData().prematch.team_number) {
+        $(".team-number").text(": " + getMatchData().prematch.team_number);
+    }
+
 });
 
 /*
