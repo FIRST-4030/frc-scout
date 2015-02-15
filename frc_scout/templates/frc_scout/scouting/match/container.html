@@ -54,16 +54,23 @@
         </div>
         <div class="row">
             <div class="col-md-12">
-                <input id="team_number" class="form-control input-x-lg" placeholder="Team Number" type="number">
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
                 <input id="match_number" class="form-control input-x-lg" placeholder="Match Number" type='number'>
             </div>
         </div>
-        <br>
-        <div class="row">
+        <div class="row" id="type_team_number">
+            <div class="col-md-12">
+                <input id="team_number" class="form-control input-x-lg" placeholder="Team Number" type="number">
+            </div>
+        </div>
+        <div class="row" id="select_team_number" class="alliance-toggle">
+            <div class="col-md-12">
+                <select id="select_team_number_select" class="form-control input-x-lg alliance-toggle">
+                    <option value="">Select Team</option>
+                </select>
+            </div>
+        </div>
+        <div class="row" id="select_alliance_color">
+            <br>
             <div class="col-md-12">
                 <div class="btn-group max-width" data-toggle="buttons">
                     <label class="btn btn-lg btn-danger alliance-toggle" style="width: 50%;" id="red_alliance">
@@ -81,8 +88,8 @@
             <div class="col-md-12">
                 <h3 style="color: #666666;">Location: <span id='location'>{{ request.session.location_name }}</span></h3>
             </div>
+            <br>
         </div>
-        <br>
         <div class="row">
             <div class="col-sm-6">
                 <button class="btn btn-extra-high btn-info btn-lg max-width" onclick="window.location = '{% url 'frc_scout:index' %}';"><span class="glyphicon glyphicon-arrow-left"></span> return home</button>

@@ -9,17 +9,25 @@ from frc_scout.models import Team, UserProfile, Location, SitePreferences
 from django.db import IntegrityError
 from frc_scout_2015 import local_settings
 
-from frc_scout.views.loc_list import locations
-
 
 def index(request):
     if request.user.is_authenticated():
+
+
         context = {
             'user': request.user,
             'nav_title': "Home",
-            'location_id': request.session.get('location'),
+            'location_id': request.session.get('location_id'),
             'location_name': request.session.get('location_name'),
             }
+
+        try:
+            location = Location.objects.get(id=request.session.get('location_id'))
+            event_code = location.tba_event_code
+
+            context['event_code'] = event_code
+        except Location.DoesNotExist:
+            pass
 
         try:
             obj = SitePreferences.objects.filter(site_url=local_settings.SITE_URL)

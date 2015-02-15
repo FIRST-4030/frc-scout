@@ -1,6 +1,8 @@
 var backgroundColorRed = "rgb(255, 158, 158)";
 var backgroundColorBlue = "rgb(199, 208, 255)";
 
+var schedule = null;
+
 /*
  Run on page load
  */
@@ -28,24 +30,37 @@ $(function() {
         'offText': "NO"
 
     });
+
+    if(localStorage.eventSchedule !== null && localStorage.eventSchedule !== undefined) {
+        schedule = $.parseJSON(localStorage.eventSchedule);
+    }
 });
 
 /*
  This will update the background color of the page based on the alliance selection
  Alliance colors are not stored permanently; they are only used to help scouts remember who they're scouting
  */
-$(".alliance-toggle").click(function() {
+$(".alliance-toggle").on('change click', function() {
     var id = this.id;
 
-    if(id === "blue_alliance") {
+    var child = $(this).find("option:selected");
+
+    if(id === "blue_alliance" || child.data('color') === "blue") {
         $("body").css("background-color", backgroundColorBlue);
+        localStorage.allianceColor = 'blue_alliance';
     }
 
-    else if(id === "red_alliance") {
+    else if(id === "red_alliance" || child.data('color') === "red") {
         $("body").css("background-color", backgroundColorRed);
+        localStorage.allianceColor = 'red_alliance';
     }
 
-    localStorage.allianceColor = id;
+    setMatchData('prematch', 'team_number', child.val().substr(3));
+
+    if(getMatchData().prematch.team_number) {
+        $(".team-number").text(": " + getMatchData().prematch.team_number);
+    }
+
 });
 
 /*
@@ -111,7 +126,14 @@ function saveAndContinue(fromStage, toStage, sender) {
      **/
 
     if(fromStage == "prematch") {
-        var teamNumber = parseInt($("#team_number").val());
+        var teamNumber;
+
+        if($("#team_number").is(':visible')) {
+            teamNumber = parseInt($("#team_number").val());
+        } else {
+            teamNumber = parseInt($("#select_team_number_select").val().substr(3));
+        }
+
         var matchNumber = parseInt($("#match_number").val());
 
         if(isNaN(teamNumber) || teamNumber < 1) {
@@ -122,7 +144,7 @@ function saveAndContinue(fromStage, toStage, sender) {
             errorMessage.push("Match number is required and must be a number of one or greater.");
         }
 
-        if(!($("#red_alliance").hasClass('active') || $("#blue_alliance").hasClass('active'))) {
+        if(localStorage.allianceColor === null || localStorage.allianceColor === undefined) {
             errorMessage.push("Alliance color is required.");
         }
 
@@ -538,6 +560,7 @@ function saveDataOffline() {
     $("#finished_message").show();
 }
 
+
 function openStage(stage) {
     /**
      * TO STAGES
@@ -588,6 +611,15 @@ function openStage(stage) {
         } catch (e) {
             $("#team_number").val("");
             $("#match_number").val("");
+        }
+
+        $("#match_number").trigger('keyup');
+
+        if($("#select_team_number").is(':visible')) {
+            console.log('runnnning');
+            $("#select_team_number_select").find('label > span:contains(' + storedVariables.prematch.team_number + ')').parent().addClass('active');
+        } else {
+            console.log('niooooo');
         }
 
         $(".alliance-toggle").removeClass('active');
@@ -1066,3 +1098,47 @@ function updatePossessionColor() {
         $("#totes_in_possession_wrapper").css('color', '#444444');
     }
 }
+
+$("#match_number").on('keyup', function() {
+    var match = parseInt($(this).val());
+    var match_array = undefined;
+
+    $.each(schedule, function(k, v) {
+        if(v.match_number === match) {
+            match_array = schedule[k];
+            return;
+        }
+    });
+
+    console.log('triggered blur');
+
+    $("#select_team_number_select").find('.d').remove();
+
+    if(match_array !== undefined) {
+        var blue = match_array.alliances.blue.teams;
+        var red = match_array.alliances.red.teams;
+
+        $.each(red, function(k, v) {
+            $("#red" + k).text(v.substr(3));
+            $("#select_team_number_select").append("<option class='d' data-color='red' value='" + v + "'>" + v.substr(3) + "</option>");
+        });
+
+        $.each(blue, function(k, v) {
+            $("#select_team_number_select").append("<option class='d' data-color='blue' value='" + v + "'>" + v.substr(3) + "</option>");
+            $("#blue" + k).text(v.substr(3));
+        });
+
+        $("#type_team_number").hide();
+        $("#select_alliance_color").hide();
+        $("#select_team_number").show();
+
+        if(getMatchData().prematch.team_number) {
+            $("#select_team_number_select").val("frc" + getMatchData().prematch.team_number);
+        }
+    } else {
+        $("#type_team_number").show();
+        $("#select_alliance_color").show();
+        $("#select_team_number").hide();
+    }
+
+});
