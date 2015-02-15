@@ -40,12 +40,10 @@ $(function() {
  This will update the background color of the page based on the alliance selection
  Alliance colors are not stored permanently; they are only used to help scouts remember who they're scouting
  */
-$(".alliance-toggle").click(function() {
+$(".alliance-toggle").on('change click', function() {
     var id = this.id;
 
-    var child = $(this).find("input");
-
-
+    var child = $(this).find("option:selected");
 
     if(id === "blue_alliance" || child.data('color') === "blue") {
         $("body").css("background-color", backgroundColorBlue);
@@ -127,7 +125,7 @@ function saveAndContinue(fromStage, toStage, sender) {
         if($("#team_number").is(':visible')) {
             teamNumber = parseInt($("#team_number").val());
         } else {
-            teamNumber = parseInt($("#select_team_number_select").find('.active > span').text());
+            teamNumber = parseInt($("#select_team_number_select").val().substr(3));
         }
 
         var matchNumber = parseInt($("#match_number").val());
@@ -609,7 +607,7 @@ function openStage(stage) {
             $("#match_number").val("");
         }
 
-        $("#match_number").trigger('blur');
+        $("#match_number").trigger('keyup');
 
         if($("#select_team_number").is(':visible')) {
             console.log('runnnning');
@@ -1095,7 +1093,7 @@ function updatePossessionColor() {
     }
 }
 
-$("#match_number").blur(function() {
+$("#match_number").on('keyup', function() {
     var match = parseInt($(this).val());
     var match_array = undefined;
 
@@ -1108,25 +1106,33 @@ $("#match_number").blur(function() {
 
     console.log('triggered blur');
 
+    $("#select_team_number_select").find('.d').remove();
+
     if(match_array !== undefined) {
         var blue = match_array.alliances.blue.teams;
         var red = match_array.alliances.red.teams;
 
         $.each(red, function(k, v) {
             $("#red" + k).text(v.substr(3));
+            $("#select_team_number_select").append("<option class='d' data-color='red' value='" + v + "'>" + v.substr(3) + "</option>");
         });
 
         $.each(blue, function(k, v) {
+            $("#select_team_number_select").append("<option class='d' data-color='blue' value='" + v + "'>" + v.substr(3) + "</option>");
             $("#blue" + k).text(v.substr(3));
         });
 
         $("#type_team_number").hide();
         $("#select_alliance_color").hide();
         $("#select_team_number").show();
+
+        if(getMatchData().prematch.team_number) {
+            $("#select_team_number_select").val("frc" + getMatchData().prematch.team_number);
+        }
     } else {
         $("#type_team_number").show();
         $("#select_alliance_color").show();
         $("#select_team_number").hide();
     }
 
-})
+});

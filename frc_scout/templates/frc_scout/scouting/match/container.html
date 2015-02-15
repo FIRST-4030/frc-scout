@@ -62,33 +62,15 @@
                 <input id="team_number" class="form-control input-x-lg" placeholder="Team Number" type="number">
             </div>
         </div>
-        <div class="row" id="select_team_number">
-            <br>
+        <div class="row" id="select_team_number" class="alliance-toggle">
             <div class="col-md-12">
-                <div class="btn-group btn-default max-width" data-toggle="buttons" id="select_team_number_select">
-                    <label class="btn btn-danger btn-group-tall-6 start-height-group-wrapper alliance-toggle">
-                        <input data-color="red" type="radio" name="select_team_select_group" data-height="0"><span id="red0"></span>
-                    </label>
-                    <label class="btn btn-danger btn-group-tall-6 start-height-group-wrapper alliance-toggle">
-                        <input data-color="red" type="radio" name="select_team_select_group" data-height="1"><span id="red1"></span>
-                    </label>
-                    <label class="btn btn-danger btn-group-tall-6 start-height-group-wrapper alliance-toggle">
-                        <input data-color="red" type="radio" name="select_team_select_group" data-height="2"><span id="red2"></span>
-                    </label>
-                    <label class="btn btn-primary btn-group-tall-6 start-height-group-wrapper alliance-toggle">
-                        <input data-color="blue" type="radio" name="select_team_select_group" data-height="3"><span id="blue0"></span>
-                    </label>
-                    <label class="btn btn-primary btn-group-tall-6 start-height-group-wrapper alliance-toggle">
-                        <input data-color="blue" type="radio" name="select_team_select_group" data-height="4"><span id="blue1"></span>
-                    </label>
-                    <label class="btn btn-primary btn-group-tall-6 start-height-group-wrapper alliance-toggle">
-                        <input data-color="blue" type="radio" name="select_team_select_group" data-height="5"><span id="blue2"></span>
-                    </label>
-                </div>
+                <select id="select_team_number_select" class="form-control input-x-lg alliance-toggle">
+                    <option value="">Select Team</option>
+                </select>
             </div>
         </div>
-        <br>
         <div class="row" id="select_alliance_color">
+            <br>
             <div class="col-md-12">
                 <div class="btn-group max-width" data-toggle="buttons">
                     <label class="btn btn-lg btn-danger alliance-toggle" style="width: 50%;" id="red_alliance">
@@ -106,8 +88,8 @@
             <div class="col-md-12">
                 <h3 style="color: #666666;">Location: <span id='location'>{{ request.session.location_name }}</span></h3>
             </div>
+            <br>
         </div>
-        <br>
         <div class="row">
             <div class="col-sm-6">
                 <button class="btn btn-extra-high btn-info btn-lg max-width" onclick="window.location = '{% url 'frc_scout:index' %}';"><span class="glyphicon glyphicon-arrow-left"></span> return home</button>
