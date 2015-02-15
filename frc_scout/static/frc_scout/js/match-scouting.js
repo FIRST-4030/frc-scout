@@ -1103,13 +1103,14 @@ $("#match_number").on('keyup', function() {
     var match = parseInt($(this).val());
     var match_array = undefined;
 
-    $.each(schedule, function(k, v) {
-        if(v.match_number === match) {
-            match_array = schedule[k];
-            return;
-        }
-    });
-
+    if(schedule !== null && schedule !== undefined) {
+        $.each(schedule, function (k, v) {
+            if (v.match_number === match) {
+                match_array = schedule[k];
+                return;
+            }
+        });
+    }
     console.log('triggered blur');
 
     $("#select_team_number_select").find('.d').remove();
