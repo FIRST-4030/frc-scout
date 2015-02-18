@@ -21,9 +21,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h1 class="panel-title">
-                        {% if team.team_name %}
-                            <h3>{{ team.team_name }}'{% if not pluralized %}s{% endif %} Profile</h3>
-                        {% elif  aggregate_data.team_name %}
+                        {% if  aggregate_data.team_name %}
                             <h3>{{ aggregate_data.team_name }}'s Profile</h3>
                         {% else %}
                             <h3>Team {{ team_number }}'s Profile</h3>

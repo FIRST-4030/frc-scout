@@ -32,7 +32,7 @@ def view_team_profile(request, team_number=None):
             field_section = "Autonomous"
         if field_type == "IntegerField":
             # if it's an integer and not a special field
-            if field_name != "team_number" and field_name != "match_number":
+            if field_name != "team_number" and field_name != "match_number" and field_name != "scout_team_number":
                 # then calculate the average of it
 
                 m = matches.aggregate(Avg(field_name))[field_name+"__avg"]
@@ -66,18 +66,6 @@ def view_team_profile(request, team_number=None):
             'value': value,
         })
 
-    pluralized = False
-
-    try:
-        team = Team.objects.get(team_number=team_number)
-        team_name = team.team_name
-
-        if str.endswith(team_name, "s"):
-            pluralized = True
-
-    except Team.DoesNotExist:
-        team = None
-
     pit_scout_data = PitScoutData.objects.filter(team_number=team_number).order_by('id')
 
     aggregate_data = PitScoutData(team_number=team_number)
@@ -98,14 +86,12 @@ def view_team_profile(request, team_number=None):
     # then pass all the sections/data to the context
     context = {
         'aggregate_data': model_to_dict(aggregate_data),
-        'pluralized': pluralized,
         'team_number': team_number,
         # this converts e.g. {'auto': {'name':'auto', 'data':[{...}]}, ...}
         # to [{'name':'auto', 'data':[{...}]}, ...]
         # (this is necessary because otherwise the sections could show up in any order
         # when we iterate over the dictionary)
         'sections': [average_sections[z] for z in sorted(list(average_sections))],
-        'team': team,
         'nav_title': str("Profile: %s" % team_number),
         'matches': matches
     }

@@ -59,8 +59,10 @@ $(".alliance-toggle").on('change click', function() {
         setMatchData('prematch', 'team_number', child.val().substr(3));
     }
 
-    if(getMatchData().prematch.team_number) {
-        $(".team-number").text(": " + getMatchData().prematch.team_number);
+    if(getMatchData().prematch) {
+        if (getMatchData().prematch.team_number) {
+            $(".team-number").text(": " + getMatchData().prematch.team_number);
+        }
     }
 
 });
@@ -94,8 +96,9 @@ window.onbeforeunload = function() {
  */
 function setupNewMatch() {
     console.log('setting up new match');
-    localStorage.allianceColor = undefined;
-    localStorage.totesInPossession = undefined;
+
+    localStorage.removeItem('allianceColor');
+    localStorage.removeItem('totesInPossession');
 
     /* Iterate through all matches currently in localStorage until we find an empty one */
     $("#team-number").text("");
@@ -878,8 +881,11 @@ $(".btn-add-subtract").click(function () {
         }
     }
 
-    else if (sender.data('operation' == "subtract")) {
+    else if (sender.data('operation')  === "subtract") {
         if (parseInt(target.text()) > 0) {
+            if(sender.data('affect') === "moved_to_zone") {
+                $("#auto-moved-container-text").text(parseInt($("#auto-moved-container-text").text()) - 1);
+            }
             target.text(parseInt(target.text()) - 1);
         }
     }
@@ -993,7 +999,7 @@ $("#tele_stacked_totes_subtract").click(function () {
     if (lastIndex) {
         data = data.slice(0, -1);
 
-        var subtract = localStorage.totesInPossession + lastIndex.totes_added;
+        var subtract = parseInt(localStorage.totesInPossession) + lastIndex.totes_added;
 
         /*
          Can't be < 0
@@ -1148,8 +1154,10 @@ $("#match_number").on('keyup', function() {
         $("#select_alliance_color").hide();
         $("#select_team_number").show();
 
-        if(getMatchData().prematch.team_number) {
-            $("#select_team_number_select").val("frc" + getMatchData().prematch.team_number);
+        if(getMatchData().prematch) {
+            if (getMatchData().prematch.team_number) {
+                $("#select_team_number_select").val("frc" + getMatchData().prematch.team_number);
+            }
         }
     } else {
         $("#type_team_number").show();
