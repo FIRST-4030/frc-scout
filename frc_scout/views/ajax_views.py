@@ -56,7 +56,7 @@ def get_locations(request):
 @login_required
 def get_averages(request):
 
-    matches = Match.objects.values('team_number').annotate(
+    matches = Match.objects.exclude(location__name="TEST").values('team_number').annotate(
         auto_yellow_stacked_totes=Avg('auto_yellow_stacked_totes'),
         auto_yellow_moved_totes=Avg('auto_yellow_moved_totes'),
         auto_grey_acquired_totes=Avg('auto_grey_acquired_totes'),

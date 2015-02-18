@@ -469,8 +469,14 @@ function saveAndContinue(fromStage, toStage, sender) {
         var teleFoulContext = $("#tele_foul_context").val();
         var telePrivateComments = $("#tele_private_comments").val();
         var telePublicComments = $("#tele_public_comments").val();
+        var matchFinalScore = parseInt($("#match_final_score").val());
+
+        if(isNaN(matchFinalScore)) {
+            errorMessage.push("Final alliance score is required.");
+        }
 
         stageVariables = {
+            match_final_score: matchFinalScore,
             tele_foul_context: teleFoulContext,
             tele_private_comments: telePrivateComments,
             tele_public_comments: telePublicComments,
@@ -787,10 +793,12 @@ function openStage(stage) {
             $("#tele_foul_context").val(storedVariables['postmatch'].tele_foul_context);
             $("#tele_private_comments").val(storedVariables['postmatch'].tele_private_comments);
             $("#tele_public_comments").val(storedVariables['postmatch'].tele_public_comments);
+            $("#match_final_score").val(storedVariables['postmatch'].match_final_score);
         } else {
             $("#tele_foul_context").val("");
             $("#tele_private_comments").val("");
             $("#tele_public_comments").val("");
+            $("#match_final_score").val("");
         }
     }
 
