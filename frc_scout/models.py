@@ -123,6 +123,7 @@ class ToteStack(models.Model):
 class ContainerStack(models.Model):
     match = models.ForeignKey(Match)
     height = models.IntegerField(default=1)
+    containers_added = models.IntegerField(default=1)
 
     def __str__(self):
         return str("Team: %i | Match: %i | Location: %s" %
