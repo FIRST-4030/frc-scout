@@ -1,0 +1,60 @@
+{% extends 'frc_scout/base.html' %}
+
+{% block title %}Average Scores{% endblock %}
+
+{% load staticfiles %}
+
+{% block nav %}{% include 'frc_scout/nav.html' %}{% endblock %}
+
+{% block main_content %}
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <div id="chart_container"></div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+    {% load staticfiles %}
+    <script type="text/javascript" src="{% static 'frc_scout/js/highcharts.js' %}"></script>
+
+    <script type="text/javascript">
+        $('#chart_container').highcharts({
+            chart: {
+                type: 'bar'
+            },
+            title: {
+                text: 'Average Team Scores'
+            },
+            xAxis: {
+                categories: ['Apples', 'Oranges', 'Pears', 'Grapes', 'Bananas']
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Total fruit consumption'
+                }
+            },
+            legend: {
+                reversed: true
+            },
+            plotOptions: {
+                series: {
+                    stacking: 'normal'
+                }
+            },
+            series: [{
+                name: 'John',
+                data: [5, 3, 4, 7, 2]
+            }, {
+                name: 'Jane',
+                data: [2, 2, 3, 2, 1]
+            }, {
+                name: 'Joe',
+                data: [3, 4, 4, 2, 5]
+            }]
+        });
+    </script>
+{% endblock %}
+
+{% block footer %}{% include 'frc_scout/footer.html' %}{% endblock %}
