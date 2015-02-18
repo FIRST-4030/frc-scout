@@ -55,10 +55,14 @@ $(".alliance-toggle").on('change click', function() {
         localStorage.allianceColor = 'red_alliance';
     }
 
-    setMatchData('prematch', 'team_number', child.val().substr(3));
+    if(child.val()) {
+        setMatchData('prematch', 'team_number', child.val().substr(3));
+    }
 
-    if(getMatchData().prematch.team_number) {
-        $(".team-number").text(": " + getMatchData().prematch.team_number);
+    if(getMatchData().prematch) {
+        if (getMatchData().prematch.team_number) {
+            $(".team-number").text(": " + getMatchData().prematch.team_number);
+        }
     }
 
 });
@@ -92,8 +96,9 @@ window.onbeforeunload = function() {
  */
 function setupNewMatch() {
     console.log('setting up new match');
-    localStorage.allianceColor = undefined;
-    localStorage.totesInPossession = undefined;
+
+    localStorage.removeItem('allianceColor');
+    localStorage.removeItem('totesInPossession');
 
     /* Iterate through all matches currently in localStorage until we find an empty one */
     $("#team-number").text("");
@@ -242,8 +247,16 @@ function saveAndContinue(fromStage, toStage, sender) {
          For undoing things
          */
         storedVariables['teleoperated_picked_up_totes'].lastChange = id;
-        $("#tele_picked_up_totes_subtract_button").prop('disabled', false);
 
+
+
+        if(!storedVariables['teleoperated_picked_up_totes'].undoPickedUpTotes) {
+            storedVariables['teleoperated_picked_up_totes'].undoPickedUpTotes = [
+                id,
+            ]
+        } else {
+            storedVariables['teleoperated_picked_up_totes'].undoPickedUpTotes.push(id);
+        }
 
         var totalThings = sumNumInDict(storedVariables['teleoperated_picked_up_totes']);
 
@@ -361,8 +374,17 @@ function saveAndContinue(fromStage, toStage, sender) {
         /*
          For undoing things
          */
+
+
+        if(!storedVariables['teleoperated_picked_up_containers'].undoPickedUpContainers) {
+            storedVariables['teleoperated_picked_up_containers'].undoPickedUpContainers = [
+                id,
+            ]
+        } else {
+            storedVariables['teleoperated_picked_up_containers'].undoPickedUpContainers.push(id);
+        }
+
         storedVariables['teleoperated_picked_up_containers'].lastChange = id;
-        $("#tele_picked_up_container_subtract").prop('disabled', false);
 
 
         var totalThings = sumNumInDict(storedVariables['teleoperated_picked_up_containers']);
@@ -375,7 +397,6 @@ function saveAndContinue(fromStage, toStage, sender) {
          For undoing things
          */
         storedVariables['teleoperated_picked_up_containers'].lastChange = id;
-        $("#tele_picked_up_containers_subtract").prop('disabled', false);
 
     }
 
@@ -860,8 +881,11 @@ $(".btn-add-subtract").click(function () {
         }
     }
 
-    else if (sender.data('operation' == "subtract")) {
+    else if (sender.data('operation')  === "subtract") {
         if (parseInt(target.text()) > 0) {
+            if(sender.data('affect') === "moved_to_zone") {
+                $("#auto-moved-container-text").text(parseInt($("#auto-moved-container-text").text()) - 1);
+            }
             target.text(parseInt(target.text()) - 1);
         }
     }
@@ -913,18 +937,17 @@ $("#teleoperated_stacked_totes_image").click(function (event) {
 $("#tele_picked_up_totes_subtract_button").click(function () {
     var variables = getMatchData()['teleoperated_picked_up_totes'];
 
-    var lastChange = variables.lastChange;
+    var undoableThings = variables.undoPickedUpTotes;
 
     /*
      only subtract if it exists and is > 0 (otherwise errors)
      */
 
-    if (variables.lastChange) {
-        if (variables[lastChange] > 0) {
-            setMatchData("teleoperated_picked_up_totes", lastChange, variables[lastChange] - 1);
-            setMatchData("teleoperated_picked_up_totes", 'lastChange', undefined);
-
-            $("#tele_picked_up_totes_subtract_button").prop('disabled', true);
+    if (undoableThings) {
+        var lastThing = undoableThings.pop();
+        if(undoableThings.length >= 0 && sumNumInDict(variables) > 0) {
+            setMatchData("teleoperated_picked_up_totes", lastThing, variables[lastThing] - 1);
+            setMatchData("teleoperated_picked_up_totes", 'undoPickedUpTotes', undoableThings);
         }
     }
 
@@ -950,23 +973,21 @@ $("#tele_picked_up_totes_subtract_button").click(function () {
 $("#tele_picked_up_containers_subtract").click(function () {
     var variables = getMatchData()['teleoperated_picked_up_containers'];
 
-    var lastChange = variables.lastChange;
+    var undoableThings = variables.undoPickedUpContainers;
 
     /*
      only subtract if it exists and is > 0 (otherwise errors)
      */
 
-    if (variables.lastChange) {
-        if (variables[lastChange] > 0) {
-            setMatchData("teleoperated_picked_up_containers", lastChange, variables[lastChange] - 1);
-            setMatchData("teleoperated_picked_up_containers", 'lastChange', undefined);
-
-            $("#tele_picked_up_containers_subtract").prop('disabled', true);
+    if (undoableThings) {
+        var lastThing = undoableThings.pop();
+        if(undoableThings.length >= 0 && sumNumInDict(variables) > 0) {
+            setMatchData("teleoperated_picked_up_containers", lastThing, variables[lastThing] - 1);
+            setMatchData("teleoperated_picked_up_containers", 'undoPickedUpContainers', undoableThings);
         }
     }
 
     $("#tele_picked_up_containers_text").text(sumNumInDict(getMatchData()['teleoperated_picked_up_containers']));
-
 });
 
 $("#tele_stacked_totes_subtract").click(function () {
@@ -978,7 +999,7 @@ $("#tele_stacked_totes_subtract").click(function () {
     if (lastIndex) {
         data = data.slice(0, -1);
 
-        var subtract = localStorage.totesInPossession + lastIndex.totes_added;
+        var subtract = parseInt(localStorage.totesInPossession) + lastIndex.totes_added;
 
         /*
          Can't be < 0
@@ -1133,8 +1154,10 @@ $("#match_number").on('keyup', function() {
         $("#select_alliance_color").hide();
         $("#select_team_number").show();
 
-        if(getMatchData().prematch.team_number) {
-            $("#select_team_number_select").val("frc" + getMatchData().prematch.team_number);
+        if(getMatchData().prematch) {
+            if (getMatchData().prematch.team_number) {
+                $("#select_team_number_select").val("frc" + getMatchData().prematch.team_number);
+            }
         }
     } else {
         $("#type_team_number").show();
