@@ -61,6 +61,14 @@
                         Tote Stack Capacity: <strong>{{ aggregate_data.tote_stack_capacity }} totes</strong>
                         <br>
                     {% endif %}
+                    {% if aggregate_data.known_strengths %}
+                        Known Strengths: <strong>{{ aggregate_data.known_strengths }}</strong>
+                        <br>
+                    {% endif %}
+                    {% if aggregate_data.known_weaknesses %}
+                        Known Weaknesses: <strong>{{ aggregate_data.known_weaknesses }}</strong>
+                        <br>
+                    {% endif %}
                 </div>
             </div>
 
