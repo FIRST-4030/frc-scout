@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8' ?>
 
-<datasource formatted-name='FRCscout' inline='true' source-platform='mac' version='8.3' xmlns:user='http://www.tableausoftware.com/xml/user'>
+<datasource formatted-name='connect' inline='true' source-platform='mac' version='8.3' xmlns:user='http://www.tableausoftware.com/xml/user'>
   <!-- build 8300.15.0114.2230                                -->
   <connection class='postgres' dbname='frc_scout' odbc-native-protocol='yes' port='20568' server='173.193.191.191' username='public_access'>
     <relation join='left' type='join'>
@@ -67,7 +67,6 @@
       <map key='[can_move_containers]' value='[frc_scout_pitscoutdata].[can_move_containers]' />
       <map key='[can_move_totes]' value='[frc_scout_pitscoutdata].[can_move_totes]' />
       <map key='[coach]' value='[frc_scout_pitscoutdata].[coach]' />
-      <map key='[containers_added]' value='[frc_scout_containerstack].[containers_added]' />
       <map key='[coop_stack]' value='[frc_scout_totestack].[coop_stack]' />
       <map key='[driver_1]' value='[frc_scout_pitscoutdata].[driver_1]' />
       <map key='[driver_2]' value='[frc_scout_pitscoutdata].[driver_2]' />
@@ -86,7 +85,6 @@
       <map key='[known_weaknesses]' value='[frc_scout_pitscoutdata].[known_weaknesses]' />
       <map key='[location_id (frc_scout_pitscoutdata)]' value='[frc_scout_pitscoutdata].[location_id]' />
       <map key='[location_id]' value='[frc_scout_match].[location_id]' />
-      <map key='[match_final_score]' value='[frc_scout_match].[match_final_score]' />
       <map key='[match_id (frc_scout_containerstack)]' value='[frc_scout_containerstack].[match_id]' />
       <map key='[match_id]' value='[frc_scout_totestack].[match_id]' />
       <map key='[match_number]' value='[frc_scout_match].[match_number]' />
@@ -96,10 +94,7 @@
       <map key='[robot_weight]' value='[frc_scout_pitscoutdata].[robot_weight]' />
       <map key='[scout_id (frc_scout_pitscoutdata)]' value='[frc_scout_pitscoutdata].[scout_id]' />
       <map key='[scout_id]' value='[frc_scout_match].[scout_id]' />
-      <map key='[scout_name]' value='[frc_scout_match].[scout_name]' />
-      <map key='[scout_team_number]' value='[frc_scout_match].[scout_team_number]' />
       <map key='[start_height]' value='[frc_scout_totestack].[start_height]' />
-      <map key='[tba_event_code]' value='[frc_scout_location].[tba_event_code]' />
       <map key='[team_name]' value='[frc_scout_pitscoutdata].[team_name]' />
       <map key='[team_number (frc_scout_pitscoutdata)]' value='[frc_scout_pitscoutdata].[team_number]' />
       <map key='[team_number]' value='[frc_scout_match].[team_number]' />
@@ -581,7 +576,7 @@
         <local-type>string</local-type>
         <aggregation>Count</aggregation>
         <width>8190</width>
-        <contains-null>true</contains-null>
+        <contains-null>false</contains-null>
         <cast-to-local-type>true</cast-to-local-type>
         <attributes>
           <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_WLONGVARCHAR&quot;</attribute>
@@ -598,7 +593,7 @@
         <local-type>string</local-type>
         <aggregation>Count</aggregation>
         <width>8190</width>
-        <contains-null>true</contains-null>
+        <contains-null>false</contains-null>
         <cast-to-local-type>true</cast-to-local-type>
         <attributes>
           <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_WLONGVARCHAR&quot;</attribute>
@@ -654,61 +649,12 @@
         </attributes>
       </metadata-record>
       <metadata-record class='column'>
-        <remote-name>scout_name</remote-name>
-        <remote-type>130</remote-type>
-        <local-name>[scout_name]</local-name>
-        <parent-name>[frc_scout_match]</parent-name>
-        <remote-alias>scout_name</remote-alias>
-        <ordinal>34</ordinal>
-        <local-type>string</local-type>
-        <aggregation>Count</aggregation>
-        <width>8190</width>
-        <contains-null>false</contains-null>
-        <cast-to-local-type>true</cast-to-local-type>
-        <attributes>
-          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_WLONGVARCHAR&quot;</attribute>
-          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_WCHAR&quot;</attribute>
-        </attributes>
-      </metadata-record>
-      <metadata-record class='column'>
-        <remote-name>scout_team_number</remote-name>
-        <remote-type>3</remote-type>
-        <local-name>[scout_team_number]</local-name>
-        <parent-name>[frc_scout_match]</parent-name>
-        <remote-alias>scout_team_number</remote-alias>
-        <ordinal>35</ordinal>
-        <local-type>integer</local-type>
-        <aggregation>Sum</aggregation>
-        <precision>10</precision>
-        <contains-null>false</contains-null>
-        <attributes>
-          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_INTEGER&quot;</attribute>
-          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_SLONG&quot;</attribute>
-        </attributes>
-      </metadata-record>
-      <metadata-record class='column'>
-        <remote-name>match_final_score</remote-name>
-        <remote-type>3</remote-type>
-        <local-name>[match_final_score]</local-name>
-        <parent-name>[frc_scout_match]</parent-name>
-        <remote-alias>match_final_score</remote-alias>
-        <ordinal>36</ordinal>
-        <local-type>integer</local-type>
-        <aggregation>Sum</aggregation>
-        <precision>10</precision>
-        <contains-null>true</contains-null>
-        <attributes>
-          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_INTEGER&quot;</attribute>
-          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_SLONG&quot;</attribute>
-        </attributes>
-      </metadata-record>
-      <metadata-record class='column'>
         <remote-name>id</remote-name>
         <remote-type>3</remote-type>
         <local-name>[id (frc_scout_pitscoutdata)]</local-name>
         <parent-name>[frc_scout_pitscoutdata]</parent-name>
         <remote-alias>id</remote-alias>
-        <ordinal>39</ordinal>
+        <ordinal>36</ordinal>
         <local-type>integer</local-type>
         <aggregation>Sum</aggregation>
         <precision>10</precision>
@@ -724,7 +670,7 @@
         <local-name>[team_number (frc_scout_pitscoutdata)]</local-name>
         <parent-name>[frc_scout_pitscoutdata]</parent-name>
         <remote-alias>team_number</remote-alias>
-        <ordinal>40</ordinal>
+        <ordinal>37</ordinal>
         <local-type>integer</local-type>
         <aggregation>Sum</aggregation>
         <precision>10</precision>
@@ -740,7 +686,7 @@
         <local-name>[team_name]</local-name>
         <parent-name>[frc_scout_pitscoutdata]</parent-name>
         <remote-alias>team_name</remote-alias>
-        <ordinal>41</ordinal>
+        <ordinal>38</ordinal>
         <local-type>string</local-type>
         <aggregation>Count</aggregation>
         <width>8190</width>
@@ -757,7 +703,7 @@
         <local-name>[can_move_totes]</local-name>
         <parent-name>[frc_scout_pitscoutdata]</parent-name>
         <remote-alias>can_move_totes</remote-alias>
-        <ordinal>42</ordinal>
+        <ordinal>39</ordinal>
         <local-type>boolean</local-type>
         <aggregation>Count</aggregation>
         <contains-null>true</contains-null>
@@ -772,7 +718,7 @@
         <local-name>[can_move_containers]</local-name>
         <parent-name>[frc_scout_pitscoutdata]</parent-name>
         <remote-alias>can_move_containers</remote-alias>
-        <ordinal>43</ordinal>
+        <ordinal>40</ordinal>
         <local-type>boolean</local-type>
         <aggregation>Count</aggregation>
         <contains-null>true</contains-null>
@@ -787,7 +733,7 @@
         <local-name>[can_acquire_containers]</local-name>
         <parent-name>[frc_scout_pitscoutdata]</parent-name>
         <remote-alias>can_acquire_containers</remote-alias>
-        <ordinal>44</ordinal>
+        <ordinal>41</ordinal>
         <local-type>boolean</local-type>
         <aggregation>Count</aggregation>
         <contains-null>true</contains-null>
@@ -802,7 +748,7 @@
         <local-name>[tote_stack_capacity]</local-name>
         <parent-name>[frc_scout_pitscoutdata]</parent-name>
         <remote-alias>tote_stack_capacity</remote-alias>
-        <ordinal>45</ordinal>
+        <ordinal>42</ordinal>
         <local-type>integer</local-type>
         <aggregation>Sum</aggregation>
         <precision>10</precision>
@@ -818,7 +764,7 @@
         <local-name>[human_tote_loading]</local-name>
         <parent-name>[frc_scout_pitscoutdata]</parent-name>
         <remote-alias>human_tote_loading</remote-alias>
-        <ordinal>46</ordinal>
+        <ordinal>43</ordinal>
         <local-type>boolean</local-type>
         <aggregation>Count</aggregation>
         <contains-null>true</contains-null>
@@ -833,7 +779,7 @@
         <local-name>[human_litter_loading]</local-name>
         <parent-name>[frc_scout_pitscoutdata]</parent-name>
         <remote-alias>human_litter_loading</remote-alias>
-        <ordinal>47</ordinal>
+        <ordinal>44</ordinal>
         <local-type>boolean</local-type>
         <aggregation>Count</aggregation>
         <contains-null>true</contains-null>
@@ -848,7 +794,7 @@
         <local-name>[has_turret]</local-name>
         <parent-name>[frc_scout_pitscoutdata]</parent-name>
         <remote-alias>has_turret</remote-alias>
-        <ordinal>48</ordinal>
+        <ordinal>45</ordinal>
         <local-type>boolean</local-type>
         <aggregation>Count</aggregation>
         <contains-null>true</contains-null>
@@ -863,7 +809,7 @@
         <local-name>[scout_id (frc_scout_pitscoutdata)]</local-name>
         <parent-name>[frc_scout_pitscoutdata]</parent-name>
         <remote-alias>scout_id</remote-alias>
-        <ordinal>49</ordinal>
+        <ordinal>46</ordinal>
         <local-type>integer</local-type>
         <aggregation>Sum</aggregation>
         <precision>10</precision>
@@ -879,7 +825,7 @@
         <local-name>[has_strafing]</local-name>
         <parent-name>[frc_scout_pitscoutdata]</parent-name>
         <remote-alias>has_strafing</remote-alias>
-        <ordinal>50</ordinal>
+        <ordinal>47</ordinal>
         <local-type>boolean</local-type>
         <aggregation>Count</aggregation>
         <contains-null>true</contains-null>
@@ -894,7 +840,7 @@
         <local-name>[location_id (frc_scout_pitscoutdata)]</local-name>
         <parent-name>[frc_scout_pitscoutdata]</parent-name>
         <remote-alias>location_id</remote-alias>
-        <ordinal>51</ordinal>
+        <ordinal>48</ordinal>
         <local-type>integer</local-type>
         <aggregation>Sum</aggregation>
         <precision>10</precision>
@@ -910,7 +856,7 @@
         <local-name>[team_website]</local-name>
         <parent-name>[frc_scout_pitscoutdata]</parent-name>
         <remote-alias>team_website</remote-alias>
-        <ordinal>52</ordinal>
+        <ordinal>49</ordinal>
         <local-type>string</local-type>
         <aggregation>Count</aggregation>
         <width>8190</width>
@@ -927,7 +873,7 @@
         <local-name>[auto_start_x (frc_scout_pitscoutdata)]</local-name>
         <parent-name>[frc_scout_pitscoutdata]</parent-name>
         <remote-alias>auto_start_x</remote-alias>
-        <ordinal>53</ordinal>
+        <ordinal>50</ordinal>
         <local-type>real</local-type>
         <aggregation>Sum</aggregation>
         <precision>15</precision>
@@ -943,7 +889,7 @@
         <local-name>[auto_start_y (frc_scout_pitscoutdata)]</local-name>
         <parent-name>[frc_scout_pitscoutdata]</parent-name>
         <remote-alias>auto_start_y</remote-alias>
-        <ordinal>54</ordinal>
+        <ordinal>51</ordinal>
         <local-type>real</local-type>
         <aggregation>Sum</aggregation>
         <precision>15</precision>
@@ -959,7 +905,7 @@
         <local-name>[coach]</local-name>
         <parent-name>[frc_scout_pitscoutdata]</parent-name>
         <remote-alias>coach</remote-alias>
-        <ordinal>55</ordinal>
+        <ordinal>52</ordinal>
         <local-type>string</local-type>
         <aggregation>Count</aggregation>
         <width>8190</width>
@@ -976,7 +922,7 @@
         <local-name>[driver_1]</local-name>
         <parent-name>[frc_scout_pitscoutdata]</parent-name>
         <remote-alias>driver_1</remote-alias>
-        <ordinal>56</ordinal>
+        <ordinal>53</ordinal>
         <local-type>string</local-type>
         <aggregation>Count</aggregation>
         <width>8190</width>
@@ -993,7 +939,7 @@
         <local-name>[driver_2]</local-name>
         <parent-name>[frc_scout_pitscoutdata]</parent-name>
         <remote-alias>driver_2</remote-alias>
-        <ordinal>57</ordinal>
+        <ordinal>54</ordinal>
         <local-type>string</local-type>
         <aggregation>Count</aggregation>
         <width>8190</width>
@@ -1010,7 +956,7 @@
         <local-name>[human_litter_throwing]</local-name>
         <parent-name>[frc_scout_pitscoutdata]</parent-name>
         <remote-alias>human_litter_throwing</remote-alias>
-        <ordinal>58</ordinal>
+        <ordinal>55</ordinal>
         <local-type>boolean</local-type>
         <aggregation>Count</aggregation>
         <contains-null>true</contains-null>
@@ -1025,7 +971,7 @@
         <local-name>[known_strengths]</local-name>
         <parent-name>[frc_scout_pitscoutdata]</parent-name>
         <remote-alias>known_strengths</remote-alias>
-        <ordinal>59</ordinal>
+        <ordinal>56</ordinal>
         <local-type>string</local-type>
         <aggregation>Count</aggregation>
         <width>8190</width>
@@ -1042,7 +988,7 @@
         <local-name>[known_weaknesses]</local-name>
         <parent-name>[frc_scout_pitscoutdata]</parent-name>
         <remote-alias>known_weaknesses</remote-alias>
-        <ordinal>60</ordinal>
+        <ordinal>57</ordinal>
         <local-type>string</local-type>
         <aggregation>Count</aggregation>
         <width>8190</width>
@@ -1059,7 +1005,7 @@
         <local-name>[robot_height]</local-name>
         <parent-name>[frc_scout_pitscoutdata]</parent-name>
         <remote-alias>robot_height</remote-alias>
-        <ordinal>61</ordinal>
+        <ordinal>58</ordinal>
         <local-type>real</local-type>
         <aggregation>Sum</aggregation>
         <precision>15</precision>
@@ -1075,7 +1021,7 @@
         <local-name>[robot_speed]</local-name>
         <parent-name>[frc_scout_pitscoutdata]</parent-name>
         <remote-alias>robot_speed</remote-alias>
-        <ordinal>62</ordinal>
+        <ordinal>59</ordinal>
         <local-type>real</local-type>
         <aggregation>Sum</aggregation>
         <precision>15</precision>
@@ -1091,7 +1037,7 @@
         <local-name>[robot_weight]</local-name>
         <parent-name>[frc_scout_pitscoutdata]</parent-name>
         <remote-alias>robot_weight</remote-alias>
-        <ordinal>63</ordinal>
+        <ordinal>60</ordinal>
         <local-type>real</local-type>
         <aggregation>Sum</aggregation>
         <precision>15</precision>
@@ -1107,7 +1053,7 @@
         <local-name>[id (frc_scout_totestack)]</local-name>
         <parent-name>[frc_scout_totestack]</parent-name>
         <remote-alias>id</remote-alias>
-        <ordinal>66</ordinal>
+        <ordinal>63</ordinal>
         <local-type>integer</local-type>
         <aggregation>Sum</aggregation>
         <precision>10</precision>
@@ -1123,7 +1069,7 @@
         <local-name>[start_height]</local-name>
         <parent-name>[frc_scout_totestack]</parent-name>
         <remote-alias>start_height</remote-alias>
-        <ordinal>67</ordinal>
+        <ordinal>64</ordinal>
         <local-type>integer</local-type>
         <aggregation>Sum</aggregation>
         <precision>10</precision>
@@ -1139,7 +1085,7 @@
         <local-name>[x]</local-name>
         <parent-name>[frc_scout_totestack]</parent-name>
         <remote-alias>x</remote-alias>
-        <ordinal>68</ordinal>
+        <ordinal>65</ordinal>
         <local-type>real</local-type>
         <aggregation>Sum</aggregation>
         <precision>8</precision>
@@ -1156,7 +1102,7 @@
         <local-name>[y]</local-name>
         <parent-name>[frc_scout_totestack]</parent-name>
         <remote-alias>y</remote-alias>
-        <ordinal>69</ordinal>
+        <ordinal>66</ordinal>
         <local-type>real</local-type>
         <aggregation>Sum</aggregation>
         <precision>8</precision>
@@ -1173,7 +1119,7 @@
         <local-name>[coop_stack]</local-name>
         <parent-name>[frc_scout_totestack]</parent-name>
         <remote-alias>coop_stack</remote-alias>
-        <ordinal>70</ordinal>
+        <ordinal>67</ordinal>
         <local-type>boolean</local-type>
         <aggregation>Count</aggregation>
         <contains-null>true</contains-null>
@@ -1188,7 +1134,7 @@
         <local-name>[match_id]</local-name>
         <parent-name>[frc_scout_totestack]</parent-name>
         <remote-alias>match_id</remote-alias>
-        <ordinal>71</ordinal>
+        <ordinal>68</ordinal>
         <local-type>integer</local-type>
         <aggregation>Sum</aggregation>
         <precision>10</precision>
@@ -1204,7 +1150,7 @@
         <local-name>[totes_added]</local-name>
         <parent-name>[frc_scout_totestack]</parent-name>
         <remote-alias>totes_added</remote-alias>
-        <ordinal>72</ordinal>
+        <ordinal>69</ordinal>
         <local-type>integer</local-type>
         <aggregation>Sum</aggregation>
         <precision>10</precision>
@@ -1220,7 +1166,7 @@
         <local-name>[id (frc_scout_containerstack)]</local-name>
         <parent-name>[frc_scout_containerstack]</parent-name>
         <remote-alias>id</remote-alias>
-        <ordinal>74</ordinal>
+        <ordinal>71</ordinal>
         <local-type>integer</local-type>
         <aggregation>Sum</aggregation>
         <precision>10</precision>
@@ -1236,7 +1182,7 @@
         <local-name>[height]</local-name>
         <parent-name>[frc_scout_containerstack]</parent-name>
         <remote-alias>height</remote-alias>
-        <ordinal>75</ordinal>
+        <ordinal>72</ordinal>
         <local-type>integer</local-type>
         <aggregation>Sum</aggregation>
         <precision>10</precision>
@@ -1252,23 +1198,7 @@
         <local-name>[match_id (frc_scout_containerstack)]</local-name>
         <parent-name>[frc_scout_containerstack]</parent-name>
         <remote-alias>match_id</remote-alias>
-        <ordinal>76</ordinal>
-        <local-type>integer</local-type>
-        <aggregation>Sum</aggregation>
-        <precision>10</precision>
-        <contains-null>true</contains-null>
-        <attributes>
-          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_INTEGER&quot;</attribute>
-          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_SLONG&quot;</attribute>
-        </attributes>
-      </metadata-record>
-      <metadata-record class='column'>
-        <remote-name>containers_added</remote-name>
-        <remote-type>3</remote-type>
-        <local-name>[containers_added]</local-name>
-        <parent-name>[frc_scout_containerstack]</parent-name>
-        <remote-alias>containers_added</remote-alias>
-        <ordinal>77</ordinal>
+        <ordinal>73</ordinal>
         <local-type>integer</local-type>
         <aggregation>Sum</aggregation>
         <precision>10</precision>
@@ -1284,7 +1214,7 @@
         <local-name>[id (frc_scout_location)]</local-name>
         <parent-name>[frc_scout_location]</parent-name>
         <remote-alias>id</remote-alias>
-        <ordinal>79</ordinal>
+        <ordinal>75</ordinal>
         <local-type>integer</local-type>
         <aggregation>Sum</aggregation>
         <precision>10</precision>
@@ -1300,24 +1230,7 @@
         <local-name>[name]</local-name>
         <parent-name>[frc_scout_location]</parent-name>
         <remote-alias>name</remote-alias>
-        <ordinal>80</ordinal>
-        <local-type>string</local-type>
-        <aggregation>Count</aggregation>
-        <width>8190</width>
-        <contains-null>true</contains-null>
-        <cast-to-local-type>true</cast-to-local-type>
-        <attributes>
-          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_WLONGVARCHAR&quot;</attribute>
-          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_WCHAR&quot;</attribute>
-        </attributes>
-      </metadata-record>
-      <metadata-record class='column'>
-        <remote-name>tba_event_code</remote-name>
-        <remote-type>130</remote-type>
-        <local-name>[tba_event_code]</local-name>
-        <parent-name>[frc_scout_location]</parent-name>
-        <remote-alias>tba_event_code</remote-alias>
-        <ordinal>81</ordinal>
+        <ordinal>76</ordinal>
         <local-type>string</local-type>
         <aggregation>Count</aggregation>
         <width>8190</width>
@@ -1331,18 +1244,6 @@
     </metadata-records>
   </connection>
   <aliases enabled='yes' />
-  <column caption='Tote Stack Height' datatype='integer' name='[Calculation_0430215155343106]' role='measure' type='quantitative'>
-    <calculation class='tableau' formula='[totes_added]+[start_height]' scope-isolation='false' />
-  </column>
-  <column caption='Tele Total Collected Totes' datatype='integer' name='[Calculation_2810215163604905]' role='measure' type='quantitative'>
-    <calculation class='tableau' formula='[tele_picked_up_ground_upright_totes]+&#10;[tele_picked_up_human_station_totes]+&#10;[tele_picked_up_sideways_totes]+&#10;[tele_picked_up_upside_down_totes]' scope-isolation='false' />
-  </column>
-  <column caption='Tele Points' datatype='integer' name='[Calculation_4660215155944836]' role='measure' type='quantitative'>
-    <calculation class='tableau' formula='zn([Calculation_0430215155343106])*2+&#10;zn([height])*4+&#10;zn([tele_placed_in_container_litter])*6+&#10;zn([tele_pushed_litter])' scope-isolation='false' />
-  </column>
-  <column caption='Tele Total Collected Containers' datatype='integer' name='[Calculation_9290215163458033]' role='measure' type='quantitative'>
-    <calculation class='tableau' formula='[tele_picked_up_sideways_containers]+&#10;[tele_picked_up_center_step_containers]+&#10;[tele_picked_up_upright_containers]' scope-isolation='false' />
-  </column>
   <column datatype='integer' name='[Number of Records]' role='measure' type='quantitative' user:auto-column='numrec'>
     <calculation class='tableau' formula='1' />
   </column>
@@ -1382,8 +1283,6 @@
   </column>
   <column caption='Coach' datatype='string' name='[coach]' role='dimension' type='nominal'>
   </column>
-  <column caption='Containers_added' datatype='integer' name='[containers_added]' role='measure' type='quantitative'>
-  </column>
   <column caption='Coop Stack' datatype='boolean' name='[coop_stack]' role='dimension' type='nominal'>
   </column>
   <column caption='Driver 1' datatype='string' name='[driver_1]' role='dimension' type='nominal'>
@@ -1394,7 +1293,7 @@
   </column>
   <column caption='Has Turret' datatype='boolean' name='[has_turret]' role='dimension' type='nominal'>
   </column>
-  <column caption='Container Stack Height' datatype='integer' name='[height]' role='measure' type='quantitative'>
+  <column caption='Height' datatype='integer' name='[height]' role='measure' type='quantitative'>
   </column>
   <column caption='Human Litter Loading' datatype='boolean' name='[human_litter_loading]' role='dimension' type='nominal'>
   </column>
@@ -1422,11 +1321,11 @@
   </column>
   <column aggregation='Sum' caption='Match Id (Frc Scout Containerstack)' datatype='integer' name='[match_id (frc_scout_containerstack)]' role='dimension' type='ordinal'>
   </column>
-  <column aggregation='Sum' caption='Stack ID' datatype='integer' name='[match_id]' role='dimension' type='ordinal'>
+  <column aggregation='Sum' caption='Match Id' datatype='integer' name='[match_id]' role='dimension' type='ordinal'>
   </column>
   <column caption='Match Number' datatype='integer' name='[match_number]' role='dimension' type='ordinal'>
   </column>
-  <column caption='Event Name' datatype='string' name='[name]' role='dimension' type='nominal'>
+  <column caption='Name' datatype='string' name='[name]' role='dimension' type='nominal'>
   </column>
   <column caption='Robot Height' datatype='real' name='[robot_height]' role='measure' type='quantitative'>
   </column>
@@ -1437,8 +1336,6 @@
   <column aggregation='Sum' caption='Scout Id (Frc Scout Pitscoutdata)' datatype='integer' name='[scout_id (frc_scout_pitscoutdata)]' role='dimension' type='ordinal'>
   </column>
   <column aggregation='Sum' caption='Scout Id' datatype='integer' name='[scout_id]' role='dimension' type='ordinal'>
-  </column>
-  <column aggregation='Sum' datatype='integer' name='[scout_team_number]' role='dimension' type='ordinal'>
   </column>
   <column caption='Start Height' datatype='integer' name='[start_height]' role='measure' type='quantitative'>
   </column>
@@ -1492,7 +1389,6 @@
   </column>
   <folder name='Autonomous' role='dimensions'>
     <folder-item name='[auto_moved_to_auto_zone]' type='field' />
-    <folder-item name='[auto_no_auto]' type='field' />
   </folder>
   <folder name='Comments' role='dimensions'>
     <folder-item name='[tele_foul_context]' type='field' />
@@ -1502,18 +1398,13 @@
     <folder-item name='[tele_dead_bot]' type='field' />
     <folder-item name='[tele_shooter_jam]' type='field' />
   </folder>
-  <folder name='Ignore These' role='dimensions'>
+  <folder name='IDs' role='dimensions'>
     <folder-item name='[id (frc_scout_containerstack)]' type='field' />
     <folder-item name='[id (frc_scout_location)]' type='field' />
     <folder-item name='[id (frc_scout_pitscoutdata)]' type='field' />
     <folder-item name='[id (frc_scout_totestack)]' type='field' />
     <folder-item name='[id]' type='field' />
-    <folder-item name='[location_id (frc_scout_pitscoutdata)]' type='field' />
     <folder-item name='[location_id]' type='field' />
-    <folder-item name='[match_id (frc_scout_containerstack)]' type='field' />
-    <folder-item name='[scout_id (frc_scout_pitscoutdata)]' type='field' />
-    <folder-item name='[scout_id]' type='field' />
-    <folder-item name='[team_number (frc_scout_pitscoutdata)]' type='field' />
   </folder>
   <folder name='PitScouting' role='dimensions'>
     <folder-item name='[can_acquire_containers]' type='field' />
@@ -1530,7 +1421,11 @@
     <folder-item name='[human_tote_loading]' type='field' />
     <folder-item name='[known_strengths]' type='field' />
     <folder-item name='[known_weaknesses]' type='field' />
+    <folder-item name='[location_id (frc_scout_pitscoutdata)]' type='field' />
+    <folder-item name='[match_id (frc_scout_containerstack)]' type='field' />
+    <folder-item name='[scout_id (frc_scout_pitscoutdata)]' type='field' />
     <folder-item name='[team_name]' type='field' />
+    <folder-item name='[team_number (frc_scout_pitscoutdata)]' type='field' />
     <folder-item name='[team_website]' type='field' />
   </folder>
   <folder name='Autonomous' role='measures'>
@@ -1548,9 +1443,6 @@
     <folder-item name='[auto_yellow_stacked_totes]' type='field' />
   </folder>
   <folder name='Containers' role='measures'>
-    <folder-item name='[Calculation_9290215163458033]' type='field' />
-    <folder-item name='[containers_added]' type='field' />
-    <folder-item name='[height]' type='field' />
     <folder-item name='[tele_picked_up_center_step_containers]' type='field' />
     <folder-item name='[tele_picked_up_sideways_containers]' type='field' />
     <folder-item name='[tele_picked_up_upright_containers]' type='field' />
@@ -1564,18 +1456,14 @@
     <folder-item name='[tele_pushed_litter]' type='field' />
   </folder>
   <folder name='Pit Scouting' role='measures'>
+    <folder-item name='[height]' type='field' />
     <folder-item name='[robot_height]' type='field' />
     <folder-item name='[robot_speed]' type='field' />
     <folder-item name='[robot_weight]' type='field' />
+    <folder-item name='[start_height]' type='field' />
     <folder-item name='[tote_stack_capacity]' type='field' />
   </folder>
-  <folder name='Points' role='measures'>
-    <folder-item name='[Calculation_4660215155944836]' type='field' />
-  </folder>
   <folder name='Totes' role='measures'>
-    <folder-item name='[Calculation_0430215155343106]' type='field' />
-    <folder-item name='[Calculation_2810215163604905]' type='field' />
-    <folder-item name='[start_height]' type='field' />
     <folder-item name='[tele_picked_up_ground_upright_totes]' type='field' />
     <folder-item name='[tele_picked_up_human_station_totes]' type='field' />
     <folder-item name='[tele_picked_up_sideways_totes]' type='field' />
@@ -1584,13 +1472,8 @@
     <folder-item name='[x]' type='field' />
     <folder-item name='[y]' type='field' />
   </folder>
-  <layout dim-ordering='alphabetic' dim-percentage='0.719895' measure-ordering='alphabetic' measure-percentage='0.252618' show-structure='false' />
+  <layout dim-ordering='alphabetic' dim-percentage='0.5' measure-ordering='alphabetic' measure-percentage='0.4' show-structure='false' />
   <semantic-values>
     <semantic-value key='[Country].[Name]' value='&quot;United States&quot;' />
   </semantic-values>
-  <filter class='categorical' column='[name]' filter-group='2'>
-    <groupfilter expression='ISNULL([name]) OR (NOT([name] = &apos;TEST&apos;))' function='filter' user:ui-enumeration='exclusive' user:ui-pattern-include-all-when-empty='true' user:ui-pattern_text='TEST' user:ui-pattern_type='exact-match'>
-      <groupfilter function='level-members' level='[name]' user:ui-enumeration='all' user:ui-marker='enumerate' />
-    </groupfilter>
-  </filter>
 </datasource>
