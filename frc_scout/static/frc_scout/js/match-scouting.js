@@ -471,7 +471,7 @@ function saveAndContinue(fromStage, toStage, sender) {
         var telePublicComments = $("#tele_public_comments").val();
         var matchFinalScore = parseInt($("#match_final_score").val());
 
-        if(isNaN(matchFinalScore)) {
+        if(isNaN(matchFinalScore) && toStage !== "teleoperated") {
             errorMessage.push("Final alliance score is required.");
         }
 
