@@ -471,7 +471,7 @@ function saveAndContinue(fromStage, toStage, sender) {
         var telePublicComments = $("#tele_public_comments").val();
         var matchFinalScore = parseInt($("#match_final_score").val());
 
-        if(isNaN(matchFinalScore)) {
+        if(isNaN(matchFinalScore) && toStage !== "teleoperated") {
             errorMessage.push("Final alliance score is required.");
         }
 
@@ -507,6 +507,13 @@ function saveAndContinue(fromStage, toStage, sender) {
 }
 
 function discardAndChangeStage(fromStage, toStage) {
+
+    if(fromStage === 'teleoperated_stacked_totes_location') {
+        var data = getMatchData()['teleoperated_stacked_totes'];
+        data.pop();
+        setMatchDataArray('teleoperated_stacked_totes', data);
+    }
+
     // hide our current stage
     $("#" + fromStage).hide();
 
