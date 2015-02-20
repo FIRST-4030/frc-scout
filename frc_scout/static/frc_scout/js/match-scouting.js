@@ -507,6 +507,13 @@ function saveAndContinue(fromStage, toStage, sender) {
 }
 
 function discardAndChangeStage(fromStage, toStage) {
+
+    if(fromStage === 'teleoperated_stacked_totes_location') {
+        var data = getMatchData()['teleoperated_stacked_totes'];
+        data.pop();
+        setMatchDataArray('teleoperated_stacked_totes', data);
+    }
+
     // hide our current stage
     $("#" + fromStage).hide();
 
