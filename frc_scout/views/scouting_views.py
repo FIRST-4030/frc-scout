@@ -134,14 +134,20 @@ def submit_match_scouting_data(request):
                     for stacked_totes in match['teleoperated_stacked_totes']:
                         tote_stack = ToteStack()
 
-                        setattr(tote_stack, 'match', match_object)
-                        setattr(tote_stack, 'start_height', stacked_totes['start_height'])
-                        setattr(tote_stack, 'totes_added', stacked_totes['totes_added'])
-                        setattr(tote_stack, 'x', stacked_totes['x'])
-                        setattr(tote_stack, 'y', stacked_totes['y'])
-                        setattr(tote_stack, 'coop_stack', stacked_totes['coop_stack'])
+                        try:
+                            setattr(tote_stack, 'match', match_object)
+                            setattr(tote_stack, 'start_height', stacked_totes['start_height'])
+                            setattr(tote_stack, 'totes_added', stacked_totes['totes_added'])
+                            setattr(tote_stack, 'x', stacked_totes['x'])
+                            setattr(tote_stack, 'y', stacked_totes['y'])
+                            setattr(tote_stack, 'coop_stack', stacked_totes['coop_stack'])
+                        except KeyError:
+                            pass
 
-                        tote_stack.save()
+                        try:
+                            tote_stack.save()
+                        except IntegrityError:
+                            pass
 
                 if 'teleoperated_stacked_containers' in match:
                     for stacked_containers in match['teleoperated_stacked_containers']:
@@ -153,7 +159,7 @@ def submit_match_scouting_data(request):
                         bin_stack.save()
 
         if len(errors) != 0:
-            return HttpResponse(json.dumps(errors), status=400)
+            return HttpResponse(json.dumps(errors), status=200)
         else:
             return HttpResponse(status=200)
 
