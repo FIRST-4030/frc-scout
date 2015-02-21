@@ -145,3 +145,11 @@ def create_account(request):
         return HttpResponseRedirect(reverse("frc_scout:login"))
 
     return render(request, 'frc_scout/create_account.html')
+
+
+def about(request):
+    context = {
+        'nav_title': "About FRC Scout",
+    }
+
+    return render(request, "frc_scout/about_frc_scout.html", context)

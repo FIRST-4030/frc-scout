@@ -1,6 +1,6 @@
 import json
 from django.contrib.auth.decorators import login_required
-from django.db.models.aggregates import Avg
+from django.db.models.aggregates import Avg, Count
 from django.http.response import HttpResponse
 from frc_scout.models import Team, Location, Match
 from django.contrib.auth.models import User
@@ -56,32 +56,70 @@ def get_locations(request):
 @login_required
 def get_averages(request):
 
-    matches = Match.objects.exclude(location__name="TEST").values('team_number').annotate(
+    matches = Match.objects.values('team_number').annotate(
+        total_matches=Count('team_number'),
         auto_yellow_stacked_totes=Avg('auto_yellow_stacked_totes'),
         auto_yellow_moved_totes=Avg('auto_yellow_moved_totes'),
-        auto_grey_acquired_totes=Avg('auto_grey_acquired_totes'),
-        auto_step_center_acquired_containers=Avg('auto_step_center_acquired_containers'),
-        auto_ground_acquired_containers=Avg('auto_ground_acquired_containers'),
+        auto_moved_to_auto_zone=Avg('auto_moved_to_auto_zone'),
+
         auto_moved_containers=Avg('auto_moved_containers'),
 
-        tele_picked_up_ground_upright_totes=Avg('tele_picked_up_ground_upright_totes'),
-        tele_picked_up_upside_down_totes=Avg('tele_picked_up_upside_down_totes'),
-        tele_picked_up_sideways_totes=Avg('tele_picked_up_sideways_totes'),
-        tele_picked_up_human_station_totes=Avg('tele_picked_up_human_station_totes'),
-        tele_picked_up_sideways_containers=Avg('tele_picked_up_sideways_containers'),
-        tele_picked_up_upright_containers=Avg('tele_picked_up_upright_containers'),
-        tele_picked_up_center_step_containers=Avg('tele_picked_up_center_step_containers'),
         tele_pushed_litter=Avg('tele_pushed_litter'),
         tele_placed_in_container_litter=Avg('tele_placed_in_container_litter'),
-        tele_fouls=Avg('tele_fouls'),
 
-        tele_knocked_over_stacks=Avg('tele_knocked_over_stacks'),
         totestack_start_height=Avg('totestack__start_height'),
         totestack_totes_added=Avg('totestack__totes_added'),
+
+        number_of_totestacks=Count('totestack'),
+
         containerstack_height=Avg('containerstack__height'),
+
+        number_of_containerstacks=Avg('containerstack'),
         )
 
-    return HttpResponse(json.dumps(list(matches)))
+    teams = []
+    auto_scores = []
+    tele_scores = []
+
+    unprocessed_matches = {}
+
+    for match in matches:
+        auto_score = 0
+
+        # multiply by point value, divide by robots per alliance
+
+        if match['auto_moved_to_auto_zone'] is not None:
+            auto_score += (match['auto_moved_to_auto_zone'] / 3 * 4)
+
+        if match['auto_moved_to_auto_zone'] is not None:
+            auto_score += (match['auto_moved_to_auto_zone'] / 3 * 6)
+
+        if match['auto_moved_to_auto_zone'] is not None:
+            auto_score += (match['auto_moved_to_auto_zone'] / 3 * 20)
+
+        tele_score = 0
+
+        # worth 2 per tote stacked (average)
+        if match['totestack_totes_added'] is not None:
+            tele_score += match['totestack_totes_added'] * (match['number_of_totestacks'] / match['total_matches']) * 2
+
+        if match['containerstack_height'] is not None:
+            tele_score += match['containerstack_height'] * (match['number_of_containerstacks'] / match['total_matches']) * 4
+
+        teams.append(match['team_number'])
+        auto_scores.append(auto_score)
+        tele_scores.append(tele_score)
+
+
+
+    processed_matches = {
+        'teams': teams,
+        'auto_scores': auto_scores,
+        'tele_scores': tele_scores
+    }
+
+    return HttpResponse(json.dumps(processed_matches))
+
 
 
     
