@@ -7,6 +7,9 @@ from frc_scout import views
 urlpatterns = patterns(
     '',
 
+    # About us
+    url(r'^about/$', views.about, name='about_us'),
+
     # Views dealing with session stuff stored in session_views.py
     url(r'^$', views.index, name='index'),
     url(r'^login/$', views.login_view, name='login'),
@@ -43,6 +46,6 @@ urlpatterns = patterns(
 
     # Results views
     url(r'^results/database/$', views.database_instructions, name='database_instructions'),
-    url(r'^results/averages/$', views.average_scores, name='average_scores'),
+    #url(r'^results/averages/$', views.average_scores, name='average_scores'),
 
     )

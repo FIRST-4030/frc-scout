@@ -1,0 +1,72 @@
+{% extends 'frc_scout/base.html' %}
+
+{% block title %}Connect to Database{% endblock %}
+
+{% load staticfiles %}
+
+{% block nav %}{% include 'frc_scout/nav.html' %}{% endblock %}
+
+{% block main_content %}
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><span class="glyphicon glyphicon-question-sign"></span>&nbsp; What is FRC Scout?</h3>
+                </div>
+                <div class="panel-body">
+                    FRC Scout is a web-based app that aims to make scouting and strategy much easier.
+                    Instead of frantically writing down robot attributes on paper, compiling everything manually,
+                    and attempting to form a strategy from that, FRC Scout will allow your team to collect data
+                    much more easily, and process it using <strong>Tableau</strong> (or other software of your choosing).
+                    <br><br>
+                    Each of your scouts can create an account, and then scout using our simple, intuitive interface.
+                    Our database is publicly accessible and updated in real time, so strategizing can be done more quickly.
+                    <br><br>
+                    Furthermore, you will not only have access to your own data, but also to that of other teams using FRC Scout.
+                    This helps every team by improving the overall quality of data. The more teams that use the app, the
+                    better it becomes!
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><span class="glyphicon glyphicon-user"></span>&nbsp; How does scout management work?</h3>
+                </div>
+                <div class="panel-body">
+                    The first user that creates an account under your team's number will be treated as the <strong>team manager</strong>.
+                    Each subsequent scout will require approval from the team manager before they can log in and scout as a member of that team.
+                    <br><Br>
+                    Of course, teams can have multiple managers and managers can be promoted or demoted by other managers.
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><span class="glyphicon glyphicon-wrench"></span>&nbsp; Who is behind all this?</h3>
+                </div>
+                <div class="panel-body">
+                    FRC Team 4030 &mdash; NullPointerException has been developing scouting applications since Rebound Rumble. This year,
+                    we have teamed up with 1983 &mdash; Skunkworks to improve our data acquisition and processing, and to
+                    integrate our collection techniques with Tableau.
+                    <br><Br>
+                    Both of us are from the Seattle, WA area.
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><span class="glyphicon glyphicon-log-in"></span>&nbsp; How do I get started?</h3>
+                </div>
+                <div class="panel-body">
+                    You can sign up <a href="{% url 'frc_scout:create_account' %}">right here</a>! If you are the first member
+                    of your team to create an account, congratulations, you will be the team manager! Otherwise, you will require
+                    approval from a manager before you may login.
+                    <br><br>
+                    We encourage you to look around and learn more, but please do not submit any data if you are not actually scouting a match!
+                    You may go through the scouting procedure and simply hit "Discard Data" at the end.
+                    <br><br>
+                    <strong>Arise, go forth, and conquer!</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+

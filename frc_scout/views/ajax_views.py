@@ -75,9 +75,13 @@ def get_averages(request):
         containerstack_height=Avg('containerstack__height'),
 
         number_of_containerstacks=Avg('containerstack'),
-        ).filter(location__id=request.session.get('location_id'))
+        )
 
-    processed_matches = []
+    teams = []
+    auto_scores = []
+    tele_scores = []
+
+    unprocessed_matches = {}
 
     for match in matches:
         auto_score = 0
@@ -102,15 +106,17 @@ def get_averages(request):
         if match['containerstack_height'] is not None:
             tele_score += match['containerstack_height'] * (match['number_of_containerstacks'] / match['total_matches']) * 4
 
-        # processed_matches[match['team_number']] = {
-        #     'auto_score': auto_score,
-        #     'tele_score': tele_score
-        # }
+        teams.append(match['team_number'])
+        auto_scores.append(auto_score)
+        tele_scores.append(tele_score)
 
-        processed_matches.append({
-            'name': match['team_number'],
 
-        })
+
+    processed_matches = {
+        'teams': teams,
+        'auto_scores': auto_scores,
+        'tele_scores': tele_scores
+    }
 
     return HttpResponse(json.dumps(processed_matches))
 

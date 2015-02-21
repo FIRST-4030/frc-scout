@@ -9,7 +9,7 @@
 {% block main_content %}
     <div class="row">
         <div class="col-md-10 col-md-offset-1">
-            <div id="chart_container"></div>
+            <div id="chart_container">loading...</div>
         </div>
     </div>
 {% endblock %}
@@ -19,41 +19,44 @@
     <script type="text/javascript" src="{% static 'frc_scout/js/highcharts.js' %}"></script>
 
     <script type="text/javascript">
-        $('#chart_container').highcharts({
-            chart: {
-                type: 'bar'
-            },
-            title: {
-                text: 'Average Team Scores'
-            },
-            xAxis: {
-                categories: ['Apples', 'Oranges', 'Pears', 'Grapes', 'Bananas']
-            },
-            yAxis: {
-                min: 0,
+
+        $.getJSON('{% url "frc_scout:get_averages" %}', function(data) {
+            console.log(data);
+            $('#chart_container').highcharts({
+                chart: {
+                    type: 'bar',
+                    height: data['teams'].length * 20
+                },
                 title: {
-                    text: 'Total fruit consumption'
-                }
-            },
-            legend: {
-                reversed: true
-            },
-            plotOptions: {
-                series: {
-                    stacking: 'normal'
-                }
-            },
-            series: [{
-                name: 'John',
-                data: [5, 3, 4, 7, 2]
-            }, {
-                name: 'Jane',
-                data: [2, 2, 3, 2, 1]
-            }, {
-                name: 'Joe',
-                data: [3, 4, 4, 2, 5]
-            }]
+                    text: 'Average Team Scores'
+                },
+                xAxis: {
+                    categories: data['teams']
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: 'Total Points'
+                    }
+                },
+                legend: {
+                    reversed: true
+                },
+                plotOptions: {
+                    series: {
+                        stacking: 'normal'
+                    }
+                },
+                series: [{
+                    name: 'Autonomous',
+                    data: data['auto_scores']
+                }, {
+                    name: 'Teleoperated',
+                    data: data['tele_scores']
+                }]
+            });
         });
+
     </script>
 {% endblock %}
 
