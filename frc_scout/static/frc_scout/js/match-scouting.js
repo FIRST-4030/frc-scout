@@ -271,7 +271,7 @@ function saveAndContinue(fromStage, toStage, sender) {
 
         console.log('starting');
 
-        if(!isNaN(localStorage.totesInPossession) || localStorage.totesInPossession === undefined) {
+        if(!isNaN(localStorage.totesInPossession)) {
             var currentTotes = localStorage.totesInPossession;
             localStorage.totesInPossession = parseInt(currentTotes) + 1;
         } else {
@@ -897,9 +897,12 @@ $(".btn-add-subtract").click(function () {
     }
 
     else if (sender.data('operation')  === "subtract") {
+        console.log(target.text());
         if (parseInt(target.text()) > 0) {
             if(sender.data('affect') === "moved_to_zone") {
-                $("#auto-moved-container-text").text(parseInt($("#auto-moved-container-text").text()) - 1);
+                if(parseInt($("#auto-moved-container-text").text()) > 0) {
+                    $("#auto-moved-container-text").text(parseInt($("#auto-moved-container-text").text()) - 1);
+                }
             }
             target.text(parseInt(target.text()) - 1);
         }
