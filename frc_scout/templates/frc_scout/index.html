@@ -108,7 +108,7 @@
                 $("#submit_pending").show();
             }
 
-            $.getJSON("http://www.thebluealliance.com/api/v2/event/2014{{ event_code }}/matches?X-TBA-App-Id=frc4030:frcscout.com:v1", function(data) {
+            $.getJSON("http://www.thebluealliance.com/api/v2/event/2015{{ event_code }}/matches?X-TBA-App-Id=frc4030:frcscout.com:v1", function(data) {
                 localStorage.eventSchedule = JSON.stringify(data);
             });
         });
