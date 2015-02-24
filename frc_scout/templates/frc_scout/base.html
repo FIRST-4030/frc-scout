@@ -29,15 +29,6 @@
 
     {% load staticfiles compress %}
 
-    {% compress js %}
-        <script type="text/javascript" src="{% static 'frc_scout/js/jquery-1.11.2.min.js' %}"></script>
-        <script type="text/javascript" src="{% static 'frc_scout/js/bootstrap.min.js' %}"></script>
-        <script type="text/javascript" src="{% static 'frc_scout/js/jquery.cookie.js' %}"></script>
-        <script type="text/javascript" src="{% static 'frc_scout/js/typeahead.bundle.js' %}"></script>
-        <script type="text/javascript" src="{% static 'frc_scout/js/bootstrap-switch.min.js' %}"></script>
-        <script type="text/javascript" src="{% static 'frc_scout/js/bootstrap-editable.min.js' %}"></script>
-    {% endcompress %}
-
     {% compress css %}
         <link rel="stylesheet" type="text/css" href="{% static 'frc_scout/css/paper.theme.min.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'frc_scout/css/twitter-typeahead.css' %}">
@@ -64,7 +55,14 @@
 
 
 {% block footer %}{% endblock %}
-
-</body>
+{% compress js %}
+    <script type="text/javascript" src="{% static 'frc_scout/js/jquery-1.11.2.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'frc_scout/js/bootstrap.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'frc_scout/js/jquery.cookie.js' %}"></script>
+    <script type="text/javascript" src="{% static 'frc_scout/js/typeahead.bundle.js' %}"></script>
+    <script type="text/javascript" src="{% static 'frc_scout/js/bootstrap-switch.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'frc_scout/js/bootstrap-editable.min.js' %}"></script>
+{% endcompress %}
 {% block extra_js %}{% endblock %}
+</body>
 </html>
