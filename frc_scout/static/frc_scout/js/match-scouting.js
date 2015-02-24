@@ -774,11 +774,6 @@ function openStage(stage) {
     }
 
     else if (stage === "teleoperated_stacked_totes") {
-        $("#coop_stack").bootstrapSwitch({
-            onText: "YES",
-            offText: "NO"
-        });
-
         $("#coop_stack").bootstrapSwitch('state', false);
 
         if (localStorage.totesInPossession) {
