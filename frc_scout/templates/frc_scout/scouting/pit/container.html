@@ -56,6 +56,12 @@
                 </div>
             </div>
             <div class="form-group">
+                <label for="team_number" class="col-lg-2 control-label">Robot Picture</label>
+                <div class="col-lg-10">
+                    <input type="file" accept="image/*" capture="camera" id="robot_image" class="form-control">
+                </div>
+            </div>
+            <div class="form-group">
                 <label for="team_name" class="col-lg-2 control-label">Team Name</label>
                 <div class="col-lg-10">
                     <input type="text" class="form-control" id="team_name" placeholder="Team Name">
@@ -223,8 +229,16 @@
 
             <br>
             <div class="form-group">
-                <div class="col-lg-10 col-lg-offset-2">
+                <div class="col-lg-2 col-lg-offset-2">
                     <button id="submit_button" type="submit" class="btn btn-lg btn-primary">Submit</button>
+                </div>
+                <div class="col-lg-8">
+                    <div class="progress" id="submit_progress" style="display: none;">
+                        <div class="progress-bar progress-bar-info" id="submit_progress_bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+                            <span class="sr-only">60% Complete</span>
+                        </div>
+                    </div>
+                    <p style="display: none;" class="failure">Image upload failed.</p>
                 </div>
             </div>
 
@@ -244,11 +258,11 @@
         });
 
         $(function() {
-           if(window.location.hash) {
-               if(!isNaN(window.location.hash.substr(1))) {
-                   $("#team_number").val(window.location.hash.substr(1));
-               }
-           }
+            if(window.location.hash) {
+                if(!isNaN(window.location.hash.substr(1))) {
+                    $("#team_number").val(window.location.hash.substr(1));
+                }
+            }
         });
 
         $(".set-indeterminate").click(function() {
@@ -258,7 +272,7 @@
         function getFormData() {
             var data = {}
 
-            $.each($("#pit_scout_form").find('input, select').not('input[type=checkbox]'), function() {
+            $.each($("#pit_scout_form").find('input, select').not('input[type=checkbox], input[type=file]'), function() {
                 if($(this).val() !== "") {
                     if(!isNaN($(this).val())) {
                         data[this.id] = parseFloat($(this).val());
@@ -277,41 +291,6 @@
             return data;
         }
 
-        function submitForm() {
-            var formData = getFormData();
-
-            if($("#team_number").val() === "") {
-                window.scrollTo(0, 1);
-                $("#required_message").show();
-                return;
-            }
-
-            if(Object.keys(getFormData()).length > 1) {
-
-                $("#submit_button").button('loading');
-
-                $.ajax({
-                    url: '{% url "frc_scout:submit_pit_scouting_data" %}',
-                    type: "POST",
-                    data: {
-                        csrfmiddlewaretoken: $.cookie('csrftoken'),
-                        data: JSON.stringify(formData)
-                    },
-                    success: function() {
-                        window.setTimeout(function() {
-                            $("#submit_button").button('reset');
-                            clearForm();
-                            window.scrollTo(0, 1);
-                            $("#success_message").show();
-                        }, 2000);
-                    }
-                })
-            } else {
-                window.scrollTo(0, 1);
-                $("#insufficient_message").show();
-            }
-        }
-
         function clearForm() {
             $.each($("#pit_scout_form").find('input, select').not('input[type=checkbox]'), function() {
                 $(this).val("");
@@ -325,6 +304,8 @@
                     .removeClass('success')
                     .addClass('primary')
                     .text("SELECT");
+
+            $(".failure").hide();
         }
 
         /*
@@ -359,6 +340,74 @@
             if(Object.keys(getFormData()).length > 0) {
                 return "You've entered data into the form. Are you sure you want to reload the page?";
             }
+        }
+
+        function submitForm() {
+            if($("#team_number").val() === "") {
+                window.scrollTo(0, 1);
+                $("#required_message").show();
+                return;
+            }
+            if(Object.keys(getFormData()).length > 1 || $("#robot_image").val() !== "") {
+
+                $("#submit_progress").show();
+                $("#submit_progress_bar").css('width', '20%');
+
+                postToImgur();
+            } else {
+                window.scrollTo(0, 1);
+                $("#insufficient_message").show();
+            }
+        }
+
+        function postToImgur() {
+            var formData = new FormData();
+            formData.append("image", $("#robot_image")[0].files[0]);
+            $.ajax({
+                url: "https://api.imgur.com/3/image",
+                type: "POST",
+                datatype: "json",
+                headers: {
+                    "Authorization": "Client-ID 74944771f93ba86"
+                },
+                data: formData,
+                success: function(response) {
+                    console.log(response);
+                    $("#submit_progress_bar").css('width', '80%');
+                    postFormData(response);
+                },
+                cache: false,
+                contentType: false,
+                processData: false
+            });
+        }
+
+        function postFormData(imageData) {
+            var formData = getFormData();
+
+
+            $("#submit_button").button('loading');
+
+            $.ajax({
+                url: '{% url "frc_scout:submit_pit_scouting_data" %}',
+                type: "POST",
+                data: {
+                    csrfmiddlewaretoken: $.cookie('csrftoken'),
+                    data: JSON.stringify(formData),
+                    image_data: JSON.stringify(imageData)
+                },
+                success: function() {
+                    $("#submit_progress_bar").css('width', '100%');
+                    window.setTimeout(function() {
+                        $("#submit_button").button('reset');
+                        clearForm();
+                        window.scrollTo(0, 1);
+                        $("#success_message").show();
+                        $("#submit_progress").hide();
+                    }, 2000);
+                }
+            })
+
         }
 
     </script>

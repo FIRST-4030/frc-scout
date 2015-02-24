@@ -170,6 +170,11 @@ class PitScoutData(models.Model):
     known_strengths = models.TextField(max_length=256, null=True)
     known_weaknesses = models.TextField(max_length=256, null=True)
 
+    # image info
+    image_id = models.TextField(max_length=256, null=True, blank=True)
+    image_link = models.TextField(max_length=256, null=True, blank=True)
+    image_type = models.TextField(max_length=64, null=True, blank=True)
+
     def __str__(self):
         rt = self.scout.get_short_name() + " | " + str(self.location.name) + " | " + str(self.team_number)
 

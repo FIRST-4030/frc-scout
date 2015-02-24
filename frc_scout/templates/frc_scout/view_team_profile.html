@@ -29,6 +29,12 @@
                     </h1>
                 </div>
                 <div class="panel-body">
+                    {% if aggregate_data.image_link %}
+                        <div style="text-align: center;">
+                            <img src="{{ aggregate_data.image_link }}" style="height: 300px;">
+                        </div>
+                        <br>
+                    {% endif %}
                     {% if aggregate_data.team_website %}
                         Website: <strong><a target="_blank" href="{{ aggregate_data.team_website }}">{{ aggregate_data.team_website }}</a></strong>
                         <br>
