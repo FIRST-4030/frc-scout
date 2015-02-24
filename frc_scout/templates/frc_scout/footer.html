@@ -10,7 +10,8 @@
         </div>
     </div>
 </footer>
-
+{% load compress %}
+{% compress css inline %}
 <style type="text/css">
     /* Sticky footer styles
 -------------------------------------------------- */
@@ -31,3 +32,4 @@
         /*background-color: #f5f5f5;*/
     }
 </style>
+{% endcompress %}
