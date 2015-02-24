@@ -37,13 +37,13 @@
 {% block main_content %}
     <h6>The team number, and any other attribute, are the only required fields here &mdash; fill out what you know.</h6>
     <div class="alert alert-success" style="display: none;" id="success_message">
-        <h6><span class="glyphicon glyphicon-check"></span>&nbsp; Data submitted successfully, you may now enter more.</h6>
+        <p><span class="glyphicon glyphicon-check"></span>&nbsp; Data submitted successfully, you may now enter more.</p>
     </div>
     <div class="alert alert-warning" style="display: none;" id="insufficient_message">
-        <h6><span class="glyphicon glyphicon-exclamation-sign"></span>&nbsp; You must enter some attribute <strong>other than team number</strong> &mdash; otherwise your data is useless!</h6>
+        <p><span class="glyphicon glyphicon-exclamation-sign"></span>&nbsp; You must enter some attribute <strong>other than team number</strong> &mdash; otherwise your data is useless!</p>
     </div>
     <div class="alert alert-warning" style="display: none;" id="required_message">
-        <h6><span class="glyphicon glyphicon-exclamation-sign"></span>&nbsp; <strong>Team number is required.</strong></h6>
+        <p><span class="glyphicon glyphicon-exclamation-sign"></span>&nbsp; <strong>Team number is required.</strong></p>
     </div>
     <form onclick="$('#success_message, #insufficient_message, #required_message').slideUp(200);" class="form-horizontal" id="pit_scout_form" onsubmit="submitForm(); return false;">
         <fieldset>
@@ -229,11 +229,11 @@
 
             <br>
             <div class="form-group">
-                <div class="col-lg-2 col-lg-offset-2">
+                <div class="col-sm-2 col-sm-offset-2">
                     <button id="submit_button" type="submit" class="btn btn-lg btn-primary">Submit</button>
                 </div>
-                <div class="col-lg-8">
-                    <div class="progress" id="submit_progress" style="display: none;">
+                <div class="col-sm-8">
+                    <div class="progress" id="submit_progress" style="display: none; margin-top: 10px;">
                         <div class="progress-bar progress-bar-info" id="submit_progress_bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
                             <span class="sr-only">60% Complete</span>
                         </div>
@@ -353,6 +353,7 @@
                 $("#submit_progress").show();
                 $("#submit_progress_bar").css('width', '20%');
 
+                $("#submit_button").button('loading');
                 postToImgur();
             } else {
                 window.scrollTo(0, 1);
@@ -384,9 +385,6 @@
 
         function postFormData(imageData) {
             var formData = getFormData();
-
-
-            $("#submit_button").button('loading');
 
             $.ajax({
                 url: '{% url "frc_scout:submit_pit_scouting_data" %}',
