@@ -173,7 +173,9 @@ def submit_pit_scouting_data(request):
         image_data = json.loads(request.POST.get('image_data'))
 
         data_object = PitScoutData(scout=request.user,
-                                   location=Location.objects.get(id=request.session.get('location_id')))
+                                   location=Location.objects.get(id=request.session.get('location_id')),
+                                   pitscout_name=request.user.get_full_name(),
+                                   pitscout_team_number=request.user.userprofile.team.team_number)
         for name in data:
             setattr(data_object, name, data.get(name))
 
@@ -181,8 +183,6 @@ def submit_pit_scouting_data(request):
             data_object.image_id = image_data['data']['id']
             data_object.image_link = image_data['data']['link']
             data_object.image_type = image_data['data']['type']
-
-        print(image_data)
 
         data_object.save()
 

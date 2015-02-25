@@ -135,6 +135,10 @@ class ContainerStack(models.Model):
 class PitScoutData(models.Model):
     scout = models.ForeignKey(User)
     location = models.ForeignKey(Location)
+
+    pitscout_name = models.TextField(null=True, blank=True)
+    pitscout_team_number = models.IntegerField(null=True, blank=True)
+
     team_number = models.IntegerField(max_length=5, verbose_name="Team Number")
     team_name = models.TextField(max_length=64, default=None, null=True, verbose_name="Team Name")
     team_website = models.TextField(max_length=128, default=None, null=True, verbose_name="Team Website")
