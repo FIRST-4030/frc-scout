@@ -286,8 +286,8 @@ function saveAndContinue(fromStage, toStage, sender) {
         var startHeight = $("#start_height").find('.active > input').data('height');
         var endHeight = $("#totes_added").find('.active > input').data('height');
 
-        $("#start_height").find('.active').removeClass('active');
-        $("#totes_added").find('.active').removeClass('active');
+        // $("#start_height").find('.active').removeClass('active');
+        // $("#totes_added").find('.active').removeClass('active');
 
         if(isNaN(startHeight) || isNaN(endHeight)) {
             errorMessage.push("Both start and end height are required.");
@@ -473,6 +473,8 @@ function saveAndContinue(fromStage, toStage, sender) {
 
         if(isNaN(matchFinalScore) && toStage !== "teleoperated") {
             errorMessage.push("Final alliance score is required.");
+        } else if((parseInt(matchFinalScore) < 0 || parseInt(matchFinalScore) > 1000) && toStage !== "teleoperated") {
+            errorMessage.push("Final alliance score must be greater than 0 and less than 1000.");
         }
 
         stageVariables = {
@@ -552,6 +554,11 @@ function submitData() {
         success: function() {
             clearPendingMatches();
 
+            $("#submit_pending").html("<span class='glyphicon glyphicon-saved'></span>&nbsp; Data submitted successfully.");
+            window.setTimeout(function() {
+                $("#submit_pending").fadeOut(500);
+            }, 2000);
+
             $("#saved").hide();
             $("#submitted").show();
             $("#deleted").hide()
@@ -579,6 +586,7 @@ function submitData() {
             $("#in_progress_message").hide();
             $("#online_message").hide();
             $("#offline_message").show();
+            $("#submit_pending").html("<span class='glyphicon glyphicon-remove'></span>&nbsp; Data submission failed, please try again later.");
         }
     });
 }
@@ -659,6 +667,13 @@ function openStage(stage) {
         $(".alliance-toggle").removeClass('active');
         if (localStorage.allianceColor) {
             $("#" + localStorage.allianceColor).addClass('active');
+        }
+
+        if(getPendingMatches().length !== 0) {
+            $("#submit_pending").show();
+            $("#submit_pending").text("Submit pending matches (" + getPendingMatches().length + ")")
+        } else {
+            $("#submit_pending").hide();
         }
     }
 
@@ -767,14 +782,26 @@ function openStage(stage) {
         if (!isNaN(localStorage.totesInPossession)) {
             $("#totes_in_possession").text(localStorage.totesInPossession);
             updatePossessionColor();
+            if(parseInt(localStorage.totesInPossession) > 0) {
+                $("#tele_stacked_totes_button").prop('disabled', false);
+            } else {
+                $("#tele_stacked_totes_button").prop('disabled', true);
+            }
         } else {
             $("#totes_in_possession").text(0);
+            $("#tele_stacked_totes_button").prop('disabled', true);
+
             updatePossessionColor();
         }
     }
 
     else if (stage === "teleoperated_stacked_totes") {
-        $("#coop_stack").bootstrapSwitch('state', false);
+
+        $("#totes_added").find('input').parent('label').attr('disabled', false);
+
+        $("#start_height").find('input').parent('label').removeClass('active');
+        $("#totes_added").find('input').parent('label').removeClass('active');
+
 
         if (localStorage.totesInPossession) {
             $("#totes_added").find('input[data-height=' + localStorage.totesInPossession + "]").parent('label').addClass('active');
@@ -950,6 +977,7 @@ $("#teleoperated_stacked_totes_image").click(function (event) {
 $("#tele_picked_up_totes_subtract_button").click(function () {
     var variables = getMatchData()['teleoperated_picked_up_totes'];
 
+
     var undoableThings = variables.undoPickedUpTotes;
 
     /*
@@ -976,6 +1004,7 @@ $("#tele_picked_up_totes_subtract_button").click(function () {
 
     $("#totes_in_possession").text(localStorage.totesInPossession);
     updatePossessionColor();
+    updateDisabledStackedTotes();
 
 });
 
@@ -1027,6 +1056,8 @@ $("#tele_stacked_totes_subtract").click(function () {
 
         setMatchDataArray('teleoperated_stacked_totes', data);
 
+        updateDisabledStackedTotes();
+
         $("#tele_stacked_totes_text").text(data.length);
     }
 });
@@ -1054,12 +1085,12 @@ $(".start-height-group-wrapper").click(function () {
 
         if (sender.data('height') > maxHeight) {
             sender.parent('label').attr('disabled', true);
+            sender.parent('label').removeClass('active');
         } else {
             sender.parent('label').attr('disabled', false);
         }
 
     })
-
 });
 
 function getPendingMatches() {
@@ -1179,3 +1210,20 @@ $("#match_number").on('keyup', function() {
     }
 
 });
+
+function updateDisabledStackedTotes() {
+    if (!isNaN(localStorage.totesInPossession)) {
+        $("#totes_in_possession").text(localStorage.totesInPossession);
+        updatePossessionColor();
+        if(parseInt(localStorage.totesInPossession) > 0) {
+            $("#tele_stacked_totes_button").prop('disabled', false);
+        } else {
+            $("#tele_stacked_totes_button").prop('disabled', true);
+        }
+    } else {
+        $("#totes_in_possession").text(0);
+        $("#tele_stacked_totes_button").prop('disabled', true);
+
+        updatePossessionColor();
+    }
+}

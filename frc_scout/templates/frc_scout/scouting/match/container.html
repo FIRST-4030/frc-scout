@@ -59,7 +59,7 @@
                 <input id="team_number" class="form-control input-x-lg background-white" placeholder="Team Number" type="number">
             </div>
         </div>
-        <div class="row" id="select_team_number" class="alliance-toggle">
+        <div class="row" id="select_team_number" class="alliance-toggle" style="display: none;">
             <div class="col-md-12">
                 <select id="select_team_number_select" class="form-control input-x-lg alliance-toggle background-white">
                     <option value="" selected="selected">Select Team</option>
@@ -93,6 +93,12 @@
             </div>
             <div class="col-sm-6">
                 <button class="btn btn-extra-high btn-primary btn-lg max-width" onclick="saveAndContinue('prematch', 'autonomous_starting_location');">autonomous &nbsp;<span class="glyphicon glyphicon-arrow-right"></span></button>
+            </div>
+        </div>
+        <Br>
+        <div class="row">
+            <div class="col-md-12">
+                <button class="btn btn-extra-high btn-warning btn-lg max-width" style="display:none;" id="submit_pending" onclick="submitData();">Attempt to submit pending matches</button>
             </div>
         </div>
     </div>
@@ -270,7 +276,7 @@
                 </div>
                 <div class="row">
                     <div class="col-xs-7">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width" onclick="saveAndContinue('teleoperated', 'teleoperated_stacked_totes');">stacked</button>
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width" id="tele_stacked_totes_button" onclick="saveAndContinue('teleoperated', 'teleoperated_stacked_totes');">stacked</button>
                     </div>
                     <div class="col-xs-3">
                         <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning max-width" id="tele_stacked_totes_subtract">&mdash;</button>
@@ -383,7 +389,7 @@
         <div class="row">
             <div class="col-md-12">
                 <h3>Totes Stacked On Top Of</h3>
-                <div class="btn-group btn-default max-width" data-toggle="buttons" id="start_height" onclick='$("#totes_added").find("input").parent("label").removeClass("active");'>
+                <div class="btn-group btn-default max-width" data-toggle="buttons" id="start_height">
                     <label class="btn btn-success btn-group-tall-6 start-height-group-wrapper">
                         <input type="radio" name="start_height_group" data-height="0"><span style="font-size: 24px; margin-top: 10px;">New<br>Stack</span>
                     </label>
@@ -555,14 +561,14 @@
         <br>
         <div class="row">
             <div class="col-md-12">
-{#                <h5><strong>Private</strong> comments about the match. <span style="color: green; font-weight: 500;">Only your team will have access to them.</span></h5>#}
+                {#                <h5><strong>Private</strong> comments about the match. <span style="color: green; font-weight: 500;">Only your team will have access to them.</span></h5>#}
                 <textarea class="form-control background-white" rows="2" id="tele_private_comments" placeholder="Private comments about the match &mdash; only your team will have access to them."></textarea>
             </div>
         </div>
         <br>
         <div class="row">
             <div class="col-md-12">
-{#                <h5><strong>Public</strong> comments about the match. <span style="color: firebrick; font-weight: 500;">Everyone will have access to them.</span></h5>#}
+                {#                <h5><strong>Public</strong> comments about the match. <span style="color: firebrick; font-weight: 500;">Everyone will have access to them.</span></h5>#}
                 <textarea class="form-control background-white" rows="2" id="tele_public_comments" placeholder="Public comments about the match &mdash; everyone will have access to them."></textarea>
             </div>
         </div>
