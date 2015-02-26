@@ -1,4 +1,5 @@
 import json
+
 from django.contrib.auth import authenticate, logout, login
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
@@ -7,13 +8,13 @@ from django.shortcuts import render
 from django.contrib import messages
 from frc_scout.models import Team, UserProfile, Location, SitePreferences
 from django.db import IntegrityError
+from frc_scout.decorators import secure_required, insecure_required
 from frc_scout_2015 import local_settings
 
 
+@insecure_required
 def index(request):
     if request.user.is_authenticated():
-
-
         context = {
             'user': request.user,
             'nav_title': "Home",
@@ -42,6 +43,7 @@ def index(request):
         return HttpResponseRedirect(reverse('frc_scout:login'))
 
 
+@secure_required
 # Cannot be named login() because it conflicts with django internally and causes an infinite loop
 def login_view(request):
 
@@ -109,6 +111,7 @@ def logout_view(request):
     return HttpResponseRedirect(reverse('frc_scout:login'))
 
 
+@secure_required
 def create_account(request):
     if request.method == "POST":
         password = request.POST.get('password')

@@ -3,10 +3,12 @@ from django.forms.models import model_to_dict
 from django.http.response import HttpResponse
 from django.shortcuts import render
 from django.db.models import Avg
+from frc_scout.decorators import insecure_required
 
 from frc_scout.models import Match, Team, PitScoutData
 
 
+@insecure_required
 @login_required
 def view_team_profile(request, team_number=None):
 

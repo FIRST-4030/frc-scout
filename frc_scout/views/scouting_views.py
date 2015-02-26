@@ -5,9 +5,11 @@ from django.http import Http404, HttpResponse
 
 
 # Match Scouting
+from frc_scout.decorators import insecure_required
 from frc_scout.models import Match, Location, ToteStack, ContainerStack, PitScoutData, MatchPrivateComments
 
 
+@insecure_required
 def match_scouting(request):
 
     context = {
@@ -17,6 +19,7 @@ def match_scouting(request):
     return render(request, 'frc_scout/scouting/match/container.html', context)
 
 
+@insecure_required
 def pit_scouting(request):
 
     context = {
@@ -27,6 +30,7 @@ def pit_scouting(request):
     return render(request, 'frc_scout/scouting/pit/container.html', context)
 
 
+@insecure_required
 def submit_match_scouting_data(request):
     if request.method != "POST":
         raise Http404
@@ -164,6 +168,7 @@ def submit_match_scouting_data(request):
             return HttpResponse(status=200)
 
 
+@insecure_required
 def submit_pit_scouting_data(request):
     if request.method != "POST":
         return HttpResponse(status=403)

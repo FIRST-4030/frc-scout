@@ -2,9 +2,11 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http.response import HttpResponse
 from django.shortcuts import render
+from frc_scout.decorators import secure_required
 
 
 @login_required
+@secure_required
 def update_profile(request):
     if request.method == "POST":
         pk = request.POST.get('pk')
@@ -25,6 +27,7 @@ def update_profile(request):
 
 
 @login_required
+@secure_required
 def update_password(request):
     context = {
         'nav_title': "Update Password",
