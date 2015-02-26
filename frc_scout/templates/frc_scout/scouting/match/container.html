@@ -3,8 +3,10 @@
 {% load staticfiles %}
 
 {% block title %}Scouting{% endblock %}
+    {% load compress %}
 
 {% block extra_css %}
+    {% compress css inline %}
     <style type="text/css">
         ::-webkit-input-placeholder { /* WebKit browsers */
             color:    #666666 !important;
@@ -21,6 +23,10 @@
             color:    #666666 !important;
         }
     </style>
+    {% endcompress %}
+    {% compress css %}
+        <link rel="stylesheet" type="text/css" href="{% static 'frc_scout/css/bootstrap-switch.min.css' %}">
+    {% endcompress %}
 {% endblock %}
 
 {% block main_content %}
@@ -652,8 +658,8 @@
 
 
 {% block extra_js %}
-    {% load compress %}
     {% compress js %}
+        <script type="text/javascript" src="{% static 'frc_scout/js/bootstrap-switch.min.js' %}"></script>
         <script type="text/javascript" src="{% static "frc_scout/js/match-scouting.js" %}"></script>
     {% endcompress %}
 {% endblock %}

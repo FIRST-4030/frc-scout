@@ -4,6 +4,12 @@
 
 {% block title %}FRC Scout - Login{% endblock %}
 
+{% block extra_css %}
+    {% compress css %}
+        <link rel="stylesheet" type="text/css" href="{% static 'frc_scout/css/twitter-typeahead.css' %}">
+    {% endcompress %}
+{% endblock %}
+
 {% block main_content %}
     <div class="row">
         <div class="col-md-6 col-md-offset-3" style="text-align: center;">
@@ -57,67 +63,68 @@
         </div>
     </footer>
     {% compress css inline %}
-    <style type="text/css">
-        /* Sticky footer style
-    -------------------------------------------------- */
-        html {
-            position: relative;
-            min-height: 100%;
-        }
-        body {
-            /* Margin bottom by footer height */
-            margin-bottom: 60px;
-        }
-        .footer {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            /* Set the fixed height of the footer here */
-            height: 60px;
-            /*background-color: #f5f5f5;*/
-        }
-    </style>
+        <style type="text/css">
+            /* Sticky footer style
+        -------------------------------------------------- */
+            html {
+                position: relative;
+                min-height: 100%;
+            }
+            body {
+                /* Margin bottom by footer height */
+                margin-bottom: 60px;
+            }
+            .footer {
+                position: absolute;
+                bottom: 0;
+                width: 100%;
+                /* Set the fixed height of the footer here */
+                height: 60px;
+                /*background-color: #f5f5f5;*/
+            }
+        </style>
     {% endcompress %}
 {% endblock %}
 
 {% block extra_js %}
+    {% compress js %}
+        <script type="text/javascript" src="{% static 'frc_scout/js/typeahead.bundle.js' %}"></script>
+    {% endcompress %}
     {% compress js inline %}
-    <script type="text/javascript">
+        <script type="text/javascript">
 
 
-        (function() {
-            $.getJSON( '{% url 'frc_scout:get_locations' %}', {
-                format: "json"
-            })
-                    .done(function( data ) {
-                        function searcher(query, cb) {
-                            var matches, substrRegex;
-                            matches = [];
-                            substrRegex = new RegExp(query, 'i');
-                            $.each(Object.keys(data), function(i, str) {
-                                if (substrRegex.test(str)) {
-                                    matches.push({value: str});
-                                }
+            (function() {
+                $.getJSON( '{% url 'frc_scout:get_locations' %}', {
+                    format: "json"
+                })
+                        .done(function( data ) {
+                            function searcher(query, cb) {
+                                var matches, substrRegex;
+                                matches = [];
+                                substrRegex = new RegExp(query, 'i');
+                                $.each(Object.keys(data), function(i, str) {
+                                    if (substrRegex.test(str)) {
+                                        matches.push({value: str});
+                                    }
+                                });
+                                cb(matches);
+                            }
+
+                            $("#location").prop('disabled', false);
+                            $("#location").prop('placeholder', "Event Location");
+
+                            $('.typeahead').typeahead({
+                                highlight: true
+                            }, {
+                                name: 'events',
+                                source: searcher
                             });
-                            cb(matches);
-                        }
-
-                        $("#location").prop('disabled', false);
-                        $("#location").prop('placeholder', "Event Location");
-
-                        $('.typeahead').typeahead({
-                            highlight: true
-                        }, {
-                            name: 'events',
-                            source: searcher
                         });
-                    });
-        })();
+            })();
+            $(function() { {% load staticfiles %}
 
-
-        $(function() { {% load staticfiles %}
-
-        });
-    </script>
+            });
+        </script>
     {% endcompress %}
 {% endblock %}
