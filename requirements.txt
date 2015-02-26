@@ -9,3 +9,4 @@ psycopg2==2.5.4
 six==1.9.0
 static3==0.5.1
 imgurpython==1.1.5
+django-sslify-admin==0.5.0

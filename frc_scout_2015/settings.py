@@ -49,6 +49,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'sslifyadmin.middleware.SSLifyAdminMiddleware',
 )
 
 ROOT_URLCONF = 'frc_scout_2015.urls'
