@@ -17,7 +17,7 @@ def view_team_profile(request, team_number=None):
 
     # oh boy here we go
     average_sections = {}
-    matches = Match.objects.filter(team_number=team_number) # only take matches for this team
+    matches = Match.objects.filter(team_number=team_number).exclude(location__name="TEST") # only take matches for this team
     # iterate over possible match fields
     for field in Match._meta.fields:
         # field_type = IntegerField, BooleanField, etc.
@@ -68,7 +68,7 @@ def view_team_profile(request, team_number=None):
             'value': value,
         })
 
-    pit_scout_data = PitScoutData.objects.filter(team_number=team_number).order_by('id')
+    pit_scout_data = PitScoutData.objects.filter(team_number=team_number).order_by('id').exclude(location__name="TEST")
 
     aggregate_data = PitScoutData(team_number=team_number)
 
