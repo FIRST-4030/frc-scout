@@ -1,0 +1,33 @@
+{% extends 'frc_scout/base.html' %}
+
+{% block title %}Connect to Database{% endblock %}
+
+{% load staticfiles %}
+
+{% block nav %}{% include 'frc_scout/nav.html' %}{% endblock %}
+
+{% block main_content %}
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><span class="glyphicon glyphicon-sort-by-attributes-alt"></span>&nbsp; Tableau</h3>
+                </div>
+                <div class="panel-body">
+                    <p>You can use <a href="http://www.tableau.com/" target="_blank">Tableau</a> (included with your Kit of Parts) to help sort your data.</p>
+                    <p>A starter file has be provided for you, which separates data by stage, incorporates some pit scouting attributes, and helps you get going with your analysis.</p>
+                    <p><strong>You may need to <a target="_blank" href="http://www.tableau.com/support/drivers">install a driver</a> to connect to a PostgreSQL database.</strong></p>
+                    <p><a href="{% static 'frc_scout/tableau/FRCscout.com_V1.1.tds' %}" class="btn btn-success"><span class="glyphicon glyphicon-download"></span> Download Scout Connector (without test data)</a></p>
+                    <p><a href="{% static 'frc_scout/tableau/FRCscout.com_V1.1_Test Data.tds' %}" class="btn btn-success"><span class="glyphicon glyphicon-download"></span> Download Scout Connector (including test data) *</a></p>
+                    <p>* This is the same connector, but with the test data left in if you want to practice analyzing your fake data.</p>
+                    <p>
+                        <strong>For more information on how to use Tableau, <a href="http://www.tableau.com/first-robotics" target="_blank">check out these fabulous resources.</a></strong>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block footer %}{% include 'frc_scout/footer.html' %}{% endblock %}

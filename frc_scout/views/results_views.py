@@ -19,3 +19,12 @@ def average_scores(request):
     }
 
     return render(request, 'frc_scout/results/average_total_score.html', context)
+
+
+@login_required
+def tableau_info(request):
+    context = {
+        'nav_title': "Integrating with Tableau",
+    }
+
+    return render(request, "frc_scout/results/tableau.html", context)

@@ -67,7 +67,9 @@
                 </div>
                 <div class="panel-body">
                     {#                    <a class="btn btn-primary btn-super" href="#">View Team Averages</a>#}
-                    <a class="btn btn-primary btn-super" href="{% url 'frc_scout:database_instructions' %}">connect to database</a>                </div>
+                    <a class="btn btn-primary btn-super" href="{% url 'frc_scout:tableau_info' %}">Integrate with Tableau</a>
+                    <a class="btn btn-primary btn-super" href="{% url 'frc_scout:database_instructions' %}">connect to database</a>
+                </div>
             </div>
         </div>
 
@@ -102,82 +104,82 @@
 {% block extra_js %}
     {% load compress %}
     {% compress js inline %}
-    <script type="text/javascript">
-        $(function() {
-            $("a[href=#]").attr('disabled', true);
+        <script type="text/javascript">
+            $(function() {
+                $("a[href=#]").attr('disabled', true);
 
-            if(getPendingMatches().length !== 0) {
-                $("#submit_pending").show();
+                if(getPendingMatches().length !== 0) {
+                    $("#submit_pending").show();
+                }
+
+                localStorage.removeItem('eventSchedule');
+
+                $.getJSON("http://www.thebluealliance.com/api/v2/event/2015{{ event_code }}/matches?X-TBA-App-Id=frc4030:frcscout.com:v1", function(data) {
+                    localStorage.eventSchedule = JSON.stringify(data);
+                });
+            });
+
+            function submitData() {
+                var pendingMatches = getPendingMatches();
+
+                $("#online_message").hide();
+                $("#in_progress_message").show();
+
+                $.ajax({
+                    url: '/scouting/match/submit/',
+                    method: "POST",
+                    data: {
+                        csrfmiddlewaretoken: $.cookie('csrftoken'),
+                        data: JSON.stringify(pendingMatches)
+                    },
+                    success: function() {
+                        clearPendingMatches();
+                        $("#submit_pending").html("<span class='glyphicon glyphicon-saved'></span>&nbsp; Data submitted successfully.");
+
+                        window.setTimeout(function() {
+                            $("#submit_pending").fadeOut(500);
+                        }, 2000);
+
+                    },
+                    error: function() {
+                        console.log("Data submission failed -- please try again.");
+                    }
+                });
             }
 
-            localStorage.removeItem('eventSchedule');
+            function getPendingMatches() {
+                var pendingMatches = [];
 
-            $.getJSON("http://www.thebluealliance.com/api/v2/event/2015{{ event_code }}/matches?X-TBA-App-Id=frc4030:frcscout.com:v1", function(data) {
-                localStorage.eventSchedule = JSON.stringify(data);
-            });
-        });
+                for (var i = 0; ; i++) {
+                    if (localStorage["match" + i.toString()]) {
+                        var match = $.parseJSON(localStorage["match" + i.toString()]);
 
-        function submitData() {
-            var pendingMatches = getPendingMatches();
-
-            $("#online_message").hide();
-            $("#in_progress_message").show();
-
-            $.ajax({
-                url: '/scouting/match/submit/',
-                method: "POST",
-                data: {
-                    csrfmiddlewaretoken: $.cookie('csrftoken'),
-                    data: JSON.stringify(pendingMatches)
-                },
-                success: function() {
-                    clearPendingMatches();
-                    $("#submit_pending").html("<span class='glyphicon glyphicon-saved'></span>&nbsp; Data submitted successfully.");
-
-                    window.setTimeout(function() {
-                        $("#submit_pending").fadeOut(500);
-                    }, 2000);
-
-                },
-                error: function() {
-                    console.log("Data submission failed -- please try again.");
-                }
-            });
-        }
-
-        function getPendingMatches() {
-            var pendingMatches = [];
-
-            for (var i = 0; ; i++) {
-                if (localStorage["match" + i.toString()]) {
-                    var match = $.parseJSON(localStorage["match" + i.toString()]);
-
-                    if(match.postmatch) {
-                        if(match.postmatch.scouting_complete === true) {
-                            pendingMatches.push(match);
+                        if(match.postmatch) {
+                            if(match.postmatch.scouting_complete === true) {
+                                pendingMatches.push(match);
+                            }
                         }
                     }
+                    else {
+                        break;
+                    }
                 }
-                else {
-                    break;
+
+                return pendingMatches;
+            }
+
+            function clearPendingMatches() {
+                for (var i = 0; ; i++) {
+                    if (localStorage["match" + i.toString()]) {
+                        localStorage.removeItem("match" + i.toString());
+                    }
+                    else {
+                        break;
+                    }
                 }
             }
 
-            return pendingMatches;
-        }
-
-        function clearPendingMatches() {
-            for (var i = 0; ; i++) {
-                if (localStorage["match" + i.toString()]) {
-                    localStorage.removeItem("match" + i.toString());
-                }
-                else {
-                    break;
-                }
-            }
-        }
-
-    </script>
+        </script>
     {% endcompress %}
 {% endblock %}
 

@@ -46,6 +46,7 @@ urlpatterns = patterns(
 
     # Results views
     url(r'^results/database/$', views.database_instructions, name='database_instructions'),
+    url(r'^results/tableau/$', views.tableau_info, name='tableau_info'),
     #url(r'^results/averages/$', views.average_scores, name='average_scores'),
 
-    )
+)
