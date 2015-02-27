@@ -2,10 +2,12 @@ import json
 
 from django.contrib.auth import authenticate, logout, login
 from django.contrib.auth.models import User
+from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
 from django.http.response import HttpResponseRedirect
 from django.shortcuts import render
 from django.contrib import messages
+from django.utils import timezone
 from frc_scout.models import Team, UserProfile, Location, SitePreferences
 from django.db import IntegrityError
 from frc_scout.decorators import secure_required, insecure_required
@@ -127,10 +129,12 @@ def create_account(request):
         last_name = request.POST.get('last_name')
         email_address = request.POST.get('email')
 
+        team_manager_request = request.POST.get('request_team_manager', False)
+
         try:
             user = User.objects.create_user(username, email_address, password, first_name=first_name, last_name=last_name)
-        except IntegrityError:
-            messages.error(request, "That username has been taken.")
+        except IntegrityError as e:
+            messages.error(request, "That username (or email address) has been taken.")
             return render(request, 'frc_scout/create_account.html')
 
         user.userprofile = UserProfile()
@@ -144,7 +148,29 @@ def create_account(request):
 
         user.userprofile.save()
 
-        messages.success(request, "Account created successfully, you may now login.")
+        if not created:
+            team_manager = \
+                User.objects.filter(userprofile__team__team_number=team_number, userprofile__team_manager=True).order_by('id')[0]
+
+            email_body = "Greetings,\n\n" \
+                         "A new user, " + user.get_full_name() + ", has registered on FRC Scout under your team.\n" \
+                         "To approve this user, go to: http://frcscout.com/manage/scouts/\n"
+
+            if team_manager_request:
+                email_body += \
+                    "This user also requested to be made a team manager - you may promote them using the same link.\n"
+
+            email_body += "\nSincerely,\n" \
+                          "Scout Bot\n\n" \
+                          "Generated " + str(timezone.now())
+
+            send_mail("New user on FRC Scout", email_body, local_settings.EMAIL_HOST_USER, [team_manager.email])
+
+        if created:
+            messages.success(request, "Account created successfully, you may now login.")
+        else:
+            messages.info(request,
+                          "Your account has been created, but must be approved by a team manager before you may login.")
         return HttpResponseRedirect(reverse("frc_scout:login"))
 
     return render(request, 'frc_scout/create_account.html')
