@@ -1,5 +1,5 @@
 //var backgroundColorRed = "rgb(255, 158, 158)";
-var backgroundColorRed = "rgba(252, 73, 73, 0.86)";
+var backgroundColorRed = "rgba(255, 131, 131, 0.862745)";
 var backgroundColorBlue = "rgb(199, 208, 255)";
 
 var schedule = null;
