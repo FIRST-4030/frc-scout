@@ -149,12 +149,16 @@ def create_account(request):
         user.userprofile.save()
 
         if not created and local_settings.SERVER_EMAIL is not None:
-            team_manager = \
-                User.objects.filter(userprofile__team__team_number=team_number, userprofile__team_manager=True).order_by('id')[0]
+            team_managers = \
+                User.objects.filter(userprofile__team__team_number=1234, userprofile__team_manager=True).values('email')
 
             email_body = "Greetings,\n\n" \
                          "A new user, " + user.get_full_name() + ", has registered on FRC Scout under your team.\n" \
                          "To approve this user, go to: http://frcscout.com/manage/scouts/\n"
+
+            manager_emails = []
+            for m in team_managers:
+                manager_emails.append(m.email)
 
             if team_manager_request:
                 email_body += \
@@ -164,7 +168,7 @@ def create_account(request):
                           "Scout Bot\n\n" \
                           "Generated " + str(timezone.now())
 
-            send_mail("New user on FRC Scout", email_body, local_settings.SERVER_EMAIL, [team_manager.email])
+            send_mail("New user on FRC Scout", email_body, local_settings.SERVER_EMAIL, manager_emails)
 
         if created:
             messages.success(request, "Account created successfully, you may now login.")
