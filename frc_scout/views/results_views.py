@@ -3,7 +3,6 @@ from django.shortcuts import render
 
 __author__ = 'Sam'
 
-@login_required
 def database_instructions(request):
     context = {
         'nav_title': "Connect to Database"
@@ -21,7 +20,6 @@ def average_scores(request):
     return render(request, 'frc_scout/results/average_total_score.html', context)
 
 
-@login_required
 def tableau_info(request):
     context = {
         'nav_title': "Integrating with Tableau",
