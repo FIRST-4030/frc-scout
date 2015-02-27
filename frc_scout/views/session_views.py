@@ -158,7 +158,7 @@ def create_account(request):
 
             manager_emails = []
             for m in team_managers:
-                manager_emails.append(m.email)
+                manager_emails.append(m['email'])
 
             if team_manager_request:
                 email_body += \
