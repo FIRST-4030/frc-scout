@@ -3,6 +3,7 @@ from django.shortcuts import render
 
 __author__ = 'Sam'
 
+
 def database_instructions(request):
     context = {
         'nav_title': "Connect to Database"
