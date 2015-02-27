@@ -150,7 +150,7 @@ def create_account(request):
 
         if not created and local_settings.SERVER_EMAIL is not None:
             team_managers = \
-                User.objects.filter(userprofile__team__team_number=1234, userprofile__team_manager=True).values('email')
+                User.objects.filter(userprofile__team__team_number=team_number, userprofile__team_manager=True).values('email')
 
             email_body = "Greetings,\n\n" \
                          "A new user, " + user.get_full_name() + ", has registered on FRC Scout under your team.\n" \
