@@ -53,7 +53,7 @@ def submit_match_scouting_data(request):
 
                 match_object = Match(scout=request.user,
                                      location=location,
-                                     scout_name=request.user.get_full_name(),
+                                     scout_name=request.user.first_name + " " + request.user.last_name[:1],
                                      scout_team_number=request.user.userprofile.team.team_number)
 
                 # PRE-MATCH
@@ -179,7 +179,7 @@ def submit_pit_scouting_data(request):
 
         data_object = PitScoutData(scout=request.user,
                                    location=Location.objects.get(id=request.session.get('location_id')),
-                                   pitscout_name=request.user.get_full_name(),
+                                   pitscout_name=request.user.first_name + " " + request.user.last_name[:1],
                                    pitscout_team_number=request.user.userprofile.team.team_number)
         for name in data:
             setattr(data_object, name, data.get(name))
