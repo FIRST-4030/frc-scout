@@ -119,19 +119,3 @@ def get_averages(request):
     }
 
     return HttpResponse(json.dumps(processed_matches))
-
-
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
