@@ -649,8 +649,8 @@ function openStage(stage) {
         window.location.hash = "prematch";
     }
 
-    if(getMatchData()) {
-        if($.isEmptyObject(getMatchData()) || getMatchData() === undefined || getMatchData() === null) {
+    if (getMatchData()) {
+        if ($.isEmptyObject(getMatchData()) || getMatchData() === undefined || getMatchData() === null) {
             window.location.hash = "prematch";
         }
     }
@@ -692,7 +692,7 @@ function openStage(stage) {
 
         $("#match_number").trigger('keyup');
 
-        if($("#select_team_number").is(':visible')) {
+        if ($("#select_team_number").is(':visible')) {
             console.log('runnnning');
             $("#select_team_number_select").find('label > span:contains(' + storedVariables.prematch.team_number + ')').parent().addClass('active');
         } else {
@@ -704,7 +704,7 @@ function openStage(stage) {
             $("#" + localStorage.allianceColor).addClass('active');
         }
 
-        if(getPendingMatches().length !== 0) {
+        if (getPendingMatches().length !== 0) {
             $("#submit_pending").show();
             $("#submit_pending").text("Submit pending matches (" + getPendingMatches().length + ")")
         } else {
@@ -748,12 +748,12 @@ function openStage(stage) {
             }
 
 
-            if(storedVariables.autonomous.autonomous_containers_unscored) {
+            if (storedVariables.autonomous.autonomous_containers_unscored) {
                 $("#auto_unscored_container_text").text(storedVariables['autonomous']['autonomous_containers_unscored'].length);
             } else {
                 $("#auto_unscored_container_text").text(0);
             }
-            if(storedVariables.autonomous.autonomous_containers_scored) {
+            if (storedVariables.autonomous.autonomous_containers_scored) {
                 $("#auto_scored_container_text").text(storedVariables['autonomous']['autonomous_containers_scored'].length);
             } else {
                 $("#auto_scored_container_text").text(0);
@@ -783,10 +783,19 @@ function openStage(stage) {
             $("#tele_stacked_totes_text").text(0);
         }
 
+        var pickedUpContainers = 0;
+
         if (storedVariables['teleoperated_picked_up_containers']) {
-            $("#tele_picked_up_containers_text").text(sumNumInDict(storedVariables['teleoperated_picked_up_containers']));
+            pickedUpContainers = sumNumInDict(storedVariables['teleoperated_picked_up_containers'])
+            $("#tele_picked_up_containers_text").text(pickedUpContainers);
         } else {
             $("#tele_picked_up_containers_text").text(0);
+        }
+
+        if (pickedUpContainers < 1) {
+            $(".tele-stacked-containers").attr('disabled', true);
+        } else {
+            $(".tele-stacked-containers").attr('disabled', false);
         }
 
         if (storedVariables['teleoperated_picked_up_containers']) {
@@ -827,7 +836,7 @@ function openStage(stage) {
         if (!isNaN(localStorage.totesInPossession)) {
             $("#totes_in_possession").text(localStorage.totesInPossession);
             updatePossessionColor();
-            if(parseInt(localStorage.totesInPossession) > 0) {
+            if (parseInt(localStorage.totesInPossession) > 0) {
                 $("#tele_stacked_totes_button").prop('disabled', false);
             } else {
                 $("#tele_stacked_totes_button").prop('disabled', true);
@@ -839,6 +848,7 @@ function openStage(stage) {
             updatePossessionColor();
         }
     }
+
 
     else if (stage === "teleoperated_stacked_totes") {
 
@@ -1074,7 +1084,15 @@ $("#tele_picked_up_containers_subtract").click(function () {
         }
     }
 
-    $("#tele_picked_up_containers_text").text(sumNumInDict(getMatchData()['teleoperated_picked_up_containers']));
+    var newTotal = sumNumInDict(getMatchData()['teleoperated_picked_up_containers']);
+
+    $("#tele_picked_up_containers_text").text(newTotal);
+
+    if(newTotal < 1) {
+        $(".tele-stacked-containers").attr('disabled', true);
+    } else {
+        $(".tele-stacked-containers").attr('disabled', false);
+    }
 });
 
 $("#tele_stacked_totes_subtract").click(function () {
