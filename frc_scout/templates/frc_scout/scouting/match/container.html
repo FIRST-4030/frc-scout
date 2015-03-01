@@ -184,43 +184,32 @@
 
             <div class="col-sm-6">
                 <h3>Containers</h3>
+
                 <div class="row">
                     <div class="col-xs-8">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="auto-acquired-step-container" data-operation="add">Acquired From Step</button>
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" onclick="saveAndContinue('autonomous', 'autonomous_containers_unscored');">Unscored</button>
                     </div>
                     <div class="col-xs-2">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning btn-add-subtract" data-name="auto-acquired-step-container" data-operation="subtract" data-affect="moved_to_zone">&mdash;</button>
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning btn-add-subtract auto-container-undo" data-affect="autonomous_containers_unscored">&mdash;</button>
                     </div>
                     <div class="col-xs-2 text-center">
-                        <h4 class="button-state-text" id="auto-acquired-step-container-text" data-max="4">0</h4>
+                        <h4 class="button-state-text" data-field="autonomous_containers_unscored" id="auto_unscored_container_text">0</h4>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-xs-8">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="auto-acquired-ground-container" data-operation="add">Acquired From Ground</button>
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" onclick="saveAndContinue('autonomous', 'autonomous_containers_scored');">Scored</button>
                     </div>
                     <div class="col-xs-2">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning btn-add-subtract" data-name="auto-acquired-ground-container" data-operation="subtract" data-affect="moved_to_zone">&mdash;</button>
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning btn-add-subtract auto-container-undo" data-affect="autonomous_containers_scored">&mdash;</button>
                     </div>
                     <div class="col-xs-2 text-center">
-                        <h4 class="button-state-text" id="auto-acquired-ground-container-text" data-max="3">0</h4>
+                        <h4 class="button-state-text" data-field="autonomous_containers_scored" id="auto_scored_container_text">0</h4>
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="col-xs-8">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="auto-moved-container" data-operation="add">Moved To Zone</button>
-                    </div>
-                    <div class="col-xs-2">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning btn-add-subtract" data-name="auto-moved-container" data-operation="subtract">&mdash;</button>
-                    </div>
-                    <div class="col-xs-2 text-center">
-                        <h4 class="button-state-text" id="auto-moved-container-text" data-max="7">0</h4>
-                    </div>
-                </div>
-
-                <div class="row" style="margin-top:10px;">
+                <div class="row" style="margin-top:20px;">
                     <div class="col-xs-7">
                         <span class='btn-lg-text'>ROBOT ENDED IN AUTO ZONE</span>
                     </div>
@@ -242,6 +231,36 @@
 
             <div class="col-sm-4">
                 <button style="margin-top: -10px; margin-bottom: 5px; height: 75px;" class="btn btn-extra-high btn-primary btn-lg max-width" onclick="saveAndContinue('autonomous', 'teleoperated');">teleoperated  &nbsp;<span class="glyphicon glyphicon-arrow-right"></span></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- AUTONOMOUS CONTAINERS UNSCORED -->
+    <div class="container-fluid stage" id="autonomous_containers_unscored" style="display: none;">
+        <div class="row">
+            <div class="col-md-12" style="margin-top: 2vh;">
+                <button id="auto_ground_acquired_containers" onclick="saveAndContinue('autonomous_containers_unscored', 'autonomous', this);" class="btn btn-lg btn-warning max-width" style="height: 35vh; margin-top: 1vh; margin-bottom: 1vh; font-size: 30px;">From Ground</button>
+            </div>
+            <div class="col-md-12">
+                <button id="auto_center_acquired_containers" onclick="saveAndContinue('autonomous_containers_unscored', 'autonomous', this);" class="btn btn-lg btn-danger max-width" style="height: 35vh; margin-top: 1vh; margin-bottom: 1vh; font-size: 30px;">From Center</button>
+            </div>
+            <div class="col-md-12">
+                <button class="btn btn-lg btn-info max-width" style="margin-top: 3vh; height: 10vh;" onclick="discardAndChangeStage('autonomous_containers_unscored', 'autonomous');"><span class="glyphicon glyphicon-arrow-left"></span>&nbsp; autONOMOUS</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- AUTONOMOUS CONTAINERS SCORED -->
+    <div class="container-fluid stage" id="autonomous_containers_scored" style="display: none;">
+        <div class="row">
+            <div class="col-md-12" style="margin-top: 2vh;">
+                <button id="auto_ground_acquired_containers" onclick="saveAndContinue('autonomous_containers_scored', 'autonomous', this);" class="btn btn-lg btn-warning max-width" style="height: 35vh; margin-top: 1vh; margin-bottom: 1vh; font-size: 30px;">From Ground</button>
+            </div>
+            <div class="col-md-12">
+                <button id="auto_center_acquired_containers" onclick="saveAndContinue('autonomous_containers_scored', 'autonomous', this);" class="btn btn-lg btn-danger max-width" style="height: 35vh; margin-top: 1vh; margin-bottom: 1vh; font-size: 30px;">From Center</button>
+            </div>
+            <div class="col-md-12">
+                <button class="btn btn-lg btn-info max-width" style="margin-top: 3vh; height: 10vh;" onclick="discardAndChangeStage('autonomous_containers_scored', 'autonomous');"><span class="glyphicon glyphicon-arrow-left"></span>&nbsp; autONOMOUS</button>
             </div>
         </div>
     </div>
@@ -342,7 +361,7 @@
                         <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="tele_placed_in_container_litter" data-operation="add">in container</button>
                     </div>
                     <div class="col-xs-3">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning max-width btn-add-subtract" data-name="tele_placed_in_container_litter" data-operatio="subtract">&mdash;</button>
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning max-width btn-add-subtract" data-name="tele_placed_in_container_litter" data-operation="subtract">&mdash;</button>
                     </div>
                     <div class="col-xs-2">
                         <h4 class="button-state-text three-column" id="tele_placed_in_container_litter-text" data-max="7">0</h4>

@@ -125,13 +125,13 @@ function saveAndContinue(fromStage, toStage, sender) {
     var userCorrectionRequired = true;
 
     // no variables for now
-    var stageVariables = undefined;
+    var stageVariables;
 
     /**
      * FROM STAGES
      **/
 
-    if(fromStage == "prematch") {
+    if(fromStage === "prematch") {
         var teamNumber;
 
         if($("#team_number").is(':visible')) {
@@ -160,7 +160,7 @@ function saveAndContinue(fromStage, toStage, sender) {
         };
     }
 
-    else if(fromStage == "autonomous_starting_location") {
+    else if(fromStage === "autonomous_starting_location") {
         stageVariables = {
             auto_start_x: xPosition,
             auto_start_y: yPosition
@@ -171,34 +171,74 @@ function saveAndContinue(fromStage, toStage, sender) {
         }
     }
 
-    else if(fromStage == "autonomous") {
+    else if(fromStage === "autonomous") {
         // totes
         var autoStackedYellowTotes = parseInt($("#auto-stacked-yellow-tote-text").text());
         var autoMovedYellowTotes = parseInt($("#auto-moved-yellow-tote-text").text());
         var autoAcquiredGreyTotes = parseInt($("#auto-acquired-grey-tote-text").text());
 
-        // containers
-        var autoAcquiredStepContainers = parseInt($("#auto-acquired-step-container-text").text());
-        var autoAcquiredGroundContainers = parseInt($("#auto-acquired-ground-container-text").text());
-        var autoMovedContainers = parseInt($("#auto-moved-container-text").text());
+        if(storedVariables['autonomous']) {
+            stageVariables = storedVariables['autonomous'];
+        } else {
+            stageVariables = {};
+        }
 
-        stageVariables = {
-            auto_yellow_stacked_totes: autoStackedYellowTotes,
-            auto_yellow_moved_totes: autoMovedYellowTotes,
-            auto_grey_acquired_totes: autoAcquiredGreyTotes,
+        stageVariables['auto_yellow_stacked_totes'] = autoStackedYellowTotes;
+        stageVariables['auto_yellow_moved_totes'] = autoMovedYellowTotes;
+        stageVariables['auto_grey_acquired_totes'] = autoAcquiredGreyTotes;
+        stageVariables['auto_moved_to_auto_zone'] = $("#auto_moved_to_alliance_zone").bootstrapSwitch('state');
+    }
 
-            auto_step_center_acquired_containers: autoAcquiredStepContainers,
-            auto_ground_acquired_containers: autoAcquiredGroundContainers,
-            auto_moved_containers: autoMovedContainers,
-            auto_moved_to_auto_zone: $("#auto_moved_to_alliance_zone").bootstrapSwitch('state')
-        };
+    else if(fromStage === "autonomous_containers_unscored" || fromStage === "autonomous_containers_scored") {
+        var id = sender.id;
 
-        $.each(stageVariables, function(index, variable) {
-            if(isNaN(variable)) {
-                errorMessage.push("One or more of your variables are not numbers, what are you doing?");
-                return false;
+        var autoVariables = storedVariables['autonomous'];
+
+        // assume 1 if nothing else because they obviously did something to get here
+        var numberOfThings = 1;
+
+        // if there's already data then set it to that
+        if(autoVariables[id]) {
+            numberOfThings = autoVariables[id] + 1;
+        }
+
+        stageVariables = autoVariables;
+
+        stageVariables[id] = numberOfThings;
+
+        /*
+         UNDOING THINGS
+         */
+
+        var scoredContainers = 0;
+
+        var thingToUndo = "autonomous_containers_unscored";
+
+        if(fromStage === "autonomous_containers_scored") {
+            if(autoVariables['auto_moved_containers']) {
+                scoredContainers = autoVariables['auto_moved_containers'];
             }
-        });
+
+            console.log("from scored");
+
+            thingToUndo = "autonomous_containers_scored";
+            stageVariables['auto_moved_containers'] = scoredContainers + 1;
+        }
+
+        var newThingsToUndo;
+
+        if(autoVariables[thingToUndo]) {
+            newThingsToUndo = autoVariables[thingToUndo];
+        } else {
+            newThingsToUndo = [];
+        }
+
+        newThingsToUndo.push(id);
+
+        stageVariables[thingToUndo] = newThingsToUndo;
+
+        // hacky
+        fromStage = "autonomous";
     }
 
     else if(fromStage === "autonomous_fouls_and_other") {
@@ -487,25 +527,19 @@ function saveAndContinue(fromStage, toStage, sender) {
         };
     }
 
-// show alerts and bail if they exist
+    // show alerts and bail if they exist
     if(errorMessage.length !== 0) {
         showErrorMessages(errorMessage, userCorrectionRequired);
         return;
     }
 
-// otherwise hide any active alerts
+    // otherwise hide any active alerts
     $("#alert").hide();
 
-// append our current values to the array that we get
-    storedVariables[fromStage] = stageVariables;
+    // push it back to localStorage
+    setMatchDataArray(fromStage, stageVariables);
 
-// push it back to localStorage
-    localStorage['match' + localStorage.pageMatchID] = JSON.stringify(storedVariables);
-
-// hide our current stage
-    $("#" + fromStage).hide();
-
-// change hash triggering the next stage to show
+    // change hash triggering the next stage to show
     window.location.hash = toStage;
 }
 
@@ -693,9 +727,7 @@ function openStage(stage) {
             $("#auto-acquired-grey-tote-text").text(storedVariables.autonomous.auto_grey_acquired_totes);
 
             // containers
-            $("#auto-acquired-step-container-text").text(storedVariables.autonomous.auto_step_center_acquired_containers);
-            $("#auto-acquired-ground-container-text").text(storedVariables.autonomous.auto_ground_acquired_containers);
-            $("#auto-moved-container-text").text(storedVariables.autonomous.auto_moved_containers);
+
 
         } catch (e) {
             $("#auto-stacked-yellow-tote-text").text(0);
@@ -703,17 +735,29 @@ function openStage(stage) {
             $("#auto-acquired-grey-tote-text").text(0);
 
             // containers
-            $("#auto-acquired-step-container-text").text(0);
-            $("#auto-acquired-ground-container-text").text(0);
-            $("#auto-moved-container-text").text(0);
+            $("#auto_unscored_container_text").text(0);
+            $("#auto_scored_container_text").text(0);
         }
+
 
         if (storedVariables.autonomous) {
             if (storedVariables.autonomous.auto_moved_to_auto_zone) {
                 $("#auto_moved_to_alliance_zone").bootstrapSwitch('state', true);
+            } else {
+                $("#auto_moved_to_alliance_zone").bootstrapSwitch('state', false);
             }
-        } else {
-            $("#auto_moved_to_alliance_zone").bootstrapSwitch('state', false);
+
+
+            if(storedVariables.autonomous.autonomous_containers_unscored) {
+                $("#auto_unscored_container_text").text(storedVariables['autonomous']['autonomous_containers_unscored'].length);
+            } else {
+                $("#auto_unscored_container_text").text(0);
+            }
+            if(storedVariables.autonomous.autonomous_containers_scored) {
+                $("#auto_scored_container_text").text(storedVariables['autonomous']['autonomous_containers_scored'].length);
+            } else {
+                $("#auto_scored_container_text").text(0);
+            }
         }
     }
 
@@ -1228,3 +1272,19 @@ function updateDisabledStackedTotes() {
         updatePossessionColor();
     }
 }
+
+$(".auto-container-undo").click(function() {
+    var sender = $(this);
+
+    var affected = sender.data('affect');
+
+    if(getMatchData()['autonomous'][affected]) {
+        var affectedArray = getMatchData()['autonomous'][affected];
+
+        if(affected.length > 0) {
+            affectedArray.pop();
+            setMatchData('autonomous', affected, affectedArray);
+            $("[data-field=" + affected).text(affectedArray.length);
+        }
+    }
+});
