@@ -1,5 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.db.models.aggregates import Avg, Count, Sum
+from django.forms.models import model_to_dict
 from django.http.response import Http404, HttpResponse
 from django.shortcuts import render
 from frc_scout.models import Location, Match
@@ -77,6 +79,7 @@ def update_scouts(request):
 def find_match(request):
     if not request.user.userprofile.team_manager:
         return HttpResponse(status=403)
+
     context = {
         'nav_title': "Find Match",
         'locations': Location.objects.all().order_by('name')
@@ -94,6 +97,62 @@ def find_match(request):
             matches = Match.objects.filter(scout__userprofile__team__team_number=request.user.userprofile.team.team_number,
                                            team_number=team_number, location__id=location_id)
 
-        context['matches'] = matches
+        processed_matches = []
+
+        for match in matches:
+            auto_score = 0
+
+            # multiply by point value, divide by robots per alliance
+
+            if match.auto_moved_to_auto_zone is not None:
+                auto_score += (match.auto_moved_to_auto_zone / 3 * 4)
+
+            if match.auto_yellow_moved_totes is not None:
+                auto_score += (match.auto_yellow_moved_totes / 3 * 6)
+
+            if match.auto_moved_containers is not None:
+                auto_score += (match.auto_moved_containers / 3 * 8)
+
+            if match.auto_yellow_stacked_totes is not None:
+                auto_score += (match.auto_yellow_stacked_totes / 3 * 20)
+
+            tele_score = 0
+
+            # worth 2 per tote stacked
+            if match.totestack_set.count() > 0:
+                tele_score += match.totestack_set.aggregate(Sum('totes_added'))['totes_added__sum'] * 2
+
+            if match.containerstack_set.count() > 0:
+                tele_score += match.containerstack_set.aggregate(Sum('height'))['height__sum'] * 4
+
+            processed_matches.append({
+                'scout': match.scout,
+                'id': match.id,
+                'match_number': match.match_number,
+                'match_final_score': match.match_final_score,
+                'auto_score': int(auto_score),
+                'tele_score': int(tele_score),
+                'timestamp': match.timestamp,
+            })
+
+        context['matches'] = processed_matches
 
     return render(request, 'frc_scout/manage/find_match.html', context)
+
+
+@login_required
+def edit_match(request, match_id=None):
+    if not request.user.userprofile.team_manager:
+        return HttpResponse(status=403)
+
+    try:
+        match = Match.objects.get(id=match_id)
+    except Match.DoesNotExist:
+        raise Http404
+
+    context = {
+        'nav_title': "Edit Match",
+        'match': match,
+    }
+
+    return render(request, 'frc_scout/manage/edit_match.html', context)

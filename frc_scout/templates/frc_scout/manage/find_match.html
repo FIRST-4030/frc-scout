@@ -8,14 +8,6 @@
 
 {% load compress %}
 
-{% block extra_css %}
-    <style type="text/css">
-        .twitter-typeahead {
-            width: 100%;
-        }
-    </style>
-{% endblock %}
-
 {% block main_content %}
     <div class="row">
         <div class="col-md-10 col-md-offset-1">
@@ -66,6 +58,10 @@
                             <tr>
                                 <th>Scout Name</th>
                                 <th>Match Number</th>
+                                <th>Timestamp</th>
+                                <th>Auto Score</th>
+                                <th>Tele Score</th>
+                                <th>Alliance Score</th>
                                 <th>Actions</th>
                             </tr>
                             </thead>
@@ -74,7 +70,11 @@
                                 <tr>
                                     <td>{{ match.scout.get_full_name }}</td>
                                     <td>{{ match.match_number }}</td>
-                                    <td><a href="#">Edit Data</a></td>
+                                    <td>{{ match.timestamp|date:"N j, P" }}</td>
+                                    <td>{{ match.auto_score }}</td>
+                                    <td>{{ match.tele_score }}</td>
+                                    <td>{{ match.match_final_score }}</td>
+                                    <td><a href="{% url 'frc_scout:edit_match' match_id=match.id %}">Edit Data</a></td>
                                 </tr>
                             {% endfor %}
                             </tbody>
@@ -82,48 +82,11 @@
 
                     </div>
                 </div>
+            {% elif request.GET %}
+                <h3>No matches found for specified filters.</h3>
             {% endif %}
         </div>
     </div>
-{% endblock %}
-
-{% block extra_js %}
-    {% load compress %}
-    {% compress js %}
-        <script type="text/javascript" src="{% static 'frc_scout/js/typeahead.bundle.js' %}"></script>
-    {% endcompress %}
-    {% compress js inline %}
-        <script type="text/javascript">
-            (function() {
-                $.getJSON( '{% url 'frc_scout:get_locations' %}', {
-                    format: "json"
-                })
-                        .done(function( data ) {
-                            function searcher(query, cb) {
-                                var matches, substrRegex;
-                                matches = [];
-                                substrRegex = new RegExp(query, 'i');
-                                $.each(Object.keys(data), function(i, str) {
-                                    if (substrRegex.test(str)) {
-                                        matches.push({value: str});
-                                    }
-                                });
-                                cb(matches);
-                            }
-
-                            $("#location").prop('disabled', false);
-                            $("#location").prop('placeholder', "Event Location");
-
-                            $('.typeahead').typeahead({
-                                highlight: true
-                            }, {
-                                name: 'events',
-                                source: searcher
-                            });
-                        });
-            })();
-        </script>
-    {% endcompress %}
 {% endblock %}
 
 {% block footer %}{% include 'frc_scout/footer.html' %}{% endblock %}

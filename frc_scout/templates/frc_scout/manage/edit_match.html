@@ -1,0 +1,58 @@
+{% extends 'frc_scout/base.html' %}
+
+{% load staticfiles %}
+
+{% block title %}Edit Match{% endblock %}
+
+{% block nav %}{% include 'frc_scout/nav.html' %}{% endblock %}
+
+{% load compress %}
+
+{% block main_content %}
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <div class="panel panel-warning">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Editing match <strong>{{ match.match_number }}</strong> for team <strong>{{ match.team_number }}</strong> in <strong>{{ match.location.name }}</strong></h3>
+                </div>
+                <div class="panel-body">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>Autonomous</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>Yellow Stacked Totes</td>
+                            <td>{{ match.auto_yellow_stacked_totes }}</td>
+                        </tr>
+                        <tr>
+                            <td>Yellow Moved Totes</td>
+                            <td>{{ match.auto_yellow_moved_totes }}</td>
+                        </tr>
+                        <tr>
+                            <td>Grey Acquired Totes</td>
+                            <td>{{ match.auto_grey_acquired_totes }}</td>
+                        </tr>
+                        <tr>
+                            <td>Step/Center Acquired Containers</td>
+                            <td>{{ match.auto_step_center_acquired_containers }}</td>
+                        </tr>
+                        <tr>
+                            <td>Ground Acquired Containers</td>
+                            <td>{{ match.auto_ground_acquired_containers }}</td>
+                        </tr>
+                        <tr>
+                            <td>Moved Containers</td>
+                            <td>{{ match.auto_moved_containers }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block footer %}{% include 'frc_scout/footer.html' %}{% endblock %}

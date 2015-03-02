@@ -26,6 +26,7 @@ urlpatterns = patterns(
     url(r'^manage/scouts/$', views.view_scouts, name='view_scouts'),
     url(r'^manage/scouts/update/$', views.update_scouts, name='update_scouts'),
     url(r'^manage/find_match/$', views.find_match, name='find_match'),
+    url(r'^manage/edit_match/(?P<match_id>[0-9]+)/$', views.edit_match, name='edit_match'),
 
     # Account views
     url(r'^account/profile/$', views.update_profile, name='update_profile'),
@@ -48,6 +49,5 @@ urlpatterns = patterns(
     # Results views
     url(r'^results/database/$', views.database_instructions, name='database_instructions'),
     url(r'^results/tableau/$', views.tableau_info, name='tableau_info'),
-    #url(r'^results/averages/$', views.average_scores, name='average_scores'),
 
 )
