@@ -1,15 +1,14 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.contrib.sessions.models import Session
 from django.http.response import Http404, HttpResponse
 from django.shortcuts import render
-from django.utils import timezone
+from frc_scout.models import Location, Match
 
 
 @login_required
 def view_scouts(request):
     if not request.user.userprofile.team_manager:
-        raise Http404
+        return HttpResponse(status=403)
 
     team = request.user.userprofile.team
 
@@ -33,7 +32,7 @@ def view_scouts(request):
 @login_required
 def update_scouts(request):
     if not request.user.userprofile.team_manager:
-        raise Http404
+        return HttpResponse(status=403)
 
     if request.method == "POST":
 
@@ -72,3 +71,29 @@ def update_scouts(request):
         return HttpResponse(status=200)
 
     raise Http404
+
+
+@login_required
+def find_match(request):
+    if not request.user.userprofile.team_manager:
+        return HttpResponse(status=403)
+    context = {
+        'nav_title': "Find Match",
+        'locations': Location.objects.all().order_by('name')
+    }
+
+    if request.GET:
+        team_number = request.GET.get('team_number', None)
+        match_number = request.GET.get('match_number', None)
+        location_id = request.GET.get('location', None)
+
+        if match_number is not None and match_number != "":
+            matches = Match.objects.filter(scout__userprofile__team__team_number=request.user.userprofile.team.team_number,
+                                           team_number=team_number, match_number=match_number, location__id=location_id)
+        else:
+            matches = Match.objects.filter(scout__userprofile__team__team_number=request.user.userprofile.team.team_number,
+                                           team_number=team_number, location__id=location_id)
+
+        context['matches'] = matches
+
+    return render(request, 'frc_scout/manage/find_match.html', context)

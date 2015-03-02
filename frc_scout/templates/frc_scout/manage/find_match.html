@@ -1,0 +1,129 @@
+{% extends 'frc_scout/base.html' %}
+
+{% load staticfiles %}
+
+{% block title %}Search Matches{% endblock %}
+
+{% block nav %}{% include 'frc_scout/nav.html' %}{% endblock %}
+
+{% load compress %}
+
+{% block extra_css %}
+    <style type="text/css">
+        .twitter-typeahead {
+            width: 100%;
+        }
+    </style>
+{% endblock %}
+
+{% block main_content %}
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Search for match to change</h3>
+                </div>
+                <div class="panel-body">
+                    <form role="form" method="get">
+                        <div class="form-group">
+                            <label for="team_number" class="col-lg-3 control-label">Scouted Team Number</label>
+                            <div class="col-lg-9">
+                                <input placeholder="Team Number" type="number" class="form-control" name="team_number" id="team_number" value="{{ request.GET.team_number }}" required="true">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="match_number" class="col-lg-3 control-label">Match Number</label>
+                            <div class="col-lg-9">
+                                <input type="number" placeholder="Match Number" class="form-control" name="match_number" id="match_number" value="{{ request.GET.match_number }}">
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="location" class="col-lg-3 control-label">Location</label>
+                            <div class="col-lg-9">
+                                <select name="location" id="location" class="form-control">
+                                    {% for location in locations %}
+                                        <option value="{{ location.id }}" {% if request.GET.location|floatformat == location.id|floatformat or request.session.location_id == location.id and not request.GET.location %} selected{% endif %}>{{ location.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <button style="margin-top: 15px;" class="btn btn-info form-control">Submit</button>
+                    </form>
+                </div>
+            </div>
+            {% if matches %}
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Match results for team {{ request.GET.team_number }}</h3>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>Scout Name</th>
+                                <th>Match Number</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for match in matches %}
+                                <tr>
+                                    <td>{{ match.scout.get_full_name }}</td>
+                                    <td>{{ match.match_number }}</td>
+                                    <td><a href="#">Edit Data</a></td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+    {% load compress %}
+    {% compress js %}
+        <script type="text/javascript" src="{% static 'frc_scout/js/typeahead.bundle.js' %}"></script>
+    {% endcompress %}
+    {% compress js inline %}
+        <script type="text/javascript">
+            (function() {
+                $.getJSON( '{% url 'frc_scout:get_locations' %}', {
+                    format: "json"
+                })
+                        .done(function( data ) {
+                            function searcher(query, cb) {
+                                var matches, substrRegex;
+                                matches = [];
+                                substrRegex = new RegExp(query, 'i');
+                                $.each(Object.keys(data), function(i, str) {
+                                    if (substrRegex.test(str)) {
+                                        matches.push({value: str});
+                                    }
+                                });
+                                cb(matches);
+                            }
+
+                            $("#location").prop('disabled', false);
+                            $("#location").prop('placeholder', "Event Location");
+
+                            $('.typeahead').typeahead({
+                                highlight: true
+                            }, {
+                                name: 'events',
+                                source: searcher
+                            });
+                        });
+            })();
+        </script>
+    {% endcompress %}
+{% endblock %}
+
+{% block footer %}{% include 'frc_scout/footer.html' %}{% endblock %}

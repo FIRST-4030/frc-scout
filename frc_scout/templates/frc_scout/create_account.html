@@ -12,10 +12,12 @@
                     <input type="number" class="form-control" placeholder="Team Number" name="team_number" id="team_number" required>
                     <div class="alert alert-success" style="display: none; margin-top: 10px;" id="team_exists">
                         <span class="glyphicon glyphicon-check"></span><strong> Your team is already registered.</strong> Your account will require approval by a team manager, please get in touch with your scout leader.
-                        <label style="margin-top: 10px;">
-                            <input type="checkbox" id="request_team_manager" name="request_team_manager" style="margin-right: 5px;">
-                            Request to be made a team manager
-                        </label>
+                        <div class="checkbox">
+                            <label style="margin-top: 10px;">
+                                <input type="checkbox" id="request_team_manager" name="request_team_manager" style="margin-right: 5px;">
+                                Request to be made a team manager
+                            </label>
+                        </div>
                     </div>
                     <div class="alert alert-warning" style="display: none; margin-top: 10px;" id="team_does_not_exist">
                         <span class="glyphicon glyphicon-info-sign"></span><strong> Your team is not yet registered. </strong> Your account will be considered the "team manager" account. From it you will be able to manage your team's scouts.
