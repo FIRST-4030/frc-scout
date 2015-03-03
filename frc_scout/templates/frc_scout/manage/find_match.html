@@ -58,6 +58,7 @@
                             <thead>
                             <tr>
                                 <th>Scout Name</th>
+                                <th>Team Number</th>
                                 <th>Match Number</th>
                                 <th>Timestamp</th>
                                 <th>Auto Score</th>
@@ -70,6 +71,7 @@
                             {% for match in matches %}
                                 <tr>
                                     <td>{{ match.scout.get_full_name }}</td>
+                                    <td>{{ match.team_number }}</td>
                                     <td>{{ match.match_number }}</td>
                                     <td>{{ match.timestamp|date:"N j, P" }}</td>
                                     <td>{{ match.auto_score }}</td>

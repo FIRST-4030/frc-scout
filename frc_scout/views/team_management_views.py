@@ -4,7 +4,7 @@ from django.db.models.aggregates import Avg, Count, Sum
 from django.forms.models import model_to_dict
 from django.http.response import Http404, HttpResponse
 from django.shortcuts import render
-from frc_scout.models import Location, Match
+from frc_scout.models import Location, Match, ToteStack, ContainerStack
 
 
 @login_required
@@ -129,13 +129,14 @@ def find_match(request):
 
             processed_matches.append({
                 'scout': match.scout,
+                'team_number': match.team_number,
                 'id': match.id,
                 'match_number': match.match_number,
                 'match_final_score': match.match_final_score,
                 'auto_score': int(auto_score),
                 'tele_score': int(tele_score),
                 'timestamp': match.timestamp,
-            })
+                })
 
         context['matches'] = processed_matches
 
@@ -155,6 +156,7 @@ def edit_match(request, match_id=None):
     context = {
         'nav_title': "Edit Match",
         'match': match,
+        'totestacks': match.totestack_set
     }
 
     return render(request, 'frc_scout/manage/edit_match.html', context)
@@ -167,30 +169,99 @@ def edit_match_post(request):
     if not request.user.userprofile.team_manager:
         return HttpResponse(status=403)
 
-    if request.POST['editable']:
+    if request.POST.get('editable', False):
         name = request.POST.get('name')
         pk = request.POST.get('pk')
 
-        try:
-            match = Match.objects.get(id=pk)
+        if request.POST.get('match', False):
+            try:
+                match = Match.objects.get(id=pk)
 
-            if match.scout.userprofile.team.team_number != request.user.userprofile.team.team_number:
+                if match.scout.userprofile.team.team_number != request.user.userprofile.team.team_number:
+                    return HttpResponse(status=403)
+
+            except Match.DoesNotExist:
+                return HttpResponse(status=400)
+
+            if not request.POST.get('boolean', False):
+                value = request.POST.get('value')
+                setattr(match, name, value)
+
+            else:
+                current = model_to_dict(match)[name]
+                setattr(match, name, not current)
+
+            try:
+                match.save()
+            except ValueError:
+                return HttpResponse("Field cannot be blank.", status=400)
+
+        elif request.POST.get('totestack', False):
+            try:
+                totestack = ToteStack.objects.get(id=pk)
+
+                if totestack.match.scout.userprofile.team.team_number != request.user.userprofile.team.team_number:
+                    return HttpResponse(status=403)
+
+            except ToteStack.DoesNotExist:
+                return HttpResponse(status=400)
+
+            if not request.POST.get('boolean', False):
+                value = request.POST.get('value')
+                setattr(totestack, name, value)
+
+            else:
+                current = model_to_dict(totestack)[name]
+                setattr(totestack, name, not current)
+
+            try:
+                totestack.save()
+            except ValueError:
+                return HttpResponse("Field cannot be blank.", status=400)
+
+        elif request.POST.get('containerstack', False):
+            try:
+                containerstack = ContainerStack.objects.get(id=pk)
+
+                if containerstack.match.scout.userprofile.team.team_number != request.user.userprofile.team.team_number:
+                    return HttpResponse(status=403)
+
+            except ToteStack.DoesNotExist:
+                return HttpResponse(status=400)
+
+            if not request.POST.get('boolean', False):
+                value = request.POST.get('value')
+                setattr(containerstack, name, value)
+
+            else:
+                current = model_to_dict(containerstack)[name]
+                setattr(containerstack, name, not current)
+
+            try:
+                containerstack.save()
+            except ValueError:
+                return HttpResponse("Field cannot be blank.", status=400)
+
+    elif request.POST.get('totestack_location', False):
+        id = request.POST.get('id', None)
+
+        try:
+            totestack = ToteStack.objects.get(id=id)
+
+            if totestack.match.scout.userprofile.team.team_number != request.user.userprofile.team.team_number:
                 return HttpResponse(status=403)
 
-        except Match.DoesNotExist:
+        except ToteStack.DoesNotExist:
             return HttpResponse(status=400)
 
-        if not request.POST.get('boolean', False):
-            value = request.POST.get('value')
-            setattr(match, name, value)
-
-        else:
-            current = model_to_dict(match)[name]
-            setattr(match, name, not current)
-
         try:
-            match.save()
+            totestack.x = request.POST.get('x')
+            totestack.y = request.POST.get('y')
+            totestack.save()
         except ValueError:
             return HttpResponse("Field cannot be blank.", status=400)
 
         return HttpResponse("success!", status=200)
+
+    else:
+        return HttpResponse(status=400)
