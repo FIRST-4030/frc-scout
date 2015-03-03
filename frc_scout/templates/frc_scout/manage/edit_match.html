@@ -24,7 +24,7 @@
                 </div>
                 <div class="panel-body">
                     <h4>Scout: <strong>{{ match.scout.get_full_name }}</strong></h4>
-                    <p><i>Click on information to change.</i></p>
+                    <p><i>Click on information to edit.</i></p>
                     <table class="table table-striped">
                         <thead>
                         <tr>
@@ -279,7 +279,8 @@
                         'editable': 'editable',
                         'name': name,
                         'pk': pk,
-                        'boolean': true
+                        'boolean': true,
+                        'match': true
                     },
                     error: function(response) {
                         if(response.statusCode() === 400) {

@@ -242,6 +242,8 @@ def edit_match_post(request):
             except ValueError:
                 return HttpResponse("Field cannot be blank.", status=400)
 
+        return HttpResponse(status=200)
+
     elif request.POST.get('totestack_location', False):
         id = request.POST.get('id', None)
 
