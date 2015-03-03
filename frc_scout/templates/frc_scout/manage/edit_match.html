@@ -8,6 +8,13 @@
 
 {% load compress %}
 
+{% block extra_css %}
+    {% compress css %}
+        <link rel="stylesheet" type="text/css" href="{% static 'frc_scout/css/bootstrap-editable.css' %}">
+    {% endcompress %}
+{% endblock %}
+
+
 {% block main_content %}
     <div class="row">
         <div class="col-md-10 col-md-offset-1">
@@ -16,36 +23,131 @@
                     <h3 class="panel-title">Editing match <strong>{{ match.match_number }}</strong> for team <strong>{{ match.team_number }}</strong> in <strong>{{ match.location.name }}</strong></h3>
                 </div>
                 <div class="panel-body">
+                    <h4>Scout: <strong>{{ match.scout.get_full_name }}</strong></h4>
+                    <p>Click information to change.</p>
                     <table class="table table-striped">
                         <thead>
                         <tr>
                             <th>Autonomous</th>
+                            <th></th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr>
                             <td>Yellow Stacked Totes</td>
-                            <td>{{ match.auto_yellow_stacked_totes }}</td>
+                            <td><a href="#" data-type="number" class="editable" data-name="auto_yellow_stacked_totes" data-pk="{{ match.id }}">{{ match.auto_yellow_stacked_totes }}</a></td>
                         </tr>
                         <tr>
                             <td>Yellow Moved Totes</td>
-                            <td>{{ match.auto_yellow_moved_totes }}</td>
+                            <td><a href="#" data-type="number" class="editable" data-name="auto_yellow_moved_totes" data-pk="{{ match.id }}">{{ match.auto_yellow_moved_totes }}</a></td>
                         </tr>
                         <tr>
                             <td>Grey Acquired Totes</td>
-                            <td>{{ match.auto_grey_acquired_totes }}</td>
+                            <td><a href="#" data-type="number" class="editable" data-name="auto_grey_acquired_totes" data-pk="{{ match.id }}">{{ match.auto_grey_acquired_totes }}</a></td>
                         </tr>
                         <tr>
                             <td>Step/Center Acquired Containers</td>
-                            <td>{{ match.auto_step_center_acquired_containers }}</td>
+                            <td><a href="#" data-type="number" class="editable" data-name="auto_step_center_acquired_containers" data-pk="{{ match.id }}">{{ match.auto_step_center_acquired_containers }}</a></td>
                         </tr>
                         <tr>
                             <td>Ground Acquired Containers</td>
-                            <td>{{ match.auto_ground_acquired_containers }}</td>
+                            <td><a href="#" data-type="number" class="editable" data-name="auto_ground_acquired_containers" data-pk="{{ match.id }}">{{ match.auto_ground_acquired_containers }}</a></td>
                         </tr>
                         <tr>
                             <td>Moved Containers</td>
-                            <td>{{ match.auto_moved_containers }}</td>
+                            <td><a href="#" data-type="number" class="editable" data-name="auto_moved_containers" data-pk="{{ match.id }}">{{ match.auto_moved_containers }}</a></td>
+                        </tr>
+                        <tr>
+                            <td>Robot Moved to Auto Zone</td>
+                            <td class="checkbox-inline" style="width: 100%;"><input type="checkbox" style="margin-left: -6px;" data-name="auto_moved_to_auto_zone" data-pk="{{ match.id }}" {% if match.auto_moved_to_auto_zone %}checked{% endif %}></td>
+                        </tr>
+                        <tr>
+                            <td>Caused Fouls</td>
+                            <td><a href="#" data-type="number" class="editable" data-name="auto_fouls" data-pk="{{ match.id }}">{{ match.auto_fouls }}</a></td>
+                        </tr>
+                        <tr>
+                            <td>Caused Interference</td>
+                            <td><a href="#" data-type="number" class="editable" data-name="auto_interference" data-pk="{{ match.id }}">{{ match.auto_interference }}</a></td>
+                        </tr>
+                        <tr>
+                            <td>No Autonomous</td>
+                            <td class="checkbox-inline" style="width: 100%;"><input type="checkbox" style="margin-left: -6px;" data-name="auto_no_auto" data-pk="{{ match.id }}" {% if match.auto_no_auto %}checked{% endif %}></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>Teleoperated</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>Upright Totes Picked Up</td>
+                            <td><a href="#" data-type="number" class="editable" data-name="tele_picked_up_ground_upright_totes" data-pk="{{ match.id }}">{{ match.tele_picked_up_ground_upright_totes }}</a></td>
+                        </tr>
+                        <tr>
+                            <td>Upside Down Totes Picked Up</td>
+                            <td><a href="#" data-type="number" class="editable" data-name="tele_picked_up_upside_down_totes" data-pk="{{ match.id }}">{{ match.tele_picked_up_upside_down_totes }}</a></td>
+                        </tr>
+                        <tr>
+                            <td>Sideways Totes Picked Up</td>
+                            <td><a href="#" data-type="number" class="editable" data-name="tele_picked_up_sideways_totes" data-pk="{{ match.id }}">{{ match.tele_picked_up_sideways_totes }}</a></td>
+                        </tr>
+                        <tr>
+                            <td>Human Station Totes Picked Up</td>
+                            <td><a href="#" data-type="number" class="editable" data-name="tele_picked_up_human_station_totes" data-pk="{{ match.id }}">{{ match.tele_picked_up_human_station_totes }}</a></td>
+                        </tr>
+                        <tr>
+                            <td>Sideways Containers Picked Up</td>
+                            <td><a href="#" data-type="number" class="editable" data-name="tele_picked_up_sideways_containers" data-pk="{{ match.id }}">{{ match.tele_picked_up_sideways_containers }}</a></td>
+                        </tr>
+                        <tr>
+                            <td>Upright Containers Picked Up</td>
+                            <td><a href="#" data-type="number" class="editable" data-name="tele_picked_up_upright_containers" data-pk="{{ match.id }}">{{ match.tele_picked_up_upright_containers }}</a></td>
+                        </tr>
+                        <tr>
+                            <td>Center/Step Containers Picked Up</td>
+                            <td><a href="#" data-type="number" class="editable" data-name="tele_picked_up_center_step_containers" data-pk="{{ match.id }}">{{ match.tele_picked_up_center_step_containers }}</a></td>
+                        </tr>
+                        <tr>
+                            <td>Litter Pushed</td>
+                            <td><a href="#" data-type="number" class="editable" data-name="tele_pushed_litter" data-pk="{{ match.id }}">{{ match.tele_pushed_litter }}</a></td>
+                        </tr>
+                        <tr>
+                            <td>Litter Placed In Container</td>
+                            <td><a href="#" data-type="number" class="editable" data-name="tele_placed_in_container_litter" data-pk="{{ match.id }}">{{ match.tele_placed_in_container_litter }}</a></td>
+                        </tr>
+                        <tr>
+                            <td>Robot Died</td>
+                            <td class="checkbox-inline" style="width: 100%;"><input type="checkbox" style="margin-left: -6px;" data-name="tele_dead_bot" data-pk="{{ match.id }}" {% if match.tele_dead_bot %}checked{% endif %}></td>
+                        </tr>
+                        <tr>
+                            <td>Container(s) Dropped</td>
+                            <td class="checkbox-inline" style="width: 100%;"><input type="checkbox" style="margin-left: -6px;" data-name="tele_shooter_jam" data-pk="{{ match.id }}" {% if match.tele_shooter_jam %}checked{% endif %}></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>Miscellaneous</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>Foul Comments</td>
+                            <td><a href="#" data-type="text" class="editable" data-name="tele_foul_context" data-pk="{{ match.id }}">{{ match.tele_foul_context }}</a></td>
+                        </tr>
+                        <tr>
+                            <td>Public Comments</td>
+                            <td><a href="#" data-type="text" class="editable" data-name="tele_public_comments" data-pk="{{ match.id }}">{{ match.tele_public_comments }}</a></td>
+                        </tr>
+                        <tr>
+                            <td>Alliance Score</td>
+                            <td><a href="#" data-type="number" class="editable" data-name="match_final_score" data-pk="{{ match.id }}">{{ match.match_final_score }}</a></td>
                         </tr>
                         </tbody>
                     </table>
@@ -53,6 +155,49 @@
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block extra_js %}
+    {% compress js %}
+        <script type="text/javascript" src="{% static 'frc_scout/js/bootstrap-editable.min.js' %}"></script>
+    {% endcompress %}
+    {% compress js inline %}
+        <script type="text/javascript">
+            $(".editable").editable({
+                url: "{% url 'frc_scout:edit_match_post' %}",
+                mode: 'inline',
+                params: {
+                    'csrfmiddlewaretoken': $.cookie('csrftoken'),
+                    'editable': 'editable'
+                }
+            });
+
+            $("input[type=checkbox]").click(function() {
+                var sender = $(this);
+
+                var name = sender.data('name');
+                var pk = sender.data('pk');
+
+
+                $.ajax({
+                    url: "{% url 'frc_scout:edit_match_post' %}",
+                    type: "POST",
+                    data: {
+                        'csrfmiddlewaretoken': $.cookie('csrftoken'),
+                        'editable': 'editable',
+                        'name': name,
+                        'pk': pk,
+                        'boolean': true
+                    },
+                    error: function(response) {
+                        if(response.statusCode() === 400) {
+                            sender.prop('checked', !sender.prop('checked'));
+                        }
+                    }
+                })
+            })
+        </script>
+    {% endcompress %}
 {% endblock %}
 
 {% block footer %}{% include 'frc_scout/footer.html' %}{% endblock %}

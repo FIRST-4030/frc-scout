@@ -156,3 +156,35 @@ def edit_match(request, match_id=None):
     }
 
     return render(request, 'frc_scout/manage/edit_match.html', context)
+
+
+def edit_match_post(request):
+    if request.method != "POST":
+        return HttpResponse(status=400)
+
+    if not request.user.userprofile.team_manager:
+        return HttpResponse(status=403)
+
+    if request.POST['editable']:
+        name = request.POST.get('name')
+        pk = request.POST.get('pk')
+
+        try:
+            match = Match.objects.get(id=pk)
+        except Match.DoesNotExist:
+            return HttpResponse(status=400)
+
+        if not request.POST.get('boolean', False):
+            value = request.POST.get('value')
+            setattr(match, name, value)
+
+        else:
+            current = model_to_dict(match)[name]
+            setattr(match, name, not current)
+
+        try:
+            match.save()
+        except ValueError:
+            return HttpResponse("Field cannot be blank.", status=400)
+
+        return HttpResponse("success!", status=200)

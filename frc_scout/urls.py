@@ -27,6 +27,7 @@ urlpatterns = patterns(
     url(r'^manage/scouts/update/$', views.update_scouts, name='update_scouts'),
     url(r'^manage/find_match/$', views.find_match, name='find_match'),
     url(r'^manage/edit_match/(?P<match_id>[0-9]+)/$', views.edit_match, name='edit_match'),
+    url(r'^manage/edit_match/update/$', views.edit_match_post, name='edit_match_post'),
 
     # Account views
     url(r'^account/profile/$', views.update_profile, name='update_profile'),
