@@ -16,11 +16,12 @@
                     <h3 class="panel-title">Search for match to change</h3>
                 </div>
                 <div class="panel-body">
+                    <p><i>Team number and match number are both optional.</i></p>
                     <form role="form" method="get">
                         <div class="form-group">
                             <label for="team_number" class="col-lg-3 control-label">Scouted Team Number</label>
                             <div class="col-lg-9">
-                                <input placeholder="Team Number" type="number" class="form-control" name="team_number" id="team_number" value="{{ request.GET.team_number }}" required="true">
+                                <input placeholder="Team Number" type="number" class="form-control" name="team_number" id="team_number" value="{{ request.GET.team_number }}">
                             </div>
                         </div>
 
@@ -50,7 +51,7 @@
             {% if matches %}
                 <div class="panel panel-primary">
                     <div class="panel-heading">
-                        <h3 class="panel-title">Match results for team {{ request.GET.team_number }}</h3>
+                        <h3 class="panel-title">Match results</h3>
                     </div>
                     <div class="panel-body">
                         <table class="table table-striped">

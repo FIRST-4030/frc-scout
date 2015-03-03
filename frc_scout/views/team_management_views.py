@@ -90,12 +90,14 @@ def find_match(request):
         match_number = request.GET.get('match_number', None)
         location_id = request.GET.get('location', None)
 
-        if match_number is not None and match_number != "":
-            matches = Match.objects.filter(scout__userprofile__team__team_number=request.user.userprofile.team.team_number,
-                                           team_number=team_number, match_number=match_number, location__id=location_id)
-        else:
-            matches = Match.objects.filter(scout__userprofile__team__team_number=request.user.userprofile.team.team_number,
-                                           team_number=team_number, location__id=location_id)
+        matches = Match.objects.filter(scout__userprofile__team__team_number=request.user.userprofile.team.team_number,
+                                       location__id=location_id).order_by('match_number')
+
+        if team_number and team_number != "":
+            matches = matches.filter(team_number=team_number)
+
+        if match_number and match_number != "":
+            matches = matches.filter(match_number=match_number)
 
         processed_matches = []
 
