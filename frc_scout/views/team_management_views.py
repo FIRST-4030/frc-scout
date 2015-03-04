@@ -91,7 +91,7 @@ def find_match(request):
         location_id = request.GET.get('location', None)
 
         matches = Match.objects.filter(scout__userprofile__team__team_number=request.user.userprofile.team.team_number,
-                                       location__id=location_id).order_by('match_number')
+                                       location__id=location_id).order_by('-match_number')
 
         if team_number and team_number != "":
             matches = matches.filter(team_number=team_number)
