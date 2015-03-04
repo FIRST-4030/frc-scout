@@ -228,7 +228,7 @@
             </div>
 
             <div class="col-sm-4">
-                <button style="margin-top: -10px; margin-bottom: 5px; height: 75px;" class="btn btn-extra-high btn-danger btn-lg max-width" onclick="saveAndContinue('autonomous', 'autonomous_fouls_and_other');">Fouls & Other</button>
+                <button style="margin-top: -10px; margin-bottom: 5px; height: 75px;" class="btn btn-extra-high btn-danger btn-lg max-width" onclick="saveAndContinue('autonomous', 'autonomous_fouls_and_other');">mess ups & Other</button>
             </div>
 
             <div class="col-sm-4">
@@ -271,7 +271,7 @@
     <div class="container-fluid stage" id="autonomous_fouls_and_other" style="display: none;">
         <div class="row">
             <div class="col-md-12" style="margin-top: 2vh;">
-                <button id="auto_fouls" onclick="saveAndContinue('autonomous_fouls_and_other', 'autonomous', this);" class="btn btn-lg btn-warning max-width" style="height: 25vh; margin-top: 1vh; margin-bottom: 1vh; font-size: 30px;">fouls</button>
+                <button id="auto_mess_ups" onclick="saveAndContinue('autonomous_fouls_and_other', 'autonomous', this);" class="btn btn-lg btn-warning max-width" style="height: 25vh; margin-top: 1vh; margin-bottom: 1vh; font-size: 30px;">mess ups</button>
             </div>
             <div class="col-md-12">
                 <button id="auto_interference" onclick="saveAndContinue('autonomous_fouls_and_other', 'autonomous', this);" class="btn btn-lg btn-danger max-width" style="height: 25vh; margin-top: 1vh; margin-bottom: 1vh; font-size: 30px;">interference</button>
@@ -385,7 +385,7 @@
                 <button style="margin-top: 5px; margin-bottom: 5px;" class="btn btn-extra-high btn-info btn-lg max-width" onclick="saveAndContinue('teleoperated', 'autonomous');"><span class="glyphicon glyphicon-arrow-left"></span>&nbsp; autoNomoUs</button>
             </div>
             <div class="col-sm-4">
-                <button style="margin-top: 5px; margin-bottom: 5px;" class="btn btn-extra-high btn-danger btn-lg max-width" onclick="saveAndContinue('teleoperated', 'teleoperated_fouls_and_other');">Fouls & Other</button>
+                <button style="margin-top: 5px; margin-bottom: 5px;" class="btn btn-extra-high btn-danger btn-lg max-width" onclick="saveAndContinue('teleoperated', 'teleoperated_fouls_and_other');">Mess Ups & Other</button>
             </div>
 
             <div class="col-sm-4">
@@ -421,7 +421,7 @@
         <div class="row">
             <div class="col-md-12">
                 <h3>Totes Stacked On Top Of</h3>
-                <div class="btn-group btn-default max-width" data-toggle="buttons" id="start_height">
+                <div class="btn-group max-width" data-toggle="buttons" id="start_height">
                     <label class="btn btn-success btn-group-tall-6 start-height-group-wrapper">
                         <input type="radio" name="start_height_group" data-height="0"><span style="font-size: 24px; margin-top: 10px;">New<br>Stack</span>
                     </label>
@@ -556,7 +556,7 @@
     <div class="container-fluid stage" id="teleoperated_fouls_and_other" style="display:none;">
         <div class="row">
             <div class="col-sm-6">
-                <button class="btn btn-lg btn-default max-width btn-grid" id="tele_fouls" style="margin-top: 2vh; margin-bottom: 1vh;" onclick="saveAndContinue('teleoperated_fouls_and_other', 'teleoperated', this);">fouls</button>
+                <button class="btn btn-lg btn-default max-width btn-grid" id="tele_mess_ups" style="margin-top: 2vh; margin-bottom: 1vh;" onclick="saveAndContinue('teleoperated_fouls_and_other', 'teleoperated', this);">mess ups</button>
                 <button class="btn btn-lg btn-success max-width btn-grid" id="tele_knocked_over_stacks" style="margin-top: 1vh; margin-bottom: 1vh;" onclick="saveAndContinue('teleoperated_fouls_and_other', 'teleoperated', this);">knocked over stack</button>
             </div>
 
@@ -587,7 +587,7 @@
         <br>
         <div class="row">
             <div class="col-md-12">
-                <textarea class="form-control background-white" rows="2" id="tele_foul_context" placeholder="Please comment on any fouls that occurred during the match."></textarea>
+                <textarea class="form-control background-white" rows="2" id="mess_up_context" placeholder="Please comment on any mess ups that occurred during the match."></textarea>
             </div>
         </div>
         <br>

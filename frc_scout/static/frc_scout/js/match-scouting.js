@@ -148,6 +148,8 @@ function saveAndContinue(fromStage, toStage, sender) {
 
         if(isNaN(matchNumber) || matchNumber < 1) {
             errorMessage.push("Match number is required and must be a number of one or greater.");
+        } else if(matchNumber > 150) {
+            errorMessage.push("Match number cannot be greater than 150.");
         }
 
         if(localStorage.allianceColor === null || localStorage.allianceColor === undefined) {
@@ -247,7 +249,7 @@ function saveAndContinue(fromStage, toStage, sender) {
 
         if(!storedVariables['autonomous_fouls_and_other']) {
             storedVariables['autonomous_fouls_and_other'] = {
-                'auto_fouls': 0,
+                'auto_mess_ups': 0,
                 'auto_interference': 0,
                 'auto_no_auto': false
             };
@@ -488,7 +490,7 @@ function saveAndContinue(fromStage, toStage, sender) {
 
         if(!storedVariables['teleoperated_fouls_and_other']) {
             storedVariables['teleoperated_fouls_and_other'] = {
-                'tele_fouls': 0,
+                'tele_mess_ups': 0,
                 'tele_knocked_over_stacks': 0,
                 'tele_dead_bot': false,
                 'tele_shooter_jam': 0
@@ -507,7 +509,7 @@ function saveAndContinue(fromStage, toStage, sender) {
     }
 
     else if(fromStage === "postmatch") {
-        var teleFoulContext = $("#tele_foul_context").val();
+        var teleFoulContext = $("#mess_up_context").val();
         var telePrivateComments = $("#tele_private_comments").val();
         var telePublicComments = $("#tele_public_comments").val();
         var matchFinalScore = parseInt($("#match_final_score").val());
@@ -520,7 +522,7 @@ function saveAndContinue(fromStage, toStage, sender) {
 
         stageVariables = {
             match_final_score: matchFinalScore,
-            tele_foul_context: teleFoulContext,
+            mess_up_context: teleFoulContext,
             tele_private_comments: telePrivateComments,
             tele_public_comments: telePublicComments,
             scouting_complete: true

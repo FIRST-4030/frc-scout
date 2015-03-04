@@ -69,7 +69,7 @@ class Match(models.Model):
     auto_moved_to_auto_zone = models.BooleanField(default=False, verbose_name="Moved to Auto Zone")
     auto_no_auto = models.BooleanField(default=False, verbose_name="No autonomous")
 
-    auto_fouls = models.IntegerField(default=0, verbose_name="Autonomous fouls committed")
+    auto_mess_ups = models.IntegerField(default=0, verbose_name="Autonomous mess-ups committed")
     auto_interference = models.IntegerField(default=0, verbose_name="Interference committed")
 
     # Teleoperated
@@ -85,13 +85,13 @@ class Match(models.Model):
     tele_pushed_litter = models.IntegerField(default=0, verbose_name="Litter pushed")
     tele_placed_in_container_litter = models.IntegerField(default=0, verbose_name="Litter placed in container")
 
-    tele_fouls = models.IntegerField(default=0, verbose_name="Teleoperated fouls committed")
+    tele_mess_ups = models.IntegerField(default=0, verbose_name="Teleoperated fouls committed")
     tele_knocked_over_stacks = models.IntegerField(default=0, verbose_name="Stacks knocked over")
 
     tele_dead_bot = models.BooleanField(default=False, verbose_name="Robot died")
     tele_shooter_jam = models.BooleanField(default=False, verbose_name="Shooter jammed")
 
-    tele_foul_context = models.TextField(null=True, blank=True)
+    mess_up_context = models.TextField(null=True, blank=True)
     tele_public_comments = models.TextField(null=True, blank=True)
 
     match_final_score = models.IntegerField(verbose_name="Final match score", null=True)
