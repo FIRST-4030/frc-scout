@@ -144,6 +144,27 @@ def find_match(request):
 
 
 @login_required
+def delete_match(request):
+    match_id = request.POST.get('match_id', None)
+
+    # need to be manager
+    if not request.user.userprofile.team_manager:
+        return HttpResponse(status=403)
+
+    try:
+        match = Match.objects.get(id=match_id)
+    except Match.DoesNotExist:
+        raise Http404
+
+    # needs to be their data
+    if match.scout.userprofile.team.team_number != request.user.userprofile.team.team_number:
+        return HttpResponse(status=403)
+
+    match.delete()
+    return HttpResponse(status=200)
+
+
+@login_required
 def edit_match(request, match_id=None):
     if not request.user.userprofile.team_manager:
         return HttpResponse(status=403)
