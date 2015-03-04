@@ -56,7 +56,7 @@ def login_view(request):
     context = {
         'location_list': json.dumps(location_list),
         'total_teams': Team.objects.all().count(),
-        'total_matches': Match.objects.all().count(),
+        'total_matches': Match.objects.exclude(location__name="TEST").count(),
         'total_users': User.objects.all().count()
         }
 
