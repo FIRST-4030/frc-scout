@@ -160,6 +160,17 @@ function saveAndContinue(fromStage, toStage, sender) {
             team_number: teamNumber,
             match_number: matchNumber
         };
+
+
+        if(sender) {
+            if (sender.id === "no_show") {
+                if (confirm("Click OK to confirm that this team was not present for the match."));
+
+                stageVariables['no_show'] = true;
+                setMatchDataArray('postmatch', {});
+                setMatchData('postmatch', 'scouting_complete', true);
+            }
+        }
     }
 
     else if(fromStage === "autonomous_starting_location") {
@@ -249,7 +260,7 @@ function saveAndContinue(fromStage, toStage, sender) {
 
         if(!storedVariables['autonomous_fouls_and_other']) {
             storedVariables['autonomous_fouls_and_other'] = {
-                'auto_mess_ups': 0,
+                'auto_fouls': 0,
                 'auto_interference': 0,
                 'auto_no_auto': false
             };
@@ -490,7 +501,7 @@ function saveAndContinue(fromStage, toStage, sender) {
 
         if(!storedVariables['teleoperated_fouls_and_other']) {
             storedVariables['teleoperated_fouls_and_other'] = {
-                'tele_mess_ups': 0,
+                'tele_fouls': 0,
                 'tele_knocked_over_stacks': 0,
                 'tele_dead_bot': false,
                 'tele_shooter_jam': 0
@@ -509,7 +520,7 @@ function saveAndContinue(fromStage, toStage, sender) {
     }
 
     else if(fromStage === "postmatch") {
-        var teleFoulContext = $("#mess_up_context").val();
+        var teleFoulContext = $("#foul_context").val();
         var telePrivateComments = $("#tele_private_comments").val();
         var telePublicComments = $("#tele_public_comments").val();
         var matchFinalScore = parseInt($("#match_final_score").val());
@@ -522,7 +533,7 @@ function saveAndContinue(fromStage, toStage, sender) {
 
         stageVariables = {
             match_final_score: matchFinalScore,
-            mess_up_context: teleFoulContext,
+            foul_context: teleFoulContext,
             tele_private_comments: telePrivateComments,
             tele_public_comments: telePublicComments,
             scouting_complete: true
@@ -636,7 +647,6 @@ function saveDataOffline() {
     $("#finished_message").show();
     $("#saved").show();
     $("#deleted").hide();
-    $("#finished_message").show();
 }
 
 
@@ -906,6 +916,11 @@ function openStage(stage) {
             $("#online_message").show();
         } else {
             $("#offline_message").show();
+        }
+
+
+        if($("#practice_scouting").val() === "true") {
+            setMatchData('postmatch', 'practice_scouting', true);
         }
 
     }

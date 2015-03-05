@@ -15,6 +15,9 @@ def view_team_profile(request, team_number=None):
     if not team_number:
         team_number = request.user.userprofile.team.team_number
 
+    elif int(team_number) < 1:
+        return HttpResponse("Team numbers cannot be less than 1.", status=400)
+
     # oh boy here we go
     average_sections = {}
     matches = Match.objects.filter(team_number=team_number).exclude(location__name="TEST") # only take matches for this team
