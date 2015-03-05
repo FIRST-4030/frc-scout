@@ -44,6 +44,7 @@ def get_current_time():
 
 class Match(models.Model):
     class Meta:
+        verbose_name = "Match"
         verbose_name_plural = "Matches"
 
     # References
