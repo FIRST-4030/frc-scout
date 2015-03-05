@@ -521,7 +521,7 @@ function saveAndContinue(fromStage, toStage, sender) {
     }
 
     else if(fromStage === "postmatch") {
-        var teleFoulContext = $("#foul_context").val();
+        var teleFoulContext = $("#tele_foul_context").val();
         var telePrivateComments = $("#tele_private_comments").val();
         var telePublicComments = $("#tele_public_comments").val();
         var matchFinalScore = parseInt($("#match_final_score").val());
@@ -534,7 +534,7 @@ function saveAndContinue(fromStage, toStage, sender) {
 
         stageVariables = {
             match_final_score: matchFinalScore,
-            foul_context: teleFoulContext,
+            tele_foul_context: teleFoulContext,
             tele_private_comments: telePrivateComments,
             tele_public_comments: telePublicComments,
             scouting_complete: true
