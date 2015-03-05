@@ -505,7 +505,7 @@ function saveAndContinue(fromStage, toStage, sender) {
                 'tele_fouls': 0,
                 'tele_knocked_over_stacks': 0,
                 'tele_dead_bot': false,
-                'tele_shooter_jam': 0
+                'tele_container_fell_off': 0
             };
         }
 

@@ -91,7 +91,7 @@ class Match(models.Model):
     tele_knocked_over_stacks = models.IntegerField(default=0, verbose_name="Stacks knocked over")
 
     tele_dead_bot = models.BooleanField(default=False, verbose_name="Robot died")
-    tele_shooter_jam = models.BooleanField(default=False, verbose_name="Shooter jammed")
+    tele_container_fell_off = models.IntegerField(default=0, verbose_name="Containers dropped")
 
     tele_foul_context = models.TextField(null=True, blank=True)
     tele_public_comments = models.TextField(null=True, blank=True)
