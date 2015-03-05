@@ -28,6 +28,24 @@
                     <table class="table table-striped">
                         <thead>
                         <tr>
+                            <th>General</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td class="col-md-10">Team Number</td>
+                            <td class="col-md-2"><a href="#" data-type="number" class="editable" data-name="team_number" data-pk="{{ match.id }}">{{ match.team_number }}</a></td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-10">Match Number</td>
+                            <td class="col-md-2"><a href="#" data-type="number" class="editable" data-name="match_number" data-pk="{{ match.id }}">{{ match.match_number }}</a></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
                             <th>Autonomous</th>
                             <th></th>
                         </tr>
@@ -35,11 +53,11 @@
                         <tbody>
                         <tr>
                             <td class="col-md-10">Yellow Stacked Totes</td>
-                            <td class="col-md-2"><a href="#" data-type="number" class="editable" data-name="auto_yellow_stacked_totes" data-pk="{{ match.id }}">{{ match.auto_yellow_stacked_totes }}</a></td>
+                            <td class="col-md-2"><a href="#" data-max="3" data-type="number" class="editable" data-name="auto_yellow_stacked_totes" data-pk="{{ match.id }}">{{ match.auto_yellow_stacked_totes }}</a></td>
                         </tr>
                         <tr>
                             <td class="col-md-6">Yellow Moved Totes</td>
-                            <td class="col-md-6"><a href="#" data-type="number" class="editable" data-name="auto_yellow_moved_totes" data-pk="{{ match.id }}">{{ match.auto_yellow_moved_totes }}</a></td>
+                            <td class="col-md-6"><a href="#" data-max="3" data-type="number" class="editable" data-name="auto_yellow_moved_totes" data-pk="{{ match.id }}">{{ match.auto_yellow_moved_totes }}</a></td>
                         </tr>
                         <tr>
                             <td class="col-md-6">Grey Acquired Totes</td>
@@ -47,15 +65,15 @@
                         </tr>
                         <tr>
                             <td class="col-md-6">Step/Center Acquired Containers</td>
-                            <td class="col-md-6"><a href="#" data-type="number" class="editable" data-name="auto_step_center_acquired_containers" data-pk="{{ match.id }}">{{ match.auto_step_center_acquired_containers }}</a></td>
+                            <td class="col-md-6"><a href="#" data-max="4" data-type="number" class="editable" data-name="auto_step_center_acquired_containers" data-pk="{{ match.id }}">{{ match.auto_step_center_acquired_containers }}</a></td>
                         </tr>
                         <tr>
                             <td class="col-md-6">Ground Acquired Containers</td>
-                            <td class="col-md-6"><a href="#" data-type="number" class="editable" data-name="auto_ground_acquired_containers" data-pk="{{ match.id }}">{{ match.auto_ground_acquired_containers }}</a></td>
+                            <td class="col-md-6"><a href="#" data-max="3" data-type="number" class="editable" data-name="auto_ground_acquired_containers" data-pk="{{ match.id }}">{{ match.auto_ground_acquired_containers }}</a></td>
                         </tr>
                         <tr>
                             <td class="col-md-6">Moved Containers</td>
-                            <td class="col-md-6"><a href="#" data-type="number" class="editable" data-name="auto_moved_containers" data-pk="{{ match.id }}">{{ match.auto_moved_containers }}</a></td>
+                            <td class="col-md-6"><a href="#" data-max="7" data-type="number" class="editable" data-name="auto_moved_containers" data-pk="{{ match.id }}">{{ match.auto_moved_containers }}</a></td>
                         </tr>
                         <tr>
                             <td class="col-md-6">Robot Moved to Auto Zone</td>
@@ -63,11 +81,11 @@
                         </tr>
                         <tr>
                             <td class="col-md-6">Caused Fouls</td>
-                            <td class="col-md-6"><a href="#" data-type="number" class="editable" data-name="auto_fouls" data-pk="{{ match.id }}">{{ match.auto_fouls }}</a></td>
+                            <td class="col-md-6"><a href="#" data-max="10" data-type="number" class="editable" data-name="auto_fouls" data-pk="{{ match.id }}">{{ match.auto_fouls }}</a></td>
                         </tr>
                         <tr>
                             <td class="col-md-6">Caused Interference</td>
-                            <td class="col-md-6"><a href="#" data-type="number" class="editable" data-name="auto_interference" data-pk="{{ match.id }}">{{ match.auto_interference }}</a></td>
+                            <td class="col-md-6"><a href="#" data-max="10" data-type="number" class="editable" data-name="auto_interference" data-pk="{{ match.id }}">{{ match.auto_interference }}</a></td>
                         </tr>
                         <tr>
                             <td class="col-md-6">No Autonomous</td>
@@ -85,39 +103,39 @@
                         <tbody>
                         <tr>
                             <td class="col-md-10">Upright Totes Picked Up</td>
-                            <td class="col-md-2"><a href="#" data-type="number" class="editable" data-name="tele_picked_up_ground_upright_totes" data-pk="{{ match.id }}">{{ match.tele_picked_up_ground_upright_totes }}</a></td>
+                            <td class="col-md-2"><a href="#" data-max="50" data-type="number" class="editable" data-name="tele_picked_up_ground_upright_totes" data-pk="{{ match.id }}">{{ match.tele_picked_up_ground_upright_totes }}</a></td>
                         </tr>
                         <tr>
                             <td class="col-md-6">Upside Down Totes Picked Up</td>
-                            <td class="col-md-6"><a href="#" data-type="number" class="editable" data-name="tele_picked_up_upside_down_totes" data-pk="{{ match.id }}">{{ match.tele_picked_up_upside_down_totes }}</a></td>
+                            <td class="col-md-6"><a href="#" data-max="50" data-type="number" class="editable" data-name="tele_picked_up_upside_down_totes" data-pk="{{ match.id }}">{{ match.tele_picked_up_upside_down_totes }}</a></td>
                         </tr>
                         <tr>
                             <td class="col-md-6">Sideways Totes Picked Up</td>
-                            <td class="col-md-6"><a href="#" data-type="number" class="editable" data-name="tele_picked_up_sideways_totes" data-pk="{{ match.id }}">{{ match.tele_picked_up_sideways_totes }}</a></td>
+                            <td class="col-md-6"><a href="#" data-max="50" data-type="number" class="editable" data-name="tele_picked_up_sideways_totes" data-pk="{{ match.id }}">{{ match.tele_picked_up_sideways_totes }}</a></td>
                         </tr>
                         <tr>
                             <td class="col-md-6">Human Station Totes Picked Up</td>
-                            <td class="col-md-6"><a href="#" data-type="number" class="editable" data-name="tele_picked_up_human_station_totes" data-pk="{{ match.id }}">{{ match.tele_picked_up_human_station_totes }}</a></td>
+                            <td class="col-md-6"><a href="#" data-max="50" data-type="number" class="editable" data-name="tele_picked_up_human_station_totes" data-pk="{{ match.id }}">{{ match.tele_picked_up_human_station_totes }}</a></td>
                         </tr>
                         <tr>
                             <td class="col-md-6">Sideways Containers Picked Up</td>
-                            <td class="col-md-6"><a href="#" data-type="number" class="editable" data-name="tele_picked_up_sideways_containers" data-pk="{{ match.id }}">{{ match.tele_picked_up_sideways_containers }}</a></td>
+                            <td class="col-md-6"><a href="#" data-max="50" data-type="number" class="editable" data-name="tele_picked_up_sideways_containers" data-pk="{{ match.id }}">{{ match.tele_picked_up_sideways_containers }}</a></td>
                         </tr>
                         <tr>
                             <td class="col-md-6">Upright Containers Picked Up</td>
-                            <td class="col-md-6"><a href="#" data-type="number" class="editable" data-name="tele_picked_up_upright_containers" data-pk="{{ match.id }}">{{ match.tele_picked_up_upright_containers }}</a></td>
+                            <td class="col-md-6"><a href="#" data-max="50" data-type="number" class="editable" data-name="tele_picked_up_upright_containers" data-pk="{{ match.id }}">{{ match.tele_picked_up_upright_containers }}</a></td>
                         </tr>
                         <tr>
                             <td class="col-md-6">Center/Step Containers Picked Up</td>
-                            <td class="col-md-6"><a href="#" data-type="number" class="editable" data-name="tele_picked_up_center_step_containers" data-pk="{{ match.id }}">{{ match.tele_picked_up_center_step_containers }}</a></td>
+                            <td class="col-md-6"><a href="#" data-max="50" data-type="number" class="editable" data-name="tele_picked_up_center_step_containers" data-pk="{{ match.id }}">{{ match.tele_picked_up_center_step_containers }}</a></td>
                         </tr>
                         <tr>
                             <td class="col-md-6">Litter Pushed</td>
-                            <td class="col-md-6"><a href="#" data-type="number" class="editable" data-name="tele_pushed_litter" data-pk="{{ match.id }}">{{ match.tele_pushed_litter }}</a></td>
+                            <td class="col-md-6"><a href="#" data-max="50" data-type="number" class="editable" data-name="tele_pushed_litter" data-pk="{{ match.id }}">{{ match.tele_pushed_litter }}</a></td>
                         </tr>
                         <tr>
                             <td class="col-md-6">Litter Placed In Container</td>
-                            <td class="col-md-6"><a href="#" data-type="number" class="editable" data-name="tele_placed_in_container_litter" data-pk="{{ match.id }}">{{ match.tele_placed_in_container_litter }}</a></td>
+                            <td class="col-md-6"><a href="#" data-max="50" data-type="number" class="editable" data-name="tele_placed_in_container_litter" data-pk="{{ match.id }}">{{ match.tele_placed_in_container_litter }}</a></td>
                         </tr>
                         <tr>
                             <td class="col-md-6">Robot Died</td>
@@ -125,7 +143,7 @@
                         </tr>
                         <tr>
                             <td class="col-md-6">Container(s) Dropped</td>
-                            <td class="checkbox-inline" style="width: 100%;"><input type="checkbox" style="margin-left: -6px;" data-name="tele_shooter_jam" data-pk="{{ match.id }}" {% if match.tele_shooter_jam %}checked{% endif %}></td>
+                            <td class="col-md-6"><a href="#" data-max="50" data-type="number" class="editable" data-name="tele_container_fell_off" data-pk="{{ match.id }}">{{ match.tele_container_fell_off }}</a></td>
                         </tr>
                         </tbody>
                     </table>
@@ -145,9 +163,9 @@
                         <tbody>
                         {% for totestack in match.totestack_set.all %}
                             <tr>
-                                <td class="col-md-5"><a href="#" data-type="number" class="editable-totestack" data-name="start_height" data-pk="{{ totestack.id }}">{{ totestack.start_height }}</a></td>
-                                <td class="col-md-5"><a href="#" data-type="number" class="editable-totestack" data-name="totes_added" data-pk="{{ totestack.id }}">{{ totestack.totes_added }}</a></td>
-                                <td class="col-md-2">({{ totestack.x|floatformat:"-2" }}, {{ totestack.y|floatformat:"-2" }})<br><a data-toggle="modal" href="#editLocationModal" class="btn btn-info btn-sm" onclick="lastToteStackIdClicked = {{ totestack.id }};">Change</a></td>
+                                <td class="col-md-5"><a href="#" data-max="5" data-type="number" class="editable-totestack" data-name="start_height" data-pk="{{ totestack.id }}">{{ totestack.start_height }}</a></td>
+                                <td class="col-md-5"><a href="#" data-max="6" data-type="number" class="editable-totestack" data-name="totes_added" data-pk="{{ totestack.id }}">{{ totestack.totes_added }}</a></td>
+                                <td class="col-md-2">({{ totestack.x|floatformat:"-2" }}, {{ totestack.y|floatformat:"-2" }})<br><a  data-toggle="modal" href="#editLocationModal" class="btn btn-info btn-sm" onclick="lastToteStackIdClicked = {{ totestack.id }}; lastX = {{ totestack.x }}; lastY = {{ totestack.y }}; drawImage();">Change</a></td>
                             </tr>
                         {% endfor %}
                         </tbody>
@@ -166,7 +184,7 @@
                         <tbody>
                         {% for containerstack in match.containerstack_set.all %}
                             <tr>
-                                <td class="col-md-5"><a href="#" data-type="number" class="editable-containerstack" data-name="height" data-pk="{{ containerstack.id }}">{{ containerstack.height }}</a></td>
+                                <td class="col-md-5"><a data-max="6" href="#" data-type="number" class="editable-containerstack" data-name="height" data-pk="{{ containerstack.id }}">{{ containerstack.height }}</a></td>
                                 <td class="col-md-7">{{ containerstack.containers_added }}</td>
                             </tr>
                         {% endfor %}
@@ -208,7 +226,8 @@
                     <h4 class="modal-title" id="myModalLabel">Click Tote Stack Location</h4>
                 </div>
                 <div class="modal-body">
-                    <img id="teleoperated_stacked_totes_image" style="width: 100%;" src="{% static 'frc_scout/img/tote_score.png' %}">
+                    <canvas id="teleoperated_stacked_totes_wrapper" style="background: url('{% static "frc_scout/img/tote_score.png" %}') no-repeat; padding: 0; background-size: contain; width: 200%;"></canvas>
+                    {#                    <img id="teleoperated_stacked_totes_image" style="width: 100%;" src="{% static 'frc_scout/img/tote_score.png' %}">#}
                     {#                    <canvas id="image_wrap" style="padding: 0;"></canvas>#}
                 </div>
             </div>
@@ -225,12 +244,19 @@
 
         <script type="text/javascript">
             var lastToteStackIdClicked = undefined;
+            var lastX, lastY;
 
             function drawImage() {
-                var canvas = document.getElementById('image_wrap');
+                var canvas = document.getElementById('teleoperated_stacked_totes_wrapper');
                 var ctx = canvas.getContext('2d');
-                var image = document.getElementById('teleoperated_stacked_totes_image');
-                ctx.drawImage(image, 0, 0);
+
+                var xLoc = lastX * canvas.width;
+                var yLoc = lastY * canvas.height;
+
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                ctx.fillStyle = 'firebrick';
+                ctx.fillRect(xLoc - 5, yLoc - 5, 10, 10);
             }
 
             $(".editable").editable({
@@ -290,10 +316,13 @@
                 })
             })
 
-            $("#teleoperated_stacked_totes_image").click(function (event) {
+            $("#teleoperated_stacked_totes_wrapper").click(function (event) {
                 var image = $(this);
                 var coopStack = false;
                 var toteStack = lastToteStackIdClicked;
+
+                var canvas = document.getElementById('teleoperated_stacked_totes_wrapper');
+                var ctx = canvas.getContext('2d');
 
                 var xPosition = (event.pageX - image.offset().left) / image.width();
                 var yPosition = (event.pageY - image.offset().top) / image.height();
@@ -303,8 +332,15 @@
                         coopStack = true;
                     }
 
-                    if(!confirm("(" + xPosition + ", " + yPosition + ") -- is this correct?")) {
+                    var xLoc = xPosition * canvas.width;
+                    var yLoc = yPosition * canvas.height;
+
+                    ctx.fillStyle = 'green';
+                    ctx.fillRect(xLoc - 5, yLoc - 5, 10, 10);
+
+                    if(!confirm("Is this position correct?")) {
                         console.log('said no :(');
+                        ctx.clearRect(xLoc - 5, yLoc - 5, 10, 10);
                         return;
                     }
 
@@ -321,7 +357,7 @@
                         },
                         success: function(response) {
                             console.log("success: " + response);
-                            $("#editLocationModal").modal('hide');
+                            location.reload();
                         },
                         error: function(response) {
                             if(response.statusCode() === 400) {
