@@ -43,6 +43,9 @@ def get_current_time():
 
 
 class Match(models.Model):
+    class Meta:
+        verbose_name_plural = "Matches"
+
     # References
 
     scout_team_number = models.IntegerField(max_length=5)
@@ -103,6 +106,9 @@ class Match(models.Model):
 
 
 class MatchPrivateComments(models.Model):
+    class Meta:
+        verbose_name_plural = "Match private comments"
+
     match = models.OneToOneField(Match)
     comments = models.TextField(null=True, blank=True)
 
@@ -135,6 +141,9 @@ class ContainerStack(models.Model):
 
 
 class PitScoutData(models.Model):
+    class Meta:
+        verbose_name_plural = "Pit scout data"
+
     scout = models.ForeignKey(User)
     location = models.ForeignKey(Location)
 
@@ -191,6 +200,9 @@ class PitScoutData(models.Model):
 
 
 class SitePreferences(models.Model):
+    class Meta:
+        verbose_name_plural = "Site preferences"
+
     site_url = models.TextField()
     login_message = models.TextField(blank=True, null=True)
     home_message = models.TextField(blank=True, null=True)
