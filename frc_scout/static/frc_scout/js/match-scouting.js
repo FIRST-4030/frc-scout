@@ -185,6 +185,7 @@ function saveAndContinue(fromStage, toStage, sender) {
     }
 
     else if(fromStage === "autonomous") {
+
         // totes
         var autoStackedYellowTotes = parseInt($("#auto-stacked-yellow-tote-text").text());
         var autoMovedYellowTotes = parseInt($("#auto-moved-yellow-tote-text").text());
@@ -210,7 +211,7 @@ function saveAndContinue(fromStage, toStage, sender) {
         // assume 1 if nothing else because they obviously did something to get here
         var numberOfThings = 1;
 
-        // if there's already data then set it to that
+        // if there's already data then set it to that + 1
         if(autoVariables[id]) {
             numberOfThings = autoVariables[id] + 1;
         }
@@ -773,6 +774,27 @@ function openStage(stage) {
         }
     }
 
+    else if(stage === "autonomous_containers_unscored" || stage === "autonomous_containers_scored") {
+        if(storedVariables['autonomous']) {
+            var autoVariables = storedVariables['autonomous'];
+            if(autoVariables['auto_ground_acquired_containers']) {
+                if(parseInt(autoVariables['auto_ground_acquired_containers']) >= 3) {
+                    $(".auto_ground_acquired_containers").attr('disabled', true);
+                } else {
+                    $(".auto_ground_acquired_containers").attr('disabled', false);
+                }
+            }
+
+            if(autoVariables['auto_step_center_acquired_containers']) {
+                if(parseInt(autoVariables['auto_step_center_acquired_containers']) >= 4) {
+                    $(".auto_step_center_acquired_containers").attr('disabled', true);
+                } else {
+                    $(".auto_step_center_acquired_containers").attr('disabled', false);
+                }
+            }
+        }
+    }
+
     else if (stage === "teleoperated") {
         $('title').text('Scouting: Teleoperated');
 
@@ -1316,10 +1338,12 @@ $(".auto-container-undo").click(function() {
     if(getMatchData()['autonomous'][affected]) {
         var affectedArray = getMatchData()['autonomous'][affected];
 
-        if(affected.length > 0) {
-            affectedArray.pop();
+        if(affectedArray.length > 0) {
+            var pop = affectedArray.pop();
             setMatchData('autonomous', affected, affectedArray);
             $("[data-field=" + affected).text(affectedArray.length);
+
+            setMatchData('autonomous', pop, getMatchData()['autonomous'][pop] - 1);
         }
     }
 });
