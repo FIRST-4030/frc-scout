@@ -1,4 +1,5 @@
 import json
+from django.core.urlresolvers import reverse
 from django.db.utils import IntegrityError
 from django.shortcuts import render
 from django.http import Http404, HttpResponse
@@ -34,7 +35,8 @@ def pit_scouting(request):
 
     context = {
         'fluid': False,
-        'nav_title': "Pit Scouting"
+        'nav_title': "Pit Scouting",
+        'parent': reverse('frc_scout:index')
     }
 
     return render(request, 'frc_scout/scouting/pit/container.html', context)

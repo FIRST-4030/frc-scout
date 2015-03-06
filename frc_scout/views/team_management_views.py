@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
 from django.db.models.aggregates import Avg, Count, Sum
 from django.forms.models import model_to_dict
 from django.http.response import Http404, HttpResponse
@@ -23,12 +24,12 @@ def view_scouts(request):
     context = {
         'location': request.session.get('location'),
         'scouts': scouts,
+        'parent': reverse('frc_scout:index'),
         'nav_title': 'Manage Scouts',
         'unapproved_scouts': unapproved_scouts
     }
 
     return render(request, 'frc_scout/manage/view_scouts.html', context)
-
 
 
 @login_required
@@ -82,7 +83,8 @@ def find_match(request):
 
     context = {
         'nav_title': "Find Match",
-        'locations': Location.objects.all().order_by('name')
+        'locations': Location.objects.all().order_by('name'),
+        'parent': reverse('frc_scout:index')
     }
 
     if request.GET:

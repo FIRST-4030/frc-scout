@@ -20,6 +20,7 @@ def index(request):
         context = {
             'user': request.user,
             'nav_title': "Home",
+            'no_back': True,
             'location_id': request.session.get('location_id'),
             'location_name': request.session.get('location_name'),
             }
@@ -56,7 +57,7 @@ def login_view(request):
     context = {
         'location_list': json.dumps(location_list),
         'total_teams': Team.objects.all().count(),
-        'total_matches': Match.objects.exclude(location__name="TEST").count(),
+        'total_matches': Match.objects.all().values('location', 'match_number').exclude(location__name="TEST").count(),
         'total_users': User.objects.all().count()
         }
 

@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.urlresolvers import reverse
 from django.http.response import HttpResponse
 from django.shortcuts import render
 from frc_scout.decorators import secure_required
@@ -21,7 +22,8 @@ def update_profile(request):
     else:
         context = {
             'nav_title': "Update Profile",
-            'location': request.session.get('location')
+            'location': request.session.get('location'),
+            'parent': reverse('frc_scout:index')
         }
         return render(request, 'frc_scout/account/update_profile.html', context)
 
@@ -31,7 +33,8 @@ def update_profile(request):
 def update_password(request):
     context = {
         'nav_title': "Update Password",
-        'location': request.session.get('location')
+        'location': request.session.get('location'),
+        'parent': reverse('frc_scout:update_profile')
     }
 
     if request.method == "POST":
