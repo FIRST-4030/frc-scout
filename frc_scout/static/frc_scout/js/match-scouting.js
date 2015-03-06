@@ -142,9 +142,38 @@ function saveAndContinue(fromStage, toStage, sender) {
 
         var matchNumber = parseInt($("#match_number").val());
 
+        var override = false;
+
+        if(sender) {
+            if(sender.id === "override") {
+                override = true;
+            }
+        }
+
         if(isNaN(teamNumber) || teamNumber < 1) {
             errorMessage.push("Team number is required and must be a number of one or greater.");
+        } else {
+            if(localStorage.teamsAtEvent !== undefined) {
+                var teams = $.parseJSON(localStorage.teamsAtEvent);
+                if(!override) {
+                    if(teams.length > 0) {
+                        var exists = false;
+                        $.each(teams, function(key, value) {
+                            if(value['team_number'] === teamNumber) {
+                                exists = true;
+                                return;
+                            }
+                        });
+
+                        if(!exists) {
+                            errorMessage.push("That team is not present at this event. <button class='btn btn-defaul btn-sm' id='override' onclick='saveAndContinue(\"prematch\", \"autonomous_starting_location\", this)';>Override.</a>");
+                        }
+                    }
+                }
+            }
         }
+
+
 
         if(isNaN(matchNumber) || matchNumber < 1) {
             errorMessage.push("Match number is required and must be a number of one or greater.");
@@ -541,19 +570,19 @@ function saveAndContinue(fromStage, toStage, sender) {
         };
     }
 
-    // show alerts and bail if they exist
+// show alerts and bail if they exist
     if(errorMessage.length !== 0) {
         showErrorMessages(errorMessage, userCorrectionRequired);
         return;
     }
 
-    // otherwise hide any active alerts
+// otherwise hide any active alerts
     $("#alert").hide();
 
-    // push it back to localStorage
+// push it back to localStorage
     setMatchDataArray(fromStage, stageVariables);
 
-    // change hash triggering the next stage to show
+// change hash triggering the next stage to show
     window.location.hash = toStage;
 }
 
