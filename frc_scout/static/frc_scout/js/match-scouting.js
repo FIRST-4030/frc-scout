@@ -166,7 +166,7 @@ function saveAndContinue(fromStage, toStage, sender) {
                         });
 
                         if(!exists) {
-                            errorMessage.push("That team is not present at this event. <button class='btn btn-defaul btn-sm' id='override' onclick='saveAndContinue(\"prematch\", \"autonomous_starting_location\", this)';>Override.</a>");
+                            errorMessage.push("That team is not present at this event. <button class='btn btn-defaul btn-sm' id='override' onclick='saveAndContinue(\"prematch\", \"autonomous_starting_location\", this)';>Override.</button>");
                         }
                     }
                 }
