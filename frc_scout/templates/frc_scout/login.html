@@ -18,7 +18,7 @@
             <br>
             <h2 style="text-align: center;">FRC Scout: Login</h2>
             {% if login_message %}
-                <div class="panel panel-danger">
+                <div class="panel panel-warning">
                     <div class="panel-heading">
                         <h3 class="panel-title">Information</h3>
                     </div>
@@ -35,7 +35,9 @@
                     <input type="password" class="form-control" placeholder="Password" name="password" required>
                     <input type="text" id='location' class="typeahead form-control" placeholder="Loading event locations..." name="location" required="true" disabled="true">
                 </div>
-                <br>
+                <div class="form-group">
+                    <p style="font-style: oblique;">So far, <strong>{{ total_users }} users</strong> from <strong>{{ total_teams }} teams</strong> have scouted <strong>{{ total_matches }} matches</strong>!</p>
+                </div>
                 <div class="form-group">
                     <button class="btn btn-primary form-control" style="margin-bottom: 10px;">Login</button>
                     <a href="{% url 'frc_scout:create_account' %}" class="btn btn-warning form-control" type="button" style="margin-bottom: 10px;">Create Account</a>

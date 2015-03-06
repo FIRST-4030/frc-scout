@@ -148,6 +148,8 @@ function saveAndContinue(fromStage, toStage, sender) {
 
         if(isNaN(matchNumber) || matchNumber < 1) {
             errorMessage.push("Match number is required and must be a number of one or greater.");
+        } else if(matchNumber > 150) {
+            errorMessage.push("Match number cannot be greater than 150.");
         }
 
         if(localStorage.allianceColor === null || localStorage.allianceColor === undefined) {
@@ -158,6 +160,17 @@ function saveAndContinue(fromStage, toStage, sender) {
             team_number: teamNumber,
             match_number: matchNumber
         };
+
+
+        if(sender) {
+            if (sender.id === "no_show") {
+                if (confirm("Click OK to confirm that this team was not present for the match."));
+
+                stageVariables['no_show'] = true;
+                setMatchDataArray('postmatch', {});
+                setMatchData('postmatch', 'scouting_complete', true);
+            }
+        }
     }
 
     else if(fromStage === "autonomous_starting_location") {
@@ -172,6 +185,7 @@ function saveAndContinue(fromStage, toStage, sender) {
     }
 
     else if(fromStage === "autonomous") {
+
         // totes
         var autoStackedYellowTotes = parseInt($("#auto-stacked-yellow-tote-text").text());
         var autoMovedYellowTotes = parseInt($("#auto-moved-yellow-tote-text").text());
@@ -197,7 +211,7 @@ function saveAndContinue(fromStage, toStage, sender) {
         // assume 1 if nothing else because they obviously did something to get here
         var numberOfThings = 1;
 
-        // if there's already data then set it to that
+        // if there's already data then set it to that + 1
         if(autoVariables[id]) {
             numberOfThings = autoVariables[id] + 1;
         }
@@ -491,7 +505,7 @@ function saveAndContinue(fromStage, toStage, sender) {
                 'tele_fouls': 0,
                 'tele_knocked_over_stacks': 0,
                 'tele_dead_bot': false,
-                'tele_shooter_jam': 0
+                'tele_container_fell_off': 0
             };
         }
 
@@ -634,7 +648,6 @@ function saveDataOffline() {
     $("#finished_message").show();
     $("#saved").show();
     $("#deleted").hide();
-    $("#finished_message").show();
 }
 
 
@@ -757,6 +770,27 @@ function openStage(stage) {
                 $("#auto_scored_container_text").text(storedVariables['autonomous']['autonomous_containers_scored'].length);
             } else {
                 $("#auto_scored_container_text").text(0);
+            }
+        }
+    }
+
+    else if(stage === "autonomous_containers_unscored" || stage === "autonomous_containers_scored") {
+        if(storedVariables['autonomous']) {
+            var autoVariables = storedVariables['autonomous'];
+            if(autoVariables['auto_ground_acquired_containers']) {
+                if(parseInt(autoVariables['auto_ground_acquired_containers']) >= 3) {
+                    $(".auto_ground_acquired_containers").attr('disabled', true);
+                } else {
+                    $(".auto_ground_acquired_containers").attr('disabled', false);
+                }
+            }
+
+            if(autoVariables['auto_step_center_acquired_containers']) {
+                if(parseInt(autoVariables['auto_step_center_acquired_containers']) >= 4) {
+                    $(".auto_step_center_acquired_containers").attr('disabled', true);
+                } else {
+                    $(".auto_step_center_acquired_containers").attr('disabled', false);
+                }
             }
         }
     }
@@ -904,6 +938,11 @@ function openStage(stage) {
             $("#online_message").show();
         } else {
             $("#offline_message").show();
+        }
+
+
+        if($("#practice_scouting").val() === "true") {
+            setMatchData('postmatch', 'practice_scouting', true);
         }
 
     }
@@ -1249,11 +1288,11 @@ $("#match_number").on('keyup', function() {
 
         $.each(red, function(k, v) {
             $("#red" + k).text(v.substr(3));
-            $("#select_team_number_select").append("<option class='d' data-color='red' value='" + v + "'>" + v.substr(3) + "</option>");
+            $("#select_team_number_select").append("<option style='color:red;' class='d' data-color='red' value='" + v + "'>" + v.substr(3) + "</option>");
         });
 
         $.each(blue, function(k, v) {
-            $("#select_team_number_select").append("<option class='d' data-color='blue' value='" + v + "'>" + v.substr(3) + "</option>");
+            $("#select_team_number_select").append("<option style='color:blue;' class='d' data-color='blue' value='" + v + "'>" + v.substr(3) + "</option>");
             $("#blue" + k).text(v.substr(3));
         });
 
@@ -1299,10 +1338,12 @@ $(".auto-container-undo").click(function() {
     if(getMatchData()['autonomous'][affected]) {
         var affectedArray = getMatchData()['autonomous'][affected];
 
-        if(affected.length > 0) {
-            affectedArray.pop();
+        if(affectedArray.length > 0) {
+            var pop = affectedArray.pop();
             setMatchData('autonomous', affected, affectedArray);
             $("[data-field=" + affected).text(affectedArray.length);
+
+            setMatchData('autonomous', pop, getMatchData()['autonomous'][pop] - 1);
         }
     }
 });

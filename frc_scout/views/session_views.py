@@ -8,7 +8,7 @@ from django.http.response import HttpResponseRedirect
 from django.shortcuts import render
 from django.contrib import messages
 from django.utils import timezone
-from frc_scout.models import Team, UserProfile, Location, SitePreferences
+from frc_scout.models import Team, UserProfile, Location, SitePreferences, Match
 from django.db import IntegrityError
 from frc_scout.decorators import secure_required, insecure_required
 from frc_scout_2015 import local_settings
@@ -55,6 +55,9 @@ def login_view(request):
 
     context = {
         'location_list': json.dumps(location_list),
+        'total_teams': Team.objects.all().count(),
+        'total_matches': Match.objects.exclude(location__name="TEST").count(),
+        'total_users': User.objects.all().count()
         }
 
     try:

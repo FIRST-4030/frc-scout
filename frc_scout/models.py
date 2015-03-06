@@ -43,10 +43,15 @@ def get_current_time():
 
 
 class Match(models.Model):
+    class Meta:
+        verbose_name_plural = "Matches"
+
     # References
 
     scout_team_number = models.IntegerField(max_length=5)
     scout_name = models.TextField()
+
+    no_show = models.BooleanField(default=False)
 
     team_number = models.IntegerField(max_length=5)
     scout = models.ForeignKey(User)
@@ -55,8 +60,8 @@ class Match(models.Model):
     location = models.ForeignKey(Location)
 
     # Autonomous
-    auto_start_x = models.DecimalField(max_digits=8, decimal_places=8)
-    auto_start_y = models.DecimalField(max_digits=8, decimal_places=8)
+    auto_start_x = models.DecimalField(default=0, max_digits=8, decimal_places=8)
+    auto_start_y = models.DecimalField(default=0, max_digits=8, decimal_places=8)
 
     auto_yellow_stacked_totes = models.IntegerField(default=0, verbose_name="Yellow totes stacked")
     auto_yellow_moved_totes = models.IntegerField(default=0, verbose_name="Yellow totes moved")
@@ -69,7 +74,7 @@ class Match(models.Model):
     auto_moved_to_auto_zone = models.BooleanField(default=False, verbose_name="Moved to Auto Zone")
     auto_no_auto = models.BooleanField(default=False, verbose_name="No autonomous")
 
-    auto_fouls = models.IntegerField(default=0, verbose_name="Autonomous fouls committed")
+    auto_fouls = models.IntegerField(default=0, verbose_name="Autonomous mess-ups committed")
     auto_interference = models.IntegerField(default=0, verbose_name="Interference committed")
 
     # Teleoperated
@@ -89,7 +94,7 @@ class Match(models.Model):
     tele_knocked_over_stacks = models.IntegerField(default=0, verbose_name="Stacks knocked over")
 
     tele_dead_bot = models.BooleanField(default=False, verbose_name="Robot died")
-    tele_shooter_jam = models.BooleanField(default=False, verbose_name="Shooter jammed")
+    tele_container_fell_off = models.IntegerField(default=0, verbose_name="Containers dropped")
 
     tele_foul_context = models.TextField(null=True, blank=True)
     tele_public_comments = models.TextField(null=True, blank=True)
@@ -101,6 +106,9 @@ class Match(models.Model):
 
 
 class MatchPrivateComments(models.Model):
+    class Meta:
+        verbose_name_plural = "Match private comments"
+
     match = models.OneToOneField(Match)
     comments = models.TextField(null=True, blank=True)
 
@@ -133,6 +141,9 @@ class ContainerStack(models.Model):
 
 
 class PitScoutData(models.Model):
+    class Meta:
+        verbose_name_plural = "Pit scout data"
+
     scout = models.ForeignKey(User)
     location = models.ForeignKey(Location)
 
@@ -189,6 +200,9 @@ class PitScoutData(models.Model):
 
 
 class SitePreferences(models.Model):
+    class Meta:
+        verbose_name_plural = "Site preferences"
+
     site_url = models.TextField()
     login_message = models.TextField(blank=True, null=True)
     home_message = models.TextField(blank=True, null=True)

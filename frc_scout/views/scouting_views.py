@@ -18,6 +18,16 @@ def match_scouting(request):
 
     return render(request, 'frc_scout/scouting/match/container.html', context)
 
+@insecure_required
+def match_scouting_practice(request):
+
+    context = {
+        'fluid': True,
+        'practice_scouting': True,
+    }
+
+    return render(request, 'frc_scout/scouting/match/container.html', context)
+
 
 @insecure_required
 def pit_scouting(request):
@@ -49,7 +59,15 @@ def submit_match_scouting_data(request):
                 # All variables that are NOT in separate database tables
                 #
 
-                location = Location.objects.get(id=request.session.get('location_id'))
+                if match['postmatch'].get('practice_scouting'):
+                    try:
+                        location = Location.objects.filter(name="TEST")[0]
+                    except Location.DoesNotExist and IndexError:
+                        Location(name="TEST").save()
+                        location = Location.objects.filter(name="TEST")[0]
+
+                else:
+                    location = Location.objects.get(id=request.session.get('location_id'))
 
                 match_object = Match(scout=request.user,
                                      location=location,
@@ -62,6 +80,7 @@ def submit_match_scouting_data(request):
 
                     for prematch_attr in prematch:
                         setattr(match_object, prematch_attr, prematch.get(prematch_attr))
+                        print(prematch_attr)
 
                 # AUTO START LOCATION
                 if 'autonomous_starting_location' in match:
@@ -121,7 +140,7 @@ def submit_match_scouting_data(request):
                         setattr(match_object, postmatch_attr, postmatch.get(postmatch_attr))
 
                     # private comments
-                    pc.comments = postmatch['tele_private_comments']
+                    pc.comments = postmatch.get('tele_private_comments', None)
                 try:
                     match_object.save()
                     pc.match = match_object

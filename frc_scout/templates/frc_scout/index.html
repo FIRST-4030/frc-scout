@@ -10,7 +10,7 @@
 
         {% if home_messages %}
             <div class="col-md-10 col-md-offset-1">
-                <div class="panel panel-danger">
+                <div class="panel panel-warning">
                     <div class="panel-heading">
                         <h3 class="panel-title">Information</h3>
                     </div>
@@ -41,21 +41,9 @@
                 </div>
                 <div class="panel-body">
                     <a class="btn btn-success btn-super" href="{% url "frc_scout:match_scouting" %}">Scout a Match</a>
+                    <a class="btn btn-success btn-super" href="{% url "frc_scout:match_scouting_practice" %}">Practice Match Scouting</a>
                     <a class="btn btn-success btn-super" href="{% url "frc_scout:pit_scouting" %}">Pit Scout a Team</a>
-                    <a class="btn btn-success btn-super" href="{% url "frc_scout:view_team_profile" %}">Team Profile</a>
                     <button id="submit_pending" class="btn btn-success btn-super" style="display: none;" onclick="submitData();">Submit Pending match data</button>
-                    <form style="display: inline;" onsubmit="window.location = '{% url 'frc_scout:view_team_profile' %}' + $('#team_number').val(); return false;">
-                        <div style="display: inline-table;">
-                            <div style="display: table-row;">
-                                <div style="display: table-cell;">
-                                    <input type="number" class="form-control" style="max-width: 150px; margin: 10px 10px; height: 50px; font-size: 18px;" placeholder="Find Team Profile" id="team_number" required>
-                                </div>
-                                <div style="display: table-cell;">
-                                    <button class="btn btn-success btn-super">Go</button>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
                     <h6 class="btn-super" style="color: #37883A; font-weight: bold;">In order to scout offline, you must select "Scout a Match" and keep the page loaded.</h6>
                 </div>
             </div>
@@ -70,6 +58,19 @@
                     {#                    <a class="btn btn-primary btn-super" href="#">View Team Averages</a>#}
                     <a class="btn btn-primary btn-super" href="{% url 'frc_scout:tableau_info' %}">Integrate with Tableau</a>
                     <a class="btn btn-primary btn-super" href="{% url 'frc_scout:database_instructions' %}">connect to database</a>
+                    <a class="btn btn-primary btn-super" href="{% url "frc_scout:view_team_profile" %}">Team Profile</a>
+                    <form style="display: inline;" onsubmit="window.location = '{% url 'frc_scout:view_team_profile' %}' + $('#team_number').val(); return false;">
+                        <div style="display: inline-table;">
+                            <div style="display: table-row;">
+                                <div style="display: table-cell;">
+                                    <input type="number" class="form-control" style="max-width: 160px; margin: 10px 10px; height: 50px; font-size: 18px;" placeholder="Find Team Profile" id="team_number" required>
+                                </div>
+                                <div style="display: table-cell;">
+                                    <button class="btn btn-primary btn-super">Go</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

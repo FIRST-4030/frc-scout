@@ -8,20 +8,20 @@
 {% block extra_css %}
     {% compress css inline %}
         <style type="text/css">
-            ::-webkit-input-placeholder { /* WebKit browsers */
-                color:    #666666 !important;
-            }
-            :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
-                color:    #666666 !important;
-                opacity:  1;
-            }
-            ::-moz-placeholder { /* Mozilla Firefox 19+ */
-                color:    #666666 !important;
-                opacity:  1;
-            }
-            :-ms-input-placeholder { /* Internet Explorer 10+ */
-                color:    #666666 !important;
-            }
+            {#            ::-webkit-input-placeholder { /* WebKit browsers */#}
+            {#                color:    #666666 !important;#}
+            {#            }#}
+            {#            :-moz-placeholder { /* Mozilla Firefox 4 to 18 */#}
+            {#                color:    #666666 !important;#}
+            {#                opacity:  1;#}
+            {#            }#}
+            {#            ::-moz-placeholder { /* Mozilla Firefox 19+ */#}
+            {#                color:    #666666 !important;#}
+            {#                opacity:  1;#}
+            {#            }#}
+            {#            :-ms-input-placeholder { /* Internet Explorer 10+ */#}
+            {#                color:    #666666 !important;#}
+            {#            }#}
 
             #teleoperated {
                 background: linear-gradient(rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, .3) 50%);
@@ -38,7 +38,7 @@
 
     <!-- ERRORS -->
     <div class="container-fluid">
-        <div class="alert alert-warning alert-dismissible" role="alert" id="alert" style="margin-top: 10px; display: none;">
+        <div class="alert alert-danger alert-dismissible" role="alert" id="alert" style="margin-top: 10px; display: none;">
             <button type="button" class="close" onclick="$('#alert').hide();" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <p id="correct_errors"><strong>Please correct the following errors:</strong></p>
             <span id="alert-text"></span>
@@ -60,21 +60,23 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-12">
-                <input id="match_number" class="form-control input-x-lg background-white" placeholder="Match Number" type='number'>
+            <label for="match_number" style="padding-top:10px; font-weight: bold;" class="col-sm-4 control-label input-x-lg">Match Number:</label>
+            <div class="col-sm-8">
+                <input id="match_number" class="form-control input-x-lg background-white" placeholder="Match" type='number'>
             </div>
         </div>
         <br>
-        <div class="row" id="type_team_number">
-            <div class="col-md-12">
-                <input id="team_number" class="form-control input-x-lg background-white" placeholder="Team Number" type="number">
-            </div>
-        </div>
-        <div class="row" id="select_team_number" class="alliance-toggle" style="display: none;">
-            <div class="col-md-12">
-                <select id="select_team_number_select" class="form-control input-x-lg alliance-toggle background-white">
-                    <option value="" selected="selected">Select Team</option>
-                </select>
+        <div class="row">
+            <label for="team_number" style="padding-top: 10px; font-weight: bold;" class="col-sm-4 control-label input-x-lg">Team Number:</label>
+            <div class="col-sm-8">
+                <div id="type_team_number">
+                    <input id="team_number" class="form-control input-x-lg background-white" placeholder="Team" type="number">
+                </div>
+
+                <div id="select_team_number">
+                    <select id="select_team_number_select" size="2" style="padding-top: 10px;" class="form-control input-x-lg alliance-toggle background-white">
+                    </select>
+                </div>
             </div>
         </div>
         <div class="row" id="select_alliance_color">
@@ -94,15 +96,22 @@
         </div>
         <div class="row">
             <div class="col-md-12">
-                <h3 style="color: #666666;">Location: <span id='location'>{{ request.session.location_name }}</span></h3>
+                {% if not practice_scouting %}
+                    <h3 style="color: #666666;">Location: <span id='location'>{{ request.session.location_name }}</span></h3>
+                {% else %}
+                    <h3 style="color:#bd001f; font-weight: bold;">You are scouting a practice match. Your data will be submitted to the TEST location.</h3>
+                {% endif %}
             </div>
             <br>
         </div>
         <div class="row">
-            <div class="col-sm-6">
+            <div class="col-sm-4">
                 <button class="btn btn-extra-high btn-info btn-lg max-width" onclick="window.location = '{% url 'frc_scout:index' %}';"><span class="glyphicon glyphicon-arrow-left"></span> return home</button>
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-4">
+                <button id="no_show" class="btn btn-extra-high btn-warning btn-lg max-width" onclick="saveAndContinue('prematch', 'finish', this);">No-show</button>
+            </div>
+            <div class="col-sm-4">
                 <button class="btn btn-extra-high btn-primary btn-lg max-width" onclick="saveAndContinue('prematch', 'autonomous_starting_location');">autonomous &nbsp;<span class="glyphicon glyphicon-arrow-right"></span></button>
             </div>
         </div>
@@ -226,7 +235,7 @@
             </div>
 
             <div class="col-sm-4">
-                <button style="margin-top: -10px; margin-bottom: 5px; height: 75px;" class="btn btn-extra-high btn-danger btn-lg max-width" onclick="saveAndContinue('autonomous', 'autonomous_fouls_and_other');">Fouls & Other</button>
+                <button style="margin-top: -10px; margin-bottom: 5px; height: 75px;" class="btn btn-extra-high btn-danger btn-lg max-width" onclick="saveAndContinue('autonomous', 'autonomous_fouls_and_other');">mess ups</button>
             </div>
 
             <div class="col-sm-4">
@@ -239,10 +248,10 @@
     <div class="container-fluid stage" id="autonomous_containers_unscored" style="display: none;">
         <div class="row">
             <div class="col-md-12" style="margin-top: 2vh;">
-                <button id="auto_ground_acquired_containers" onclick="saveAndContinue('autonomous_containers_unscored', 'autonomous', this);" class="btn btn-lg btn-warning max-width" style="height: 35vh; margin-top: 1vh; margin-bottom: 1vh; font-size: 30px;">From Ground</button>
+                <button id="auto_ground_acquired_containers" onclick="saveAndContinue('autonomous_containers_unscored', 'autonomous', this);" class="auto_ground_acquired_containers btn btn-lg btn-warning max-width" style="height: 35vh; margin-top: 1vh; margin-bottom: 1vh; font-size: 30px;">From Ground</button>
             </div>
             <div class="col-md-12">
-                <button id="auto_step_center_acquired_containers" onclick="saveAndContinue('autonomous_containers_unscored', 'autonomous', this);" class="btn btn-lg btn-danger max-width" style="height: 35vh; margin-top: 1vh; margin-bottom: 1vh; font-size: 30px;">From Center/Step</button>
+                <button id="auto_step_center_acquired_containers" onclick="saveAndContinue('autonomous_containers_unscored', 'autonomous', this);" class="auto_step_center_acquired_containers btn btn-lg btn-danger max-width" style="height: 35vh; margin-top: 1vh; margin-bottom: 1vh; font-size: 30px;">From Center/Step</button>
             </div>
             <div class="col-md-12">
                 <button class="btn btn-lg btn-info max-width" style="margin-top: 3vh; height: 10vh;" onclick="discardAndChangeStage('autonomous_containers_unscored', 'autonomous');"><span class="glyphicon glyphicon-arrow-left"></span>&nbsp; autONOMOUS</button>
@@ -254,10 +263,10 @@
     <div class="container-fluid stage" id="autonomous_containers_scored" style="display: none;">
         <div class="row">
             <div class="col-md-12" style="margin-top: 2vh;">
-                <button id="auto_ground_acquired_containers" onclick="saveAndContinue('autonomous_containers_scored', 'autonomous', this);" class="btn btn-lg btn-warning max-width" style="height: 35vh; margin-top: 1vh; margin-bottom: 1vh; font-size: 30px;">From Ground</button>
+                <button id="auto_ground_acquired_containers" onclick="saveAndContinue('autonomous_containers_scored', 'autonomous', this);" class="auto_ground_acquired_containers btn btn-lg btn-warning max-width" style="height: 35vh; margin-top: 1vh; margin-bottom: 1vh; font-size: 30px;">From Ground</button>
             </div>
             <div class="col-md-12">
-                <button id="auto_step_center_acquired_containers" onclick="saveAndContinue('autonomous_containers_scored', 'autonomous', this);" class="btn btn-lg btn-danger max-width" style="height: 35vh; margin-top: 1vh; margin-bottom: 1vh; font-size: 30px;">From Center/Step</button>
+                <button id="auto_step_center_acquired_containers" onclick="saveAndContinue('autonomous_containers_scored', 'autonomous', this);" class="auto_step_center_acquired_containers btn btn-lg btn-danger max-width" style="height: 35vh; margin-top: 1vh; margin-bottom: 1vh; font-size: 30px;">From Center/Step</button>
             </div>
             <div class="col-md-12">
                 <button class="btn btn-lg btn-info max-width" style="margin-top: 3vh; height: 10vh;" onclick="discardAndChangeStage('autonomous_containers_scored', 'autonomous');"><span class="glyphicon glyphicon-arrow-left"></span>&nbsp; autONOMOUS</button>
@@ -383,7 +392,7 @@
                 <button style="margin-top: 5px; margin-bottom: 5px;" class="btn btn-extra-high btn-info btn-lg max-width" onclick="saveAndContinue('teleoperated', 'autonomous');"><span class="glyphicon glyphicon-arrow-left"></span>&nbsp; autoNomoUs</button>
             </div>
             <div class="col-sm-4">
-                <button style="margin-top: 5px; margin-bottom: 5px;" class="btn btn-extra-high btn-danger btn-lg max-width" onclick="saveAndContinue('teleoperated', 'teleoperated_fouls_and_other');">Fouls & Other</button>
+                <button style="margin-top: 5px; margin-bottom: 5px;" class="btn btn-extra-high btn-danger btn-lg max-width" onclick="saveAndContinue('teleoperated', 'teleoperated_fouls_and_other');">Mess Ups</button>
             </div>
 
             <div class="col-sm-4">
@@ -419,7 +428,7 @@
         <div class="row">
             <div class="col-md-12">
                 <h3>Totes Stacked On Top Of</h3>
-                <div class="btn-group btn-default max-width" data-toggle="buttons" id="start_height">
+                <div class="btn-group max-width" data-toggle="buttons" id="start_height">
                     <label class="btn btn-success btn-group-tall-6 start-height-group-wrapper">
                         <input type="radio" name="start_height_group" data-height="0"><span style="font-size: 24px; margin-top: 10px;">New<br>Stack</span>
                     </label>
@@ -560,7 +569,7 @@
 
             <div class="col-sm-6">
                 <button class="btn btn-lg btn-danger max-width btn-grid" id="tele_dead_bot" style="margin-top: 2vh; margin-bottom: 1vh;" onclick="saveAndContinue('teleoperated_fouls_and_other', 'teleoperated', this);">dead bot</button>
-                <button class="btn btn-lg btn-warning max-width btn-grid" id="tele_shooter_jam" style="margin-top: 1vh; margin-bottom: 1vh;" onclick="saveAndContinue('teleoperated_fouls_and_other', 'teleoperated', this);">container fell off</button>
+                <button class="btn btn-lg btn-warning max-width btn-grid" id="tele_container_fell_off" style="margin-top: 1vh; margin-bottom: 1vh;" onclick="saveAndContinue('teleoperated_fouls_and_other', 'teleoperated', this);">container fell off</button>
             </div>
         </div>
         <div class="row">
@@ -676,7 +685,7 @@
             </div>
         </div>
     </div>
-
+    <input type="hidden" id="practice_scouting" name="practice_scouting" value="{% if practice_scouting %}true{% else %}false{% endif %}">
 
 {% endblock %}
 
@@ -685,5 +694,15 @@
     {% compress js %}
         <script type="text/javascript" src="{% static 'frc_scout/js/bootstrap-switch.min.js' %}"></script>
         <script type="text/javascript" src="{% static "frc_scout/js/match-scouting.js" %}"></script>
+
+        <script type="text/javascript">
+            if($("#practice_scouting").val() === "true") {
+                $("html").css({
+                    "border": "10px dashed rgb(255, 52, 52)",
+                    "margin": "0",
+                    "height": "100%"
+                });
+            }
+        </script>
     {% endcompress %}
 {% endblock %}
