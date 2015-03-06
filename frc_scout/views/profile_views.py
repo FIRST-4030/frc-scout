@@ -20,9 +20,11 @@ def view_team_profile(request, team_number=None):
 
     # oh boy here we go
     average_sections = {}
+
     matches = Match.objects.filter(team_number=team_number).exclude(location__name="TEST") # only take matches for this team
     # iterate over possible match fields
     for field in Match._meta.fields:
+        value = None
         # field_type = IntegerField, BooleanField, etc.
         field_type = str(field.__class__).split("'")[1].split('.')[4]
         # field_name = tele_picked_up_yellow_crates_blah, etc.
