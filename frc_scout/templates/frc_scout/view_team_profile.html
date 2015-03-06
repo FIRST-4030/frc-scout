@@ -2,7 +2,7 @@
 
 {% load staticfiles %}
 
-{% block title %}Team {{ team_number }}'s profile{% endblock %}
+{% block title %}Team {{ team_number }}{% endblock %}
 
 {% block nav %}{% include 'frc_scout/nav.html' %}{% endblock %}
 
@@ -22,9 +22,9 @@
                 <div class="panel-heading">
                     <h1 class="panel-title">
                         {% if  aggregate_data.team_name %}
-                            <h3>{{ aggregate_data.team_name }}'s Profile</h3>
+                            <h3>{{ aggregate_data.team_name }}</h3>
                         {% else %}
-                            <h3>Team {{ team_number }}'s Profile</h3>
+                            <h3>Team {{ team_number }}</h3>
                         {% endif %}
                     </h1>
                 </div>

@@ -99,7 +99,7 @@ def view_team_profile(request, team_number=None):
         # (this is necessary because otherwise the sections could show up in any order
         # when we iterate over the dictionary)
         'sections': [average_sections[z] for z in sorted(list(average_sections))],
-        'nav_title': str("Profile: %s" % team_number),
+        'nav_title': str(team_number),
         'matches': matches
     }
     return render(request, 'frc_scout/view_team_profile.html', context)
