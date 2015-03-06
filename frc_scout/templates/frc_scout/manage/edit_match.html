@@ -165,7 +165,7 @@
                             <tr>
                                 <td class="col-md-5"><a href="#" data-max="5" data-type="number" class="editable-totestack" data-name="start_height" data-pk="{{ totestack.id }}">{{ totestack.start_height }}</a></td>
                                 <td class="col-md-5"><a href="#" data-max="6" data-type="number" class="editable-totestack" data-name="totes_added" data-pk="{{ totestack.id }}">{{ totestack.totes_added }}</a></td>
-                                <td class="col-md-2">({{ totestack.x|floatformat:"-2" }}, {{ totestack.y|floatformat:"-2" }})<br><a  data-toggle="modal" href="#editLocationModal" class="btn btn-info btn-sm" onclick="lastToteStackIdClicked = {{ totestack.id }}; lastX = {{ totestack.x }}; lastY = {{ totestack.y }}; drawImage();">Change</a></td>
+                                <td class="col-md-2">({{ totestack.x|floatformat:"-2" }}, {{ totestack.y|floatformat:"-2" }})<br><a  data-toggle="modal" href="#editLocationModal" class="btn btn-info btn-sm" onclick="lastToteStackIdClicked = {{ totestack.id }}; drawImage({{ totestack.x }}, {{ totestack.y }});">Change</a></td>
                             </tr>
                         {% endfor %}
                         </tbody>
@@ -226,9 +226,7 @@
                     <h4 class="modal-title" id="myModalLabel">Click Tote Stack Location</h4>
                 </div>
                 <div class="modal-body">
-                    <canvas id="teleoperated_stacked_totes_wrapper" style="background: url('{% static "frc_scout/img/tote_score.png" %}') no-repeat; padding: 0; background-size: contain; width: 200%;"></canvas>
-                    {#                    <img id="teleoperated_stacked_totes_image" style="width: 100%;" src="{% static 'frc_scout/img/tote_score.png' %}">#}
-                    {#                    <canvas id="image_wrap" style="padding: 0;"></canvas>#}
+                    <img id="teleoperated_stacked_totes_image" style="width: 100%;" src="{% static 'frc_scout/img/tote_score.png' %}">
                 </div>
             </div>
         </div>
@@ -246,18 +244,24 @@
             var lastToteStackIdClicked = undefined;
             var lastX, lastY;
 
-            function drawImage() {
-                var canvas = document.getElementById('teleoperated_stacked_totes_wrapper');
-                var ctx = canvas.getContext('2d');
-
-                var xLoc = lastX * canvas.width;
-                var yLoc = lastY * canvas.height;
-
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-                ctx.fillStyle = 'firebrick';
-                ctx.fillRect(xLoc - 5, yLoc - 5, 10, 10);
+            function drawImage(x, y) {
+                return;
             }
+
+{#            function drawImage(x, y) {#}
+{#                var image = $('#teleoperated_stacked_totes_image');#}
+{##}
+{#                $('body').append("<div id='old_loc'></div>");#}
+{#                var old_loc = $("#old_loc");#}
+{#                old_loc.css({#}
+{#                    'position' : 'absolute',#}
+{#                    'width': 20,#}
+{#                    'height': 20,#}
+{#                    'background': 'firebrick',#}
+{#                    'top': image.offsetTop,#}
+{#                    'left': image.offsetLeft#}
+{#                })#}
+{#            }#}
 
             $(".editable").editable({
                 url: "{% url 'frc_scout:edit_match_post' %}",
@@ -316,13 +320,10 @@
                 })
             })
 
-            $("#teleoperated_stacked_totes_wrapper").click(function (event) {
+            $("#teleoperated_stacked_totes_image").click(function (event) {
                 var image = $(this);
                 var coopStack = false;
                 var toteStack = lastToteStackIdClicked;
-
-                var canvas = document.getElementById('teleoperated_stacked_totes_wrapper');
-                var ctx = canvas.getContext('2d');
 
                 var xPosition = (event.pageX - image.offset().left) / image.width();
                 var yPosition = (event.pageY - image.offset().top) / image.height();
@@ -332,15 +333,9 @@
                         coopStack = true;
                     }
 
-                    var xLoc = xPosition * canvas.width;
-                    var yLoc = yPosition * canvas.height;
-
-                    ctx.fillStyle = 'green';
-                    ctx.fillRect(xLoc - 5, yLoc - 5, 10, 10);
 
                     if(!confirm("Is this position correct?")) {
                         console.log('said no :(');
-                        ctx.clearRect(xLoc - 5, yLoc - 5, 10, 10);
                         return;
                     }
 
