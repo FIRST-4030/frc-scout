@@ -23,7 +23,7 @@
                                 ' id="more-info-btn-{{match.id}}">more info</button>
                             {% endif %}
                             </div>
-                            <div style="float:left;">
+                            <div style="float:left; padding-top:8px;">
                             <h3 class="panel-title">{{ match.location }} &mdash; Match {{ match.match_number }}</h3>
                             </div>
                             <div style="clear:both;"></div>
@@ -114,18 +114,20 @@
                                     </div>
                                 </div>
                             </div>
-                            <strong>Comments</strong>
-                            <div style="padding: 0 0 0 15px">
-                                {% if match.tele_public_comments %}
-                                    {{ match.tele_public_comments }}<br />
+                                {% if match.tele_public_comments or match.match_private_comments or match.tele_foul_context %}
+                                    <strong>Comments</strong>
+                                    <div style="padding: 0 0 0 15px">
+                                        {% if match.tele_public_comments %}
+                                            {{ match.tele_public_comments }}<br />
+                                        {% endif %}
+                                        {% if match.match_private_comments %}
+                                            <strong>Private comments:</strong> {{ match.match_private_comments}} <strong>&mdash;{{ match.scout_name }}</strong><br />
+                                        {% endif %}
+                                        {% if match.tele_foul_context %}
+                                            <strong>Foul comments:</strong> {{match.tele_foul_context }}<br />
+                                        {% endif %}
+                                    </div>
                                 {% endif %}
-                                {% if match.match_private_comments %}
-                                    <strong>Private comments:</strong> {{ match.match_private_comments}} <strong>&mdash;{{ match.scout_name }}</strong><br />
-                                {% endif %}
-                                {% if match.tele_foul_context %}
-                                    <strong>Foul comments:</strong> {{match.tele_foul_context }}<br />
-                                {% endif %}
-                            </div>
                             {% else %}
                                 <em>No-show</em>
                             {% endif %}
