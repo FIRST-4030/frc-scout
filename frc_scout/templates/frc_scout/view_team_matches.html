@@ -14,19 +14,121 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <div class="panel-title">
-                            <h3 class="panel-title">Match {{ match.match_number }}</h3>
+                            <div style="float:right; text-align:right;">
+                            {% if not match.no_show %}
+                                <button class="btn btn-default btn-sm" onclick='
+                                // what even is my life
+                                $("#more-info-auto-{{match.id}}").toggle(200);
+                                $("#more-info-tele-{{match.id}}").toggle(200);
+                                ' id="more-info-btn-{{match.id}}">more info</button>
+                            {% endif %}
+                            </div>
+                            <div style="float:left;">
+                            <h3 class="panel-title">{{ match.location }} &mdash; Match {{ match.match_number }}</h3>
+                            </div>
+                            <div style="clear:both;"></div>
                         </div>
                     </div>
                     <div class="panel-body">
                         <div style="float:right; text-align:right; padding-right:10px;">
                             <em>{{ match.timestamp }}</em><br />
-                            <em>{{ match.location }}</em>
                         </div>
                         <div style="padding-left:10px;">
+                            {% if not match.no_show %}
+                            Total score: <strong>{{ match.total_score }}</strong>
+                            (<strong>{{ match.score_proportion }}%</strong> of alliance score)<br />
                             <strong>Autonomous</strong><br />
-                            <em>stuff</em><br /><br />
+                            <div style="padding: 0 0 0 15px">
+                                <div>
+                                    Total autonomous score: <strong>{{ match.auto_total_score }}</strong><br />
+                                </div>
+                                <div id="more-info-auto-{{match.id}}" style="display:none">
+                                    <div>
+                                        Moved to auto zone: <strong>{{ match.auto_moved_to_auto_zone }}</strong><br />
+                                    </div>
+                                    <strong>Totes</strong>
+                                    <div style="padding: 0 0 0 15px">
+                                        Yellow moved: <strong>{{ match.auto_yellow_moved_totes }}</strong><br />
+                                        Yellow stacked: <strong>{{ match.auto_yellow_stacked_totes }}</strong><br />
+                                        Grey acquired: <strong>{{ match.auto_grey_acquired_totes }}</strong><br />
+                                    </div>
+                                    <strong>Containers</strong>
+                                    <div style="padding: 0 0 0 15px">
+                                        Acquired: <strong>{{ match.auto_total_acquired_containers }}</strong>
+                                        <div style="padding-left:15px;">
+                                            From center step: <strong>{{ match.auto_step_center_acquired_containers }}</strong><br />
+                                            From ground: <strong>{{ match.auto_ground_acquired_containers }}</strong>
+                                        </div>
+                                        Moved: <strong>{{ match.auto_moved_containers }}</strong>
+                                    </div>
+                                    <strong>Mess-ups</strong>
+                                    <div style="padding: 0 0 0 15px">
+                                        No autonomous mode: <strong>{{ match.auto_no_auto }}</strong><br />
+                                        Autonomous fouls: <strong>{{ match.auto_fouls }}</strong><br />
+                                        Interference committed: <strong>{{ match.auto_interference }}</strong>
+                                    </div>
+                                </div>
+                            </div>
                             <strong>Teleoperated</strong><br />
-                            Upright totes picked up: {{ match.tele_picked_up_ground_upright_totes }}
+                            <div style="padding: 0 0 0 15px">
+                                <div>
+                                    Total teleoperated score: <strong>{{ match.tele_total_score }}</strong><br />
+                                </div>
+                                <div id="more-info-tele-{{match.id}}" style="display:none;">
+                                    <strong>Totes</strong>
+                                    <div style="padding: 0 0 0 15px">
+                                        Acquired: <strong>{{ match.tele_picked_up_total_totes }}</strong>
+                                        <div style="padding-left:15px;">
+                                            From human station: <strong>{{ match.tele_picked_up_human_station_totes }}</strong><br />
+                                            Upright from ground: <strong>{{ match.tele_picked_up_ground_upright_totes }}</strong><br />
+                                            Sideways from ground: <strong>{{ match.tele_picked_up_sideways_totes }}</strong><br />
+                                            Upside-down from ground: <strong>{{ match.tele_picked_up_upside_down_totes }}</strong>
+                                        </div>
+                                        Stacked: <strong>{{ match.tele_total_stacked }}</strong>
+                                        <div style="padding-left:15px;">
+                                            Preferred stack height: <strong>{{ match.tele_average_stack_height }}</strong><br />
+                                            Average totes per stack: <strong>{{ match.tele_average_totes_stacked }}</strong>
+                                        </div>
+                                    </div>
+                                    <strong>Containers</strong>
+                                    <div style="padding: 0 0 0 15px">
+                                        Acquired: <strong>{{ match.tele_picked_up_total_containers }}</strong>
+                                        <div style="padding-left:15px;">
+                                            Upright: <strong>{{ match.tele_picked_up_upright_containers }}</strong><br />
+                                            Sideways: <strong>{{ match.tele_picked_up_sideways_containers }}</strong><br />
+                                            From center step: <strong>{{ match.tele_picked_up_center_step_containers }}</strong>
+                                        </div>
+                                        Moved: <strong>{{ match.auto_moved_containers }}</strong>
+                                    </div>
+                                    <strong>Litter</strong>
+                                    <div style="padding: 0 0 0 15px">
+                                        Pushed to landfill zone: <strong>{{ match.tele_pushed_litter }}</strong><br />
+                                        Placed in container: <strong>{{ match.tele_placed_in_container_litter }}</strong>
+                                    </div>
+                                    <strong>Mess-ups</strong>
+                                    <div style="padding: 0 0 0 15px">
+                                        Stacks knocked over: <strong>{{ match.tele_knocked_over_stacks }}</strong><br />
+                                        Containers dropped: <strong>{{ match.tele_container_fell_off }}</strong><br />
+                                        Teleop fouls: <strong>{{ match.tele_fouls }}</strong><br />
+                                        Robot died: <strong>{{ match.tele_dead_bot }}</strong>
+                                    </div>
+                                </div>
+                            </div>
+                            <strong>Comments</strong>
+                            <div style="padding: 0 0 0 15px">
+                                {% if match.tele_public_comments %}
+                                    {{ match.tele_public_comments }}<br />
+                                {% endif %}
+                                {% if match.match_private_comments %}
+                                    <strong>Private comments:</strong> {{ match.match_private_comments}} <strong>&mdash;{{ match.scout_name }}</strong><br />
+                                {% endif %}
+                                {% if match.tele_foul_context %}
+                                    <strong>Foul comments:</strong> {{match.tele_foul_context }}<br />
+                                {% endif %}
+                            </div>
+                            {% else %}
+                                <em>No-show</em>
+                            {% endif %}
                         </div>
                         <div style="clear:both"></div>
                     </div>
