@@ -4,33 +4,52 @@
 
 {% block nav %}{% include 'frc_scout/nav.html' %}{% endblock %}
 
+{% load static compress %}
+
+{% block extra_css %}
+    {% compress css %}
+        <link rel="stylesheet" type="text/css" href="{% static 'frc_scout/css/bootstrap-editable.css' %}">
+    {% endcompress %}
+{% endblock %}
+
 {% block main_content %}
     <div class="row">
         <div class="col-md-6 col-md-offset-3">
-            <p><strong>Click information to update.</strong></p>
-            First Name: <a href="#" class="editable" data-type="text" data-pk="first_name">{{ user.first_name }}</a>
-            <br>
-            Last Name: <a href="#" class="editable" data-type="text" data-pk="last_name">{{ user.last_name }}</a>
-            <br>
-            Email Address: <a href="#" class="editable" data-type="email" data-pk="email">{{ user.email }}</a>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Click information to update.</h3>
+                </div>
+                <div class="panel-body">
+                    First Name: <a href="#" class="editable" data-type="text" data-pk="first_name">{{ user.first_name }}</a>
+                    <br>
+                    Last Name: <a href="#" class="editable" data-type="text" data-pk="last_name">{{ user.last_name }}</a>
+                    <br>
+                    Email Address: <a href="#" class="editable" data-type="email" data-pk="email">{{ user.email }}</a>
 
-            <br>
-            <h6><a href="{% url 'frc_scout:update_password' %}">Update Password</a></h6>
+                    <br>
+                    <h6><a href="{% url 'frc_scout:update_password' %}">Update Password</a></h6>
+                </div>
+            </div>
         </div>
     </div>
 {% endblock %}
 
 {% block extra_js %}
-    <script type="text/javascript">
-        $(".editable").editable({
-            url: "{% url 'frc_scout:update_profile' %}",
-            type: 'POST',
-            mode: 'inline',
-            params: {
-                'csrfmiddlewaretoken': $.cookie('csrftoken')
-            }
-        });
-    </script>
+    {% compress js %}
+        <script type="text/javascript" src="{% static 'frc_scout/js/bootstrap-editable.min.js' %}"></script>
+    {% endcompress %}
+    {% compress js inline %}
+        <script type="text/javascript">
+            $(".editable").editable({
+                url: "{% url 'frc_scout:update_profile' %}",
+                type: 'POST',
+                mode: 'inline',
+                params: {
+                    'csrfmiddlewaretoken': $.cookie('csrftoken')
+                }
+            });
+        </script>
+    {% endcompress %}
 {% endblock %}
 
 {% block footer %}{% include 'frc_scout/footer.html' %}{% endblock %}

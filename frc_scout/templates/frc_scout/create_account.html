@@ -3,14 +3,21 @@
 {% block nav %}{% endblock %}
 {% block main_content %}
     <div class="row">
-        <div class="col-md-4 col-md-offset-4">
+        <div class="col-md-6 col-md-offset-3">
             <h2 style="text-align: center;">Create Account</h2>
+            <p style="text-align: center;">You may wish to <a href="{% url 'frc_scout:about_us' %}">learn more about FRC Scout</a> before you register.</p>
             <form role="form" method="post">
                 {% csrf_token %}
                 <div class="form-group">
                     <input type="number" class="form-control" placeholder="Team Number" name="team_number" id="team_number" required>
                     <div class="alert alert-success" style="display: none; margin-top: 10px;" id="team_exists">
                         <span class="glyphicon glyphicon-check"></span><strong> Your team is already registered.</strong> Your account will require approval by a team manager, please get in touch with your scout leader.
+                        <div class="checkbox">
+                            <label style="margin-top: 10px;">
+                                <input type="checkbox" id="request_team_manager" name="request_team_manager" style="margin-right: 5px;">
+                                Request to be made a team manager
+                            </label>
+                        </div>
                     </div>
                     <div class="alert alert-warning" style="display: none; margin-top: 10px;" id="team_does_not_exist">
                         <span class="glyphicon glyphicon-info-sign"></span><strong> Your team is not yet registered. </strong> Your account will be considered the "team manager" account. From it you will be able to manage your team's scouts.
@@ -48,71 +55,77 @@
             </form>
         </div>
     </div>
-    <script type="text/javascript">
-        $(".pw").keyup(function () {
-            if(($("#password").val() === $("#password_confirm").val()) && ($("#password").val() !== "")) {
-                $("#no_match").hide();
-                $("#match").show();
-            } else {
-                $("#match").hide();
-                $("#no_match").show();
-            }
-        })
+{% endblock %}
 
-        $("#team_number").keyup(function() {
-            if($("#team_number").val() === "") {
-                $("#team_does_not_exist").hide();
-                $("#team_exists").hide();
-                return;
-            }
-
-            $.ajax({
-                url: "{% url 'frc_scout:check_if_team_exists' %}",
-                type: "POST",
-                data: {
-                    'csrfmiddlewaretoken': $.cookie('csrftoken'),
-                    'team_number': $("#team_number").val()
-                },
-                success: function(response) {
-                    console.log(response);
-
-                    if (response['team_exists']) {
-                        $("#team_does_not_exist").hide();
-                        $("#team_exists").show();
-                    } else {
-                        $("#team_exists").hide();
-                        $("#team_does_not_exist").show();
-                    }
+{% block extra_js %}
+    {% load compress %}
+    {% compress js inline %}
+        <script type="text/javascript">
+            $(".pw").keyup(function () {
+                if(($("#password").val() === $("#password_confirm").val()) && ($("#password").val() !== "")) {
+                    $("#no_match").hide();
+                    $("#match").show();
+                } else {
+                    $("#match").hide();
+                    $("#no_match").show();
                 }
             })
-        })
 
-        $("#username").keyup(function() {
-            if($("#username").val() === "") {
-                $("#user_does_not_exist").hide();
-                $("#user_exists").hide();
-                return;
-            }
-
-            $.ajax({
-                url: "{% url 'frc_scout:check_if_username_exists' %}",
-                type: "POST",
-                data: {
-                    'csrfmiddlewaretoken': $.cookie('csrftoken'),
-                    'username': $("#username").val()
-                },
-                success: function(response) {
-                    console.log(response);
-
-                    if (response['username_exists']) {
-                        $("#user_does_not_exist").hide();
-                        $("#user_exists").show();
-                    } else {
-                        $("#user_exists").hide();
-                        $("#user_does_not_exist").show();
-                    }
+            $("#team_number").keyup(function() {
+                if($("#team_number").val() === "") {
+                    $("#team_does_not_exist").hide();
+                    $("#team_exists").hide();
+                    return;
                 }
+
+                $.ajax({
+                    url: "{% url 'frc_scout:check_if_team_exists' %}",
+                    type: "POST",
+                    data: {
+                        'csrfmiddlewaretoken': $.cookie('csrftoken'),
+                        'team_number': $("#team_number").val()
+                    },
+                    success: function(response) {
+                        console.log(response);
+
+                        if (response['team_exists']) {
+                            $("#team_does_not_exist").hide();
+                            $("#team_exists").show();
+                        } else {
+                            $("#team_exists").hide();
+                            $("#team_does_not_exist").show();
+                        }
+                    }
+                })
             })
-        })
-    </script>
+
+            $("#username").keyup(function() {
+                if($("#username").val() === "") {
+                    $("#user_does_not_exist").hide();
+                    $("#user_exists").hide();
+                    return;
+                }
+
+                $.ajax({
+                    url: "{% url 'frc_scout:check_if_username_exists' %}",
+                    type: "POST",
+                    data: {
+                        'csrfmiddlewaretoken': $.cookie('csrftoken'),
+                        'username': $("#username").val()
+                    },
+                    success: function(response) {
+                        console.log(response);
+
+                        if (response['username_exists']) {
+                            $("#user_does_not_exist").hide();
+                            $("#user_exists").show();
+                        } else {
+                            $("#user_exists").hide();
+                            $("#user_does_not_exist").show();
+                        }
+                    }
+                })
+            })
+        </script>
+    {% endcompress %}
 {% endblock %}

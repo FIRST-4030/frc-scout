@@ -1,6 +1,8 @@
 import json
+from django.contrib.auth.decorators import login_required
+from django.db.models.aggregates import Avg, Count
 from django.http.response import HttpResponse
-from frc_scout.models import Team, Location
+from frc_scout.models import Team, Location, Match
 from django.contrib.auth.models import User
 
 
@@ -49,3 +51,71 @@ def get_locations(request):
         location_list[loc.name] = loc.id
 
     return HttpResponse(json.dumps(location_list), content_type='application/json')
+
+
+@login_required
+def get_averages(request):
+
+    matches = Match.objects.values('team_number').annotate(
+        total_matches=Count('team_number'),
+        auto_yellow_stacked_totes=Avg('auto_yellow_stacked_totes'),
+        auto_yellow_moved_totes=Avg('auto_yellow_moved_totes'),
+        auto_moved_to_auto_zone=Avg('auto_moved_to_auto_zone'),
+
+        auto_moved_containers=Avg('auto_moved_containers'),
+
+        tele_pushed_litter=Avg('tele_pushed_litter'),
+        tele_placed_in_container_litter=Avg('tele_placed_in_container_litter'),
+
+        totestack_start_height=Avg('totestack__start_height'),
+        totestack_totes_added=Avg('totestack__totes_added'),
+
+        number_of_totestacks=Count('totestack'),
+
+        containerstack_height=Avg('containerstack__height'),
+
+        number_of_containerstacks=Avg('containerstack'),
+        )
+
+    teams = []
+    auto_scores = []
+    tele_scores = []
+
+    unprocessed_matches = {}
+
+    for match in matches:
+        auto_score = 0
+
+        # multiply by point value, divide by robots per alliance
+
+        if match['auto_moved_to_auto_zone'] is not None:
+            auto_score += (match['auto_moved_to_auto_zone'] / 3 * 4)
+
+        if match['auto_moved_to_auto_zone'] is not None:
+            auto_score += (match['auto_moved_to_auto_zone'] / 3 * 6)
+
+        if match['auto_moved_to_auto_zone'] is not None:
+            auto_score += (match['auto_moved_to_auto_zone'] / 3 * 20)
+
+        tele_score = 0
+
+        # worth 2 per tote stacked (average)
+        if match['totestack_totes_added'] is not None:
+            tele_score += match['totestack_totes_added'] * (match['number_of_totestacks'] / match['total_matches']) * 2
+
+        if match['containerstack_height'] is not None:
+            tele_score += match['containerstack_height'] * (match['number_of_containerstacks'] / match['total_matches']) * 4
+
+        teams.append(match['team_number'])
+        auto_scores.append(auto_score)
+        tele_scores.append(tele_score)
+
+
+
+    processed_matches = {
+        'teams': teams,
+        'auto_scores': auto_scores,
+        'tele_scores': tele_scores
+    }
+
+    return HttpResponse(json.dumps(processed_matches))

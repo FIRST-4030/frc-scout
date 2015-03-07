@@ -8,6 +8,19 @@
 
     <div class="row">
 
+        {% if home_messages %}
+            <div class="col-md-10 col-md-offset-1">
+                <div class="panel panel-warning">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Information</h3>
+                    </div>
+                    <div class="panel-body">
+                        {{ home_messages }}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
         {% if user.userprofile.message %}
             <div class="col-md-10 col-md-offset-1">
                 <div class="panel panel-default">
@@ -22,43 +35,159 @@
         {% endif %}
 
         <div class="col-md-10 col-md-offset-1">
-            <div class="section-header-container">
-                <span class="section-header-text">Scouting</span>
+            <div class="panel panel-success">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Scouting</h3>
+                </div>
+                <div class="panel-body">
+                    <a class="btn btn-success btn-super" href="{% url "frc_scout:match_scouting" %}">Scout a Match</a>
+                    <a class="btn btn-success btn-super" href="{% url "frc_scout:match_scouting_practice" %}">Practice Match Scouting</a>
+                    <a class="btn btn-success btn-super" href="{% url "frc_scout:pit_scouting" %}">Pit Scout a Team</a>
+                    <button id="submit_pending" class="btn btn-success btn-super" style="display: none;" onclick="submitData();">Submit Pending match data</button>
+                    <h6 class="btn-super" style="color: #37883A; font-weight: bold;">In order to scout offline, you must select "Scout a Match" and keep the page loaded.</h6>
+                </div>
             </div>
-            <a class="btn btn-success btn-super" href="{% url "frc_scout:match_scouting" %}">Scout a Match</a>
-            <a class="btn btn-success btn-super" href="{% url "frc_scout:pit_scouting" %}">Pit Scout a Team</a>
         </div>
+
         <div class="col-md-10 col-md-offset-1">
-            <div class="section-header-container">
-                <span class="section-header-text">Results</span>
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Results</h3>
+                </div>
+                <div class="panel-body">
+                    {#                    <a class="btn btn-primary btn-super" href="#">View Team Averages</a>#}
+                    <a class="btn btn-primary btn-super" href="{% url 'frc_scout:tableau_info' %}">Integrate with Tableau</a>
+                    <a class="btn btn-primary btn-super" href="{% url 'frc_scout:database_instructions' %}">connect to database</a>
+                    <a class="btn btn-primary btn-super" href="{% url "frc_scout:view_team_profile" %}">Team Profile</a>
+                    <form style="display: inline;" onsubmit="window.location = '{% url 'frc_scout:view_team_profile' %}' + $('#team_number').val(); return false;">
+                        <div style="display: inline-table;">
+                            <div style="display: table-row;">
+                                <div style="display: table-cell;">
+                                    <input type="number" class="form-control" style="max-width: 160px; margin: 10px 10px; height: 50px; font-size: 18px;" placeholder="Find Team Profile" id="team_number" required>
+                                </div>
+                                <div style="display: table-cell;">
+                                    <button class="btn btn-primary btn-super">Go</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <a class="btn btn-primary btn-super" href="#">View Team Averages</a>
         </div>
+
         {% if user.userprofile.team_manager %}
             <div class="col-md-10 col-md-offset-1">
-                <div class="section-header-container">
-                    <span class="section-header-text">Team Management</span>
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Team Management</h3>
+                    </div>
+                    <div class="panel-body">
+                        <a class="btn btn-info btn-super" href="{% url 'frc_scout:view_scouts' %}">Manage Scouts</a>
+                        <a class="btn btn-info btn-super" href="{% url 'frc_scout:find_match' %}">Edit Matches</a>
+                    </div>
                 </div>
-                <a class="btn btn-info btn-super" href="{% url 'frc_scout:view_scouts' %}">Manage Scouts</a>
             </div>
         {% endif %}
+
         <div class="col-md-10 col-md-offset-1">
-            <div class="section-header-container">
-                <span class="section-header-text">Account</span>
+            <div class="panel panel-warning">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Account Management</h3>
+                </div>
+                <div class="panel-body">
+                    <a class="btn btn-warning btn-super" href="{% url 'frc_scout:update_profile' %}">Update Profile</a>
+                    <a class="btn btn-warning btn-super" href="{% url 'frc_scout:logout' %}">Log Out</a>
+                </div>
             </div>
-            {# TODO add profile changing pages #}
-            <a class="btn btn-warning btn-super" href="{% url 'frc_scout:update_profile' %}">Update Profile</a>
-            <a class="btn btn-warning btn-super" href="{% url 'frc_scout:logout' %}">Log Out</a>
         </div>
     </div>
 {% endblock %}
 
 {% block extra_js %}
-    <script type="text/javascript">
-        $(function() {
-            $("a[href=#]").attr('disabled', true);
-        });
-    </script>
+    {% load compress %}
+    {% compress js inline %}
+        <script type="text/javascript">
+            $(function() {
+                $("a[href=#]").attr('disabled', true);
+
+                if(getPendingMatches().length !== 0) {
+                    $("#submit_pending").show();
+                }
+
+                localStorage.removeItem('eventSchedule');
+                localStorage.removeItem('teamsAtEvent');
+
+                $.getJSON("http://www.thebluealliance.com/api/v2/event/2015{{ event_code }}/matches?X-TBA-App-Id=frc4030:frcscout.com:v1", function(data) {
+                    localStorage.eventSchedule = JSON.stringify(data);
+                });
+
+                $.getJSON("http://www.thebluealliance.com/api/v2/event/2015{{ event_code }}/teams?X-TBA-App-Id=frc4030:frcscout.com:v1", function(data) {
+                    localStorage.teamsAtEvent = JSON.stringify(data);
+                });
+            });
+
+            function submitData() {
+                var pendingMatches = getPendingMatches();
+
+                $("#online_message").hide();
+                $("#in_progress_message").show();
+
+                $.ajax({
+                    url: '/scouting/match/submit/',
+                    method: "POST",
+                    data: {
+                        csrfmiddlewaretoken: $.cookie('csrftoken'),
+                        data: JSON.stringify(pendingMatches)
+                    },
+                    success: function() {
+                        clearPendingMatches();
+                        $("#submit_pending").html("<span class='glyphicon glyphicon-saved'></span>&nbsp; Data submitted successfully.");
+
+                        window.setTimeout(function() {
+                            $("#submit_pending").fadeOut(500);
+                        }, 2000);
+
+                    },
+                    error: function() {
+                        console.log("Data submission failed -- please try again.");
+                    }
+                });
+            }
+
+            function getPendingMatches() {
+                var pendingMatches = [];
+
+                for (var i = 0; ; i++) {
+                    if (localStorage["match" + i.toString()]) {
+                        var match = $.parseJSON(localStorage["match" + i.toString()]);
+
+                        if(match.postmatch) {
+                            if(match.postmatch.scouting_complete === true) {
+                                pendingMatches.push(match);
+                            }
+                        }
+                    }
+                    else {
+                        break;
+                    }
+                }
+
+                return pendingMatches;
+            }
+
+            function clearPendingMatches() {
+                for (var i = 0; ; i++) {
+                    if (localStorage["match" + i.toString()]) {
+                        localStorage.removeItem("match" + i.toString());
+                    }
+                    else {
+                        break;
+                    }
+                }
+            }
+
+        </script>
+    {% endcompress %}
 {% endblock %}
 
 {% block footer %}{% include 'frc_scout/footer.html' %}{% endblock %}

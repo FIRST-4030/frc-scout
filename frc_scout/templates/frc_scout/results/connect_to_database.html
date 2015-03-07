@@ -1,0 +1,52 @@
+{% extends 'frc_scout/base.html' %}
+
+{% block title %}Connect to Database{% endblock %}
+
+{% load staticfiles %}
+
+{% block nav %}{% include 'frc_scout/nav.html' %}{% endblock %}
+
+{% block main_content %}
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><span class="glyphicon glyphicon-tasks"></span>&nbsp; Connection Information</h3>
+                </div>
+                <div class="panel-body">
+                    <p>Database Type: <strong>PostgreSQL</strong></p>
+                    <ul>
+                        <li>IP Address: <strong>173.193.191.191</strong></li>
+                        <li>Port: <strong>20568</strong></li>
+                        <li>Database: <strong>frc_scout</strong></li>
+                        <li>Username: <strong>public_access</strong></li>
+                        <li>Password: <strong>(none)</strong></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><span class="glyphicon glyphicon-th-list"></span>&nbsp; Table Information</h3>
+                </div>
+                <div class="panel-body">
+                    <p>You will have access to the following tables:</p>
+                    <ul>
+                        <li><strong>Match</strong></li>
+                        <ul>
+                            <li><strong>ToteStack</strong> (references a Match object)</li>
+                            <li><strong>ContainerStack</strong> (references a Match object)</li>
+                        </ul>
+                        <li><strong>PitScoutData</strong></li>
+                    </ul>
+                    <p>
+                        For more information on database table structure, <a target="_blank" href="https://github.com/FIRST-4030/frc-scout-2015/blob/master/frc_scout/models.py">click here</a>.
+                        The names for each column should be self-explanatory &mdash; everything that references a <strong>ForeignKey</strong> uses its ID.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block footer %}{% include 'frc_scout/footer.html' %}{% endblock %}

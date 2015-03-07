@@ -3,7 +3,6 @@ Django settings for frc_scout_2015 project.
 
 For more information on this file, see
 https://docs.djangoproject.com/en/1.7/topics/settings/
-
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.7/ref/settings/
 """
@@ -50,6 +49,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'sslifyadmin.middleware.SSLifyAdminMiddleware',
 )
 
 ROOT_URLCONF = 'frc_scout_2015.urls'

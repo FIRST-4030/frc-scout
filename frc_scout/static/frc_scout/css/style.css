@@ -11,7 +11,7 @@
     text-transform: uppercase;
     font-size: 20px;
     margin-top: 2em;
-    margin-bottom: 12px;
+    margin-bottom: 20px;
 }
 
 .section-header-text {
@@ -22,7 +22,7 @@
 }
 
 .btn-grid {
-    height: 45vh !important;
+    height: 40vh !important;
     font-size: 32px ;
 }
 
@@ -53,7 +53,7 @@
 
 @media (max-width: 750px) {
     .btn-grid {
-        height: 21vh !important;
+        height: 18vh !important;
         font-size: 20px;
     }
 }
@@ -66,7 +66,7 @@
 
 .btn-group-tall-6 {
     height: 105px;
-    width: 16.7%;
+    width: 16.6%;
 }
 
 .btn-group-tall-6 > span {
@@ -92,7 +92,7 @@ body {
     display: block;
     margin-top: 10px;
 
-    height: 75vh;
+    height: 70vh;
     max-width: 100%;
 
     background-color: cyan;
@@ -106,4 +106,12 @@ body {
     background-color: white;
     padding: 10px !important;
     border-radius: 2px !important;
+}
+
+.btn-success-darker-1 {
+    background-image: radial-gradient(circle, #2c8c26 80%, #439a46 81%);
+}
+
+.btn-success-darker-2 {
+    background-image: radial-gradient(circle, #187C1C 80%, #439a46 81%);
 }

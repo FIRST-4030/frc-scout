@@ -1,0 +1,40 @@
+{% extends 'frc_scout/base.html' %}
+
+{% block title %}Integrating with Tableau{% endblock %}
+
+{% load staticfiles %}
+
+{% block nav %}{% include 'frc_scout/nav.html' %}{% endblock %}
+
+{% block main_content %}
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><span class="glyphicon glyphicon-sort-by-attributes-alt"></span>&nbsp; Tableau</h3>
+                </div>
+                <div class="panel-body">
+                    <p>You can use <a href="http://www.tableau.com/first-robotics" target="_blank">Tableau</a> to access and analyze your data. Access your team's 5 license keys by having a mentor log onto <a target="_blank" href="https://my.usfirst.org/frc/tims/site.lasso">TIMS</a> and checking the virtual Kit of Parts. </p>
+                    <p>A starter file has be provided for you, which separates data by stage, incorporates some pit scouting attributes, and helps you get going with your analysis.</p>
+                    <p>These connector files will link Tableau with the most updated version of the database. You won't have to download this file again to get new data &mdash; Tableau will query it automatically. <strong>If your data is not updated automatically, go to the Data menu in Tableau, hover your mouse over the FRCScout.com source and click Refresh.</strong></p>
+                    <p><strong>You may need to <a target="_blank" href="http://www.tableau.com/support/drivers">install a driver</a> to connect to a PostgreSQL database.</strong></p>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <p><a style="width: 100%;" href="{% static 'frc_scout/tableau/FRCscout.com V2.0.tds' %}" class="btn btn-success"><span class="glyphicon glyphicon-download"></span> Download Scout Connector v2.0<br>(excluding test data)</a></p>
+                        </div>
+                        <div class="col-sm-6">
+                            <p><a style="width: 100%;" href="{% static 'frc_scout/tableau/FRCscout.com V2.0 (Test Data).tds' %}" class="btn btn-primary"><span class="glyphicon glyphicon-download"></span> Download Scout Connector v2.0<Br>(including test data) *</a></p>
+                        </div>
+                    </div>
+                    <p>* This is the same connector, but with the test data left in if you want to practice analyzing your fake data.</p>
+                    <p>
+                        <strong>For more information on how to use Tableau, <a href="http://www.tableau.com/first-robotics" target="_blank">check out these fabulous resources.</a></strong>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block footer %}{% include 'frc_scout/footer.html' %}{% endblock %}

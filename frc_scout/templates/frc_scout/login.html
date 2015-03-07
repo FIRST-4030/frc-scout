@@ -1,16 +1,32 @@
 {% extends 'frc_scout/base.html' %}
 
-{% load staticfiles %}
+{% load staticfiles compress %}
 
 {% block title %}FRC Scout - Login{% endblock %}
 
+{% block extra_css %}
+    {% compress css %}
+        <link rel="stylesheet" type="text/css" href="{% static 'frc_scout/css/twitter-typeahead.css' %}">
+    {% endcompress %}
+{% endblock %}
+
 {% block main_content %}
     <div class="row">
-        <div class="col-md-4 col-md-offset-4" style="text-align: center;">
+        <div class="col-md-6 col-md-offset-3" style="text-align: center;">
             <br>
-            <img style="text-align: center; max-width: 300px;" src="{% static 'frc_scout/img/logo_earfuzz_hat.png' %}">
+            <img style="text-align: center; max-width: 350px;" src="{% static 'frc_scout/img/SkunKoala_mini.png' %}">
             <br>
             <h2 style="text-align: center;">FRC Scout: Login</h2>
+            {% if login_message %}
+                <div class="panel panel-warning">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Information</h3>
+                    </div>
+                    <div class="panel-body">
+                        {{ login_message }}
+                    </div>
+                </div>
+            {% endif %}
             <form method="post">
                 {% csrf_token %}
 
@@ -19,52 +35,98 @@
                     <input type="password" class="form-control" placeholder="Password" name="password" required>
                     <input type="text" id='location' class="typeahead form-control" placeholder="Loading event locations..." name="location" required="true" disabled="true">
                 </div>
-                <br>
+                <div class="form-group">
+                    <p style="font-style: oblique;">So far, <strong>{{ total_users }} users</strong> from <strong>{{ total_teams }} teams</strong> have scouted <strong>{{ total_matches }} matches</strong>!</p>
+                </div>
                 <div class="form-group">
                     <button class="btn btn-primary form-control" style="margin-bottom: 10px;">Login</button>
-                    <a href="{% url 'frc_scout:create_account' %}" class="btn btn-warning form-control" type="button">Create Account</a>
+                    <a href="{% url 'frc_scout:create_account' %}" class="btn btn-warning form-control" type="button" style="margin-bottom: 10px;">Create Account</a>
+                    <a href="{% url 'frc_scout:about_us' %}" class="btn btn-success form-control" type="button">What is FRC Scout?</a>
                 </div>
             </form>
         </div>
     </div>
 {% endblock %}
 
+{% block footer %}
+    <footer class="footer">
+        <div class="container-fluid">
+            <div class="row">
+                <hr style="margin-bottom: 2px;">
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <p style="text-align: center; margin-bottom: -3px; margin-top:3px;">
+                        <a href="https://github.com/FIRST-4030/frc-scout-2015" target="_blank"><img src="{% static 'frc_scout/img/github_mini.png' %}" style="height: 20px; margin-top: -3px;"></a>&nbsp;
+                        Created with love by <a target="_blank" href="http://ingrahamrobotics.org/">4030 &mdash; NullPointerException</a> in collaboration with <a target="_blank" href="http://ahsrobotics.us/">1983 &mdash; Skunkworks</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    {% compress css inline %}
+        <style type="text/css">
+            /* Sticky footer style
+        -------------------------------------------------- */
+            html {
+                position: relative;
+                min-height: 100%;
+            }
+            body {
+                /* Margin bottom by footer height */
+                margin-bottom: 60px;
+            }
+            .footer {
+                position: absolute;
+                bottom: 0;
+                width: 100%;
+                /* Set the fixed height of the footer here */
+                height: 60px;
+                /*background-color: #f5f5f5;*/
+            }
+        </style>
+    {% endcompress %}
+{% endblock %}
+
 {% block extra_js %}
-    <script type="text/javascript">
+    {% compress js %}
+        <script type="text/javascript" src="{% static 'frc_scout/js/typeahead.bundle.js' %}"></script>
+    {% endcompress %}
+    {% compress js inline %}
+        <script type="text/javascript">
 
 
-        (function() {
-            $.getJSON( '{% url 'frc_scout:get_locations' %}', {
-                format: "json"
-            })
-                    .done(function( data ) {
-                        function searcher(query, cb) {
-                            var matches, substrRegex;
-                            matches = [];
-                            substrRegex = new RegExp(query, 'i');
-                            $.each(Object.keys(data), function(i, str) {
-                                if (substrRegex.test(str)) {
-                                    matches.push({value: str});
-                                }
+            (function() {
+                $.getJSON( '{% url 'frc_scout:get_locations' %}', {
+                    format: "json"
+                })
+                        .done(function( data ) {
+                            function searcher(query, cb) {
+                                var matches, substrRegex;
+                                matches = [];
+                                substrRegex = new RegExp(query, 'i');
+                                $.each(Object.keys(data), function(i, str) {
+                                    if (substrRegex.test(str)) {
+                                        matches.push({value: str});
+                                    }
+                                });
+                                cb(matches);
+                            }
+
+                            $("#location").prop('disabled', false);
+                            $("#location").prop('placeholder', "Event Location");
+
+                            $('.typeahead').typeahead({
+                                highlight: true
+                            }, {
+                                name: 'events',
+                                source: searcher
                             });
-                            cb(matches);
-                        }
-
-                        $("#location").prop('disabled', false);
-                        $("#location").prop('placeholder', "Event Location");
-
-                        $('.typeahead').typeahead({
-                            highlight: true
-                        }, {
-                            name: 'events',
-                            source: searcher
                         });
-                    });
-        })();
+            })();
+            $(function() { {% load staticfiles %}
 
-
-        $(function() { {% load staticfiles %}
-
-        });
-    </script>
+            });
+        </script>
+    {% endcompress %}
 {% endblock %}

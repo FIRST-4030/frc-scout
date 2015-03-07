@@ -1,0 +1,372 @@
+{% extends 'frc_scout/base.html' %}
+
+{% load staticfiles %}
+
+{% block title %}Edit Match{% endblock %}
+
+{% block nav %}{% include 'frc_scout/nav.html' %}{% endblock %}
+
+{% load compress %}
+
+{% block extra_css %}
+    {% compress css %}
+        <link rel="stylesheet" type="text/css" href="{% static 'frc_scout/css/bootstrap-editable.css' %}">
+    {% endcompress %}
+{% endblock %}
+
+
+{% block main_content %}
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <div class="panel panel-warning">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Editing match <strong>{{ match.match_number }}</strong> for team <strong>{{ match.team_number }}</strong> in <strong>{{ match.location.name }}</strong></h3>
+                </div>
+                <div class="panel-body">
+                    <h4>Scout: <strong>{{ match.scout.get_full_name }}</strong></h4>
+                    <p><i>Click on information to edit.</i></p>
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>General</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td class="col-md-10">Team Number</td>
+                            <td class="col-md-2"><a href="#" data-type="number" class="editable" data-name="team_number" data-pk="{{ match.id }}">{{ match.team_number }}</a></td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-10">Match Number</td>
+                            <td class="col-md-2"><a href="#" data-type="number" class="editable" data-name="match_number" data-pk="{{ match.id }}">{{ match.match_number }}</a></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>Autonomous</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td class="col-md-10">Yellow Stacked Totes</td>
+                            <td class="col-md-2"><a href="#" data-max="3" data-type="number" class="editable" data-name="auto_yellow_stacked_totes" data-pk="{{ match.id }}">{{ match.auto_yellow_stacked_totes }}</a></td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-6">Yellow Moved Totes</td>
+                            <td class="col-md-6"><a href="#" data-max="3" data-type="number" class="editable" data-name="auto_yellow_moved_totes" data-pk="{{ match.id }}">{{ match.auto_yellow_moved_totes }}</a></td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-6">Grey Acquired Totes</td>
+                            <td class="col-md-6"><a href="#" data-type="number" class="editable" data-name="auto_grey_acquired_totes" data-pk="{{ match.id }}">{{ match.auto_grey_acquired_totes }}</a></td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-6">Step/Center Acquired Containers</td>
+                            <td class="col-md-6"><a href="#" data-max="4" data-type="number" class="editable" data-name="auto_step_center_acquired_containers" data-pk="{{ match.id }}">{{ match.auto_step_center_acquired_containers }}</a></td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-6">Ground Acquired Containers</td>
+                            <td class="col-md-6"><a href="#" data-max="3" data-type="number" class="editable" data-name="auto_ground_acquired_containers" data-pk="{{ match.id }}">{{ match.auto_ground_acquired_containers }}</a></td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-6">Moved Containers</td>
+                            <td class="col-md-6"><a href="#" data-max="7" data-type="number" class="editable" data-name="auto_moved_containers" data-pk="{{ match.id }}">{{ match.auto_moved_containers }}</a></td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-6">Robot Moved to Auto Zone</td>
+                            <td class="checkbox-inline" style="width: 100%;"><input type="checkbox" style="margin-left: -6px;" data-name="auto_moved_to_auto_zone" data-pk="{{ match.id }}" {% if match.auto_moved_to_auto_zone %}checked{% endif %}></td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-6">Caused Fouls</td>
+                            <td class="col-md-6"><a href="#" data-max="10" data-type="number" class="editable" data-name="auto_fouls" data-pk="{{ match.id }}">{{ match.auto_fouls }}</a></td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-6">Caused Interference</td>
+                            <td class="col-md-6"><a href="#" data-max="10" data-type="number" class="editable" data-name="auto_interference" data-pk="{{ match.id }}">{{ match.auto_interference }}</a></td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-6">No Autonomous</td>
+                            <td class="checkbox-inline" style="width: 100%;"><input type="checkbox" style="margin-left: -6px;" data-name="auto_no_auto" data-pk="{{ match.id }}" {% if match.auto_no_auto %}checked{% endif %}></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>Teleoperated</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td class="col-md-10">Upright Totes Picked Up</td>
+                            <td class="col-md-2"><a href="#" data-max="50" data-type="number" class="editable" data-name="tele_picked_up_ground_upright_totes" data-pk="{{ match.id }}">{{ match.tele_picked_up_ground_upright_totes }}</a></td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-6">Upside Down Totes Picked Up</td>
+                            <td class="col-md-6"><a href="#" data-max="50" data-type="number" class="editable" data-name="tele_picked_up_upside_down_totes" data-pk="{{ match.id }}">{{ match.tele_picked_up_upside_down_totes }}</a></td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-6">Sideways Totes Picked Up</td>
+                            <td class="col-md-6"><a href="#" data-max="50" data-type="number" class="editable" data-name="tele_picked_up_sideways_totes" data-pk="{{ match.id }}">{{ match.tele_picked_up_sideways_totes }}</a></td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-6">Human Station Totes Picked Up</td>
+                            <td class="col-md-6"><a href="#" data-max="50" data-type="number" class="editable" data-name="tele_picked_up_human_station_totes" data-pk="{{ match.id }}">{{ match.tele_picked_up_human_station_totes }}</a></td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-6">Sideways Containers Picked Up</td>
+                            <td class="col-md-6"><a href="#" data-max="50" data-type="number" class="editable" data-name="tele_picked_up_sideways_containers" data-pk="{{ match.id }}">{{ match.tele_picked_up_sideways_containers }}</a></td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-6">Upright Containers Picked Up</td>
+                            <td class="col-md-6"><a href="#" data-max="50" data-type="number" class="editable" data-name="tele_picked_up_upright_containers" data-pk="{{ match.id }}">{{ match.tele_picked_up_upright_containers }}</a></td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-6">Center/Step Containers Picked Up</td>
+                            <td class="col-md-6"><a href="#" data-max="50" data-type="number" class="editable" data-name="tele_picked_up_center_step_containers" data-pk="{{ match.id }}">{{ match.tele_picked_up_center_step_containers }}</a></td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-6">Litter Pushed</td>
+                            <td class="col-md-6"><a href="#" data-max="50" data-type="number" class="editable" data-name="tele_pushed_litter" data-pk="{{ match.id }}">{{ match.tele_pushed_litter }}</a></td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-6">Litter Placed In Container</td>
+                            <td class="col-md-6"><a href="#" data-max="50" data-type="number" class="editable" data-name="tele_placed_in_container_litter" data-pk="{{ match.id }}">{{ match.tele_placed_in_container_litter }}</a></td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-6">Robot Died</td>
+                            <td class="checkbox-inline" style="width: 100%;"><input type="checkbox" style="margin-left: -6px;" data-name="tele_dead_bot" data-pk="{{ match.id }}" {% if match.tele_dead_bot %}checked{% endif %}></td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-6">Container(s) Dropped</td>
+                            <td class="col-md-6"><a href="#" data-max="50" data-type="number" class="editable" data-name="tele_container_fell_off" data-pk="{{ match.id }}">{{ match.tele_container_fell_off }}</a></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>Tote Stacks</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                        <tr>
+                            <th>Start Height</th>
+                            <th>Totes Added</th>
+                            <th>Location</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for totestack in match.totestack_set.all %}
+                            <tr>
+                                <td class="col-md-5"><a href="#" data-max="5" data-type="number" class="editable-totestack" data-name="start_height" data-pk="{{ totestack.id }}">{{ totestack.start_height }}</a></td>
+                                <td class="col-md-5"><a href="#" data-max="6" data-type="number" class="editable-totestack" data-name="totes_added" data-pk="{{ totestack.id }}">{{ totestack.totes_added }}</a></td>
+                                <td class="col-md-2">({{ totestack.x|floatformat:"-2" }}, {{ totestack.y|floatformat:"-2" }})<br><a  data-toggle="modal" href="#editLocationModal" class="btn btn-info btn-sm" onclick="lastToteStackIdClicked = {{ totestack.id }}; drawImage({{ totestack.x }}, {{ totestack.y }});">Change</a></td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>Container Stacks</th>
+                            <th></th>
+                        </tr>
+                        <tr>
+                            <th>Start Height</th>
+                            <th>Containers Added</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for containerstack in match.containerstack_set.all %}
+                            <tr>
+                                <td class="col-md-5"><a data-max="6" href="#" data-type="number" class="editable-containerstack" data-name="height" data-pk="{{ containerstack.id }}">{{ containerstack.height }}</a></td>
+                                <td class="col-md-7">{{ containerstack.containers_added }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>Miscellaneous</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td class="col-md-5">Foul Comments</td>
+                            <td class="col-md-7"><a href="#" data-type="textarea" class="editable" data-name="tele_foul_context" data-pk="{{ match.id }}">{{ match.tele_foul_context }}</a></td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-5">Public Comments</td>
+                            <td class="col-md-7"><a href="#" data-type="textarea" class="editable" data-name="tele_public_comments" data-pk="{{ match.id }}">{{ match.tele_public_comments }}</a></td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-5">Alliance Score</td>
+                            <td class="col-md-7"><a href="#" data-type="number" class="editable" data-name="match_final_score" data-pk="{{ match.id }}">{{ match.match_final_score }}</a></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="editLocationModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Click Tote Stack Location</h4>
+                </div>
+                <div class="modal-body">
+                    <img id="teleoperated_stacked_totes_image" style="width: 100%;" src="{% static 'frc_scout/img/tote_score.png' %}">
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block extra_js %}
+    {% compress js %}
+        <script type="text/javascript" src="{% static 'frc_scout/js/bootstrap-editable.min.js' %}"></script>
+    {% endcompress %}
+    {% compress js inline %}
+
+        <script type="text/javascript">
+            var lastToteStackIdClicked = undefined;
+            var lastX, lastY;
+
+            function drawImage(x, y) {
+                return;
+            }
+
+{#            function drawImage(x, y) {#}
+{#                var image = $('#teleoperated_stacked_totes_image');#}
+{##}
+{#                $('body').append("<div id='old_loc'></div>");#}
+{#                var old_loc = $("#old_loc");#}
+{#                old_loc.css({#}
+{#                    'position' : 'absolute',#}
+{#                    'width': 20,#}
+{#                    'height': 20,#}
+{#                    'background': 'firebrick',#}
+{#                    'top': image.offsetTop,#}
+{#                    'left': image.offsetLeft#}
+{#                })#}
+{#            }#}
+
+            $(".editable").editable({
+                url: "{% url 'frc_scout:edit_match_post' %}",
+                mode: 'inline',
+                params: {
+                    'csrfmiddlewaretoken': $.cookie('csrftoken'),
+                    'editable': 'editable',
+                    'match': 'match'
+                }
+            });
+
+            $(".editable-totestack").editable({
+                url: "{% url 'frc_scout:edit_match_post' %}",
+                mode: 'inline',
+                params: {
+                    'csrfmiddlewaretoken': $.cookie('csrftoken'),
+                    'editable': 'editable',
+                    'totestack': 'totestack'
+                }
+            });
+
+            $(".editable-containerstack").editable({
+                url: "{% url 'frc_scout:edit_match_post' %}",
+                mode: 'inline',
+                params: {
+                    'csrfmiddlewaretoken': $.cookie('csrftoken'),
+                    'editable': 'editable',
+                    'containerstack': 'yay'
+                }
+            });
+
+
+            $("input[type=checkbox]").click(function() {
+                var sender = $(this);
+
+                var name = sender.data('name');
+                var pk = sender.data('pk');
+
+
+                $.ajax({
+                    url: "{% url 'frc_scout:edit_match_post' %}",
+                    type: "POST",
+                    data: {
+                        'csrfmiddlewaretoken': $.cookie('csrftoken'),
+                        'editable': 'editable',
+                        'name': name,
+                        'pk': pk,
+                        'boolean': true,
+                        'match': true
+                    },
+                    error: function(response) {
+                        if(response.statusCode() === 400) {
+                            sender.prop('checked', !sender.prop('checked'));
+                        }
+                    }
+                })
+            })
+
+            $("#teleoperated_stacked_totes_image").click(function (event) {
+                var image = $(this);
+                var coopStack = false;
+                var toteStack = lastToteStackIdClicked;
+
+                var xPosition = (event.pageX - image.offset().left) / image.width();
+                var yPosition = (event.pageY - image.offset().top) / image.height();
+
+                if(yPosition < 0.09 || (yPosition > 0.3 && yPosition < 0.4 && xPosition < 0.58) || (yPosition > 0.63 && yPosition < 0.73 && xPosition > 0.42)) {
+                    if(yPosition < 0.09) {
+                        coopStack = true;
+                    }
+
+
+                    if(!confirm("Is this position correct?")) {
+                        console.log('said no :(');
+                        return;
+                    }
+
+                    $.ajax({
+                        url: "{% url 'frc_scout:edit_match_post' %}",
+                        type: "POST",
+                        data: {
+                            'csrfmiddlewaretoken': $.cookie('csrftoken'),
+                            'id': toteStack,
+                            'totestack_location': 'totestack',
+                            'x': xPosition,
+                            'y': yPosition,
+                            'coop_stack': coopStack
+                        },
+                        success: function(response) {
+                            console.log("success: " + response);
+                            location.reload();
+                        },
+                        error: function(response) {
+                            if(response.statusCode() === 400) {
+                                alert("save failed -- please try again");
+                            }
+                        }
+                    })
+                } else {
+                    alert("Invalid tote stack location.");
+                }
+            });
+
+        </script>
+    {% endcompress %}
+{% endblock %}
+
+{% block footer %}{% include 'frc_scout/footer.html' %}{% endblock %}
