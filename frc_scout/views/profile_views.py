@@ -186,10 +186,13 @@ def view_team_matches(request, team_number=None):
                 + match_dict['tele_picked_up_sideways_totes'] + match_dict['tele_picked_up_upside_down_totes']
                 + match_dict['tele_picked_up_human_station_totes'])
 
+            match_dict['auto_has_auto'] = not match_dict['auto_no_auto']
+
             if match.scout.userprofile.team.team_number == request.user.userprofile.team.team_number:
                 match_dict['match_private_comments'] = match.matchprivatecomments.comments
-
-            match_dict['scout_name'] = match.scout.first_name
+                match_dict['scout_name'] = match.scout.first_name + " on team " + str(match.scout.userprofile.team.team_number)
+            else:
+                match_dict['scout_name'] = 'team ' + str(match.scout.userprofile.team.team_number)
 
             for key in match_dict:
                 if key == "no_show":
