@@ -1,12 +1,15 @@
 {% extends 'frc_scout/base.html' %}
 
+{% load staticfiles %}
+
 {% block title %}FRC Scout - Login{% endblock %}
 
 {% block main_content %}
     <div class="row">
         <div class="col-md-4 col-md-offset-4" style="text-align: center;">
             <br>
-            <img src="http://www.nhpack68.com/resources/ScoutHappy.gif" style="margin-left: auto; margin-right: auto; width: 200px;">
+            <img style="text-align: center; max-width: 300px;" src="{% static 'frc_scout/img/logo_earfuzz_hat.png' %}">
+            <br>
             <h2 style="text-align: center;">FRC Scout: Login</h2>
             <form method="post">
                 {% csrf_token %}
@@ -46,9 +49,9 @@
                             });
                             cb(matches);
                         }
-                
-                		$("#location").prop('disabled', false);
-                		$("#location").prop('placeholder', "Event Location");
+
+                        $("#location").prop('disabled', false);
+                        $("#location").prop('placeholder', "Event Location");
 
                         $('.typeahead').typeahead({
                             highlight: true
