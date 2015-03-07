@@ -14,19 +14,24 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <div class="panel-title">
-                            <h3 class="panel-title">{{ match.location }} &mdash; Match {{ match.match_number }}</h3>
-                        </div>
-                    </div>
-                    <div class="panel-body">
-                        <div style="float:right; text-align:right; padding-right:10px;">
-                            <em>{{ match.timestamp }}</em><br />
+                            <div style="float:right; text-align:right;">
                             {% if not match.no_show %}
-                                <button class="btn btn-default" onclick='
+                                <button class="btn btn-default btn-sm" onclick='
                                 // what even is my life
                                 $("#more-info-auto-{{match.id}}").toggle(200);
                                 $("#more-info-tele-{{match.id}}").toggle(200);
                                 ' id="more-info-btn-{{match.id}}">more info</button>
                             {% endif %}
+                            </div>
+                            <div style="float:left;">
+                            <h3 class="panel-title">{{ match.location }} &mdash; Match {{ match.match_number }}</h3>
+                            </div>
+                            <div style="clear:both;"></div>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div style="float:right; text-align:right; padding-right:10px;">
+                            <em>{{ match.timestamp }}</em><br />
                         </div>
                         <div style="padding-left:10px;">
                             {% if not match.no_show %}
@@ -108,6 +113,18 @@
                                         Robot died: <strong>{{ match.tele_dead_bot }}</strong>
                                     </div>
                                 </div>
+                            </div>
+                            <strong>Comments</strong>
+                            <div style="padding: 0 0 0 15px">
+                                {% if match.tele_public_comments %}
+                                    {{ match.tele_public_comments }}<br />
+                                {% endif %}
+                                {% if match.match_private_comments %}
+                                    <strong>Private comments:</strong> {{ match.match_private_comments}} <strong>&mdash;{{ match.scout_name }}</strong><br />
+                                {% endif %}
+                                {% if match.tele_foul_context %}
+                                    <strong>Foul comments:</strong> {{match.tele_foul_context }}<br />
+                                {% endif %}
                             </div>
                             {% else %}
                                 <em>No-show</em>
