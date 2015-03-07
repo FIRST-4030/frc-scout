@@ -245,7 +245,7 @@
                             <span class="sr-only">60% Complete</span>
                         </div>
                     </div>
-                    <p style="display: none;" class="failure">Image upload failed.</p>
+                    <p style="display: none;" id="failure">Image upload failed.</p>
                 </div>
             </div>
 
@@ -316,7 +316,7 @@
                         .addClass('primary')
                         .text("SELECT");
 
-                $(".failure").hide();
+                $("#failure").hide();
             }
 
             /*
@@ -387,6 +387,12 @@
                         console.log(response);
                         $("#submit_progress_bar").css('width', '80%');
                         postFormData(response);
+                    },
+                    error: function(response) {
+                        $("#submit_progress_bar").css('width', '0%');
+                        $("#failure").show();
+                        postFormData(response);
+
                     },
                     cache: false,
                     contentType: false,
