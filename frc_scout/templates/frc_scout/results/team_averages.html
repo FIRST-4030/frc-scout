@@ -1,0 +1,49 @@
+{% extends 'frc_scout/base.html' %}
+
+{% load staticfiles %}
+
+{% block title %}Team Averages{% endblock %}
+
+{% block nav %}{% include 'frc_scout/nav.html' %}{% endblock %}
+
+{% block main_content %}
+<div class="panel panel-default panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title">Team averages</h3>
+    </div>
+    <div class="panel-body">
+        Currently viewing results {% if opts.only_us %}<strong>scouted only by your team</strong>{% else %}<strong>scouted by all teams</strong>{% endif %}
+        from {% if opts.only_here %}<strong>only your location</strong>{% else %}<strong>all locations</strong>{% endif %}.<br />
+        {% if opts.only_us %}
+            <a href="{% url "frc_scout:view_team_averages" only_us=False only_here=opts.only_here %}">See matches scouted by all teams</a>
+        {% else %}
+            <a href="{% url "frc_scout:view_team_averages" only_us=True only_here=opts.only_here %}">See matches scouted only by your team</a>
+        {% endif %}&mdash;
+        {% if opts.only_here %}
+            <a href="{% url "frc_scout:view_team_averages" only_us=opts.only_us only_here=False %}">See data from all locations</a>
+        {% else %}
+            <a href="{% url "frc_scout:view_team_averages" only_us=opts.only_us only_here=True %}">See data from only your location</a>
+        {% endif %}
+        <table class="table table-striped tablesorter">
+            <thead>
+                <tr>
+                    <th>Team</th>
+                    <th>Total</th>
+                    <th>Auto.</th>
+                    <th>Tele.</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for score in scores %}
+                    <tr>
+                        <td class="col-md-3"><a href="{% url "frc_scout:view_team_profile" score.team %}">{{ score.team }}</a></td>
+                        <td class="col-md-3">{{ score.total }}</td>
+                        <td class="col-md-3">{{ score.auto }}</td>
+                        <td class="col-md-3">{{ score.tele }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
