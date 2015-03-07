@@ -230,16 +230,16 @@
         </div>
         <br>
         <div class="row">
-            <div class="col-sm-4">
-                <button style="margin-top: -10px; margin-bottom: 5px; height: 75px;" class="btn btn-extra-high btn-info btn-lg max-width" onclick="saveAndContinue('autonomous', 'prematch');"><span class="glyphicon glyphicon-arrow-left"></span>&nbsp; Prematch</button>
+            <div class="col-sm-4 col-sm-push-4">
+                <button class="btn btn-extra-high btn-danger btn-lg max-width" onclick="saveAndContinue('autonomous', 'autonomous_fouls_and_other');">mess ups</button>
             </div>
 
-            <div class="col-sm-4">
-                <button style="margin-top: -10px; margin-bottom: 5px; height: 75px;" class="btn btn-extra-high btn-danger btn-lg max-width" onclick="saveAndContinue('autonomous', 'autonomous_fouls_and_other');">mess ups</button>
+            <div class="col-sm-4 col-sm-push-4">
+                <button class="btn btn-extra-high btn-primary btn-lg max-width" onclick="saveAndContinue('autonomous', 'teleoperated');">teleoperated  &nbsp;<span class="glyphicon glyphicon-arrow-right"></span></button>
             </div>
 
-            <div class="col-sm-4">
-                <button style="margin-top: -10px; margin-bottom: 5px; height: 75px;" class="btn btn-extra-high btn-primary btn-lg max-width" onclick="saveAndContinue('autonomous', 'teleoperated');">teleoperated  &nbsp;<span class="glyphicon glyphicon-arrow-right"></span></button>
+            <div class="col-sm-4 col-sm-pull-8">
+                <button class="btn btn-extra-high btn-info btn-lg max-width" onclick="saveAndContinue('autonomous', 'prematch');"><span class="glyphicon glyphicon-arrow-left"></span>&nbsp; Prematch</button>
             </div>
         </div>
     </div>
@@ -388,16 +388,18 @@
         </div>
         <br>
         <div class="row">
-            <div class="col-sm-4">
-                <button style="margin-top: 5px; margin-bottom: 5px;" class="btn btn-extra-high btn-info btn-lg max-width" onclick="saveAndContinue('teleoperated', 'autonomous');"><span class="glyphicon glyphicon-arrow-left"></span>&nbsp; autoNomoUs</button>
-            </div>
-            <div class="col-sm-4">
-                <button style="margin-top: 5px; margin-bottom: 5px;" class="btn btn-extra-high btn-danger btn-lg max-width" onclick="saveAndContinue('teleoperated', 'teleoperated_fouls_and_other');">Mess Ups</button>
+            <div class="col-sm-4 col-sm-push-4">
+                <button class="btn btn-extra-high btn-danger btn-lg max-width" onclick="saveAndContinue('teleoperated', 'teleoperated_fouls_and_other');">Mess Ups</button>
             </div>
 
-            <div class="col-sm-4">
-                <button style="margin-top: 5px; margin-bottom: 5px;" class="btn btn-extra-high btn-primary btn-lg max-width" onclick="saveAndContinue('teleoperated', 'postmatch');">end match  &nbsp;<span class="glyphicon glyphicon-arrow-right"></span></button>
+            <div class="col-sm-4 col-sm-push-4">
+                <button class="btn btn-extra-high btn-primary btn-lg max-width" onclick="saveAndContinue('teleoperated', 'postmatch');">end match  &nbsp;<span class="glyphicon glyphicon-arrow-right"></span></button>
             </div>
+
+            <div class="col-sm-4 col-sm-pull-8">
+                <button class="btn btn-extra-high btn-info btn-lg max-width" onclick="saveAndContinue('teleoperated', 'autonomous');"><span class="glyphicon glyphicon-arrow-left"></span>&nbsp; autoNomoUs</button>
+            </div>
+
         </div>
     </div>
 
