@@ -21,6 +21,7 @@ urlpatterns = patterns(
     url(r'^json/username_exists/$', views.check_if_username_exists, name='check_if_username_exists'),
     url(r'^json/locations/$', views.get_locations, name='get_locations'),
     url(r'^json/results/averages/$', views.get_averages, name='get_averages'),
+    url(r'^json/results/totes_stacked_and_containers_scored/$', views.totes_stacked_and_containers_scored, name='totes_stacked_and_containers_scored'),
 
     # Team management views
     url(r'^manage/scouts/$', views.view_scouts, name='view_scouts'),

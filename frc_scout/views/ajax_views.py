@@ -119,3 +119,44 @@ def get_averages(request):
     }
 
     return HttpResponse(json.dumps(processed_matches))
+
+
+@login_required
+def totes_stacked_and_containers_scored(request):
+    matches = Match.objects.all()
+
+    if request.GET.get('location'):
+        matches = matches.filter(location__id=request.session.get('location_id'))
+
+    matches = matches.values('team_number').annotate(
+        total_matches=Count('team_number'),
+        auto_yellow_stacked_totes=Avg('auto_yellow_stacked_totes'),
+
+        totestack_totes_added=Avg('totestack__totes_added'),
+        number_of_totestacks=Count('totestack'),
+        number_of_containerstacks=Avg('containerstack'),
+        )
+
+    processed_matches = []
+
+    for match in matches:
+        average_containers_scored = 0.0
+        average_totes_stacked = 0.0
+
+        # autonomous
+        average_totes_stacked += match['auto_yellow_stacked_totes']
+
+        # teleoperated
+        if match['totestack_totes_added'] is not None and match['number_of_totestacks'] is not None:
+            average_totes_stacked += match['totestack_totes_added'] * match['number_of_totestacks']
+
+        if match['number_of_containerstacks'] is not None:
+            average_containers_scored += match['number_of_containerstacks']
+
+        processed_matches.append({
+            'x': average_containers_scored,
+            'y': average_totes_stacked,
+            'team_number': match['team_number'],
+        })
+
+    return HttpResponse(json.dumps(processed_matches))
