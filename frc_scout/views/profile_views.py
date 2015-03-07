@@ -2,10 +2,13 @@ from django.contrib.auth.decorators import login_required
 from django.forms.models import model_to_dict
 from django.http.response import HttpResponse
 from django.shortcuts import render
-from django.db.models import Avg
+from django.db.models import Avg, Sum
 from frc_scout.decorators import insecure_required
 
-from frc_scout.models import Match, Team, PitScoutData
+from frc_scout.models import Match, Team, ToteStack, ContainerStack, PitScoutData
+from frc_scout.views.team_management_views import match_score
+
+__author__ = 'Miles'
 
 
 @insecure_required
@@ -19,7 +22,7 @@ def view_team_profile(request, team_number=None):
         return HttpResponse("Team numbers cannot be less than 1.", status=400)
 
     # oh boy here we go
-    average_sections = {}
+    statistics = {}
 
     matches = Match.objects.filter(team_number=team_number).exclude(location__name="TEST") # only take matches for this team
     # iterate over possible match fields
@@ -29,14 +32,6 @@ def view_team_profile(request, team_number=None):
         field_type = str(field.__class__).split("'")[1].split('.')[4]
         # field_name = tele_picked_up_yellow_crates_blah, etc.
         field_name = str(field).split('.')[2]
-        # field_section = either 'Teleoperated' or 'Autonomous'
-        field_section = field_name.split("_")[0].capitalize()
-        # fancy_field_name = the verbose name of the field
-        fancy_field_name = field.verbose_name.capitalize()
-        if field_section == "Tele":
-            field_section = "Teleoperated"
-        if field_section == "Auto":
-            field_section = "Autonomous"
         if field_type == "IntegerField":
             # if it's an integer and not a special field
             if field_name != "team_number" and field_name != "match_number" and field_name != "scout_team_number":
@@ -45,6 +40,7 @@ def view_team_profile(request, team_number=None):
                 m = matches.aggregate(Avg(field_name))[field_name+"__avg"]
 
                 if m is not None:
+                    #value = str("%.2f" % matches.aggregate(Avg(field_name))[field_name+"__avg"])
                     value = str("%.2f" % matches.aggregate(Avg(field_name))[field_name+"__avg"])
                 else:
                     value = None
@@ -54,24 +50,42 @@ def view_team_profile(request, team_number=None):
         elif field_type == "BooleanField":
             # if it's a boolean, calculate the % that has true (but not if matches.count()  == 0)
             try:
-                value = str("%.2f%%" % (matches.filter(**{str(field_name): True}).count() / matches.count() * 100))
+                value = str("%.2f" % (matches.filter(**{str(field_name): True}).count() / matches.count() * 100))
             except ZeroDivisionError:
                 pass
         else:
             # otherwise, skip it
             continue
-        # if we haven't yet looked at the section that it's in...
-        if field_section not in average_sections:
-            # create a new entry for it (yes, this is redundant, we'll fix it later)
-            average_sections[field_section] = {
-                'name': field_section,
-                'data': [],
-            }
-        # then, add the number into the data of the section entry
-        average_sections[field_section]['data'].append({
-            'name': fancy_field_name,
-            'value': value,
-        })
+        # put it in the hash -- much simpler than the crazy wacko system of before
+        statistics[field_name] = value
+
+    # calculate some special stats
+    statistics['auto_total_acquired_containers'] = str("%.2f" %
+        (float(statistics['auto_step_center_acquired_containers']) + float(statistics['auto_ground_acquired_containers'])))
+    statistics['tele_picked_up_total_totes'] = str("%.2f" %
+        (float(statistics['tele_picked_up_ground_upright_totes']) + float(statistics['tele_picked_up_upside_down_totes'])
+         + float(statistics['tele_picked_up_sideways_totes']) + float(statistics['tele_picked_up_human_station_totes'])))
+    statistics['tele_picked_up_total_containers'] = str("%.2f" %
+         (float(statistics['tele_picked_up_sideways_containers']) + float(statistics['tele_picked_up_upright_containers'])
+         + float(statistics['tele_picked_up_center_step_containers'])))
+    # aggregate totestacks, yay!
+    stacks = ToteStack.objects.filter(match__team_number=team_number)
+    statistics['tele_average_stack_height'] = str("%.2f" % stacks.aggregate(Avg('start_height'))['start_height__avg'])
+    statistics['tele_average_totes_stacked'] = str("%.2f" % stacks.aggregate(Avg('totes_added'))['totes_added__avg'])
+    # I'm pretty proud of this -- it's the averages of the sum per match
+    match_stacks = stacks.values('match').annotate(total_totes=Sum('totes_added'))
+    statistics['tele_average_totes_stacked_per_match'] = str("%.2f" % match_stacks.aggregate(Avg('total_totes'))['total_totes__avg'])
+    # match scores -- I moved the thing from the 'edit match' screen into its own function
+    # because it's pretty useful and recyclable
+    match_scores = [match_score(m) for m in matches]
+    auto_scores = [m[0] for m in match_scores]
+    tele_scores = [m[1] for m in match_scores]
+    statistics['auto_average_score'] = str("%.2f" % (sum(auto_scores) / len(auto_scores)))
+    statistics['tele_average_score'] = str("%.2f" % (sum(tele_scores) / len(tele_scores)))
+    statistics['total_average_score'] = str("%.2f" %
+            (float(statistics['auto_average_score']) + float(statistics['tele_average_score'])))
+    statistics['total_score_proportion'] = str("%.2f" %
+            (float(statistics['total_average_score']) / float(statistics['match_final_score']) * 100))
 
     pit_scout_data = PitScoutData.objects.filter(team_number=team_number).order_by('id').exclude(location__name="TEST")
 
@@ -94,11 +108,7 @@ def view_team_profile(request, team_number=None):
     context = {
         'aggregate_data': model_to_dict(aggregate_data),
         'team_number': team_number,
-        # this converts e.g. {'auto': {'name':'auto', 'data':[{...}]}, ...}
-        # to [{'name':'auto', 'data':[{...}]}, ...]
-        # (this is necessary because otherwise the sections could show up in any order
-        # when we iterate over the dictionary)
-        'sections': [average_sections[z] for z in sorted(list(average_sections))],
+        'statistics': statistics,
         'nav_title': str(team_number),
         'matches': matches
     }
