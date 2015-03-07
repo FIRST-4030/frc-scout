@@ -116,9 +116,47 @@ def view_team_profile(request, team_number=None):
 
 
 def view_team_matches(request, team_number=None):
+    matches = []
+
+    for match in Match.objects.filter(team_number=team_number).exclude(location__name="TEST"):
+        match_dict = model_to_dict(match)
+
+        if not match_dict['no_show']:
+            match_dict['auto_total_score'], match_dict['tele_total_score'] = match_score(match)
+            match_dict['total_score'] = match_dict['auto_total_score'] + match_dict['tele_total_score']
+            match_dict['auto_total_score'] = str("%.2f" % match_dict['auto_total_score'])
+            match_dict['tele_total_score'] = str("%.2f" % match_dict['tele_total_score'])
+            match_dict['score_proportion'] = str("%.2f" % (match_dict['total_score'] / match_dict['match_final_score'] * 100))
+            match_dict['total_score'] = str("%.2f" % match_dict['total_score'])
+
+            stacks = ToteStack.objects.filter(match=match)
+            match_dict['tele_total_stacked'] = stacks.aggregate(Sum('totes_added'))['totes_added__sum']
+            match_dict['tele_average_totes_stacked'] = str("%.2f" % stacks.aggregate(Avg('totes_added'))['totes_added__avg'])
+            match_dict['tele_average_stack_height'] = str("%.2f" % stacks.aggregate(Avg('start_height'))['start_height__avg'])
+
+            match_dict['tele_picked_up_total_containers'] = (match_dict['tele_picked_up_sideways_containers']
+                + match_dict['tele_picked_up_upright_containers'] + match_dict['tele_picked_up_center_step_containers'])
+            match_dict['auto_total_acquired_containers'] = (match_dict['auto_step_center_acquired_containers']
+                + match_dict['auto_ground_acquired_containers'])
+            match_dict['tele_picked_up_total_totes'] = (match_dict['tele_picked_up_ground_upright_totes']
+                + match_dict['tele_picked_up_sideways_totes'] + match_dict['tele_picked_up_upside_down_totes']
+                + match_dict['tele_picked_up_human_station_totes'])
+
+            for key in match_dict:
+                if key == "no_show":
+                    continue
+                if str(match_dict[key]) == "True":
+                    match_dict[key] = "Yes"
+                if str(match_dict[key]) == "False":
+                    match_dict[key] = "No"
+
+        match_dict['location'] = match.location.name
+
+        matches.append(match_dict)
+
     context = {
         'team_number': team_number,
-        'matches': Match.objects.filter(team_number=team_number),
+        'matches': matches,
         'nav_title': team_number + "'s Matches"
     }
     return render(request, 'frc_scout/view_team_matches.html', context)
