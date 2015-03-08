@@ -50,6 +50,12 @@ urlpatterns = patterns(
 
     url(r'^team/(?P<team_number>-?[0-9]+)/matches/$', views.view_team_matches, name='view_team_matches'),
 
+    # Averages views
+    url(r'^results/averages/$', views.view_team_averages, {'only_us':False, 'only_here':True}, name='view_team_averages'),
+    url(r'^results/averages/us/$', views.view_team_averages, {'only_us':True, 'only_here':True}, name='view_team_averages'),
+    url(r'^results/averages/everywhere/$', views.view_team_averages, {'only_us':False, 'only_here':False}, name='view_team_averages'),
+    url(r'^results/averages/everywhere/us/$', views.view_team_averages, {'only_us':True, 'only_here':False}, name='view_team_averages'),
+
     # Results views
     url(r'^results/database/$', views.database_instructions, name='database_instructions'),
     url(r'^results/tableau/$', views.tableau_info, name='tableau_info'),

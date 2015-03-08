@@ -55,7 +55,7 @@
                     <h3 class="panel-title">Results</h3>
                 </div>
                 <div class="panel-body">
-                    {#                    <a class="btn btn-primary btn-super" href="#">View Team Averages</a>#}
+                    <a class="btn btn-primary btn-super" href="{% url "frc_scout:view_team_averages" only_us=False only_here=True %}">View team averages</a>
                     <a class="btn btn-primary btn-super" href="{% url 'frc_scout:tableau_info' %}">Integrate with Tableau</a>
                     <a class="btn btn-primary btn-super" href="{% url 'frc_scout:database_instructions' %}">connect to database</a>
                     <a class="btn btn-primary btn-super" href="{% url "frc_scout:view_team_profile" %}">Team Profile</a>
