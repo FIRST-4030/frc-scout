@@ -60,52 +60,65 @@ def view_team_profile(request, team_number=None):
             # put it in the hash -- much simpler than the crazy wacko system of before
             statistics[field_name] = value
 
+            if statistics[field_name] == None:
+                statistics[field_name] = "—"
+
         # calculate some special stats
         print(statistics['auto_step_center_acquired_containers'])
-        if (statistics['auto_step_center_acquired_containers'] is not None) and (statistics['auto_ground_acquired_containers'] is not None):
+        if (statistics['auto_step_center_acquired_containers'] != "—") and (statistics['auto_ground_acquired_containers'] != "—"):
             statistics['auto_total_acquired_containers'] = str("%.2f" %
                 (float(statistics['auto_step_center_acquired_containers']) + float(statistics['auto_ground_acquired_containers'])))
-        if (statistics['tele_picked_up_ground_upright_totes'] is not None) and (statistics['tele_picked_up_upside_down_totes'] is not None) and (
-            statistics['tele_picked_up_sideways_totes'] is not None) and (statistics['tele_picked_up_human_station_totes'] is not None):
+        else:
+            statistics['auto_total_acquired_containers'] = "—"
+        if (statistics['tele_picked_up_ground_upright_totes'] != "—") and (statistics['tele_picked_up_upside_down_totes'] != "—") and (
+            statistics['tele_picked_up_sideways_totes'] != "—") and (statistics['tele_picked_up_human_station_totes'] != "—"):
             statistics['tele_picked_up_total_totes'] = str("%.2f" %
                 (float(statistics['tele_picked_up_ground_upright_totes']) + float(statistics['tele_picked_up_upside_down_totes'])
                  + float(statistics['tele_picked_up_sideways_totes']) + float(statistics['tele_picked_up_human_station_totes'])))
-        if (statistics['tele_picked_up_sideways_containers'] is not None) and (statistics['tele_picked_up_upright_containers'] is not None) and (
-            statistics['tele_picked_up_center_step_containers'] is not None):
+        else:
+            statistics['tele_picked_up_total_totes'] = "—"
+        if (statistics['tele_picked_up_sideways_containers'] != "—") and (statistics['tele_picked_up_upright_containers'] != "—") and (
+            statistics['tele_picked_up_center_step_containers'] != "—"):
             statistics['tele_picked_up_total_containers'] = str("%.2f" %
                  (float(statistics['tele_picked_up_sideways_containers']) + float(statistics['tele_picked_up_upright_containers'])
                  + float(statistics['tele_picked_up_center_step_containers'])))
+        else:
+            statistics['tele_picked_up_total_containers'] = "—"
         # aggregate totestacks, yay!
         stacks = ToteStack.objects.filter(match__team_number=team_number)
-        if (len(stacks) != 0) and (stacks is not None):
+        if (len(stacks) != 0) and (stacks != "—"):
             statistics['tele_average_stack_height'] = str("%.2f" % stacks.aggregate(Avg('start_height'))['start_height__avg'])
             statistics['tele_average_totes_stacked'] = str("%.2f" % stacks.aggregate(Avg('totes_added'))['totes_added__avg'])
             # I'm pretty proud of this -- it's the averages of the sum per match
             match_stacks = stacks.values('match').annotate(total_totes=Sum('totes_added'))
             statistics['tele_average_totes_stacked_per_match'] = str("%.2f" % match_stacks.aggregate(Avg('total_totes'))['total_totes__avg'])
-            # match scores -- I moved the thing from the 'edit match' screen into its own function
-            # because it's pretty useful and recyclable
         else:
-            statistics['tele_average_stack_height'] = "0.00"
-            statistics['tele_average_totes_stacked'] = "0.00"
-            statistics['tele_average_totes_stacked_per_match'] = "0.00"
+            statistics['tele_average_stack_height'] = "—"
+            statistics['tele_average_totes_stacked'] = "—"
+            statistics['tele_average_totes_stacked_per_match'] = "—"
 
+        # match scores -- I moved the thing from the 'edit match' screen into its own function
+        # because it's pretty useful and recyclable
         match_scores = [match_score(m) for m in matches]
         auto_scores = [m[0] for m in match_scores]
         tele_scores = [m[1] for m in match_scores]
         if len(auto_scores) > 0:
             statistics['auto_average_score'] = str("%.2f" % (sum(auto_scores) / len(auto_scores)))
             statistics['tele_average_score'] = str("%.2f" % (sum(tele_scores) / len(tele_scores)))
-        else:
-            statistics['auto_average_score'] = "0.00"
-            statistics['tele_average_score'] = "0.00"
-        statistics['total_average_score'] = str("%.2f" %
+            statistics['total_average_score'] = str("%.2f" %
                 (float(statistics['auto_average_score']) + float(statistics['tele_average_score'])))
-        if statistics['match_final_score'] is not None:
-            statistics['total_score_proportion'] = str("%.2f" %
-                    (float(statistics['total_average_score']) / float(statistics['match_final_score']) * 100))
         else:
-            statistics['total_score_proportion'] = "???"
+            statistics['auto_average_score'] = "—"
+            statistics['tele_average_score'] = "—"
+            statistics['total_average_score'] = "—"
+        if statistics['match_final_score'] != "—":
+            try:
+                statistics['total_score_proportion'] = str("%.2f" %
+                    (float(statistics['total_average_score']) / float(statistics['match_final_score']) * 100))
+            except ZeroDivisionError:
+                statistics['total_score_proportion'] = "?"
+        else:
+            statistics['total_score_proportion'] = "—"
 
     pit_scout_data = PitScoutData.objects.filter(team_number=team_number).order_by('id').exclude(location__name="TEST")
 
@@ -147,7 +160,12 @@ def view_team_matches(request, team_number=None):
             match_dict['auto_total_score'] = str("%.2f" % match_dict['auto_total_score'])
             match_dict['tele_total_score'] = str("%.2f" % match_dict['tele_total_score'])
             if match_dict['match_final_score'] is not None:
-                match_dict['score_proportion'] = str("%.2f" % (match_dict['total_score'] / match_dict['match_final_score'] * 100))
+                try:
+                    match_dict['score_proportion'] = str("%.2f" % (match_dict['total_score'] / match_dict['match_final_score'] * 100))
+                except ZeroDivisionError:
+                    match_dict['score_proportion'] = "?"
+            else:
+                match_dict['score_proportion'] = "?"
             match_dict['total_score'] = str("%.2f" % match_dict['total_score'])
 
             stacks = ToteStack.objects.filter(match=match)
@@ -168,10 +186,7 @@ def view_team_matches(request, team_number=None):
                 + match_dict['tele_picked_up_sideways_totes'] + match_dict['tele_picked_up_upside_down_totes']
                 + match_dict['tele_picked_up_human_station_totes'])
 
-            if match.scout.userprofile.team.team_number == request.user.userprofile.team.team_number:
-                match_dict['match_private_comments'] = match.matchprivatecomments.comments
-
-            match_dict['scout_name'] = match.scout.first_name
+            match_dict['auto_has_auto'] = not match_dict['auto_no_auto']
 
             for key in match_dict:
                 if key == "no_show":
@@ -180,6 +195,12 @@ def view_team_matches(request, team_number=None):
                     match_dict[key] = "Yes"
                 if str(match_dict[key]) == "False":
                     match_dict[key] = "No"
+
+        if match.scout.userprofile.team.team_number == request.user.userprofile.team.team_number:
+            match_dict['match_private_comments'] = match.matchprivatecomments.comments
+            match_dict['scout_name'] = match.scout.first_name + " on team " + str(match.scout.userprofile.team.team_number)
+        else:
+            match_dict['scout_name'] = 'team ' + str(match.scout.userprofile.team.team_number)
 
         match_dict['location'] = match.location.name
 

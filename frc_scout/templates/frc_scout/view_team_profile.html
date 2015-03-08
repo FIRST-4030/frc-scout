@@ -78,6 +78,7 @@
                 </div>
             </div>
 
+            {% if matches|length > 0 %}
             <div class="section-header-container">
                 <span class="section-header-text">Match averages</span>
             </div>
@@ -211,6 +212,9 @@
                     </div>
                 {% endif %}
             {% endfor %}
+            {% else %} <!-- If no matches scouted -->
+                <em>This team has not been scouted in any matches.</em>
+            {% endif %}
         </div>
     </div>
 {% endblock %}
