@@ -75,6 +75,17 @@
             </div>
         </div>
 
+            <div class="col-md-10 col-md-offset-1">
+            <div class="panel panel-event">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Event</h3>
+                </div>
+                <div class="panel-body">
+                    <a class="btn btn-event btn-super" href="{% url "frc_scout:teams_at_event" %}">Teams here</a>
+                </div>
+            </div>
+        </div>
+
         {% if user.userprofile.team_manager %}
             <div class="col-md-10 col-md-offset-1">
                 <div class="panel panel-info">

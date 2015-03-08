@@ -7,3 +7,4 @@ from .account_views import *
 from .scouting_views import *
 from .profile_views import *
 from .results_views import *
+from .event_views import *
