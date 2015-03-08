@@ -1319,14 +1319,22 @@ $("#match_number").on('keyup', function() {
         var blue = match_array.alliances.blue.teams;
         var red = match_array.alliances.red.teams;
 
+        var onetwothree =  [1, 2, 3]
+
+        var index = 0;
+
         $.each(red, function(k, v) {
             $("#red" + k).text(v.substr(3));
-            $("#select_team_number_select").append("<option style='color:red;' class='d' data-color='red' value='" + v + "'>" + v.substr(3) + "</option>");
+            $("#select_team_number_select").append("<option style='color:red;' class='d' data-color='red' value='" + v + "'>Red " + onetwothree[index] + ": " + v.substr(3) + "</option>");
+            index++;
         });
 
+        index = 0;
+
         $.each(blue, function(k, v) {
-            $("#select_team_number_select").append("<option style='color:blue;' class='d' data-color='blue' value='" + v + "'>" + v.substr(3) + "</option>");
+            $("#select_team_number_select").append("<option style='color:blue;' class='d' data-color='blue' value='" + v + "'>Blue " + onetwothree[index] + ": " + v.substr(3) + "</option>");
             $("#blue" + k).text(v.substr(3));
+            index++;
         });
 
         $("#type_team_number").hide();
