@@ -199,6 +199,7 @@ def view_team_matches(request, team_number=None):
         if match.scout.userprofile.team.team_number == request.user.userprofile.team.team_number:
             match_dict['match_private_comments'] = match.matchprivatecomments.comments
             match_dict['scout_name'] = match.scout.first_name + " on team " + str(match.scout.userprofile.team.team_number)
+            match_dict['scout_first_name'] = match.scout.first_name
         else:
             match_dict['scout_name'] = 'team ' + str(match.scout.userprofile.team.team_number)
 
