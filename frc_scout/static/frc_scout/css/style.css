@@ -115,3 +115,8 @@ body {
 .btn-success-darker-2 {
     background-image: radial-gradient(circle, #187C1C 80%, #439a46 81%);
 }
+
+.panel-event > .panel-heading, .btn-event {
+    background-color: rgb(158, 172, 53);
+    color: white;
+}

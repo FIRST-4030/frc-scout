@@ -54,4 +54,7 @@ urlpatterns = patterns(
     url(r'^results/database/$', views.database_instructions, name='database_instructions'),
     url(r'^results/tableau/$', views.tableau_info, name='tableau_info'),
 
+    # Event views
+    url(r'^event/teams/$', views.teams_at_event, name='teams_at_event'),
+
     )
