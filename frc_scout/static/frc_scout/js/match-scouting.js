@@ -621,6 +621,7 @@ function submitData() {
 
     $("#online_message").hide();
     $("#in_progress_message").show();
+    $("#submit_pending").button('loading');
 
     $.ajax({
         url: '/scouting/match/submit/',
@@ -634,7 +635,8 @@ function submitData() {
 
             $("#submit_pending").html("<span class='glyphicon glyphicon-saved'></span>&nbsp; Data submitted successfully.");
             window.setTimeout(function() {
-                $("#submit_pending").fadeOut(500);
+                $("#submit_pending").button('reset')
+                                    .fadeOut(500);
             }, 2000);
 
             $("#saved").hide();
@@ -666,7 +668,8 @@ function submitData() {
             $("#in_progress_message").hide();
             $("#online_message").hide();
             $("#offline_message").show();
-            $("#submit_pending").html("<span class='glyphicon glyphicon-remove'></span>&nbsp; Data submission failed, please try again later.");
+            $("#submit_pending").button('reset')
+                                .html("<span class='glyphicon glyphicon-remove'></span>&nbsp; Data submission failed, please try again later.");
         }
     });
 }
@@ -1319,14 +1322,22 @@ $("#match_number").on('keyup', function() {
         var blue = match_array.alliances.blue.teams;
         var red = match_array.alliances.red.teams;
 
+        var onetwothree =  [1, 2, 3]
+
+        var index = 0;
+
         $.each(red, function(k, v) {
             $("#red" + k).text(v.substr(3));
-            $("#select_team_number_select").append("<option style='color:red;' class='d' data-color='red' value='" + v + "'>" + v.substr(3) + "</option>");
+            $("#select_team_number_select").append("<option style='color:red;' class='d' data-color='red' value='" + v + "'>Red " + onetwothree[index] + ": " + v.substr(3) + "</option>");
+            index++;
         });
 
+        index = 0;
+
         $.each(blue, function(k, v) {
-            $("#select_team_number_select").append("<option style='color:blue;' class='d' data-color='blue' value='" + v + "'>" + v.substr(3) + "</option>");
+            $("#select_team_number_select").append("<option style='color:blue;' class='d' data-color='blue' value='" + v + "'>Blue " + onetwothree[index] + ": " + v.substr(3) + "</option>");
             $("#blue" + k).text(v.substr(3));
+            index++;
         });
 
         $("#type_team_number").hide();
