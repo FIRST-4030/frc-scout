@@ -104,30 +104,7 @@ def find_match(request):
         processed_matches = []
 
         for match in matches:
-            auto_score = 0
-
-            # multiply by point value, divide by robots per alliance
-
-            if match.auto_moved_to_auto_zone is not None:
-                auto_score += (match.auto_moved_to_auto_zone / 3 * 4)
-
-            if match.auto_yellow_moved_totes is not None:
-                auto_score += (match.auto_yellow_moved_totes / 3 * 6)
-
-            if match.auto_moved_containers is not None:
-                auto_score += (match.auto_moved_containers / 3 * 8)
-
-            if match.auto_yellow_stacked_totes is not None:
-                auto_score += (match.auto_yellow_stacked_totes / 3 * 20)
-
-            tele_score = 0
-
-            # worth 2 per tote stacked
-            if match.totestack_set.count() > 0:
-                tele_score += match.totestack_set.aggregate(Sum('totes_added'))['totes_added__sum'] * 2
-
-            if match.containerstack_set.count() > 0:
-                tele_score += match.containerstack_set.aggregate(Sum('height'))['height__sum'] * 4
+            auto_score, tele_score = match_score(match)
 
             processed_matches.append({
                 'scout': match.scout,
@@ -143,6 +120,35 @@ def find_match(request):
         context['matches'] = processed_matches
 
     return render(request, 'frc_scout/manage/find_match.html', context)
+
+
+def match_score(match):
+    auto_score = 0
+
+    # multiply by point value, divide by robots per alliance
+
+    if match.auto_moved_to_auto_zone is not None:
+        auto_score += (match.auto_moved_to_auto_zone / 3 * 4)
+
+    if match.auto_yellow_moved_totes is not None:
+        auto_score += (match.auto_yellow_moved_totes / 3 * 6)
+
+    if match.auto_moved_containers is not None:
+        auto_score += (match.auto_moved_containers / 3 * 8)
+
+    if match.auto_yellow_stacked_totes is not None:
+        auto_score += (match.auto_yellow_stacked_totes / 3 * 20)
+
+    tele_score = 0
+
+    # worth 2 per tote stacked
+    if match.totestack_set.count() > 0:
+        tele_score += match.totestack_set.aggregate(Sum('totes_added'))['totes_added__sum'] * 2
+
+    if match.containerstack_set.count() > 0:
+        tele_score += match.containerstack_set.aggregate(Sum('height'))['height__sum'] * 4
+
+    return auto_score, tele_score
 
 
 @login_required
