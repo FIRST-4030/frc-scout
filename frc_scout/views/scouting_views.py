@@ -77,44 +77,44 @@ def submit_match_scouting_data(request):
                                      scout_team_number=request.user.userprofile.team.team_number)
 
                 # PRE-MATCH
-                if 'prematch' in match:
-                    prematch = match['prematch']
+                if match.get('prematch'):
+                    prematch = match.get('prematch')
 
                     for prematch_attr in prematch:
                         setattr(match_object, prematch_attr, prematch.get(prematch_attr))
                         print(prematch_attr)
 
                 # AUTO START LOCATION
-                if 'autonomous_starting_location' in match:
-                    auto_starting_location = match['autonomous_starting_location']
+                if match.get('autonomous_starting_location'):
+                    auto_starting_location = match.get('autonomous_starting_location')
 
                     for auto_start_attr in auto_starting_location:
                         setattr(match_object, auto_start_attr, auto_starting_location.get(auto_start_attr))
 
                 # AUTONOMOUS
-                if 'autonomous' in match:
-                    auto = match['autonomous']
+                if match.get('autonomous'):
+                    auto = match.get('autonomous')
 
                     for auto_attr in auto:
                         setattr(match_object, auto_attr, auto.get(auto_attr))
 
                 # AUTONOMOUS FOULS AND OTHER
-                if 'autonomous_fouls_and_other' in match:
-                    auto_fouls_other = match['autonomous_fouls_and_other']
+                if match.get('autonomous_fouls_and_other'):
+                    auto_fouls_other = match.get('autonomous_fouls_and_other')
 
                     for auto_fouls_other_attr in auto_fouls_other:
                         setattr(match_object, auto_fouls_other_attr, auto_fouls_other.get(auto_fouls_other_attr))
 
                 # TELEOPERATED
-                if 'teleoperated' in match:
-                    tele = match['teleoperated']
+                if match.get('teleoperated'):
+                    tele = match.get('teleoperated')
 
                     for tele_attr in tele:
                         setattr(match_object, tele_attr, tele.get(tele_attr))
 
                 # TELEOPERATED PICKED UP TOTES
-                if 'teleoperated_picked_up_totes' in match:
-                    tele_picked_up_totes = match['teleoperated_picked_up_totes']
+                if match.get('teleoperated_picked_up_totes'):
+                    tele_picked_up_totes = match.get('teleoperated_picked_up_totes')
 
                     for tele_picked_up_totes_attr in tele_picked_up_totes:
                         setattr(match_object, tele_picked_up_totes_attr, tele_picked_up_totes.get(tele_picked_up_totes_attr))
@@ -127,16 +127,16 @@ def submit_match_scouting_data(request):
                         setattr(match_object, tele_picked_up_containers_attr, tele_picked_up_containers.get(tele_picked_up_containers_attr))
 
                 # TELEOPERATED FOULS AND OTHER
-                if 'teleoperated_fouls_and_other' in match:
-                    tele_fouls_other = match['teleoperated_fouls_and_other']
+                if match.get('teleoperated_fouls_and_other'):
+                    tele_fouls_other = match.get('teleoperated_fouls_and_other')
 
                     for tele_fouls_other_attr in tele_fouls_other:
                         setattr(match_object, tele_fouls_other_attr, tele_fouls_other.get(tele_fouls_other_attr))
 
                 pc = MatchPrivateComments()
                 # POSTMATCH
-                if 'postmatch' in match:
-                    postmatch = match['postmatch']
+                if match.get('postmatch'):
+                    postmatch = match.get('postmatch')
 
                     for postmatch_attr in postmatch:
                         setattr(match_object, postmatch_attr, postmatch.get(postmatch_attr))
@@ -150,22 +150,22 @@ def submit_match_scouting_data(request):
 
                 except IntegrityError:
                     errors.append({
-                        'team_number': match['prematch']['team_number'],
-                        'match_number': match['prematch']['match_number'],
+                        'team_number': match.get('prematch').get('team_number'),
+                        'match_number': match.get('prematch').get('match_number'),
 
                     })
 
-                if 'teleoperated_stacked_totes' in match:
-                    for stacked_totes in match['teleoperated_stacked_totes']:
+                if match.get('teleoperated_stacked_totes'):
+                    for stacked_totes in match.get('teleoperated_stacked_totes'):
                         tote_stack = ToteStack()
 
                         try:
                             setattr(tote_stack, 'match', match_object)
-                            setattr(tote_stack, 'start_height', stacked_totes['start_height'])
-                            setattr(tote_stack, 'totes_added', stacked_totes['totes_added'])
-                            setattr(tote_stack, 'x', stacked_totes['x'])
-                            setattr(tote_stack, 'y', stacked_totes['y'])
-                            setattr(tote_stack, 'coop_stack', stacked_totes['coop_stack'])
+                            setattr(tote_stack, 'start_height', stacked_totes.get('start_height'))
+                            setattr(tote_stack, 'totes_added', stacked_totes.get('totes_added'))
+                            setattr(tote_stack, 'x', stacked_totes.get('x'))
+                            setattr(tote_stack, 'y', stacked_totes.get('y'))
+                            setattr(tote_stack, 'coop_stack', stacked_totes.get('coop_stack'))
                         except KeyError:
                             pass
 
@@ -174,8 +174,8 @@ def submit_match_scouting_data(request):
                         except IntegrityError:
                             pass
 
-                if 'teleoperated_stacked_containers' in match:
-                    for stacked_containers in match['teleoperated_stacked_containers']:
+                if match.get('teleoperated_stacked_containers'):
+                    for stacked_containers in match.get('teleoperated_stacked_containers'):
                         bin_stack = ContainerStack()
 
                         setattr(bin_stack, 'match', match_object)
@@ -205,7 +205,7 @@ def submit_pit_scouting_data(request):
         for name in data:
             setattr(data_object, name, data.get(name))
 
-        if image_data['data']:
+        if image_data.get('data'):
             data_object.image_id = image_data['data']['id']
             data_object.image_link = image_data['data']['link']
             data_object.image_type = image_data['data']['type']

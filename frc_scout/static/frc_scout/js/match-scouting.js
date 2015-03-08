@@ -629,7 +629,7 @@ function submitData() {
             csrfmiddlewaretoken: $.cookie('csrftoken'),
             data: JSON.stringify(pendingMatches)
         },
-        success: function() {
+        success: function(response) {
             clearPendingMatches();
 
             $("#submit_pending").html("<span class='glyphicon glyphicon-saved'></span>&nbsp; Data submitted successfully.");
@@ -642,13 +642,15 @@ function submitData() {
             $("#deleted").hide()
             $("#in_progress_loading").fadeIn(1000);
 
-            window.setTimeout(function(response) {
+            window.setTimeout(function() {
                 setupNewMatch();
                 $("#in_progress_message").hide();
                 $("#finished_message").show();
 
-                if(response !== undefined) {
-                    json = $.parseJSON(response);
+                if(response) {
+                    console.log(response);
+
+                    var json = $.parseJSON(response);
                     $("#submit_errors").show();
 
                     $.each(json, function(key, value) {
@@ -800,6 +802,8 @@ function openStage(stage) {
             } else {
                 $("#auto_scored_container_text").text(0);
             }
+        } else {
+            $("#auto_moved_to_alliance_zone").bootstrapSwitch('state', false);
         }
     }
 
