@@ -1,0 +1,1944 @@
+<?xml version='1.0' encoding='utf-8' ?>
+
+<datasource formatted-name='FRCscout.com V2.0' inline='true' source-platform='mac' version='8.3' xmlns:user='http://www.tableausoftware.com/xml/user'>
+  <!-- build 8300.15.0114.2230                                -->
+  <connection class='postgres' dbname='frc_scout' odbc-native-protocol='yes' port='20568' server='173.193.191.191' username='public_access'>
+    <relation join='left' type='join'>
+      <clause type='join'>
+        <expression op='AND'>
+          <expression op='='>
+            <expression op='[frc_scout_match].[team_number]'>
+            </expression>
+            <expression op='[frc_scout_pitscoutdata].[team_number]'>
+            </expression>
+          </expression>
+          <expression op='='>
+            <expression op='[frc_scout_match].[location_id]'>
+            </expression>
+            <expression op='[frc_scout_pitscoutdata].[location_id]'>
+            </expression>
+          </expression>
+        </expression>
+      </clause>
+      <relation join='left' type='join'>
+        <clause type='join'>
+          <expression op='='>
+            <expression op='[frc_scout_match].[location_id]'>
+            </expression>
+            <expression op='[frc_scout_location].[id]'>
+            </expression>
+          </expression>
+        </clause>
+        <relation join='left' type='join'>
+          <clause type='join'>
+            <expression op='='>
+              <expression op='[frc_scout_match].[id]'>
+              </expression>
+              <expression op='[frc_scout_containerstack].[match_id]'>
+              </expression>
+            </expression>
+          </clause>
+          <relation join='left' type='join'>
+            <clause type='join'>
+              <expression op='='>
+                <expression op='[frc_scout_match].[id]'>
+                </expression>
+                <expression op='[frc_scout_totestack].[match_id]'>
+                </expression>
+              </expression>
+            </clause>
+            <relation name='frc_scout_match' table='[public].[frc_scout_match]' type='table' />
+            <relation name='frc_scout_totestack' table='[public].[frc_scout_totestack]' type='table' />
+          </relation>
+          <relation name='frc_scout_containerstack' table='[public].[frc_scout_containerstack]' type='table' />
+        </relation>
+        <relation name='frc_scout_location' table='[public].[frc_scout_location]' type='table' />
+      </relation>
+      <relation name='frc_scout_pitscoutdata' table='[public].[frc_scout_pitscoutdata]' type='table' />
+    </relation>
+    <cols>
+      <map key='[auto_fouls]' value='[frc_scout_match].[auto_fouls]' />
+      <map key='[auto_grey_acquired_totes]' value='[frc_scout_match].[auto_grey_acquired_totes]' />
+      <map key='[auto_ground_acquired_containers]' value='[frc_scout_match].[auto_ground_acquired_containers]' />
+      <map key='[auto_interference]' value='[frc_scout_match].[auto_interference]' />
+      <map key='[auto_moved_containers]' value='[frc_scout_match].[auto_moved_containers]' />
+      <map key='[auto_moved_to_auto_zone]' value='[frc_scout_match].[auto_moved_to_auto_zone]' />
+      <map key='[auto_no_auto]' value='[frc_scout_match].[auto_no_auto]' />
+      <map key='[auto_start_x (frc_scout_pitscoutdata)]' value='[frc_scout_pitscoutdata].[auto_start_x]' />
+      <map key='[auto_start_x]' value='[frc_scout_match].[auto_start_x]' />
+      <map key='[auto_start_y (frc_scout_pitscoutdata)]' value='[frc_scout_pitscoutdata].[auto_start_y]' />
+      <map key='[auto_start_y]' value='[frc_scout_match].[auto_start_y]' />
+      <map key='[auto_step_center_acquired_containers]' value='[frc_scout_match].[auto_step_center_acquired_containers]' />
+      <map key='[auto_yellow_moved_totes]' value='[frc_scout_match].[auto_yellow_moved_totes]' />
+      <map key='[auto_yellow_stacked_totes]' value='[frc_scout_match].[auto_yellow_stacked_totes]' />
+      <map key='[can_acquire_containers]' value='[frc_scout_pitscoutdata].[can_acquire_containers]' />
+      <map key='[can_move_containers]' value='[frc_scout_pitscoutdata].[can_move_containers]' />
+      <map key='[can_move_totes]' value='[frc_scout_pitscoutdata].[can_move_totes]' />
+      <map key='[coach]' value='[frc_scout_pitscoutdata].[coach]' />
+      <map key='[containers_added]' value='[frc_scout_containerstack].[containers_added]' />
+      <map key='[coop_stack]' value='[frc_scout_totestack].[coop_stack]' />
+      <map key='[driver_1]' value='[frc_scout_pitscoutdata].[driver_1]' />
+      <map key='[driver_2]' value='[frc_scout_pitscoutdata].[driver_2]' />
+      <map key='[has_strafing]' value='[frc_scout_pitscoutdata].[has_strafing]' />
+      <map key='[has_turret]' value='[frc_scout_pitscoutdata].[has_turret]' />
+      <map key='[height]' value='[frc_scout_containerstack].[height]' />
+      <map key='[human_litter_loading]' value='[frc_scout_pitscoutdata].[human_litter_loading]' />
+      <map key='[human_litter_throwing]' value='[frc_scout_pitscoutdata].[human_litter_throwing]' />
+      <map key='[human_tote_loading]' value='[frc_scout_pitscoutdata].[human_tote_loading]' />
+      <map key='[id (frc_scout_containerstack)]' value='[frc_scout_containerstack].[id]' />
+      <map key='[id (frc_scout_location)]' value='[frc_scout_location].[id]' />
+      <map key='[id (frc_scout_pitscoutdata)]' value='[frc_scout_pitscoutdata].[id]' />
+      <map key='[id (frc_scout_totestack)]' value='[frc_scout_totestack].[id]' />
+      <map key='[id]' value='[frc_scout_match].[id]' />
+      <map key='[image_id]' value='[frc_scout_pitscoutdata].[image_id]' />
+      <map key='[image_link]' value='[frc_scout_pitscoutdata].[image_link]' />
+      <map key='[image_type]' value='[frc_scout_pitscoutdata].[image_type]' />
+      <map key='[known_strengths]' value='[frc_scout_pitscoutdata].[known_strengths]' />
+      <map key='[known_weaknesses]' value='[frc_scout_pitscoutdata].[known_weaknesses]' />
+      <map key='[location_id (frc_scout_pitscoutdata)]' value='[frc_scout_pitscoutdata].[location_id]' />
+      <map key='[location_id]' value='[frc_scout_match].[location_id]' />
+      <map key='[match_final_score]' value='[frc_scout_match].[match_final_score]' />
+      <map key='[match_id (frc_scout_containerstack)]' value='[frc_scout_containerstack].[match_id]' />
+      <map key='[match_id]' value='[frc_scout_totestack].[match_id]' />
+      <map key='[match_number]' value='[frc_scout_match].[match_number]' />
+      <map key='[name]' value='[frc_scout_location].[name]' />
+      <map key='[no_show]' value='[frc_scout_match].[no_show]' />
+      <map key='[pitscout_name]' value='[frc_scout_pitscoutdata].[pitscout_name]' />
+      <map key='[pitscout_team_number]' value='[frc_scout_pitscoutdata].[pitscout_team_number]' />
+      <map key='[robot_height]' value='[frc_scout_pitscoutdata].[robot_height]' />
+      <map key='[robot_speed]' value='[frc_scout_pitscoutdata].[robot_speed]' />
+      <map key='[robot_weight]' value='[frc_scout_pitscoutdata].[robot_weight]' />
+      <map key='[scout_id (frc_scout_pitscoutdata)]' value='[frc_scout_pitscoutdata].[scout_id]' />
+      <map key='[scout_id]' value='[frc_scout_match].[scout_id]' />
+      <map key='[scout_name]' value='[frc_scout_match].[scout_name]' />
+      <map key='[scout_team_number]' value='[frc_scout_match].[scout_team_number]' />
+      <map key='[start_height]' value='[frc_scout_totestack].[start_height]' />
+      <map key='[tba_event_code]' value='[frc_scout_location].[tba_event_code]' />
+      <map key='[team_name]' value='[frc_scout_pitscoutdata].[team_name]' />
+      <map key='[team_number (frc_scout_pitscoutdata)]' value='[frc_scout_pitscoutdata].[team_number]' />
+      <map key='[team_number]' value='[frc_scout_match].[team_number]' />
+      <map key='[team_website]' value='[frc_scout_pitscoutdata].[team_website]' />
+      <map key='[tele_container_fell_off]' value='[frc_scout_match].[tele_container_fell_off]' />
+      <map key='[tele_dead_bot]' value='[frc_scout_match].[tele_dead_bot]' />
+      <map key='[tele_foul_context]' value='[frc_scout_match].[tele_foul_context]' />
+      <map key='[tele_fouls]' value='[frc_scout_match].[tele_fouls]' />
+      <map key='[tele_knocked_over_stacks]' value='[frc_scout_match].[tele_knocked_over_stacks]' />
+      <map key='[tele_picked_up_center_step_containers]' value='[frc_scout_match].[tele_picked_up_center_step_containers]' />
+      <map key='[tele_picked_up_ground_upright_totes]' value='[frc_scout_match].[tele_picked_up_ground_upright_totes]' />
+      <map key='[tele_picked_up_human_station_totes]' value='[frc_scout_match].[tele_picked_up_human_station_totes]' />
+      <map key='[tele_picked_up_sideways_containers]' value='[frc_scout_match].[tele_picked_up_sideways_containers]' />
+      <map key='[tele_picked_up_sideways_totes]' value='[frc_scout_match].[tele_picked_up_sideways_totes]' />
+      <map key='[tele_picked_up_upright_containers]' value='[frc_scout_match].[tele_picked_up_upright_containers]' />
+      <map key='[tele_picked_up_upside_down_totes]' value='[frc_scout_match].[tele_picked_up_upside_down_totes]' />
+      <map key='[tele_placed_in_container_litter]' value='[frc_scout_match].[tele_placed_in_container_litter]' />
+      <map key='[tele_public_comments]' value='[frc_scout_match].[tele_public_comments]' />
+      <map key='[tele_pushed_litter]' value='[frc_scout_match].[tele_pushed_litter]' />
+      <map key='[timestamp]' value='[frc_scout_match].[timestamp]' />
+      <map key='[tote_stack_capacity]' value='[frc_scout_pitscoutdata].[tote_stack_capacity]' />
+      <map key='[totes_added]' value='[frc_scout_totestack].[totes_added]' />
+      <map key='[x]' value='[frc_scout_totestack].[x]' />
+      <map key='[y]' value='[frc_scout_totestack].[y]' />
+    </cols>
+    <metadata-records>
+      <metadata-record class='column'>
+        <remote-name>id</remote-name>
+        <remote-type>3</remote-type>
+        <local-name>[id]</local-name>
+        <parent-name>[frc_scout_match]</parent-name>
+        <remote-alias>id</remote-alias>
+        <ordinal>1</ordinal>
+        <local-type>integer</local-type>
+        <aggregation>Sum</aggregation>
+        <precision>10</precision>
+        <contains-null>false</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_INTEGER&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_SLONG&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>match_number</remote-name>
+        <remote-type>3</remote-type>
+        <local-name>[match_number]</local-name>
+        <parent-name>[frc_scout_match]</parent-name>
+        <remote-alias>match_number</remote-alias>
+        <ordinal>2</ordinal>
+        <local-type>integer</local-type>
+        <aggregation>Sum</aggregation>
+        <precision>10</precision>
+        <contains-null>false</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_INTEGER&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_SLONG&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>timestamp</remote-name>
+        <remote-type>7</remote-type>
+        <local-name>[timestamp]</local-name>
+        <parent-name>[frc_scout_match]</parent-name>
+        <remote-alias>timestamp</remote-alias>
+        <ordinal>3</ordinal>
+        <local-type>datetime</local-type>
+        <aggregation>Year</aggregation>
+        <contains-null>false</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_TYPE_TIMESTAMP&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_TYPE_TIMESTAMP&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>auto_start_x</remote-name>
+        <remote-type>131</remote-type>
+        <local-name>[auto_start_x]</local-name>
+        <parent-name>[frc_scout_match]</parent-name>
+        <remote-alias>auto_start_x</remote-alias>
+        <ordinal>4</ordinal>
+        <local-type>real</local-type>
+        <aggregation>Sum</aggregation>
+        <precision>8</precision>
+        <scale>8</scale>
+        <contains-null>false</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_NUMERIC&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_NUMERIC&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>auto_start_y</remote-name>
+        <remote-type>131</remote-type>
+        <local-name>[auto_start_y]</local-name>
+        <parent-name>[frc_scout_match]</parent-name>
+        <remote-alias>auto_start_y</remote-alias>
+        <ordinal>5</ordinal>
+        <local-type>real</local-type>
+        <aggregation>Sum</aggregation>
+        <precision>8</precision>
+        <scale>8</scale>
+        <contains-null>false</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_NUMERIC&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_NUMERIC&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>auto_yellow_stacked_totes</remote-name>
+        <remote-type>3</remote-type>
+        <local-name>[auto_yellow_stacked_totes]</local-name>
+        <parent-name>[frc_scout_match]</parent-name>
+        <remote-alias>auto_yellow_stacked_totes</remote-alias>
+        <ordinal>6</ordinal>
+        <local-type>integer</local-type>
+        <aggregation>Sum</aggregation>
+        <precision>10</precision>
+        <contains-null>false</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_INTEGER&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_SLONG&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>auto_yellow_moved_totes</remote-name>
+        <remote-type>3</remote-type>
+        <local-name>[auto_yellow_moved_totes]</local-name>
+        <parent-name>[frc_scout_match]</parent-name>
+        <remote-alias>auto_yellow_moved_totes</remote-alias>
+        <ordinal>7</ordinal>
+        <local-type>integer</local-type>
+        <aggregation>Sum</aggregation>
+        <precision>10</precision>
+        <contains-null>false</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_INTEGER&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_SLONG&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>auto_grey_acquired_totes</remote-name>
+        <remote-type>3</remote-type>
+        <local-name>[auto_grey_acquired_totes]</local-name>
+        <parent-name>[frc_scout_match]</parent-name>
+        <remote-alias>auto_grey_acquired_totes</remote-alias>
+        <ordinal>8</ordinal>
+        <local-type>integer</local-type>
+        <aggregation>Sum</aggregation>
+        <precision>10</precision>
+        <contains-null>false</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_INTEGER&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_SLONG&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>auto_step_center_acquired_containers</remote-name>
+        <remote-type>3</remote-type>
+        <local-name>[auto_step_center_acquired_containers]</local-name>
+        <parent-name>[frc_scout_match]</parent-name>
+        <remote-alias>auto_step_center_acquired_containers</remote-alias>
+        <ordinal>9</ordinal>
+        <local-type>integer</local-type>
+        <aggregation>Sum</aggregation>
+        <precision>10</precision>
+        <contains-null>false</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_INTEGER&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_SLONG&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>auto_ground_acquired_containers</remote-name>
+        <remote-type>3</remote-type>
+        <local-name>[auto_ground_acquired_containers]</local-name>
+        <parent-name>[frc_scout_match]</parent-name>
+        <remote-alias>auto_ground_acquired_containers</remote-alias>
+        <ordinal>10</ordinal>
+        <local-type>integer</local-type>
+        <aggregation>Sum</aggregation>
+        <precision>10</precision>
+        <contains-null>false</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_INTEGER&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_SLONG&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>auto_moved_containers</remote-name>
+        <remote-type>3</remote-type>
+        <local-name>[auto_moved_containers]</local-name>
+        <parent-name>[frc_scout_match]</parent-name>
+        <remote-alias>auto_moved_containers</remote-alias>
+        <ordinal>11</ordinal>
+        <local-type>integer</local-type>
+        <aggregation>Sum</aggregation>
+        <precision>10</precision>
+        <contains-null>false</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_INTEGER&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_SLONG&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>auto_moved_to_auto_zone</remote-name>
+        <remote-type>11</remote-type>
+        <local-name>[auto_moved_to_auto_zone]</local-name>
+        <parent-name>[frc_scout_match]</parent-name>
+        <remote-alias>auto_moved_to_auto_zone</remote-alias>
+        <ordinal>12</ordinal>
+        <local-type>boolean</local-type>
+        <aggregation>Count</aggregation>
+        <contains-null>false</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_BIT&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_BIT&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>auto_no_auto</remote-name>
+        <remote-type>11</remote-type>
+        <local-name>[auto_no_auto]</local-name>
+        <parent-name>[frc_scout_match]</parent-name>
+        <remote-alias>auto_no_auto</remote-alias>
+        <ordinal>13</ordinal>
+        <local-type>boolean</local-type>
+        <aggregation>Count</aggregation>
+        <contains-null>false</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_BIT&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_BIT&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>auto_interference</remote-name>
+        <remote-type>3</remote-type>
+        <local-name>[auto_interference]</local-name>
+        <parent-name>[frc_scout_match]</parent-name>
+        <remote-alias>auto_interference</remote-alias>
+        <ordinal>14</ordinal>
+        <local-type>integer</local-type>
+        <aggregation>Sum</aggregation>
+        <precision>10</precision>
+        <contains-null>false</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_INTEGER&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_SLONG&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>tele_picked_up_ground_upright_totes</remote-name>
+        <remote-type>3</remote-type>
+        <local-name>[tele_picked_up_ground_upright_totes]</local-name>
+        <parent-name>[frc_scout_match]</parent-name>
+        <remote-alias>tele_picked_up_ground_upright_totes</remote-alias>
+        <ordinal>15</ordinal>
+        <local-type>integer</local-type>
+        <aggregation>Sum</aggregation>
+        <precision>10</precision>
+        <contains-null>false</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_INTEGER&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_SLONG&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>tele_picked_up_upside_down_totes</remote-name>
+        <remote-type>3</remote-type>
+        <local-name>[tele_picked_up_upside_down_totes]</local-name>
+        <parent-name>[frc_scout_match]</parent-name>
+        <remote-alias>tele_picked_up_upside_down_totes</remote-alias>
+        <ordinal>16</ordinal>
+        <local-type>integer</local-type>
+        <aggregation>Sum</aggregation>
+        <precision>10</precision>
+        <contains-null>false</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_INTEGER&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_SLONG&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>tele_picked_up_sideways_totes</remote-name>
+        <remote-type>3</remote-type>
+        <local-name>[tele_picked_up_sideways_totes]</local-name>
+        <parent-name>[frc_scout_match]</parent-name>
+        <remote-alias>tele_picked_up_sideways_totes</remote-alias>
+        <ordinal>17</ordinal>
+        <local-type>integer</local-type>
+        <aggregation>Sum</aggregation>
+        <precision>10</precision>
+        <contains-null>false</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_INTEGER&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_SLONG&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>tele_picked_up_human_station_totes</remote-name>
+        <remote-type>3</remote-type>
+        <local-name>[tele_picked_up_human_station_totes]</local-name>
+        <parent-name>[frc_scout_match]</parent-name>
+        <remote-alias>tele_picked_up_human_station_totes</remote-alias>
+        <ordinal>18</ordinal>
+        <local-type>integer</local-type>
+        <aggregation>Sum</aggregation>
+        <precision>10</precision>
+        <contains-null>false</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_INTEGER&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_SLONG&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>tele_picked_up_sideways_containers</remote-name>
+        <remote-type>3</remote-type>
+        <local-name>[tele_picked_up_sideways_containers]</local-name>
+        <parent-name>[frc_scout_match]</parent-name>
+        <remote-alias>tele_picked_up_sideways_containers</remote-alias>
+        <ordinal>19</ordinal>
+        <local-type>integer</local-type>
+        <aggregation>Sum</aggregation>
+        <precision>10</precision>
+        <contains-null>false</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_INTEGER&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_SLONG&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>tele_picked_up_upright_containers</remote-name>
+        <remote-type>3</remote-type>
+        <local-name>[tele_picked_up_upright_containers]</local-name>
+        <parent-name>[frc_scout_match]</parent-name>
+        <remote-alias>tele_picked_up_upright_containers</remote-alias>
+        <ordinal>20</ordinal>
+        <local-type>integer</local-type>
+        <aggregation>Sum</aggregation>
+        <precision>10</precision>
+        <contains-null>false</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_INTEGER&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_SLONG&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>tele_picked_up_center_step_containers</remote-name>
+        <remote-type>3</remote-type>
+        <local-name>[tele_picked_up_center_step_containers]</local-name>
+        <parent-name>[frc_scout_match]</parent-name>
+        <remote-alias>tele_picked_up_center_step_containers</remote-alias>
+        <ordinal>21</ordinal>
+        <local-type>integer</local-type>
+        <aggregation>Sum</aggregation>
+        <precision>10</precision>
+        <contains-null>false</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_INTEGER&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_SLONG&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>tele_pushed_litter</remote-name>
+        <remote-type>3</remote-type>
+        <local-name>[tele_pushed_litter]</local-name>
+        <parent-name>[frc_scout_match]</parent-name>
+        <remote-alias>tele_pushed_litter</remote-alias>
+        <ordinal>22</ordinal>
+        <local-type>integer</local-type>
+        <aggregation>Sum</aggregation>
+        <precision>10</precision>
+        <contains-null>false</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_INTEGER&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_SLONG&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>tele_placed_in_container_litter</remote-name>
+        <remote-type>3</remote-type>
+        <local-name>[tele_placed_in_container_litter]</local-name>
+        <parent-name>[frc_scout_match]</parent-name>
+        <remote-alias>tele_placed_in_container_litter</remote-alias>
+        <ordinal>23</ordinal>
+        <local-type>integer</local-type>
+        <aggregation>Sum</aggregation>
+        <precision>10</precision>
+        <contains-null>false</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_INTEGER&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_SLONG&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>tele_fouls</remote-name>
+        <remote-type>3</remote-type>
+        <local-name>[tele_fouls]</local-name>
+        <parent-name>[frc_scout_match]</parent-name>
+        <remote-alias>tele_fouls</remote-alias>
+        <ordinal>24</ordinal>
+        <local-type>integer</local-type>
+        <aggregation>Sum</aggregation>
+        <precision>10</precision>
+        <contains-null>false</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_INTEGER&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_SLONG&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>tele_knocked_over_stacks</remote-name>
+        <remote-type>3</remote-type>
+        <local-name>[tele_knocked_over_stacks]</local-name>
+        <parent-name>[frc_scout_match]</parent-name>
+        <remote-alias>tele_knocked_over_stacks</remote-alias>
+        <ordinal>25</ordinal>
+        <local-type>integer</local-type>
+        <aggregation>Sum</aggregation>
+        <precision>10</precision>
+        <contains-null>false</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_INTEGER&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_SLONG&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>tele_dead_bot</remote-name>
+        <remote-type>11</remote-type>
+        <local-name>[tele_dead_bot]</local-name>
+        <parent-name>[frc_scout_match]</parent-name>
+        <remote-alias>tele_dead_bot</remote-alias>
+        <ordinal>26</ordinal>
+        <local-type>boolean</local-type>
+        <aggregation>Count</aggregation>
+        <contains-null>false</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_BIT&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_BIT&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>tele_foul_context</remote-name>
+        <remote-type>130</remote-type>
+        <local-name>[tele_foul_context]</local-name>
+        <parent-name>[frc_scout_match]</parent-name>
+        <remote-alias>tele_foul_context</remote-alias>
+        <ordinal>27</ordinal>
+        <local-type>string</local-type>
+        <aggregation>Count</aggregation>
+        <width>8190</width>
+        <contains-null>true</contains-null>
+        <cast-to-local-type>true</cast-to-local-type>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_WLONGVARCHAR&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_WCHAR&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>tele_public_comments</remote-name>
+        <remote-type>130</remote-type>
+        <local-name>[tele_public_comments]</local-name>
+        <parent-name>[frc_scout_match]</parent-name>
+        <remote-alias>tele_public_comments</remote-alias>
+        <ordinal>28</ordinal>
+        <local-type>string</local-type>
+        <aggregation>Count</aggregation>
+        <width>8190</width>
+        <contains-null>true</contains-null>
+        <cast-to-local-type>true</cast-to-local-type>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_WLONGVARCHAR&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_WCHAR&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>scout_id</remote-name>
+        <remote-type>3</remote-type>
+        <local-name>[scout_id]</local-name>
+        <parent-name>[frc_scout_match]</parent-name>
+        <remote-alias>scout_id</remote-alias>
+        <ordinal>29</ordinal>
+        <local-type>integer</local-type>
+        <aggregation>Sum</aggregation>
+        <precision>10</precision>
+        <contains-null>false</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_INTEGER&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_SLONG&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>team_number</remote-name>
+        <remote-type>3</remote-type>
+        <local-name>[team_number]</local-name>
+        <parent-name>[frc_scout_match]</parent-name>
+        <remote-alias>team_number</remote-alias>
+        <ordinal>30</ordinal>
+        <local-type>integer</local-type>
+        <aggregation>Sum</aggregation>
+        <precision>10</precision>
+        <contains-null>false</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_INTEGER&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_SLONG&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>location_id</remote-name>
+        <remote-type>3</remote-type>
+        <local-name>[location_id]</local-name>
+        <parent-name>[frc_scout_match]</parent-name>
+        <remote-alias>location_id</remote-alias>
+        <ordinal>31</ordinal>
+        <local-type>integer</local-type>
+        <aggregation>Sum</aggregation>
+        <precision>10</precision>
+        <contains-null>false</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_INTEGER&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_SLONG&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>scout_name</remote-name>
+        <remote-type>130</remote-type>
+        <local-name>[scout_name]</local-name>
+        <parent-name>[frc_scout_match]</parent-name>
+        <remote-alias>scout_name</remote-alias>
+        <ordinal>32</ordinal>
+        <local-type>string</local-type>
+        <aggregation>Count</aggregation>
+        <width>8190</width>
+        <contains-null>false</contains-null>
+        <cast-to-local-type>true</cast-to-local-type>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_WLONGVARCHAR&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_WCHAR&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>scout_team_number</remote-name>
+        <remote-type>3</remote-type>
+        <local-name>[scout_team_number]</local-name>
+        <parent-name>[frc_scout_match]</parent-name>
+        <remote-alias>scout_team_number</remote-alias>
+        <ordinal>33</ordinal>
+        <local-type>integer</local-type>
+        <aggregation>Sum</aggregation>
+        <precision>10</precision>
+        <contains-null>false</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_INTEGER&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_SLONG&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>match_final_score</remote-name>
+        <remote-type>3</remote-type>
+        <local-name>[match_final_score]</local-name>
+        <parent-name>[frc_scout_match]</parent-name>
+        <remote-alias>match_final_score</remote-alias>
+        <ordinal>34</ordinal>
+        <local-type>integer</local-type>
+        <aggregation>Sum</aggregation>
+        <precision>10</precision>
+        <contains-null>true</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_INTEGER&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_SLONG&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>auto_fouls</remote-name>
+        <remote-type>3</remote-type>
+        <local-name>[auto_fouls]</local-name>
+        <parent-name>[frc_scout_match]</parent-name>
+        <remote-alias>auto_fouls</remote-alias>
+        <ordinal>35</ordinal>
+        <local-type>integer</local-type>
+        <aggregation>Sum</aggregation>
+        <precision>10</precision>
+        <contains-null>false</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_INTEGER&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_SLONG&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>no_show</remote-name>
+        <remote-type>11</remote-type>
+        <local-name>[no_show]</local-name>
+        <parent-name>[frc_scout_match]</parent-name>
+        <remote-alias>no_show</remote-alias>
+        <ordinal>36</ordinal>
+        <local-type>boolean</local-type>
+        <aggregation>Count</aggregation>
+        <contains-null>false</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_BIT&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_BIT&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>tele_container_fell_off</remote-name>
+        <remote-type>3</remote-type>
+        <local-name>[tele_container_fell_off]</local-name>
+        <parent-name>[frc_scout_match]</parent-name>
+        <remote-alias>tele_container_fell_off</remote-alias>
+        <ordinal>37</ordinal>
+        <local-type>integer</local-type>
+        <aggregation>Sum</aggregation>
+        <precision>10</precision>
+        <contains-null>false</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_INTEGER&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_SLONG&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>id</remote-name>
+        <remote-type>3</remote-type>
+        <local-name>[id (frc_scout_totestack)]</local-name>
+        <parent-name>[frc_scout_totestack]</parent-name>
+        <remote-alias>id</remote-alias>
+        <ordinal>40</ordinal>
+        <local-type>integer</local-type>
+        <aggregation>Sum</aggregation>
+        <precision>10</precision>
+        <contains-null>true</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_INTEGER&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_SLONG&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>start_height</remote-name>
+        <remote-type>3</remote-type>
+        <local-name>[start_height]</local-name>
+        <parent-name>[frc_scout_totestack]</parent-name>
+        <remote-alias>start_height</remote-alias>
+        <ordinal>41</ordinal>
+        <local-type>integer</local-type>
+        <aggregation>Sum</aggregation>
+        <precision>10</precision>
+        <contains-null>true</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_INTEGER&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_SLONG&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>x</remote-name>
+        <remote-type>131</remote-type>
+        <local-name>[x]</local-name>
+        <parent-name>[frc_scout_totestack]</parent-name>
+        <remote-alias>x</remote-alias>
+        <ordinal>42</ordinal>
+        <local-type>real</local-type>
+        <aggregation>Sum</aggregation>
+        <precision>8</precision>
+        <scale>8</scale>
+        <contains-null>true</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_NUMERIC&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_NUMERIC&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>y</remote-name>
+        <remote-type>131</remote-type>
+        <local-name>[y]</local-name>
+        <parent-name>[frc_scout_totestack]</parent-name>
+        <remote-alias>y</remote-alias>
+        <ordinal>43</ordinal>
+        <local-type>real</local-type>
+        <aggregation>Sum</aggregation>
+        <precision>8</precision>
+        <scale>8</scale>
+        <contains-null>true</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_NUMERIC&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_NUMERIC&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>coop_stack</remote-name>
+        <remote-type>11</remote-type>
+        <local-name>[coop_stack]</local-name>
+        <parent-name>[frc_scout_totestack]</parent-name>
+        <remote-alias>coop_stack</remote-alias>
+        <ordinal>44</ordinal>
+        <local-type>boolean</local-type>
+        <aggregation>Count</aggregation>
+        <contains-null>true</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_BIT&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_BIT&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>match_id</remote-name>
+        <remote-type>3</remote-type>
+        <local-name>[match_id]</local-name>
+        <parent-name>[frc_scout_totestack]</parent-name>
+        <remote-alias>match_id</remote-alias>
+        <ordinal>45</ordinal>
+        <local-type>integer</local-type>
+        <aggregation>Sum</aggregation>
+        <precision>10</precision>
+        <contains-null>true</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_INTEGER&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_SLONG&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>totes_added</remote-name>
+        <remote-type>3</remote-type>
+        <local-name>[totes_added]</local-name>
+        <parent-name>[frc_scout_totestack]</parent-name>
+        <remote-alias>totes_added</remote-alias>
+        <ordinal>46</ordinal>
+        <local-type>integer</local-type>
+        <aggregation>Sum</aggregation>
+        <precision>10</precision>
+        <contains-null>true</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_INTEGER&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_SLONG&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>id</remote-name>
+        <remote-type>3</remote-type>
+        <local-name>[id (frc_scout_containerstack)]</local-name>
+        <parent-name>[frc_scout_containerstack]</parent-name>
+        <remote-alias>id</remote-alias>
+        <ordinal>48</ordinal>
+        <local-type>integer</local-type>
+        <aggregation>Sum</aggregation>
+        <precision>10</precision>
+        <contains-null>true</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_INTEGER&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_SLONG&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>height</remote-name>
+        <remote-type>3</remote-type>
+        <local-name>[height]</local-name>
+        <parent-name>[frc_scout_containerstack]</parent-name>
+        <remote-alias>height</remote-alias>
+        <ordinal>49</ordinal>
+        <local-type>integer</local-type>
+        <aggregation>Sum</aggregation>
+        <precision>10</precision>
+        <contains-null>true</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_INTEGER&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_SLONG&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>match_id</remote-name>
+        <remote-type>3</remote-type>
+        <local-name>[match_id (frc_scout_containerstack)]</local-name>
+        <parent-name>[frc_scout_containerstack]</parent-name>
+        <remote-alias>match_id</remote-alias>
+        <ordinal>50</ordinal>
+        <local-type>integer</local-type>
+        <aggregation>Sum</aggregation>
+        <precision>10</precision>
+        <contains-null>true</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_INTEGER&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_SLONG&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>containers_added</remote-name>
+        <remote-type>3</remote-type>
+        <local-name>[containers_added]</local-name>
+        <parent-name>[frc_scout_containerstack]</parent-name>
+        <remote-alias>containers_added</remote-alias>
+        <ordinal>51</ordinal>
+        <local-type>integer</local-type>
+        <aggregation>Sum</aggregation>
+        <precision>10</precision>
+        <contains-null>true</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_INTEGER&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_SLONG&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>id</remote-name>
+        <remote-type>3</remote-type>
+        <local-name>[id (frc_scout_location)]</local-name>
+        <parent-name>[frc_scout_location]</parent-name>
+        <remote-alias>id</remote-alias>
+        <ordinal>53</ordinal>
+        <local-type>integer</local-type>
+        <aggregation>Sum</aggregation>
+        <precision>10</precision>
+        <contains-null>true</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_INTEGER&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_SLONG&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>name</remote-name>
+        <remote-type>130</remote-type>
+        <local-name>[name]</local-name>
+        <parent-name>[frc_scout_location]</parent-name>
+        <remote-alias>name</remote-alias>
+        <ordinal>54</ordinal>
+        <local-type>string</local-type>
+        <aggregation>Count</aggregation>
+        <width>8190</width>
+        <contains-null>true</contains-null>
+        <cast-to-local-type>true</cast-to-local-type>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_WLONGVARCHAR&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_WCHAR&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>tba_event_code</remote-name>
+        <remote-type>130</remote-type>
+        <local-name>[tba_event_code]</local-name>
+        <parent-name>[frc_scout_location]</parent-name>
+        <remote-alias>tba_event_code</remote-alias>
+        <ordinal>55</ordinal>
+        <local-type>string</local-type>
+        <aggregation>Count</aggregation>
+        <width>8190</width>
+        <contains-null>true</contains-null>
+        <cast-to-local-type>true</cast-to-local-type>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_WLONGVARCHAR&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_WCHAR&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>id</remote-name>
+        <remote-type>3</remote-type>
+        <local-name>[id (frc_scout_pitscoutdata)]</local-name>
+        <parent-name>[frc_scout_pitscoutdata]</parent-name>
+        <remote-alias>id</remote-alias>
+        <ordinal>56</ordinal>
+        <local-type>integer</local-type>
+        <aggregation>Sum</aggregation>
+        <precision>10</precision>
+        <contains-null>true</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_INTEGER&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_SLONG&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>team_number</remote-name>
+        <remote-type>3</remote-type>
+        <local-name>[team_number (frc_scout_pitscoutdata)]</local-name>
+        <parent-name>[frc_scout_pitscoutdata]</parent-name>
+        <remote-alias>team_number</remote-alias>
+        <ordinal>57</ordinal>
+        <local-type>integer</local-type>
+        <aggregation>Sum</aggregation>
+        <precision>10</precision>
+        <contains-null>true</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_INTEGER&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_SLONG&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>team_name</remote-name>
+        <remote-type>130</remote-type>
+        <local-name>[team_name]</local-name>
+        <parent-name>[frc_scout_pitscoutdata]</parent-name>
+        <remote-alias>team_name</remote-alias>
+        <ordinal>58</ordinal>
+        <local-type>string</local-type>
+        <aggregation>Count</aggregation>
+        <width>8190</width>
+        <contains-null>true</contains-null>
+        <cast-to-local-type>true</cast-to-local-type>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_WLONGVARCHAR&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_WCHAR&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>can_move_totes</remote-name>
+        <remote-type>11</remote-type>
+        <local-name>[can_move_totes]</local-name>
+        <parent-name>[frc_scout_pitscoutdata]</parent-name>
+        <remote-alias>can_move_totes</remote-alias>
+        <ordinal>59</ordinal>
+        <local-type>boolean</local-type>
+        <aggregation>Count</aggregation>
+        <contains-null>true</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_BIT&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_BIT&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>can_move_containers</remote-name>
+        <remote-type>11</remote-type>
+        <local-name>[can_move_containers]</local-name>
+        <parent-name>[frc_scout_pitscoutdata]</parent-name>
+        <remote-alias>can_move_containers</remote-alias>
+        <ordinal>60</ordinal>
+        <local-type>boolean</local-type>
+        <aggregation>Count</aggregation>
+        <contains-null>true</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_BIT&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_BIT&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>can_acquire_containers</remote-name>
+        <remote-type>11</remote-type>
+        <local-name>[can_acquire_containers]</local-name>
+        <parent-name>[frc_scout_pitscoutdata]</parent-name>
+        <remote-alias>can_acquire_containers</remote-alias>
+        <ordinal>61</ordinal>
+        <local-type>boolean</local-type>
+        <aggregation>Count</aggregation>
+        <contains-null>true</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_BIT&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_BIT&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>tote_stack_capacity</remote-name>
+        <remote-type>3</remote-type>
+        <local-name>[tote_stack_capacity]</local-name>
+        <parent-name>[frc_scout_pitscoutdata]</parent-name>
+        <remote-alias>tote_stack_capacity</remote-alias>
+        <ordinal>62</ordinal>
+        <local-type>integer</local-type>
+        <aggregation>Sum</aggregation>
+        <precision>10</precision>
+        <contains-null>true</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_INTEGER&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_SLONG&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>human_tote_loading</remote-name>
+        <remote-type>11</remote-type>
+        <local-name>[human_tote_loading]</local-name>
+        <parent-name>[frc_scout_pitscoutdata]</parent-name>
+        <remote-alias>human_tote_loading</remote-alias>
+        <ordinal>63</ordinal>
+        <local-type>boolean</local-type>
+        <aggregation>Count</aggregation>
+        <contains-null>true</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_BIT&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_BIT&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>human_litter_loading</remote-name>
+        <remote-type>11</remote-type>
+        <local-name>[human_litter_loading]</local-name>
+        <parent-name>[frc_scout_pitscoutdata]</parent-name>
+        <remote-alias>human_litter_loading</remote-alias>
+        <ordinal>64</ordinal>
+        <local-type>boolean</local-type>
+        <aggregation>Count</aggregation>
+        <contains-null>true</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_BIT&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_BIT&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>has_turret</remote-name>
+        <remote-type>11</remote-type>
+        <local-name>[has_turret]</local-name>
+        <parent-name>[frc_scout_pitscoutdata]</parent-name>
+        <remote-alias>has_turret</remote-alias>
+        <ordinal>65</ordinal>
+        <local-type>boolean</local-type>
+        <aggregation>Count</aggregation>
+        <contains-null>true</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_BIT&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_BIT&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>scout_id</remote-name>
+        <remote-type>3</remote-type>
+        <local-name>[scout_id (frc_scout_pitscoutdata)]</local-name>
+        <parent-name>[frc_scout_pitscoutdata]</parent-name>
+        <remote-alias>scout_id</remote-alias>
+        <ordinal>66</ordinal>
+        <local-type>integer</local-type>
+        <aggregation>Sum</aggregation>
+        <precision>10</precision>
+        <contains-null>true</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_INTEGER&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_SLONG&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>has_strafing</remote-name>
+        <remote-type>11</remote-type>
+        <local-name>[has_strafing]</local-name>
+        <parent-name>[frc_scout_pitscoutdata]</parent-name>
+        <remote-alias>has_strafing</remote-alias>
+        <ordinal>67</ordinal>
+        <local-type>boolean</local-type>
+        <aggregation>Count</aggregation>
+        <contains-null>true</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_BIT&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_BIT&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>location_id</remote-name>
+        <remote-type>3</remote-type>
+        <local-name>[location_id (frc_scout_pitscoutdata)]</local-name>
+        <parent-name>[frc_scout_pitscoutdata]</parent-name>
+        <remote-alias>location_id</remote-alias>
+        <ordinal>68</ordinal>
+        <local-type>integer</local-type>
+        <aggregation>Sum</aggregation>
+        <precision>10</precision>
+        <contains-null>true</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_INTEGER&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_SLONG&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>team_website</remote-name>
+        <remote-type>130</remote-type>
+        <local-name>[team_website]</local-name>
+        <parent-name>[frc_scout_pitscoutdata]</parent-name>
+        <remote-alias>team_website</remote-alias>
+        <ordinal>69</ordinal>
+        <local-type>string</local-type>
+        <aggregation>Count</aggregation>
+        <width>8190</width>
+        <contains-null>true</contains-null>
+        <cast-to-local-type>true</cast-to-local-type>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_WLONGVARCHAR&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_WCHAR&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>auto_start_x</remote-name>
+        <remote-type>5</remote-type>
+        <local-name>[auto_start_x (frc_scout_pitscoutdata)]</local-name>
+        <parent-name>[frc_scout_pitscoutdata]</parent-name>
+        <remote-alias>auto_start_x</remote-alias>
+        <ordinal>70</ordinal>
+        <local-type>real</local-type>
+        <aggregation>Sum</aggregation>
+        <precision>15</precision>
+        <contains-null>true</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_FLOAT&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_DOUBLE&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>auto_start_y</remote-name>
+        <remote-type>5</remote-type>
+        <local-name>[auto_start_y (frc_scout_pitscoutdata)]</local-name>
+        <parent-name>[frc_scout_pitscoutdata]</parent-name>
+        <remote-alias>auto_start_y</remote-alias>
+        <ordinal>71</ordinal>
+        <local-type>real</local-type>
+        <aggregation>Sum</aggregation>
+        <precision>15</precision>
+        <contains-null>true</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_FLOAT&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_DOUBLE&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>coach</remote-name>
+        <remote-type>130</remote-type>
+        <local-name>[coach]</local-name>
+        <parent-name>[frc_scout_pitscoutdata]</parent-name>
+        <remote-alias>coach</remote-alias>
+        <ordinal>72</ordinal>
+        <local-type>string</local-type>
+        <aggregation>Count</aggregation>
+        <width>8190</width>
+        <contains-null>true</contains-null>
+        <cast-to-local-type>true</cast-to-local-type>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_WLONGVARCHAR&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_WCHAR&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>driver_1</remote-name>
+        <remote-type>130</remote-type>
+        <local-name>[driver_1]</local-name>
+        <parent-name>[frc_scout_pitscoutdata]</parent-name>
+        <remote-alias>driver_1</remote-alias>
+        <ordinal>73</ordinal>
+        <local-type>string</local-type>
+        <aggregation>Count</aggregation>
+        <width>8190</width>
+        <contains-null>true</contains-null>
+        <cast-to-local-type>true</cast-to-local-type>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_WLONGVARCHAR&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_WCHAR&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>driver_2</remote-name>
+        <remote-type>130</remote-type>
+        <local-name>[driver_2]</local-name>
+        <parent-name>[frc_scout_pitscoutdata]</parent-name>
+        <remote-alias>driver_2</remote-alias>
+        <ordinal>74</ordinal>
+        <local-type>string</local-type>
+        <aggregation>Count</aggregation>
+        <width>8190</width>
+        <contains-null>true</contains-null>
+        <cast-to-local-type>true</cast-to-local-type>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_WLONGVARCHAR&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_WCHAR&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>human_litter_throwing</remote-name>
+        <remote-type>11</remote-type>
+        <local-name>[human_litter_throwing]</local-name>
+        <parent-name>[frc_scout_pitscoutdata]</parent-name>
+        <remote-alias>human_litter_throwing</remote-alias>
+        <ordinal>75</ordinal>
+        <local-type>boolean</local-type>
+        <aggregation>Count</aggregation>
+        <contains-null>true</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_BIT&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_BIT&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>known_strengths</remote-name>
+        <remote-type>130</remote-type>
+        <local-name>[known_strengths]</local-name>
+        <parent-name>[frc_scout_pitscoutdata]</parent-name>
+        <remote-alias>known_strengths</remote-alias>
+        <ordinal>76</ordinal>
+        <local-type>string</local-type>
+        <aggregation>Count</aggregation>
+        <width>8190</width>
+        <contains-null>true</contains-null>
+        <cast-to-local-type>true</cast-to-local-type>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_WLONGVARCHAR&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_WCHAR&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>known_weaknesses</remote-name>
+        <remote-type>130</remote-type>
+        <local-name>[known_weaknesses]</local-name>
+        <parent-name>[frc_scout_pitscoutdata]</parent-name>
+        <remote-alias>known_weaknesses</remote-alias>
+        <ordinal>77</ordinal>
+        <local-type>string</local-type>
+        <aggregation>Count</aggregation>
+        <width>8190</width>
+        <contains-null>true</contains-null>
+        <cast-to-local-type>true</cast-to-local-type>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_WLONGVARCHAR&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_WCHAR&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>robot_height</remote-name>
+        <remote-type>5</remote-type>
+        <local-name>[robot_height]</local-name>
+        <parent-name>[frc_scout_pitscoutdata]</parent-name>
+        <remote-alias>robot_height</remote-alias>
+        <ordinal>78</ordinal>
+        <local-type>real</local-type>
+        <aggregation>Sum</aggregation>
+        <precision>15</precision>
+        <contains-null>true</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_FLOAT&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_DOUBLE&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>robot_speed</remote-name>
+        <remote-type>5</remote-type>
+        <local-name>[robot_speed]</local-name>
+        <parent-name>[frc_scout_pitscoutdata]</parent-name>
+        <remote-alias>robot_speed</remote-alias>
+        <ordinal>79</ordinal>
+        <local-type>real</local-type>
+        <aggregation>Sum</aggregation>
+        <precision>15</precision>
+        <contains-null>true</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_FLOAT&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_DOUBLE&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>robot_weight</remote-name>
+        <remote-type>5</remote-type>
+        <local-name>[robot_weight]</local-name>
+        <parent-name>[frc_scout_pitscoutdata]</parent-name>
+        <remote-alias>robot_weight</remote-alias>
+        <ordinal>80</ordinal>
+        <local-type>real</local-type>
+        <aggregation>Sum</aggregation>
+        <precision>15</precision>
+        <contains-null>true</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_FLOAT&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_DOUBLE&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>image_id</remote-name>
+        <remote-type>130</remote-type>
+        <local-name>[image_id]</local-name>
+        <parent-name>[frc_scout_pitscoutdata]</parent-name>
+        <remote-alias>image_id</remote-alias>
+        <ordinal>81</ordinal>
+        <local-type>string</local-type>
+        <aggregation>Count</aggregation>
+        <width>8190</width>
+        <contains-null>true</contains-null>
+        <cast-to-local-type>true</cast-to-local-type>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_WLONGVARCHAR&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_WCHAR&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>image_link</remote-name>
+        <remote-type>130</remote-type>
+        <local-name>[image_link]</local-name>
+        <parent-name>[frc_scout_pitscoutdata]</parent-name>
+        <remote-alias>image_link</remote-alias>
+        <ordinal>82</ordinal>
+        <local-type>string</local-type>
+        <aggregation>Count</aggregation>
+        <width>8190</width>
+        <contains-null>true</contains-null>
+        <cast-to-local-type>true</cast-to-local-type>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_WLONGVARCHAR&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_WCHAR&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>image_type</remote-name>
+        <remote-type>130</remote-type>
+        <local-name>[image_type]</local-name>
+        <parent-name>[frc_scout_pitscoutdata]</parent-name>
+        <remote-alias>image_type</remote-alias>
+        <ordinal>83</ordinal>
+        <local-type>string</local-type>
+        <aggregation>Count</aggregation>
+        <width>8190</width>
+        <contains-null>true</contains-null>
+        <cast-to-local-type>true</cast-to-local-type>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_WLONGVARCHAR&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_WCHAR&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>pitscout_name</remote-name>
+        <remote-type>130</remote-type>
+        <local-name>[pitscout_name]</local-name>
+        <parent-name>[frc_scout_pitscoutdata]</parent-name>
+        <remote-alias>pitscout_name</remote-alias>
+        <ordinal>84</ordinal>
+        <local-type>string</local-type>
+        <aggregation>Count</aggregation>
+        <width>8190</width>
+        <contains-null>true</contains-null>
+        <cast-to-local-type>true</cast-to-local-type>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_WLONGVARCHAR&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_WCHAR&quot;</attribute>
+        </attributes>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>pitscout_team_number</remote-name>
+        <remote-type>3</remote-type>
+        <local-name>[pitscout_team_number]</local-name>
+        <parent-name>[frc_scout_pitscoutdata]</parent-name>
+        <remote-alias>pitscout_team_number</remote-alias>
+        <ordinal>85</ordinal>
+        <local-type>integer</local-type>
+        <aggregation>Sum</aggregation>
+        <precision>10</precision>
+        <contains-null>true</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_INTEGER&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_SLONG&quot;</attribute>
+        </attributes>
+      </metadata-record>
+    </metadata-records>
+  </connection>
+  <aliases enabled='yes' />
+  <column datatype='string' name='[:Measure Names]' role='dimension' type='nominal'>
+    <aliases>
+      <alias key='&quot;[FRCscout.com V2.0]&quot;' value='Favorite Collecting Orientation' />
+      <alias key='&quot;[FRCscout.com V2.0].[avg:tele_picked_up_ground_upright_totes:qk]&quot;' value='Upright Totes' />
+      <alias key='&quot;[FRCscout.com V2.0].[avg:tele_picked_up_human_station_totes:qk]&quot;' value='Human Station Totes' />
+      <alias key='&quot;[FRCscout.com V2.0].[avg:tele_picked_up_sideways_totes:qk]&quot;' value='Sideways Totes' />
+      <alias key='&quot;[FRCscout.com V2.0].[avg:tele_picked_up_upside_down_totes:qk]&quot;' value='Upside Down Totes' />
+    </aliases>
+    <desc>
+      <formatted-text>
+        <run>You found an Easter Egg!</run>
+      </formatted-text>
+    </desc>
+  </column>
+  <column aggregation='Avg' caption='Tote Stack Height' datatype='integer' name='[Calculation_0430215155343106]' role='measure' type='quantitative'>
+    <calculation class='tableau' formula='[totes_added]+[start_height]' scope-isolation='false' />
+  </column>
+  <column caption='Sum of Totes' datatype='real' name='[Calculation_0570225132945417]' role='measure' type='quantitative'>
+    <calculation class='tableau' formula='avg([totes_added])*&#10;countd([id (frc_scout_totestack)])/&#10;countd([scout_team_number])' scope-isolation='false' />
+  </column>
+  <column caption='Sum Container Points' datatype='real' name='[Calculation_0610306134614213]' role='measure' type='quantitative'>
+    <calculation class='tableau' formula='avg([height])*countd([id (frc_scout_containerstack)])/countd([scout_team_number])*4' scope-isolation='false' />
+  </column>
+  <column caption='Average Container Points Per Match' datatype='real' name='[Calculation_1570306134712041]' role='measure' type='quantitative'>
+    <calculation class='tableau' formula='[Calculation_0610306134614213]/countd([match_number])' scope-isolation='false' />
+  </column>
+  <column caption='Sum Containers Added' datatype='integer' name='[Calculation_2710225133135827]' role='measure' type='quantitative'>
+    <calculation class='tableau' formula='countd([id (frc_scout_containerstack)])' scope-isolation='false' />
+  </column>
+  <column aggregation='Avg' caption='Tele Total Collected Totes' datatype='integer' name='[Calculation_2810215163604905]' role='measure' type='quantitative'>
+    <calculation class='tableau' formula='[tele_picked_up_ground_upright_totes]+&#10;[tele_picked_up_human_station_totes]+&#10;[tele_picked_up_sideways_totes]+&#10;[tele_picked_up_upside_down_totes]' scope-isolation='false' />
+  </column>
+  <column caption='Average Containers Added' datatype='real' name='[Calculation_3050225133245479]' role='measure' type='quantitative'>
+    <calculation class='tableau' formula='[Calculation_2710225133135827]/countd([match_number])' scope-isolation='false' />
+  </column>
+  <column caption='# of times that stack type has been scouted' datatype='integer' name='[Calculation_4370306133446677]' role='measure' type='quantitative'>
+    <calculation class='tableau' formula='countd([id (frc_scout_totestack)])' scope-isolation='false' />
+  </column>
+  <column caption='Average Tote Points Per Match' datatype='real' name='[Calculation_4450306142028085]' role='measure' type='quantitative'>
+    <calculation class='tableau' formula='[Calculation_6950225133031395]*2' scope-isolation='false' />
+  </column>
+  <column caption='Average Tele Points' datatype='real' name='[Calculation_4930306142604838]' role='measure' type='quantitative'>
+    <calculation class='tableau' formula='zn([Calculation_1570306134712041])+&#10;zn([Calculation_9230306141443070])+&#10;zn([Calculation_4450306142028085])' scope-isolation='false' />
+  </column>
+  <column caption='Stack Action Type' datatype='string' name='[Calculation_5070306133056827]' role='dimension' type='nominal'>
+    <calculation class='tableau' formula='//nulls occur whenever robots place containers&#10;IFNULL(&quot;Put &quot; + str([Calculation_0430215155343106]-[totes_added]) + &quot; totes on top of &quot; + str([start_height]) + &quot; totes.&quot;, &#10;&quot;FILTER THIS ACTION OUT&quot;)' scope-isolation='false' />
+  </column>
+  <column caption='Average Totes per Match' datatype='real' name='[Calculation_6950225133031395]' role='measure' type='quantitative'>
+    <calculation class='tableau' formula='[Calculation_0570225132945417]/countd([match_number])' scope-isolation='false' />
+  </column>
+  <column caption='Average Robot Litter Points/Match' datatype='real' name='[Calculation_9230306141443070]' role='measure' type='quantitative'>
+    <calculation class='tableau' formula='(avg([tele_placed_in_container_litter])*6+&#10;avg([tele_pushed_litter]))' scope-isolation='false' />
+  </column>
+  <column aggregation='Avg' caption='Tele Total Collected Containers' datatype='integer' name='[Calculation_9290215163458033]' role='measure' type='quantitative'>
+    <calculation class='tableau' formula='[tele_picked_up_sideways_containers]+&#10;[tele_picked_up_center_step_containers]+&#10;[tele_picked_up_upright_containers]' scope-isolation='false' />
+  </column>
+  <column datatype='integer' name='[Number of Records]' role='measure' type='quantitative' user:auto-column='numrec'>
+    <calculation class='tableau' formula='1' />
+  </column>
+  <column aggregation='Avg' caption='Auto Fouls' datatype='integer' name='[auto_fouls]' role='measure' type='quantitative'>
+  </column>
+  <column aggregation='Avg' caption='Auto Grey Acquired Totes' datatype='integer' name='[auto_grey_acquired_totes]' role='measure' type='quantitative'>
+  </column>
+  <column aggregation='Avg' caption='Auto Ground Acquired Containers' datatype='integer' name='[auto_ground_acquired_containers]' role='measure' type='quantitative'>
+  </column>
+  <column aggregation='Avg' caption='Auto Interference' datatype='integer' name='[auto_interference]' role='measure' type='quantitative'>
+  </column>
+  <column aggregation='Avg' caption='Auto Moved Containers' datatype='integer' name='[auto_moved_containers]' role='measure' type='quantitative'>
+  </column>
+  <column caption='Auto Moved To Auto Zone' datatype='boolean' name='[auto_moved_to_auto_zone]' role='dimension' type='nominal'>
+  </column>
+  <column caption='Auto No Auto' datatype='boolean' name='[auto_no_auto]' role='dimension' type='nominal'>
+  </column>
+  <column aggregation='Sum' caption='Auto Start X (Frc Scout Pitscoutdata)' datatype='real' hidden='true' name='[auto_start_x (frc_scout_pitscoutdata)]' role='dimension' type='ordinal'>
+  </column>
+  <column aggregation='Avg' caption='Auto Start X' datatype='real' name='[auto_start_x]' role='dimension' type='quantitative'>
+  </column>
+  <column aggregation='Sum' caption='Auto Start Y (Frc Scout Pitscoutdata)' datatype='real' hidden='true' name='[auto_start_y (frc_scout_pitscoutdata)]' role='dimension' type='ordinal'>
+  </column>
+  <column aggregation='Avg' caption='Auto Start Y' datatype='real' name='[auto_start_y]' role='dimension' type='quantitative'>
+  </column>
+  <column aggregation='Avg' caption='Auto Step Center Acquired Containers' datatype='integer' name='[auto_step_center_acquired_containers]' role='measure' type='quantitative'>
+  </column>
+  <column aggregation='Avg' caption='Auto Yellow Moved Totes' datatype='integer' name='[auto_yellow_moved_totes]' role='measure' type='quantitative'>
+  </column>
+  <column aggregation='Avg' caption='Auto Yellow Stacked Totes' datatype='integer' name='[auto_yellow_stacked_totes]' role='measure' type='quantitative'>
+  </column>
+  <column caption='Can Acquire Containers' datatype='boolean' name='[can_acquire_containers]' role='dimension' type='nominal'>
+  </column>
+  <column caption='Can Move Containers' datatype='boolean' name='[can_move_containers]' role='dimension' type='nominal'>
+  </column>
+  <column caption='Can Move Totes' datatype='boolean' name='[can_move_totes]' role='dimension' type='nominal'>
+  </column>
+  <column caption='Coach' datatype='string' name='[coach]' role='dimension' type='nominal'>
+  </column>
+  <column caption='Containers_added' datatype='integer' hidden='true' name='[containers_added]' role='measure' type='quantitative'>
+  </column>
+  <column caption='Coop Stack' datatype='boolean' name='[coop_stack]' role='dimension' type='nominal'>
+  </column>
+  <column caption='Driver 1' datatype='string' name='[driver_1]' role='dimension' type='nominal'>
+  </column>
+  <column caption='Driver 2' datatype='string' name='[driver_2]' role='dimension' type='nominal'>
+  </column>
+  <column caption='Has Strafing' datatype='boolean' name='[has_strafing]' role='dimension' type='nominal'>
+  </column>
+  <column caption='Has Turret' datatype='boolean' name='[has_turret]' role='dimension' type='nominal'>
+  </column>
+  <column caption='Container Stack Height' datatype='integer' name='[height]' role='measure' type='quantitative'>
+  </column>
+  <column caption='Human Litter Loading' datatype='boolean' name='[human_litter_loading]' role='dimension' type='nominal'>
+  </column>
+  <column caption='Human Litter Throwing' datatype='boolean' name='[human_litter_throwing]' role='dimension' type='nominal'>
+  </column>
+  <column caption='Human Tote Loading' datatype='boolean' name='[human_tote_loading]' role='dimension' type='nominal'>
+  </column>
+  <column caption='Id (Frc Scout Containerstack)' datatype='integer' name='[id (frc_scout_containerstack)]' role='dimension' type='ordinal'>
+  </column>
+  <column aggregation='Sum' caption='Id (Frc Scout Location)' datatype='integer' name='[id (frc_scout_location)]' role='dimension' type='ordinal'>
+  </column>
+  <column caption='Id (Frc Scout Pitscoutdata)' datatype='integer' name='[id (frc_scout_pitscoutdata)]' role='dimension' type='ordinal'>
+  </column>
+  <column caption='Separate by Stack' datatype='integer' name='[id (frc_scout_totestack)]' role='dimension' type='ordinal'>
+  </column>
+  <column caption='Id' datatype='integer' name='[id]' role='dimension' type='ordinal'>
+  </column>
+  <column caption='Image Id' datatype='string' name='[image_id]' role='dimension' type='nominal'>
+  </column>
+  <column caption='Image Link' datatype='string' name='[image_link]' role='dimension' type='nominal'>
+  </column>
+  <column caption='Image Type' datatype='string' name='[image_type]' role='dimension' type='nominal'>
+  </column>
+  <column caption='Known Strengths' datatype='string' name='[known_strengths]' role='dimension' type='nominal'>
+  </column>
+  <column caption='Known Weaknesses' datatype='string' name='[known_weaknesses]' role='dimension' type='nominal'>
+  </column>
+  <column aggregation='Sum' caption='Location Id (Frc Scout Pitscoutdata)' datatype='integer' name='[location_id (frc_scout_pitscoutdata)]' role='dimension' type='ordinal'>
+  </column>
+  <column aggregation='Sum' caption='Location Id' datatype='integer' name='[location_id]' role='dimension' type='ordinal'>
+  </column>
+  <column aggregation='Avg' datatype='integer' name='[match_final_score]' role='measure' type='quantitative'>
+  </column>
+  <column aggregation='Sum' caption='Match Id (Frc Scout Containerstack)' datatype='integer' name='[match_id (frc_scout_containerstack)]' role='dimension' type='ordinal'>
+  </column>
+  <column aggregation='Sum' caption='Match ID (Frc Scout Tote Stack' datatype='integer' name='[match_id]' role='dimension' type='ordinal'>
+  </column>
+  <column caption='Match Number' datatype='integer' name='[match_number]' role='dimension' type='ordinal'>
+    <desc>
+      <formatted-text>
+        <run>You found an Easter Egg!</run>
+      </formatted-text>
+    </desc>
+  </column>
+  <column caption='Event Name' datatype='string' name='[name]' role='dimension' type='nominal'>
+  </column>
+  <column caption='Pitscout Name' datatype='string' name='[pitscout_name]' role='dimension' type='nominal'>
+  </column>
+  <column caption='Pitscout Team Number' datatype='integer' name='[pitscout_team_number]' role='dimension' type='ordinal'>
+  </column>
+  <column caption='Robot Height' datatype='real' name='[robot_height]' role='measure' type='quantitative'>
+  </column>
+  <column caption='Robot Speed' datatype='real' name='[robot_speed]' role='measure' type='quantitative'>
+  </column>
+  <column caption='Robot Weight' datatype='real' name='[robot_weight]' role='measure' type='quantitative'>
+  </column>
+  <column aggregation='Sum' caption='Scout Id (Frc Scout Pitscoutdata)' datatype='integer' name='[scout_id (frc_scout_pitscoutdata)]' role='dimension' type='ordinal'>
+  </column>
+  <column aggregation='Sum' caption='Scout Id' datatype='integer' name='[scout_id]' role='dimension' type='ordinal'>
+  </column>
+  <column aggregation='Sum' datatype='integer' name='[scout_team_number]' role='dimension' type='ordinal'>
+  </column>
+  <column caption='Start Heigth of Stack' datatype='integer' name='[start_height]' role='measure' type='quantitative'>
+  </column>
+  <column caption='Team Name' datatype='string' name='[team_name]' role='dimension' type='nominal'>
+  </column>
+  <column caption='Team Number (Frc Scout Pitscoutdata)' datatype='integer' name='[team_number (frc_scout_pitscoutdata)]' role='dimension' type='ordinal'>
+  </column>
+  <column caption='Team Number' datatype='integer' name='[team_number]' role='dimension' type='ordinal'>
+  </column>
+  <column caption='Team Website' datatype='string' name='[team_website]' role='dimension' type='nominal'>
+  </column>
+  <column aggregation='Avg' datatype='integer' name='[tele_container_fell_off]' role='measure' type='quantitative'>
+  </column>
+  <column caption='Tele Dead Bot' datatype='boolean' name='[tele_dead_bot]' role='dimension' type='nominal'>
+  </column>
+  <column caption='Tele Foul Context' datatype='string' name='[tele_foul_context]' role='dimension' type='nominal'>
+  </column>
+  <column aggregation='Avg' caption='Tele Fouls' datatype='integer' name='[tele_fouls]' role='measure' type='quantitative'>
+  </column>
+  <column aggregation='Avg' caption='Tele Knocked Over Stacks' datatype='integer' name='[tele_knocked_over_stacks]' role='measure' type='quantitative'>
+  </column>
+  <column aggregation='Avg' caption='Tele Picked Up Center Step Containers' datatype='integer' name='[tele_picked_up_center_step_containers]' role='measure' type='quantitative'>
+  </column>
+  <column aggregation='Avg' caption='Tele Picked Up Ground Upright Totes' datatype='integer' name='[tele_picked_up_ground_upright_totes]' role='measure' type='quantitative'>
+  </column>
+  <column aggregation='Avg' caption='Tele Picked Up Human Station Totes' datatype='integer' name='[tele_picked_up_human_station_totes]' role='measure' type='quantitative'>
+  </column>
+  <column aggregation='Avg' caption='Tele Picked Up Sideways Containers' datatype='integer' name='[tele_picked_up_sideways_containers]' role='measure' type='quantitative'>
+  </column>
+  <column aggregation='Avg' caption='Tele Picked Up Sideways Totes' datatype='integer' name='[tele_picked_up_sideways_totes]' role='measure' type='quantitative'>
+  </column>
+  <column aggregation='Avg' caption='Tele Picked Up Upright Containers' datatype='integer' name='[tele_picked_up_upright_containers]' role='measure' type='quantitative'>
+  </column>
+  <column aggregation='Avg' caption='Tele Picked Up Upside Down Totes' datatype='integer' name='[tele_picked_up_upside_down_totes]' role='measure' type='quantitative'>
+  </column>
+  <column aggregation='Avg' caption='Tele Placed In Container Litter' datatype='integer' name='[tele_placed_in_container_litter]' role='measure' type='quantitative'>
+  </column>
+  <column caption='Tele Public Comments' datatype='string' name='[tele_public_comments]' role='dimension' type='nominal'>
+  </column>
+  <column aggregation='Avg' caption='Tele Pushed Litter' datatype='integer' name='[tele_pushed_litter]' role='measure' type='quantitative'>
+  </column>
+  <column caption='Timestamp' datatype='datetime' name='[timestamp]' role='dimension' type='ordinal'>
+  </column>
+  <column caption='Tote Stack Capacity' datatype='integer' name='[tote_stack_capacity]' role='measure' type='quantitative'>
+  </column>
+  <column caption='Totes Added' datatype='integer' name='[totes_added]' role='measure' type='quantitative'>
+  </column>
+  <column aggregation='Sum' caption='Stack X Cooridinate' datatype='real' name='[x]' role='dimension' type='quantitative'>
+  </column>
+  <column aggregation='Sum' caption='Stack Y Coordinate' datatype='real' name='[y]' role='dimension' type='quantitative'>
+  </column>
+  <column-instance column='[height]' derivation='Avg' name='[avg:height:qk]' pivot='key' type='quantitative' />
+  <column-instance column='[tele_picked_up_ground_upright_totes]' derivation='Avg' name='[avg:tele_picked_up_ground_upright_totes:qk]' pivot='key' type='quantitative' />
+  <column-instance column='[tele_picked_up_human_station_totes]' derivation='Avg' name='[avg:tele_picked_up_human_station_totes:qk]' pivot='key' type='quantitative' />
+  <column-instance column='[tele_picked_up_sideways_totes]' derivation='Avg' name='[avg:tele_picked_up_sideways_totes:qk]' pivot='key' type='quantitative' />
+  <column-instance column='[tele_picked_up_upside_down_totes]' derivation='Avg' name='[avg:tele_picked_up_upside_down_totes:qk]' pivot='key' type='quantitative' />
+  <column-instance column='[totes_added]' derivation='Avg' name='[avg:totes_added:qk]' pivot='key' type='quantitative' />
+  <column-instance column='[auto_start_x]' derivation='None' name='[none:auto_start_x:qk]' pivot='key' type='quantitative' />
+  <column-instance column='[auto_start_y]' derivation='None' name='[none:auto_start_y:qk]' pivot='key' type='quantitative' />
+  <column-instance column='[scout_team_number]' derivation='None' name='[none:scout_team_number:ok]' pivot='key' type='ordinal' />
+  <column-instance column='[team_number]' derivation='None' name='[none:team_number:ok]' pivot='key' type='ordinal' />
+  <column-instance column='[x]' derivation='None' name='[none:x:qk]' pivot='key' type='quantitative' />
+  <column-instance column='[y]' derivation='None' name='[none:y:qk]' pivot='key' type='quantitative' />
+  <column-instance column='[Calculation_1570306134712041]' derivation='User' name='[usr:Calculation_1570306134712041:qk]' pivot='key' type='quantitative' />
+  <column-instance column='[Calculation_4450306142028085]' derivation='User' name='[usr:Calculation_4450306142028085:qk]' pivot='key' type='quantitative' />
+  <column-instance column='[Calculation_4930306142604838]' derivation='User' name='[usr:Calculation_4930306142604838:qk]' pivot='key' type='quantitative' />
+  <column-instance column='[Calculation_9230306141443070]' derivation='User' name='[usr:Calculation_9230306141443070:qk]' pivot='key' type='quantitative' />
+  <group hidden='true' name='[Exclusions (Auto Start X,Auto Start Y,Team Number)]' name-style='unqualified' user:auto-column='exclude'>
+    <groupfilter function='crossjoin'>
+      <groupfilter function='level-members' level='[none:auto_start_x:qk]' />
+      <groupfilter function='level-members' level='[none:auto_start_y:qk]' />
+      <groupfilter function='level-members' level='[none:team_number:ok]' />
+    </groupfilter>
+  </group>
+  <group hidden='true' name='[Exclusions (X,Y)]' name-style='unqualified' user:auto-column='exclude'>
+    <groupfilter function='crossjoin'>
+      <groupfilter function='level-members' level='[none:x:qk]' />
+      <groupfilter function='level-members' level='[none:y:qk]' />
+    </groupfilter>
+  </group>
+  <mapped-images>
+    <mapped-image caption='Tele-Op' expression='http://frcscout.com/static/frc_scout/img/tote_score.png' name='[MappedImage1]'>
+      <mapping bottom='1.0' left='0.0' right='1.0' top='0.0' x='[x]' y='[y]' />
+      <image-options show-entire-image='true' />
+    </mapped-image>
+    <mapped-image caption='Autonomous' expression='http://frcscout.com/static/frc_scout/img/start_zone.png' name='[MappedImage2]'>
+      <mapping bottom='1.0' left='0.0' right='1.0' top='0.0' x='[auto_start_x]' y='[auto_start_y]' />
+      <image-options show-entire-image='true' />
+    </mapped-image>
+  </mapped-images>
+  <folder name='Autonomous' role='dimensions'>
+    <folder-item name='[auto_moved_to_auto_zone]' type='field' />
+    <folder-item name='[auto_no_auto]' type='field' />
+  </folder>
+  <folder name='Comments' role='dimensions'>
+    <folder-item name='[tele_foul_context]' type='field' />
+    <folder-item name='[tele_public_comments]' type='field' />
+  </folder>
+  <folder name='Fouls' role='dimensions'>
+    <folder-item name='[tele_dead_bot]' type='field' />
+  </folder>
+  <folder name='Ignore These' role='dimensions'>
+    <folder-item name='[id (frc_scout_containerstack)]' type='field' />
+    <folder-item name='[id (frc_scout_location)]' type='field' />
+    <folder-item name='[id (frc_scout_totestack)]' type='field' />
+    <folder-item name='[id]' type='field' />
+    <folder-item name='[location_id (frc_scout_pitscoutdata)]' type='field' />
+    <folder-item name='[location_id]' type='field' />
+    <folder-item name='[match_id (frc_scout_containerstack)]' type='field' />
+    <folder-item name='[match_id]' type='field' />
+    <folder-item name='[scout_id]' type='field' />
+  </folder>
+  <folder name='Location' role='dimensions'>
+    <folder-item name='[auto_start_x (frc_scout_pitscoutdata)]' type='field' />
+    <folder-item name='[auto_start_x]' type='field' />
+    <folder-item name='[auto_start_y (frc_scout_pitscoutdata)]' type='field' />
+    <folder-item name='[auto_start_y]' type='field' />
+    <folder-item name='[coop_stack]' type='field' />
+    <folder-item name='[x]' type='field' />
+    <folder-item name='[y]' type='field' />
+  </folder>
+  <folder name='Pit Scouting' role='dimensions'>
+    <folder-item name='[can_acquire_containers]' type='field' />
+    <folder-item name='[can_move_containers]' type='field' />
+    <folder-item name='[can_move_totes]' type='field' />
+    <folder-item name='[coach]' type='field' />
+    <folder-item name='[driver_1]' type='field' />
+    <folder-item name='[driver_2]' type='field' />
+    <folder-item name='[has_strafing]' type='field' />
+    <folder-item name='[has_turret]' type='field' />
+    <folder-item name='[human_litter_loading]' type='field' />
+    <folder-item name='[human_litter_throwing]' type='field' />
+    <folder-item name='[human_tote_loading]' type='field' />
+    <folder-item name='[id (frc_scout_pitscoutdata)]' type='field' />
+    <folder-item name='[image_id]' type='field' />
+    <folder-item name='[image_link]' type='field' />
+    <folder-item name='[image_type]' type='field' />
+    <folder-item name='[known_strengths]' type='field' />
+    <folder-item name='[known_weaknesses]' type='field' />
+    <folder-item name='[pitscout_name]' type='field' />
+    <folder-item name='[pitscout_team_number]' type='field' />
+    <folder-item name='[scout_id (frc_scout_pitscoutdata)]' type='field' />
+    <folder-item name='[scout_team_number]' type='field' />
+    <folder-item name='[team_name]' type='field' />
+    <folder-item name='[team_number (frc_scout_pitscoutdata)]' type='field' />
+    <folder-item name='[team_website]' type='field' />
+  </folder>
+  <folder name='Who Scouted this and Where? (Use to filter the data to your team)' role='dimensions'>
+    <folder-item name='[name]' type='field' />
+    <folder-item name='[scout_name]' type='field' />
+    <folder-item name='[tba_event_code]' type='field' />
+    <folder-item name='[timestamp]' type='field' />
+  </folder>
+  <folder name='Autonomous' role='measures'>
+    <folder-item name='[auto_fouls]' type='field' />
+    <folder-item name='[auto_grey_acquired_totes]' type='field' />
+    <folder-item name='[auto_ground_acquired_containers]' type='field' />
+    <folder-item name='[auto_interference]' type='field' />
+    <folder-item name='[auto_moved_containers]' type='field' />
+    <folder-item name='[auto_step_center_acquired_containers]' type='field' />
+    <folder-item name='[auto_yellow_moved_totes]' type='field' />
+    <folder-item name='[auto_yellow_stacked_totes]' type='field' />
+  </folder>
+  <folder name='Containers' role='measures'>
+    <folder-item name='[Calculation_2710225133135827]' type='field' />
+    <folder-item name='[Calculation_3050225133245479]' type='field' />
+    <folder-item name='[Calculation_9290215163458033]' type='field' />
+    <folder-item name='[containers_added]' type='field' />
+    <folder-item name='[height]' type='field' />
+    <folder-item name='[tele_picked_up_center_step_containers]' type='field' />
+    <folder-item name='[tele_picked_up_sideways_containers]' type='field' />
+    <folder-item name='[tele_picked_up_upright_containers]' type='field' />
+  </folder>
+  <folder name='Fouls' role='measures'>
+    <folder-item name='[tele_container_fell_off]' type='field' />
+    <folder-item name='[tele_fouls]' type='field' />
+    <folder-item name='[tele_knocked_over_stacks]' type='field' />
+  </folder>
+  <folder name='Litter' role='measures'>
+    <folder-item name='[tele_placed_in_container_litter]' type='field' />
+    <folder-item name='[tele_pushed_litter]' type='field' />
+  </folder>
+  <folder name='Pit Scouting' role='measures'>
+    <folder-item name='[robot_height]' type='field' />
+    <folder-item name='[robot_speed]' type='field' />
+    <folder-item name='[robot_weight]' type='field' />
+    <folder-item name='[tote_stack_capacity]' type='field' />
+  </folder>
+  <folder name='Points' role='measures'>
+    <folder-item name='[Calculation_0610306134614213]' type='field' />
+    <folder-item name='[Calculation_1570306134712041]' type='field' />
+    <folder-item name='[Calculation_4450306142028085]' type='field' />
+    <folder-item name='[Calculation_4930306142604838]' type='field' />
+    <folder-item name='[Calculation_9230306141443070]' type='field' />
+    <folder-item name='[match_final_score]' type='field' />
+  </folder>
+  <folder name='Totes' role='measures'>
+    <folder-item name='[Calculation_0430215155343106]' type='field' />
+    <folder-item name='[Calculation_0570225132945417]' type='field' />
+    <folder-item name='[Calculation_2810215163604905]' type='field' />
+    <folder-item name='[Calculation_4370306133446677]' type='field' />
+    <folder-item name='[Calculation_6950225133031395]' type='field' />
+    <folder-item name='[start_height]' type='field' />
+    <folder-item name='[tele_picked_up_ground_upright_totes]' type='field' />
+    <folder-item name='[tele_picked_up_human_station_totes]' type='field' />
+    <folder-item name='[tele_picked_up_sideways_totes]' type='field' />
+    <folder-item name='[tele_picked_up_upside_down_totes]' type='field' />
+    <folder-item name='[totes_added]' type='field' />
+  </folder>
+  <layout dim-ordering='alphabetic' dim-percentage='0.374536' measure-ordering='alphabetic' measure-percentage='0.599506' show-structure='false' />
+  <style>
+    <style-rule element='mark'>
+      <encoding attr='color' field='[none:scout_team_number:ok]' type='palette'>
+        <map to='#1f77b4'>
+          <bucket>0</bucket>
+        </map>
+        <map to='#2ca02c'>
+          <bucket>1983</bucket>
+        </map>
+        <map to='#ff7f0e'>
+          <bucket>4311</bucket>
+        </map>
+      </encoding>
+      <encoding attr='shape' field='[:Measure Names]' type='shape'>
+        <map to='circle'>
+          <bucket>&quot;[FRCscout.com V2.0].[avg:height:qk]&quot;</bucket>
+        </map>
+        <map to='plus'>
+          <bucket>&quot;[FRCscout.com V2.0].[avg:totes_added:qk]&quot;</bucket>
+        </map>
+      </encoding>
+      <encoding attr='color' field='[none:team_number:ok]' type='palette'>
+        <map to='#1f77b4'>
+          <bucket>1</bucket>
+        </map>
+        <map to='#1f77b4'>
+          <bucket>69</bucket>
+        </map>
+        <map to='#2ca02c'>
+          <bucket>3</bucket>
+        </map>
+        <map to='#2ca02c'>
+          <bucket>488</bucket>
+        </map>
+        <map to='#7f7f7f'>
+          <bucket>3718</bucket>
+        </map>
+        <map to='#8c564b'>
+          <bucket>6</bucket>
+        </map>
+        <map to='#8c564b'>
+          <bucket>2046</bucket>
+        </map>
+        <map to='#8c564b'>
+          <bucket>3470</bucket>
+        </map>
+        <map to='#9467bd'>
+          <bucket>5</bucket>
+        </map>
+        <map to='#9467bd'>
+          <bucket>1124</bucket>
+        </map>
+        <map to='#98df8a'>
+          <bucket>839</bucket>
+        </map>
+        <map to='#aec7e8'>
+          <bucket>123</bucket>
+        </map>
+        <map to='#aec7e8'>
+          <bucket>234</bucket>
+        </map>
+        <map to='#c49c94'>
+          <bucket>2064</bucket>
+        </map>
+        <map to='#c5b0d5'>
+          <bucket>1740</bucket>
+        </map>
+        <map to='#c7c7c7'>
+          <bucket>4911</bucket>
+        </map>
+        <map to='#d62728'>
+          <bucket>4</bucket>
+        </map>
+        <map to='#d62728'>
+          <bucket>1099</bucket>
+        </map>
+        <map to='#e377c2'>
+          <bucket>2826</bucket>
+        </map>
+        <map to='#f7b6d2'>
+          <bucket>2836</bucket>
+        </map>
+        <map to='#ff7f0e'>
+          <bucket>2</bucket>
+        </map>
+        <map to='#ff7f0e'>
+          <bucket>263</bucket>
+        </map>
+        <map to='#ff9896'>
+          <bucket>1111</bucket>
+        </map>
+        <map to='#ffbb78'>
+          <bucket>420</bucket>
+        </map>
+      </encoding>
+      <encoding attr='color' field='[:Measure Names]' type='palette'>
+        <map to='#1f77b4'>
+          <bucket>&quot;[FRCscout.com V2.0]&quot;</bucket>
+        </map>
+        <map to='#1f77b4'>
+          <bucket>&quot;[FRCscout.com V2.0].[usr:Calculation_1570306134712041:qk]&quot;</bucket>
+        </map>
+        <map to='#2ca02c'>
+          <bucket>&quot;[FRCscout.com V2.0].[usr:Calculation_4450306142028085:qk]&quot;</bucket>
+        </map>
+        <map to='#d62728'>
+          <bucket>&quot;[FRCscout.com V2.0].[usr:Calculation_4930306142604838:qk]&quot;</bucket>
+        </map>
+        <map to='#ff7f0e'>
+          <bucket>&quot;[FRCscout.com V2.0].[usr:Calculation_9230306141443070:qk]&quot;</bucket>
+        </map>
+      </encoding>
+    </style-rule>
+  </style>
+  <semantic-values>
+    <semantic-value key='[Country].[Name]' value='&quot;United States&quot;' />
+  </semantic-values>
+</datasource>
