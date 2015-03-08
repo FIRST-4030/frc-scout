@@ -45,10 +45,11 @@ urlpatterns = patterns(
     # Profile views
     url(r'^team/$', views.view_team_profile, name='view_team_profile'),
     url(r'^team/(?P<team_number>-?[0-9]+)/$', views.view_team_profile, name='view_team_profile'),
+    url(r'^team/(?P<team_number>-?[0-9]+)/matches/$', views.view_team_matches, name='view_team_matches'),
+    url(r'^team/(?P<team_number>-?[0-9]+)/pit/$', views.view_team_pit_data, name='view_team_pit_data'),
+    url(r'^team/(?P<team_number>-?[0-9]+)/map/$', views.view_team_auto_heatmap, name='view_team_map'),
 
     url(r'^team/edit/$', views.edit_team_profile, name='edit_team_profile'),
-
-    url(r'^team/(?P<team_number>-?[0-9]+)/matches/$', views.view_team_matches, name='view_team_matches'),
 
     # Averages views
     url(r'^results/averages/$', views.view_team_averages, {'only_us':False, 'only_here':True}, name='view_team_averages'),

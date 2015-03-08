@@ -63,7 +63,7 @@ def view_team_profile(request, team_number=None):
             if statistics[field_name] == None:
                 statistics[field_name] = "—"
 
-        if (statistics['match_final_score'] is not None) and (statistics['match_final_score'] != 0):
+        if (statistics['match_final_score'] != "—") and (statistics['match_final_score'] != 0):
             # exclude things that have a 0
             statistics['match_final_score'] = matches.exclude(match_final_score=0).aggregate(
                 Avg('match_final_score'))['match_final_score__avg']
@@ -156,14 +156,45 @@ def view_team_profile(request, team_number=None):
                 setattr(aggregate_data, field.name, getattr(data, field.name))
 
     # then pass all the sections/data to the context
+    pitdatas = PitScoutData.objects.filter(team_number=team_number).count()
+
     context = {
+        'has_pit_data': pitdatas,
         'aggregate_data': model_to_dict(aggregate_data),
         'team_number': team_number,
         'statistics': statistics,
         'nav_title': str(team_number),
-        'matches': matches
+        'matches': matches,
     }
-    return render(request, 'frc_scout/view_team_profile.html', context)
+    if pitdatas == 1:
+        context['scout_name'] = PitScoutData.objects.get(team_number=team_number).scout.first_name
+
+    return render(request, 'frc_scout/profiles/profile.html', context)
+
+
+def view_team_pit_data(request, team_number=None):
+    context = {
+        'nav_title': str(team_number) + "'s Pit Data",
+        'team_number': team_number,
+        'pit_data': sorted(PitScoutData.objects.filter(team_number=team_number), key=cmp_pit_data(request), reverse=True),
+    }
+    return render(request, 'frc_scout/profiles/pit_data.html', context)
+
+
+def cmp_pit_data(request):
+    def score_pit_data(pd):
+        score = 0
+        if pd.pitscout_team_number == pd.team_number:
+            # self-scouting is worth 2 'points'
+            score += 2
+        if pd.pitscout_team_number == request.user.userprofile.team.team_number:
+            # being scouted by your team is worth 1 'point'
+            score += 1
+        if pd.location.id == request.session.get('location_id'):
+            # being at the same location is worth 4
+            score += 4
+        return score
+    return score_pit_data
 
 
 def view_team_matches(request, team_number=None):
@@ -238,7 +269,27 @@ def view_team_matches(request, team_number=None):
         'matches': matches,
         'nav_title': team_number + "'s Matches"
     }
-    return render(request, 'frc_scout/view_team_matches.html', context)
+    return render(request, 'frc_scout/profiles/matches.html', context)
+
+
+def view_team_auto_heatmap(request, team_number=None):
+    points = []
+
+    matches = Match.objects.filter(team_number=team_number)
+    for match in matches:
+        points.append({'x': match.auto_start_x * 554, 'y': match.auto_start_y * 596, 'color': 'green', 'match_number': match.match_number})
+
+    stacks = ToteStack.objects.filter(match__team_number=team_number)
+    if (stacks is not None) and (len(stacks) > 0):
+        for stack in stacks:
+            points.append({'x': stack.x * 554, 'y': stack.y * 596, 'color': 'yellow' if stack.coop_stack else 'grey', 'match_number': stack.match.match_number})
+
+    context = {
+        'team_number': team_number,
+        'points': points,
+        'nav_title': team_number + "'s Heatmap"
+    }
+    return render(request, 'frc_scout/profiles/heatmap.html', context)
 
 
 def edit_team_profile(request):
