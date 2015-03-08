@@ -5,6 +5,7 @@ from django.http.response import HttpResponse
 from django.shortcuts import render
 import requests
 
+
 def teams_at_event(request):
     context = {
         'nav_title': "Teams Here",
@@ -35,7 +36,7 @@ def teams_at_event(request):
 
     for team in tba_teams:
         try:
-            this_data = all_pit_scout_data.get(team_number=team['team_number'])
+            this_data = all_pit_scout_data.filter(team_number=team['team_number'])
             scouted_here = True
         except PitScoutData.DoesNotExist:
             this_data = None
