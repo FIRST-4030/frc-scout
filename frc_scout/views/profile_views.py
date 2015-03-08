@@ -151,7 +151,7 @@ def view_team_profile(request, team_number=None):
 def view_team_matches(request, team_number=None):
     matches = []
 
-    for match in Match.objects.filter(team_number=team_number).exclude(location__name="TEST"):
+    for match in Match.objects.filter(team_number=team_number).exclude(location__name="TEST").order_by('-timestamp'):
         match_dict = model_to_dict(match)
 
         if not match_dict['no_show']:
