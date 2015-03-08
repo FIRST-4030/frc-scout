@@ -42,7 +42,7 @@ def view_team_averages(request, only_us, only_here):
         total_auto = 0
         total_tele = 0
 
-        matches = Match.objects.filter(team_number=team_number)
+        matches = Match.objects.filter(team_number=team_number).exclude(location__name="TEST")
         if only_us:
             matches = matches.filter(scout__userprofile__team__team_number=request.user.userprofile.team.team_number)
         if only_here:
