@@ -63,6 +63,13 @@ def view_team_profile(request, team_number=None):
             if statistics[field_name] == None:
                 statistics[field_name] = "—"
 
+        if (statistics['match_final_score'] is not None) and (statistics['match_final_score'] != 0):
+            # exclude things that have a 0
+            statistics['match_final_score'] = matches.exclude(match_final_score=0).aggregate(
+                Avg('match_final_score'))['match_final_score__avg']
+            if statistics['match_final_score'] is None:
+                statistics['match_final_score'] = 0
+
         # calculate some special stats
         print(statistics['auto_step_center_acquired_containers'])
         if (statistics['auto_step_center_acquired_containers'] != "—") and (statistics['auto_ground_acquired_containers'] != "—"):
