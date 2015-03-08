@@ -24,7 +24,7 @@
         {% else %}
             <a href="{% url "frc_scout:view_team_averages" only_us=opts.only_us only_here=True %}">See data from only your location</a>
         {% endif %}
-        <table class="table table-striped tablesorter">
+        <table class="table table-striped tablesorter" id="avgTable">
             <thead>
                 <tr>
                     <th>Team</th>
@@ -49,3 +49,16 @@
 {% endblock %}
 
 {% block footer %}{% include 'frc_scout/footer.html' %}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" type="text/css" href="{% static "frc_scout/css/tablesorter.css" %}">
+{% endblock %}
+
+{% block extra_js %}
+<script type="text/javascript" src="{% static 'frc_scout/js/jquery.tablesorter.min.js' %}"></script>
+<script type="text/javascript">
+$(function() {
+    $("#avgTable").tablesorter();
+});
+</script>
+{% endblock %}
