@@ -37,10 +37,14 @@ def teams_at_event(request):
     for team in tba_teams:
         try:
             this_data = all_pit_scout_data.filter(team_number=team['team_number'])
-            scouted_here = True
+            if len(this_data) > 0:
+                scouted_here = True
+            else:
+                scouted_here = False
         except PitScoutData.DoesNotExist:
             this_data = None
             scouted_here = False
+
 
         processed_teams.append({
             'team_name': team['nickname'],
