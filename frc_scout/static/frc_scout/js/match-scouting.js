@@ -621,6 +621,7 @@ function submitData() {
 
     $("#online_message").hide();
     $("#in_progress_message").show();
+    $("#submit_pending").button('loading');
 
     $.ajax({
         url: '/scouting/match/submit/',
@@ -666,6 +667,7 @@ function submitData() {
             $("#in_progress_message").hide();
             $("#online_message").hide();
             $("#offline_message").show();
+            $("#submit_pending").button('reset');
             $("#submit_pending").html("<span class='glyphicon glyphicon-remove'></span>&nbsp; Data submission failed, please try again later.");
         }
     });
