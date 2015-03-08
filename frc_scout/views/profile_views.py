@@ -188,12 +188,6 @@ def view_team_matches(request, team_number=None):
 
             match_dict['auto_has_auto'] = not match_dict['auto_no_auto']
 
-            if match.scout.userprofile.team.team_number == request.user.userprofile.team.team_number:
-                match_dict['match_private_comments'] = match.matchprivatecomments.comments
-                match_dict['scout_name'] = match.scout.first_name + " on team " + str(match.scout.userprofile.team.team_number)
-            else:
-                match_dict['scout_name'] = 'team ' + str(match.scout.userprofile.team.team_number)
-
             for key in match_dict:
                 if key == "no_show":
                     continue
@@ -201,6 +195,12 @@ def view_team_matches(request, team_number=None):
                     match_dict[key] = "Yes"
                 if str(match_dict[key]) == "False":
                     match_dict[key] = "No"
+
+        if match.scout.userprofile.team.team_number == request.user.userprofile.team.team_number:
+            match_dict['match_private_comments'] = match.matchprivatecomments.comments
+            match_dict['scout_name'] = match.scout.first_name + " on team " + str(match.scout.userprofile.team.team_number)
+        else:
+            match_dict['scout_name'] = 'team ' + str(match.scout.userprofile.team.team_number)
 
         match_dict['location'] = match.location.name
 
