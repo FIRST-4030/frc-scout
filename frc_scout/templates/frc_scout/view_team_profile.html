@@ -116,7 +116,7 @@
                             From center step: <strong>{{ statistics.auto_step_center_acquired_containers }}</strong><br />
                             From ground: <strong>{{ statistics.auto_ground_acquired_containers }}</strong>
                         </div>
-                        Moved: <strong>{{ statistics.auto_moved_containers }}</strong>
+                        Moved to zone: <strong>{{ statistics.auto_moved_containers }}</strong>
                     </div>
                     <strong>Mess-ups</strong>
                     <div style="padding: 0 0 0 15px">
@@ -157,7 +157,10 @@
                             Sideways: <strong>{{ statistics.tele_picked_up_sideways_containers }}</strong><br />
                             From center step: <strong>{{ statistics.tele_picked_up_center_step_containers }}</strong>
                         </div>
-                        Moved: <strong>{{ statistics.auto_moved_containers }}</strong>
+                        Stacked: <strong>{{ statistics.tele_average_containers_stacked_per_match }}</strong>
+                        <div style="padding-left:15px;">
+                            Preferred stack height: <strong>{{ statistics.tele_average_container_height }}</strong>
+                        </div>
                     </div>
                     <strong>Litter</strong>
                     <div style="padding: 0 0 10px 15px">

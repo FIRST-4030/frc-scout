@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.forms.models import model_to_dict
 from django.http.response import HttpResponse
 from django.shortcuts import render
-from django.db.models import Avg, Sum
+from django.db.models import Avg, Sum, Count
 from frc_scout.decorators import insecure_required
 
 from frc_scout.models import Match, Team, ToteStack, ContainerStack, PitScoutData
@@ -93,7 +93,7 @@ def view_team_profile(request, team_number=None):
             statistics['tele_picked_up_total_containers'] = "—"
         # aggregate totestacks, yay!
         stacks = ToteStack.objects.filter(match__team_number=team_number)
-        if (len(stacks) != 0) and (stacks != "—"):
+        if (len(stacks) != 0) and (stacks != None):
             statistics['tele_average_stack_height'] = str("%.2f" % stacks.aggregate(Avg('start_height'))['start_height__avg'])
             statistics['tele_average_totes_stacked'] = str("%.2f" % stacks.aggregate(Avg('totes_added'))['totes_added__avg'])
             # I'm pretty proud of this -- it's the averages of the sum per match
@@ -103,6 +103,17 @@ def view_team_profile(request, team_number=None):
             statistics['tele_average_stack_height'] = "—"
             statistics['tele_average_totes_stacked'] = "—"
             statistics['tele_average_totes_stacked_per_match'] = "—"
+
+        # aggregate containerstacks
+        containers = ContainerStack.objects.filter(match__team_number=team_number)
+        if (len(containers) != 0) and (containers != None):
+            statistics['tele_average_container_height'] = str("%.2f" % containers.aggregate(Avg('height'))['height__avg'])
+            match_containers = containers.values('match').annotate(total_containers=Count('containers_added'))
+            statistics['tele_average_containers_stacked_per_match'] = str("%.2f" %
+                    match_containers.aggregate(Avg('total_containers'))['total_containers__avg'])
+        else:
+            statistics['tele_average_container_height'] = "—"
+            statistics['tele_average_containers_stacked_per_match'] = "—"
 
         # match scores -- I moved the thing from the 'edit match' screen into its own function
         # because it's pretty useful and recyclable
@@ -184,6 +195,14 @@ def view_team_matches(request, team_number=None):
                 match_dict['tele_total_stacked'] = 0
                 match_dict['tele_average_totes_stacked'] = "0.00"
                 match_dict['tele_average_stack_height'] = "0.00"
+
+            containers = ContainerStack.objects.filter(match=match)
+            if len(containers) > 0:
+                match_dict['tele_total_containers'] = containers.aggregate(Sum('containers_added'))['containers_added__sum']
+                match_dict['tele_average_container_height'] = str("%.2f" % containers.aggregate(Avg('height'))['height__avg'])
+            else:
+                match_dict['tele_total_containers'] = 0
+                match_dict['tele_average_container_height'] = "0.00"
 
             match_dict['tele_picked_up_total_containers'] = (match_dict['tele_picked_up_sideways_containers']
                 + match_dict['tele_picked_up_upright_containers'] + match_dict['tele_picked_up_center_step_containers'])
