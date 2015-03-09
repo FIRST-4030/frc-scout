@@ -6,26 +6,66 @@
 
 {% block nav %}{% include 'frc_scout/nav.html' %}{% endblock %}
 
+{% block extra_css %}
+<style type="text/css">
+    .heatmap-box {
+        max-width: 554px;
+        /*height: 596px;*/
+        width: 100%;
+        display: inline-block;
+        position: relative;
+        margin: auto;
+        background-image: url({% static 'frc_scout/img/start_zone.png' %});
+        background-size: contain;
+    }
+
+    .heatmap-box:before {
+        margin-top: 50.1%;
+        display: inline-block;
+        content: '';
+    }
+
+    .heatmap-content {
+        position: absolute;
+        top: 0; bottom: 0; right: 0; left: 0;
+        outline: thin dashed green;
+        margin: auto;
+        max-height: 100%;
+    }
+</style>
+{% endblock %}
+
 {% block main_content %}
     <div class="row">
         <div class="col-md-10 col-md-offset-1">
-            <div style="width:554px; height:596px; background-image:url({% static 'frc_scout/img/start_zone.png' %}); position:relative; margin:auto;">
-                {% for point in points %} {% if point.y %} <span class="glyphicon glyphicon-{{point.glyphicon}}" style="position: absolute; left: {{point.x}}px; top: {{point.y}}px; color: {{ point.color }};" title="Match {{ point.match_number }}"></span>
-                {% else %} <!-- There is one with zero. Its color is {{ point.color }}. -->
-                {% endif %} {% endfor %}
-                <!-- good glyphicons for marking positions:
-                    remove (X)
-                    chevron-down (down arrow with no stem)
-                    menu-down (like chevron-down but thinner)
-                    hand-down (pointing hand down)
-                    equalizer (for stack)
-                    arrow-down
-                    asterisk
-                    flag
-                    pushpin
-                    remove-circle (X in a circle)
-                    certificate (looks like an explosion)
-                -->
+            <div style="text-align:center;">
+                <div class="heatmap-box">
+                    <div class="heatmap-content">
+                        {% for point in points %}{% if point.y %}<span
+                            class="glyphicon glyphicon-{{point.glyphicon}}"
+                            style="position: absolute; left: {{point.x}}%; top: {{point.y}}%; color: {{ point.color }};"
+                            title={% if point.match_number %}"Match {{ point.match_number }}"
+                            {% elif point.scouted_by %}"Scouted by team {{ point.scouted_by }}"{% endif %}>
+                        </span>
+                       {% else %}<!--There is one at (0, 0) for some reason.
+                            Its color is {{ point.color }}.
+                            Its symbol is {{ point.glyphicon }}.-->
+                       {% endif %} {% endfor %}
+                        <!-- good glyphicons for marking positions:
+                            remove (X)
+                            chevron-down (down arrow with no stem)
+                            menu-down (like chevron-down but thinner)
+                            hand-down (pointing hand down)
+                            equalizer (for stack)
+                            arrow-down
+                            asterisk
+                            flag
+                            pushpin
+                            remove-circle (X in a circle)
+                            certificate (looks like an explosion)
+                        -->
+                    </div>
+                </div>
             </div>
         </div>
     </div>

@@ -277,12 +277,36 @@ def view_team_auto_heatmap(request, team_number=None):
 
     matches = Match.objects.filter(team_number=team_number)
     for match in matches:
-        points.append({'x': match.auto_start_x * 554, 'y': match.auto_start_y * 596, 'color': 'green', 'match_number': match.match_number})
+        points.append({
+            'x': match.auto_start_x * 100,
+            'y': match.auto_start_y * 100,
+            'color': 'green',
+            'glyphicon': 'pushpin',
+            'match_number': match.match_number
+        })
 
     stacks = ToteStack.objects.filter(match__team_number=team_number)
     if (stacks is not None) and (len(stacks) > 0):
         for stack in stacks:
-            points.append({'x': stack.x * 554, 'y': stack.y * 596, 'color': 'yellow' if stack.coop_stack else 'grey', 'match_number': stack.match.match_number})
+            points.append({
+                'x': stack.x * 100,
+                'y': stack.y * 100,
+                'color': 'yellow' if stack.coop_stack else 'grey',
+                'glyphicon': 'asterisk',
+                'match_number': stack.match.match_number
+            })
+
+    pit = PitScoutData.objects.filter(team_number=team_number)
+    for data in pit:
+        if data.auto_start_x:
+            points.append({
+                'x': data.auto_start_x * 100,
+                'y': data.auto_start_y * 100,
+                'color': 'blue',
+                'glyphicon': 'flag',
+                'scouted_by': data.scout.userprofile.team.team_number,
+            })
+            
 
     context = {
         'team_number': team_number,
