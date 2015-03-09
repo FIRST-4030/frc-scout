@@ -1,0 +1,249 @@
+{% extends 'frc_scout/base.html' %}
+
+{% load staticfiles %}
+
+{% block title %}Team {{ team_number }}{% endblock %}
+
+{% block nav %}{% include 'frc_scout/nav.html' %}{% endblock %}
+
+{% block main_content %}
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+
+            {% if request.user.userprofile.team_manager %}
+                {% if request.user.userprofile.team.team_number|floatformat == team_number|floatformat %}
+                    <div class="alert alert-success alert-dismissable">
+                        <p>If you want to {% if has_pit_data %}update{% else %}add information to{% endif %} your team profile, you may <a href="{% url 'frc_scout:pit_scouting' %}#{{ team_number }}">pit scout yourself</a>{% if has_pit_data %}&mdash; your data will take precedence{% endif %}.</p>
+                    </div>
+                {% endif %}
+            {% endif %}
+
+            {% if has_pit_data %}
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h1 class="panel-title">
+                        {% if  aggregate_data.team_name %}
+                            <h3>{{ aggregate_data.team_name }}</h3>
+                        {% else %}
+                            <h3>Team {{ team_number }}</h3>
+                        {% endif %}
+                    </h1>
+                </div>
+                <div class="panel-body">
+                    {% if aggregate_data.image_link %}
+                        <div style="text-align: center;">
+                            <img src="{{ aggregate_data.image_link }}" style="max-height: 300px; max-width:100%; border-radius: 5px;">
+                        </div>
+                        <br>
+                    {% endif %}
+                    {% if aggregate_data.team_website %}
+                        Website: <strong><a target="_blank" href="{{ aggregate_data.team_website }}">{{ aggregate_data.team_website }}</a></strong>
+                        <br>
+                    {% endif %}
+                    {% if aggregate_data.driver_1 %}
+                        Driver 1: <strong>{{ aggregate_data.driver_1 }}</strong>
+                        <br>
+                    {% endif %}
+                    {% if aggregate_data.driver_2 %}
+                        Driver 2: <strong>{{ aggregate_data.driver_2 }}</strong>
+                        <br>
+                    {% endif %}
+                    {% if aggregate_data.coach %}
+                        Coach: <strong>{{ aggregate_data.coach }}</strong>
+                        <br>
+                    {% endif %}
+                    {% if aggregate_data.robot_height %}
+                        Robot Height: <strong>{{ aggregate_data.robot_height }} in.</strong>
+                        <br>
+                    {% endif %}
+                    {% if aggregate_data.robot_weight %}
+                        Robot Weight: <strong>{{ aggregate_data.robot_weight }} lbs.</strong>
+                        <br>
+                    {% endif %}
+                    {% if aggregate_data.robot_speed %}
+                        Robot Speed: <strong>{{ aggregate_data.robot_speed }} ft/s.</strong>
+                        <br>
+                    {% endif %}
+                    {% if aggregate_data.tote_stack_capacity %}
+                        Tote Stack Capacity: <strong>{{ aggregate_data.tote_stack_capacity }} totes</strong>
+                        <br>
+                    {% endif %}
+                    {% if aggregate_data.known_strengths %}
+                        Known Strengths: <strong>{{ aggregate_data.known_strengths }}</strong>
+                        <br>
+                    {% endif %}
+                    {% if aggregate_data.known_weaknesses %}
+                        Known Weaknesses: <strong>{{ aggregate_data.known_weaknesses }}</strong>
+                        <br>
+                    {% endif %}
+                    {% if has_pit_data == 1 %}
+                        <div style="text-align:right;">
+                                {% if aggregate_data.team_number == aggregate_data.pitscout_team_number %}
+                                    <em>Self-scouted
+                                    {% if aggregate_data.pitscout_team_number == request.user.userprofile.team.team_number %}
+                                    by {{ scout_name }}
+                                    {% endif %}
+                                    </em>
+                                {% else %}
+                                    <em>Scouted by
+                                    {% if aggregate_data.pitscout_team_number == request.user.userprofile.team.team_number %}
+                                        {{ scout_name }} on team {{ aggregate_data.pitscout_team_number }}
+                                    {% else %}
+                                        team {{ aggregate_data.pitscout_team_number }}
+                                    {% endif %}
+                                    </em>
+                                {% endif %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% if has_pit_data > 1 %}
+            <a href="{% url "frc_scout:view_team_pit_data" team_number %}">View all pit scouting data for this team</a>
+            {% endif %}
+            {% endif %}
+
+            {% if matches|length > 0 %}
+            <div class="section-header-container">
+                <span class="section-header-text">Match averages</span>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">General</h3>
+                </div>
+                <div class="panel-body">
+                    Total score: <strong>{{ statistics.total_average_score }}</strong>
+                    (<strong>{{ statistics.total_score_proportion }}%</strong> of total alliance score)<br />
+                    No-show: <strong>{{ statistics.no_show }}%</strong> of the time
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Autonomous</h3>
+                </div>
+                <div class="panel-body">
+                    <div style="padding: 0 0 10px 0">
+                        Total autonomous score: <strong>{{ statistics.auto_average_score }}</strong><br />
+                    </div>
+                    <div style="padding: 0 0 10px 0">
+                        Moved to auto zone: <strong>{{ statistics.auto_moved_to_auto_zone }}%</strong> of the time<br />
+                    </div>
+                    <strong>Totes</strong>
+                    <div style="padding: 0 0 10px 15px">
+                        Yellow moved: <strong>{{ statistics.auto_yellow_moved_totes }}</strong><br />
+                        Yellow stacked: <strong>{{ statistics.auto_yellow_stacked_totes }}</strong><br />
+                        Grey acquired: <strong>{{ statistics.auto_grey_acquired_totes }}</strong><br />
+                    </div>
+                    <strong>Containers</strong>
+                    <div style="padding: 0 0 10px 15px">
+                        Acquired: <strong>{{ statistics.auto_total_acquired_containers }}</strong>
+                        <div style="padding-left:15px;">
+                            From center step: <strong>{{ statistics.auto_step_center_acquired_containers }}</strong><br />
+                            From ground: <strong>{{ statistics.auto_ground_acquired_containers }}</strong>
+                        </div>
+                        Moved to zone: <strong>{{ statistics.auto_moved_containers }}</strong>
+                    </div>
+                    <strong>Mess-ups</strong>
+                    <div style="padding: 0 0 0 15px">
+                        No autonomous mode: <strong>{{ statistics.auto_no_auto }}%</strong> of the time<br />
+                        Autonomous fouls: <strong>{{ statistics.auto_fouls }}</strong><br />
+                        Interference committed: <strong>{{ statistics.auto_interference }}</strong>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Teleoperated</h3>
+                </div>
+                <div class="panel-body">
+                    <div style="padding: 0 0 10px 0">
+                        Total teleoperated score: <strong>{{ statistics.tele_average_score }}</strong><br />
+                    </div>
+                    <strong>Totes</strong>
+                    <div style="padding: 0 0 10px 15px">
+                        Acquired: <strong>{{ statistics.tele_picked_up_total_totes }}</strong>
+                        <div style="padding-left:15px;">
+                            From human station: <strong>{{ statistics.tele_picked_up_human_station_totes }}</strong><br />
+                            Upright from ground: <strong>{{ statistics.tele_picked_up_ground_upright_totes }}</strong><br />
+                            Sideways from ground: <strong>{{ statistics.tele_picked_up_sideways_totes }}</strong><br />
+                            Upside-down from ground: <strong>{{ statistics.tele_picked_up_upside_down_totes }}</strong>
+                        </div>
+                        Stacked: <strong>{{ statistics.tele_average_totes_stacked_per_match }}</strong>
+                        <div style="padding-left:15px;">
+                            Preferred stack height: <strong>{{ statistics.tele_average_stack_height }}</strong><br />
+                            Average totes per stack: <strong>{{ statistics.tele_average_totes_stacked }}</strong>
+                        </div>
+                    </div>
+                    <strong>Containers</strong>
+                    <div style="padding: 0 0 10px 15px">
+                        Acquired: <strong>{{ statistics.tele_picked_up_total_containers }}</strong>
+                        <div style="padding-left:15px;">
+                            Upright: <strong>{{ statistics.tele_picked_up_upright_containers }}</strong><br />
+                            Sideways: <strong>{{ statistics.tele_picked_up_sideways_containers }}</strong><br />
+                            From center step: <strong>{{ statistics.tele_picked_up_center_step_containers }}</strong>
+                        </div>
+                        Stacked: <strong>{{ statistics.tele_average_containers_stacked_per_match }}</strong>
+                        <div style="padding-left:15px;">
+                            Preferred stack height: <strong>{{ statistics.tele_average_container_height }}</strong>
+                        </div>
+                    </div>
+                    <strong>Litter</strong>
+                    <div style="padding: 0 0 10px 15px">
+                        Pushed to landfill zone: <strong>{{ statistics.tele_pushed_litter }}</strong><br />
+                        Placed in container: <strong>{{ statistics.tele_placed_in_container_litter }}</strong>
+                    </div>
+                    <strong>Mess-ups</strong>
+                    <div style="padding: 0 0 0 15px">
+                        Stacks knocked over: <strong>{{ statistics.tele_knocked_over_stacks }}</strong><br />
+                        Containers dropped: <strong>{{ statistics.tele_container_fell_off }}</strong><br />
+                        Teleop fouls: <strong>{{ statistics.tele_fouls }}</strong><br />
+                        Robot died: <strong>{{ statistics.tele_dead_bot }}%</strong> of the time
+                    </div>
+                </div>
+            </div>
+            <a href="{% url "frc_scout:view_team_matches" team_number %}">View all matches for this team</a>
+            <div class="section-header-container">
+                <span class="section-header-text">Public comments</span>
+            </div>
+            {% for match in matches %}
+                {% if match.tele_public_comments or match.foul_context %}
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">{{ match.location }}: Match {{ match.match_number }}</h3>
+                        </div>
+                        <div class="panel-body">
+                            {% if match.tele_public_comments %}
+                                <strong>Public Comments:</strong> {{ match.tele_public_comments }}
+                            {% endif %}
+                            <br>
+                            {% if match.tele_foul_context %}
+                                <strong>Foul Comments:</strong> {{ match.tele_foul_context }}
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+            <div class="section-header-container">
+                <span class="section-header-text">Private comments</span>
+            </div>
+            {% for match in matches %}
+                {% if match.matchprivatecomments.comments and match.scout.userprofile.team.team_number == request.user.userprofile.team.team_number %}
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">{{ match.location }}: Match {{ match.match_number }}</h3>
+                        </div>
+                        <div class="panel-body">
+                            {{ match.matchprivatecomments.comments }}
+                            <br>
+                            <small><strong>{{ match.scout.first_name }}</strong></small>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+            {% else %} <!-- If no matches scouted -->
+                <em>This team has not been scouted in any matches.</em>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block footer %}{% include 'frc_scout/footer.html' %}{% endblock %}
