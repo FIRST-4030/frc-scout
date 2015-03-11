@@ -147,8 +147,12 @@ def match_score(match):
     tele_score = 0
 
     # worth 2 per tote stacked
-    if match.totestack_set.count() > 0:
-        tele_score += match.totestack_set.aggregate(Sum('totes_added'))['totes_added__sum'] * 2
+    if match.totestack_set.exclude(coop_stack=True).count() > 0:
+        tele_score += match.totestack_set.exclude(coop_stack=True).aggregate(Sum('totes_added'))['totes_added__sum'] * 2
+
+    # 4 totes for 40 points -> 1 tote for 10 points, sort of
+    if match.totestack_set.filter(coop_stack=True).count() > 0:
+        tele_score += match.totestack_set.filter(coop_stack=True).aggregate(Sum('totes_added'))['totes_added__sum'] * 10
 
     if match.containerstack_set.count() > 0:
         tele_score += match.containerstack_set.aggregate(Sum('height'))['height__sum'] * 4

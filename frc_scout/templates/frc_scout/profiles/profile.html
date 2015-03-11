@@ -13,11 +13,12 @@
             {% if request.user.userprofile.team_manager %}
                 {% if request.user.userprofile.team.team_number|floatformat == team_number|floatformat %}
                     <div class="alert alert-success alert-dismissable">
-                        <p>If you want to update your team profile, you may <a href="{% url 'frc_scout:pit_scouting' %}#{{ team_number }}">pit scout yourself</a> &mdash; your data will take precedence.</p>
+                        <p>If you want to {% if has_pit_data %}update{% else %}add information to{% endif %} your team profile, you may <a href="{% url 'frc_scout:pit_scouting' %}#{{ team_number }}">pit scout yourself</a>{% if has_pit_data %}&mdash; your data will take precedence{% endif %}.</p>
                     </div>
                 {% endif %}
             {% endif %}
 
+            {% if has_pit_data %}
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h1 class="panel-title">
@@ -75,8 +76,31 @@
                         Known Weaknesses: <strong>{{ aggregate_data.known_weaknesses }}</strong>
                         <br>
                     {% endif %}
+                    {% if has_pit_data == 1 %}
+                        <div style="text-align:right;">
+                                {% if aggregate_data.team_number == aggregate_data.pitscout_team_number %}
+                                    <em>Self-scouted
+                                    {% if aggregate_data.pitscout_team_number == request.user.userprofile.team.team_number %}
+                                    by {{ scout_name }}
+                                    {% endif %}
+                                    </em>
+                                {% else %}
+                                    <em>Scouted by
+                                    {% if aggregate_data.pitscout_team_number == request.user.userprofile.team.team_number %}
+                                        {{ scout_name }} on team {{ aggregate_data.pitscout_team_number }}
+                                    {% else %}
+                                        team {{ aggregate_data.pitscout_team_number }}
+                                    {% endif %}
+                                    </em>
+                                {% endif %}
+                        </div>
+                    {% endif %}
                 </div>
             </div>
+            {% if has_pit_data > 1 %}
+            <a href="{% url "frc_scout:view_team_pit_data" team_number %}">View all pit scouting data for this team</a>
+            {% endif %}
+            {% endif %}
 
             {% if matches|length > 0 %}
             <div class="section-header-container">
@@ -116,7 +140,7 @@
                             From center step: <strong>{{ statistics.auto_step_center_acquired_containers }}</strong><br />
                             From ground: <strong>{{ statistics.auto_ground_acquired_containers }}</strong>
                         </div>
-                        Moved: <strong>{{ statistics.auto_moved_containers }}</strong>
+                        Moved to zone: <strong>{{ statistics.auto_moved_containers }}</strong>
                     </div>
                     <strong>Mess-ups</strong>
                     <div style="padding: 0 0 0 15px">
@@ -157,7 +181,10 @@
                             Sideways: <strong>{{ statistics.tele_picked_up_sideways_containers }}</strong><br />
                             From center step: <strong>{{ statistics.tele_picked_up_center_step_containers }}</strong>
                         </div>
-                        Moved: <strong>{{ statistics.auto_moved_containers }}</strong>
+                        Stacked: <strong>{{ statistics.tele_average_containers_stacked_per_match }}</strong>
+                        <div style="padding-left:15px;">
+                            Preferred stack height: <strong>{{ statistics.tele_average_container_height }}</strong>
+                        </div>
                     </div>
                     <strong>Litter</strong>
                     <div style="padding: 0 0 10px 15px">
@@ -181,7 +208,19 @@
                 {% if match.tele_public_comments or match.foul_context %}
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <h3 class="panel-title">{{ match.location }}: Match {{ match.match_number }}</h3>
+                            <div style="float:right;">
+                                <em>
+                                {% if match.scout.userprofile.team.team_number == request.user.userprofile.team.team_number %}
+                                    {{ match.scout.first_name }} on team {{ match.scout.userprofile.team.team_number }}
+                                {% else %}
+                                    team {{ match.scout.userprofile.team.team_number }}
+                                {% endif %}
+                                </em>
+                            </div>
+                            <div style="float:left; padding-top: 5px;">
+                                <h3 class="panel-title">{{ match.location }}: Match {{ match.match_number }}</h3>
+                            </div>
+                            <div style="clear:both;"></div>
                         </div>
                         <div class="panel-body">
                             {% if match.tele_public_comments %}

@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.forms.models import model_to_dict
 from django.http.response import HttpResponse
 from django.shortcuts import render
-from django.db.models import Avg, Sum
+from django.db.models import Avg, Sum, Count
 from frc_scout.decorators import insecure_required
 
 from frc_scout.models import Match, Team, ToteStack, ContainerStack, PitScoutData
@@ -63,6 +63,13 @@ def view_team_profile(request, team_number=None):
             if statistics[field_name] == None:
                 statistics[field_name] = "—"
 
+        if (statistics['match_final_score'] != "—") and (statistics['match_final_score'] != 0):
+            # exclude things that have a 0
+            statistics['match_final_score'] = matches.exclude(match_final_score=0).aggregate(
+                Avg('match_final_score'))['match_final_score__avg']
+            if statistics['match_final_score'] is None:
+                statistics['match_final_score'] = 0
+
         # calculate some special stats
         print(statistics['auto_step_center_acquired_containers'])
         if (statistics['auto_step_center_acquired_containers'] != "—") and (statistics['auto_ground_acquired_containers'] != "—"):
@@ -86,7 +93,7 @@ def view_team_profile(request, team_number=None):
             statistics['tele_picked_up_total_containers'] = "—"
         # aggregate totestacks, yay!
         stacks = ToteStack.objects.filter(match__team_number=team_number)
-        if (len(stacks) != 0) and (stacks != "—"):
+        if (len(stacks) != 0) and (stacks != None):
             statistics['tele_average_stack_height'] = str("%.2f" % stacks.aggregate(Avg('start_height'))['start_height__avg'])
             statistics['tele_average_totes_stacked'] = str("%.2f" % stacks.aggregate(Avg('totes_added'))['totes_added__avg'])
             # I'm pretty proud of this -- it's the averages of the sum per match
@@ -96,6 +103,17 @@ def view_team_profile(request, team_number=None):
             statistics['tele_average_stack_height'] = "—"
             statistics['tele_average_totes_stacked'] = "—"
             statistics['tele_average_totes_stacked_per_match'] = "—"
+
+        # aggregate containerstacks
+        containers = ContainerStack.objects.filter(match__team_number=team_number)
+        if (len(containers) != 0) and (containers != None):
+            statistics['tele_average_container_height'] = str("%.2f" % containers.aggregate(Avg('height'))['height__avg'])
+            match_containers = containers.values('match').annotate(total_containers=Count('containers_added'))
+            statistics['tele_average_containers_stacked_per_match'] = str("%.2f" %
+                    match_containers.aggregate(Avg('total_containers'))['total_containers__avg'])
+        else:
+            statistics['tele_average_container_height'] = "—"
+            statistics['tele_average_containers_stacked_per_match'] = "—"
 
         # match scores -- I moved the thing from the 'edit match' screen into its own function
         # because it's pretty useful and recyclable
@@ -138,14 +156,45 @@ def view_team_profile(request, team_number=None):
                 setattr(aggregate_data, field.name, getattr(data, field.name))
 
     # then pass all the sections/data to the context
+    pitdatas = PitScoutData.objects.filter(team_number=team_number).count()
+
     context = {
+        'has_pit_data': pitdatas,
         'aggregate_data': model_to_dict(aggregate_data),
         'team_number': team_number,
         'statistics': statistics,
         'nav_title': str(team_number),
-        'matches': matches
+        'matches': matches,
     }
-    return render(request, 'frc_scout/view_team_profile.html', context)
+    if pitdatas == 1:
+        context['scout_name'] = PitScoutData.objects.get(team_number=team_number).scout.first_name
+
+    return render(request, 'frc_scout/profiles/profile.html', context)
+
+
+def view_team_pit_data(request, team_number=None):
+    context = {
+        'nav_title': str(team_number) + "'s Pit Data",
+        'team_number': team_number,
+        'pit_data': sorted(PitScoutData.objects.filter(team_number=team_number), key=cmp_pit_data(request), reverse=True),
+    }
+    return render(request, 'frc_scout/profiles/pit_data.html', context)
+
+
+def cmp_pit_data(request):
+    def score_pit_data(pd):
+        score = 0
+        if pd.pitscout_team_number == pd.team_number:
+            # self-scouting is worth 2 'points'
+            score += 2
+        if pd.pitscout_team_number == request.user.userprofile.team.team_number:
+            # being scouted by your team is worth 1 'point'
+            score += 1
+        if pd.location.id == request.session.get('location_id'):
+            # being at the same location is worth 4
+            score += 4
+        return score
+    return score_pit_data
 
 
 def view_team_matches(request, team_number=None):
@@ -177,6 +226,14 @@ def view_team_matches(request, team_number=None):
                 match_dict['tele_total_stacked'] = 0
                 match_dict['tele_average_totes_stacked'] = "0.00"
                 match_dict['tele_average_stack_height'] = "0.00"
+
+            containers = ContainerStack.objects.filter(match=match)
+            if len(containers) > 0:
+                match_dict['tele_total_containers'] = containers.aggregate(Sum('containers_added'))['containers_added__sum']
+                match_dict['tele_average_container_height'] = str("%.2f" % containers.aggregate(Avg('height'))['height__avg'])
+            else:
+                match_dict['tele_total_containers'] = 0
+                match_dict['tele_average_container_height'] = "0.00"
 
             match_dict['tele_picked_up_total_containers'] = (match_dict['tele_picked_up_sideways_containers']
                 + match_dict['tele_picked_up_upright_containers'] + match_dict['tele_picked_up_center_step_containers'])
@@ -212,7 +269,27 @@ def view_team_matches(request, team_number=None):
         'matches': matches,
         'nav_title': team_number + "'s Matches"
     }
-    return render(request, 'frc_scout/view_team_matches.html', context)
+    return render(request, 'frc_scout/profiles/matches.html', context)
+
+
+def view_team_auto_heatmap(request, team_number=None):
+    points = []
+
+    matches = Match.objects.filter(team_number=team_number)
+    for match in matches:
+        points.append({'x': match.auto_start_x * 554, 'y': match.auto_start_y * 596, 'color': 'green', 'match_number': match.match_number})
+
+    stacks = ToteStack.objects.filter(match__team_number=team_number)
+    if (stacks is not None) and (len(stacks) > 0):
+        for stack in stacks:
+            points.append({'x': stack.x * 554, 'y': stack.y * 596, 'color': 'yellow' if stack.coop_stack else 'grey', 'match_number': stack.match.match_number})
+
+    context = {
+        'team_number': team_number,
+        'points': points,
+        'nav_title': team_number + "'s Heatmap"
+    }
+    return render(request, 'frc_scout/profiles/heatmap.html', context)
 
 
 def edit_team_profile(request):
