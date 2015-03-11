@@ -78,8 +78,8 @@ def update_scouts(request):
 
 @login_required
 def find_match(request):
-    if not request.user.userprofile.team_manager:
-        return HttpResponse(status=403)
+
+    team_manager = request.user.userprofile.team_manager
 
     context = {
         'nav_title': "Find Match",
@@ -92,8 +92,13 @@ def find_match(request):
         match_number = request.GET.get('match_number', None)
         location_id = request.GET.get('location', None)
 
-        matches = Match.objects.filter(scout__userprofile__team__team_number=request.user.userprofile.team.team_number,
-                                       location__id=location_id).order_by('-match_number')
+        matches = Match.objects.filter(location__id=location_id).order_by('-match_number')
+
+        if not request.user.is_superuser:
+            matches = matches.filter(scout__userprofile__team__team_number=request.user.userprofile.team.team_number)
+
+        if not team_manager:
+            matches = matches.filter(scout=request.user)
 
         if team_number and team_number != "":
             matches = matches.filter(team_number=team_number)
