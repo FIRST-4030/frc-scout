@@ -127,9 +127,12 @@ def totes_stacked_and_containers_scored(request):
     if request.GET.get('location'):
         matches = matches.filter(location__id=request.session.get('location_id'))
 
+    if request.GET.get('only'):
+        matches = matches.filter(scout__userprofile__team=request.user.userprofile.team)
+
     matches = matches.values('team_number').annotate(
-        matches=Sum('team_number'),
-        total_containers=Sum('containerstack'),
+        matches=Count('team_number'),
+        total_containers=Sum('containerstack__containers_added'),
         total_totes=Sum('totestack__totes_added')
     )
 
