@@ -111,8 +111,6 @@ def get_averages(request):
         auto_scores.append(auto_score)
         tele_scores.append(tele_score)
 
-
-
     processed_matches = {
         'teams': teams,
         'auto_scores': auto_scores,
@@ -129,6 +127,29 @@ def totes_stacked_and_containers_scored(request):
     if request.GET.get('location'):
         matches = matches.filter(location__id=request.session.get('location_id'))
 
+    matches = matches.values('team_number').annotate(
+        matches=Sum('team_number'),
+        total_containers=Sum('containerstack'),
+        total_totes=Sum('totestack__totes_added')
+    )
 
+    processed_matches = []
 
-    return HttpResponse()
+    for match in matches:
+        if match.get('total_containers'):
+            x = match.get('total_containers') / match.get('matches')
+        else:
+            x = 0
+
+        if match.get('total_totes'):
+            y = match.get('total_totes') / match.get('matches')
+        else:
+            y = 0
+
+        processed_matches.append({
+            'x': x,
+            'y': y,
+            'team_number': match.get('team_number')
+        })
+
+    return HttpResponse(json.dumps(processed_matches))
