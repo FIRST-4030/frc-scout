@@ -6,7 +6,8 @@
         <div class="col-md-6 col-md-offset-3">
             <h2 style="text-align: center;">Create Account</h2>
             <p style="text-align: center;">You may wish to <a href="{% url 'frc_scout:about_us' %}">learn more about FRC Scout</a> before you register.</p>
-            <form role="form" method="post">
+            <div class="alert alert-warning" style="display: none;" id="error_body"><p id="error_text"></p></div>
+            <form role="form" method="post" id='create_form' onsubmit="return checkForm();">
                 {% csrf_token %}
                 <div class="form-group">
                     <input type="number" class="form-control" placeholder="Team Number" name="team_number" id="team_number" required>
@@ -61,6 +62,25 @@
     {% load compress %}
     {% compress js inline %}
         <script type="text/javascript">
+
+            function checkForm() {
+                var errorMessage = [];
+
+                $.each($("#create_form").find('input'), function() {
+                    if($(this).val() === "") {
+                        errorMessage.push($(this).attr('placeholder')  + " is a required field.");
+                    }
+                })
+
+                if(errorMessage.length > 0) {
+                    $("#error_body").show();
+                    $("#error_text").html("<strong>Please correct the following errors:</strong><br>" + errorMessage.join("<br>"));
+                    return false;
+                }
+
+                return true;
+            }
+
             $(".pw").keyup(function () {
                 if(($("#password").val() === $("#password_confirm").val()) && ($("#password").val() !== "")) {
                     $("#no_match").hide();
