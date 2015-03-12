@@ -75,6 +75,7 @@ def update_scouts(request):
 
     raise Http404
 
+MAX_RESULTS = 100
 
 @login_required
 def find_match(request):
@@ -88,13 +89,18 @@ def find_match(request):
     }
 
     if request.GET:
+        scouting_team = request.GET.get('scouting_team', None)
         team_number = request.GET.get('team_number', None)
         match_number = request.GET.get('match_number', None)
         location_id = request.GET.get('location', None)
 
         matches = Match.objects.filter(location__id=location_id).order_by('-match_number')
 
-        if not request.user.is_superuser:
+        if request.user.is_superuser:
+            if scouting_team and scouting_team != "":
+                matches = matches.filter(scout__userprofile__team__team_number=scouting_team)
+
+        elif request.user.is_superuser:
             matches = matches.filter(scout__userprofile__team__team_number=request.user.userprofile.team.team_number)
 
         if not team_manager:
@@ -107,6 +113,13 @@ def find_match(request):
             matches = matches.filter(match_number=match_number)
 
         processed_matches = []
+
+        if matches.count() > MAX_RESULTS:
+            context['truncated'] = True
+        else:
+            context['truncated'] = False
+
+        matches = matches[:MAX_RESULTS]
 
         for match in matches:
             auto_score, tele_score = match_score(match)

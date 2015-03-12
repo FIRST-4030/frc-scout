@@ -24,12 +24,21 @@
                         <h5>You may edit matches <strong>that you have scouted yourself.</strong></h5>
                     {% endif %}
 
-                    <p><i>Team and match number filters are both optional.</i></p>
+                    <p><i>All filters are optional, but recommended.</i></p>
                     <form role="form" method="get">
+                        {% if request.user.is_superuser %}
+                            <div class="form-group">
+                                <label for="scouting_team" class="col-lg-3 control-label">Scouting Team Number</label>
+                                <div class="col-lg-9">
+                                    <input type="number" placeholder="Scouting Team Number" class="form-control" name="scouting_team" id="scouting_team" value="{{ request.GET.scouting_team }}">
+                                </div>
+                            </div>
+                        {% endif %}
+
                         <div class="form-group">
                             <label for="team_number" class="col-lg-3 control-label">Scouted Team Number</label>
                             <div class="col-lg-9">
-                                <input placeholder="Team Number" type="number" class="form-control" name="team_number" id="team_number" value="{{ request.GET.team_number }}">
+                                <input placeholder="Scouted Team Number" type="number" class="form-control" name="team_number" id="team_number" value="{{ request.GET.team_number }}">
                             </div>
                         </div>
 
@@ -56,12 +65,17 @@
                     </form>
                 </div>
             </div>
-            {% if matches %}
-                <div class="panel panel-primary">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Match results</h3>
-                    </div>
-                    <div class="panel-body">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Match results</h3>
+                </div>
+                <div class="panel-body">
+                    {% if matches %}
+                        {% if truncated %}
+                            <h6 style="color: firebrick;">Showing first {{ matches|length }} results. Narrow your criteria to see more.</h6>
+                        {% else %}
+                            <h6>Showing {{ matches|length }} matches.</h6>
+                        {% endif %}
                         <table class="table table-striped table-responsive">
                             <thead>
                             <tr>
@@ -84,7 +98,7 @@
                             {% for match in matches %}
                                 <tr>
                                     {% if request.user.is_superuser %}
-                                        <wtd>{{ match.scout.userprofile.team.team_number }}</td>
+                                        <td>{{ match.scout.userprofile.team.team_number }}</td>
                                     {% endif %}
                                     {% if requst.user.userprofile.team_manager %}
                                         <td>{{ match.scout.get_full_name }}</td>
@@ -103,12 +117,11 @@
                             {% endfor %}
                             </tbody>
                         </table>
-
-                    </div>
+                    {% elif request.GET %}
+                        <h6><span class="glyphicon glyphicon-exclamation-sign"></span> No matches found for specified filters. Try something better.</h6>
+                    {% endif %}
                 </div>
-            {% elif request.GET %}
-                <h3>No matches found for specified filters.</h3>
-            {% endif %}
+            </div>
         </div>
     </div>
 {% endblock %}
