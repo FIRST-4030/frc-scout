@@ -155,4 +155,8 @@ def totes_stacked_and_containers_scored(request):
             'team_number': match.get('team_number')
         })
 
-    return HttpResponse(json.dumps(processed_matches))
+    response = HttpResponse(json.dumps(processed_matches))
+
+    response['Access-Control-Allow-Origin'] = '*'
+
+    return response
