@@ -8,7 +8,8 @@ from django.http import Http404, HttpResponse
 # Match Scouting
 from frc_scout.decorators import insecure_required
 from frc_scout.models import Match, Location, ToteStack, ContainerStack, PitScoutData, MatchPrivateComments
-
+from frc_scout.tba_request import make_tba_request
+import requests
 
 @insecure_required
 def match_scouting(request):
@@ -215,6 +216,20 @@ def submit_pit_scouting_data(request):
             data_object.image_link = image_data['data']['link']
             data_object.image_type = image_data['data']['type']
 
-        data_object.save()
+        try:
+            param = str("team/frc%i" % data.get('team_number'))
+
+            json_decoded = make_tba_request(param)
+
+            setattr(data_object, 'team_name', json_decoded.get('nickname'))
+            setattr(data_object, 'team_website', json_decoded.get('website'))
+
+        except ValueError:
+            pass
+
+        try:
+            data_object.save()
+        except (ValueError, IntegrityError):
+            return HttpResponse(status=400)
 
         return HttpResponse(status=200)

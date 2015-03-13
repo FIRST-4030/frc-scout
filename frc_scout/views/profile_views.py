@@ -6,6 +6,7 @@ from django.db.models import Avg, Sum, Count
 from frc_scout.decorators import insecure_required
 
 from frc_scout.models import Match, Team, ToteStack, ContainerStack, PitScoutData
+from frc_scout.tba_request import make_tba_request
 from frc_scout.views.team_management_views import match_score
 
 __author__ = 'Miles'
@@ -158,6 +159,13 @@ def view_team_profile(request, team_number=None):
     # then pass all the sections/data to the context
     pitdatas = PitScoutData.objects.filter(team_number=team_number).count()
 
+    try:
+        param = str("team/frc%i" % int(team_number))
+        json_decoded = make_tba_request(param)
+
+    except ValueError:
+        json_decoded = None
+
     context = {
         'has_pit_data': pitdatas,
         'aggregate_data': model_to_dict(aggregate_data),
@@ -165,6 +173,7 @@ def view_team_profile(request, team_number=None):
         'statistics': statistics,
         'nav_title': str(team_number),
         'matches': matches,
+        'tba_data': json_decoded
     }
     if pitdatas == 1:
         context['scout_name'] = PitScoutData.objects.get(team_number=team_number).scout.first_name
@@ -267,7 +276,7 @@ def view_team_matches(request, team_number=None):
     context = {
         'team_number': team_number,
         'matches': matches,
-        'nav_title': team_number + "'s Matches"
+        'nav_title': team_number + "'s Matches",
     }
     return render(request, 'frc_scout/profiles/matches.html', context)
 
