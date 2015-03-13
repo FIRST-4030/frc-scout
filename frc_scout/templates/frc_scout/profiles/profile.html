@@ -32,7 +32,9 @@
                     <div class="panel-body">
                         {% if aggregate_data.image_link %}
                             <div style="text-align: center;">
-                                <img src="{{ aggregate_data.image_link }}" style="max-height: 300px; max-width:100%; border-radius: 5px;">
+                                <a href="{{ aggregate_data.image_link }}">
+                                    <img src="{{ aggregate_data.image_link }}" style="max-height: 300px; max-width:100%; border-radius: 5px;">
+                                </a>
                             </div>
                             <br>
                         {% endif %}
@@ -107,6 +109,9 @@
                 {% if has_pit_data > 1 %}
                     <a href="{% url "frc_scout:view_team_pit_data" team_number %}">View all pit scouting data for this team</a>
                 {% endif %}
+
+            {% else %}
+                <p>Failed to parse data for this team from The Blue Alliance.</p>
             {% endif %}
 
             {% if matches|length > 0 %}

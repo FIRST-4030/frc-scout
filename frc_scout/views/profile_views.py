@@ -181,6 +181,8 @@ def view_team_profile(request, team_number=None):
     return render(request, 'frc_scout/profiles/profile.html', context)
 
 
+@insecure_required
+@login_required
 def view_team_pit_data(request, team_number=None):
     context = {
         'nav_title': str(team_number) + "'s Pit Data",
@@ -190,6 +192,8 @@ def view_team_pit_data(request, team_number=None):
     return render(request, 'frc_scout/profiles/pit_data.html', context)
 
 
+@insecure_required
+@login_required
 def cmp_pit_data(request):
     def score_pit_data(pd):
         score = 0
@@ -206,6 +210,8 @@ def cmp_pit_data(request):
     return score_pit_data
 
 
+@insecure_required
+@login_required
 def view_team_matches(request, team_number=None):
     matches = []
 
@@ -281,6 +287,8 @@ def view_team_matches(request, team_number=None):
     return render(request, 'frc_scout/profiles/matches.html', context)
 
 
+@insecure_required
+@login_required
 def view_team_auto_heatmap(request, team_number=None):
     points = []
 
