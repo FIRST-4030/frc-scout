@@ -15,7 +15,7 @@ def match_scouting(request):
 
     context = {
         'fluid': True,
-    }
+        }
 
     return render(request, 'frc_scout/scouting/match/container.html', context)
 
@@ -25,7 +25,7 @@ def match_scouting_practice(request):
     context = {
         'fluid': True,
         'practice_scouting': True,
-    }
+        }
 
     return render(request, 'frc_scout/scouting/match/container.html', context)
 
@@ -147,13 +147,18 @@ def submit_match_scouting_data(request):
                     match_object.save()
                     pc.match = match_object
                     pc.save()
+                except (IntegrityError, ValueError):
+                    try:
+                        errors.append({
+                            'team_number': match.get('prematch').get('team_number'),
+                            'match_number': match.get('prematch').get('match_number'),
+                            })
+                    except AttributeError:
+                        errors.append({
+                            'team_number': "Unknown",
+                            'match_number': "Unknown",
+                        })
 
-                except IntegrityError:
-                    errors.append({
-                        'team_number': match.get('prematch').get('team_number'),
-                        'match_number': match.get('prematch').get('match_number'),
-
-                    })
 
                 if match.get('teleoperated_stacked_totes'):
                     for stacked_totes in match.get('teleoperated_stacked_totes'):
@@ -180,7 +185,7 @@ def submit_match_scouting_data(request):
 
                         setattr(bin_stack, 'match', match_object)
                         setattr(bin_stack, 'height', stacked_containers)
-    
+
                         bin_stack.save()
 
         if len(errors) != 0:

@@ -208,7 +208,19 @@
                 {% if match.tele_public_comments or match.foul_context %}
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <h3 class="panel-title">{{ match.location }}: Match {{ match.match_number }}</h3>
+                            <div style="float:right;">
+                                <em>
+                                {% if match.scout.userprofile.team.team_number == request.user.userprofile.team.team_number %}
+                                    {{ match.scout.first_name }} on team {{ match.scout.userprofile.team.team_number }}
+                                {% else %}
+                                    team {{ match.scout.userprofile.team.team_number }}
+                                {% endif %}
+                                </em>
+                            </div>
+                            <div style="float:left; padding-top: 5px;">
+                                <h3 class="panel-title">{{ match.location }}: Match {{ match.match_number }}</h3>
+                            </div>
+                            <div style="clear:both;"></div>
                         </div>
                         <div class="panel-body">
                             {% if match.tele_public_comments %}

@@ -20,6 +20,8 @@
                     <h3 class="panel-title">Click information to update.</h3>
                 </div>
                 <div class="panel-body">
+                    Username: <strong>{{ request.user.username }}</strong>
+                    <br>
                     First Name: <a href="#" class="editable" data-type="text" data-pk="first_name">{{ user.first_name }}</a>
                     <br>
                     Last Name: <a href="#" class="editable" data-type="text" data-pk="last_name">{{ user.last_name }}</a>

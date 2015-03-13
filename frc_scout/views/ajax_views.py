@@ -1,6 +1,7 @@
 import json
 from django.contrib.auth.decorators import login_required
-from django.db.models.aggregates import Avg, Count
+from django.db.models.aggregates import Avg, Count, Sum
+from django.forms.models import model_to_dict
 from django.http.response import HttpResponse
 from frc_scout.models import Team, Location, Match
 from django.contrib.auth.models import User
@@ -110,8 +111,6 @@ def get_averages(request):
         auto_scores.append(auto_score)
         tele_scores.append(tele_score)
 
-
-
     processed_matches = {
         'teams': teams,
         'auto_scores': auto_scores,
@@ -128,35 +127,36 @@ def totes_stacked_and_containers_scored(request):
     if request.GET.get('location'):
         matches = matches.filter(location__id=request.session.get('location_id'))
 
-    matches = matches.values('team_number').annotate(
-        total_matches=Count('team_number'),
-        auto_yellow_stacked_totes=Avg('auto_yellow_stacked_totes'),
+    if request.GET.get('only'):
+        matches = matches.filter(scout__userprofile__team=request.user.userprofile.team)
 
-        totestack_totes_added=Avg('totestack__totes_added'),
-        number_of_totestacks=Count('totestack'),
-        number_of_containerstacks=Avg('containerstack'),
-        )
+    matches = matches.values('team_number').annotate(
+        matches=Count('team_number'),
+        total_containers=Sum('containerstack__containers_added'),
+        total_totes=Sum('totestack__totes_added')
+    )
 
     processed_matches = []
 
     for match in matches:
-        average_containers_scored = 0.0
-        average_totes_stacked = 0.0
+        if match.get('total_containers'):
+            x = match.get('total_containers') / match.get('matches')
+        else:
+            x = 0
 
-        # autonomous
-        average_totes_stacked += match['auto_yellow_stacked_totes']
-
-        # teleoperated
-        if match['totestack_totes_added'] is not None and match['number_of_totestacks'] is not None:
-            average_totes_stacked += match['totestack_totes_added'] * match['number_of_totestacks']
-
-        if match['number_of_containerstacks'] is not None:
-            average_containers_scored += match['number_of_containerstacks']
+        if match.get('total_totes'):
+            y = match.get('total_totes') / match.get('matches')
+        else:
+            y = 0
 
         processed_matches.append({
-            'x': average_containers_scored,
-            'y': average_totes_stacked,
-            'team_number': match['team_number'],
+            'x': x,
+            'y': y,
+            'team_number': match.get('team_number')
         })
 
-    return HttpResponse(json.dumps(processed_matches))
+    response = HttpResponse(json.dumps(processed_matches))
+
+    response['Access-Control-Allow-Origin'] = '*'
+
+    return response

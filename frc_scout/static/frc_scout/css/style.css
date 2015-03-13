@@ -1,7 +1,7 @@
 .btn-super {
     /*height: 70px;*/
     font-size: 18px;
-    margin: 10px 10px 10px 10px;
+    margin: 5px;
 }
 
 .section-header-container {
@@ -119,4 +119,12 @@ body {
 .panel-event > .panel-heading, .btn-event {
     background-color: rgb(158, 172, 53);
     color: white;
+}
+
+@media (max-width: 640px) {
+    .btn-fill {
+        width: 100%;
+        margin-left: 0px;
+        margin-right: 0px;
+    }
 }

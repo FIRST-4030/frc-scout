@@ -161,6 +161,7 @@ class PitScoutData(models.Model):
     driver_1 = models.TextField(max_length=64, default=None, null=True)
     driver_2 = models.TextField(max_length=64, default=None, null=True)
     coach = models.TextField(max_length=64, default=None, null=True)
+    drive_coach_is_mentor = models.NullBooleanField(null=True)
 
     # autonomous
     can_move_totes = models.NullBooleanField(null=True)

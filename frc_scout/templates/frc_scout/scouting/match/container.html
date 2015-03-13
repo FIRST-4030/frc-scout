@@ -74,7 +74,8 @@
                 </div>
 
                 <div id="select_team_number">
-                    <select id="select_team_number_select" size="2" style="padding-top: 10px;" class="form-control input-x-lg alliance-toggle background-white">
+                    <select id="select_team_number_select" style="padding-top: 10px;" class="form-control input-x-lg alliance-toggle background-white">
+                        <option value="">Select a team</option>
                     </select>
                 </div>
             </div>
@@ -147,8 +148,11 @@
     <!-- AUTONOMOUS -->
     <div class="container-fluid stage" style="display: none;" id="autonomous">
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-6">
                 <h2>Autonomous<span class="team-number"></span></h2>
+            </div>
+            <div class="col-md-6">
+                <button id="auto_no_auto" onclick="saveAndContinue('autonomous_fouls_and_other', 'teleoperated', this);" class="btn btn-extra-high btn-lg-text btn-warning max-width" style="margin-top: 20px;">no auto  &nbsp;<span class="glyphicon glyphicon-arrow-right"></span></button>
             </div>
         </div>
         <div class="row">
@@ -278,13 +282,10 @@
     <div class="container-fluid stage" id="autonomous_fouls_and_other" style="display: none;">
         <div class="row">
             <div class="col-md-12" style="margin-top: 2vh;">
-                <button id="auto_fouls" onclick="saveAndContinue('autonomous_fouls_and_other', 'autonomous', this);" class="btn btn-lg btn-warning max-width" style="height: 25vh; margin-top: 1vh; margin-bottom: 1vh; font-size: 30px;">fouls</button>
+                <button id="auto_fouls" onclick="saveAndContinue('autonomous_fouls_and_other', 'autonomous', this);" class="btn btn-lg btn-warning max-width" style="height: 30vh; margin-top: 1vh; margin-bottom: 1vh; font-size: 30px;">fouls</button>
             </div>
             <div class="col-md-12">
-                <button id="auto_interference" onclick="saveAndContinue('autonomous_fouls_and_other', 'autonomous', this);" class="btn btn-lg btn-danger max-width" style="height: 25vh; margin-top: 1vh; margin-bottom: 1vh; font-size: 30px;">interference</button>
-            </div>
-            <div class="col-md-12">
-                <button id="auto_no_auto" onclick="saveAndContinue('autonomous_fouls_and_other', 'autonomous', this);" class="btn btn-lg btn-default max-width" style="height: 25vh; margin-top: 1vh; font-size: 30px;">no auto</button>
+                <button id="auto_interference" onclick="saveAndContinue('autonomous_fouls_and_other', 'autonomous', this);" class="btn btn-lg btn-danger max-width" style="height: 30vh; margin-top: 1vh; margin-bottom: 1vh; font-size: 30px;">interference</button>
             </div>
             <div class="col-md-12">
                 <button class="btn btn-lg btn-info max-width" style="margin-top: 3vh; height: 10vh;" onclick="discardAndChangeStage('autonomous_fouls_and_other', 'autonomous');"><span class="glyphicon glyphicon-arrow-left"></span>&nbsp; autONOMOUS</button>
