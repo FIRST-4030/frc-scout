@@ -15,9 +15,10 @@
                     <table class="table table-striped table-responsive">
                         <thead>
                         <tr>
-                            <th class="col-md-5">Team Name</th>
-                            <th class="col-md-2">Team Number</th>
-                            <th class="col-md-2">Pit Scouted Here</th>
+                            <th class="col-md-4">Team Name</th>
+                            <th class="col-md-1">Number</th>
+                            <th class="col-md-1">Pit Scouted Here</th>
+                            <th class="col-md-1">Photo</th>
                             <th class="col-md-3">Actions</th>
                         </tr>
                         </thead>
@@ -27,6 +28,7 @@
                                 <td>{{ team.team_name }}</td>
                                 <td>{{ team.team_number }}</td>
                                 <td>{% if team.scouted_here %}<span style="color: darkgreen;" class="glyphicon glyphicon-ok"></span>{% else %}<span style="color:firebrick;" class="glyphicon glyphicon-remove"></span>{% endif %} {{ data }}</td>
+                                <td>{% if team.image_here %}<span style="color: darkgreen;" class="glyphicon glyphicon-ok"></span>{% else %}<span style="color:firebrick;" class="glyphicon glyphicon-remove"></span>{% endif %} {{ data }}</td>
                                 <td><a href="{% url 'frc_scout:view_team_profile' team_number=team.team_number %}">View Profile</a> | <a href="{% url 'frc_scout:pit_scouting' %}#{{ team.team_number }}"><span{% if not team.scouted_here %} style="font-weight: bold;"{% endif %}>Pit Scout</span></a></td>
                             </tr>
                         {% endfor %}
