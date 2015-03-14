@@ -148,7 +148,7 @@ def submit_match_scouting_data(request):
                     match_object.save()
                     pc.match = match_object
                     pc.save()
-                except (IntegrityError, ValueError):
+                except (IntegrityError, ValueError, DataError):
                     try:
                         errors.append({
                             'team_number': match.get('prematch').get('team_number'),
