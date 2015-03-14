@@ -160,7 +160,6 @@ def submit_match_scouting_data(request):
                             'match_number': "Unknown",
                         })
 
-
                 if match.get('teleoperated_stacked_totes'):
                     for stacked_totes in match.get('teleoperated_stacked_totes'):
                         tote_stack = ToteStack()
@@ -187,7 +186,10 @@ def submit_match_scouting_data(request):
                         setattr(bin_stack, 'match', match_object)
                         setattr(bin_stack, 'height', stacked_containers)
 
-                        bin_stack.save()
+                        try:
+                            bin_stack.save()
+                        except IntegrityError:
+                            pass
 
         if len(errors) != 0:
             return HttpResponse(json.dumps(errors), status=200)
