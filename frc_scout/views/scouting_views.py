@@ -1,6 +1,6 @@
 import json
 from django.core.urlresolvers import reverse
-from django.db.utils import IntegrityError
+from django.db.utils import IntegrityError, DataError
 from django.shortcuts import render
 from django.http import Http404, HttpResponse
 
