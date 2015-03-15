@@ -306,12 +306,12 @@ def view_team_auto_heatmap(request, team_number=None):
                 'glyphicon': 'flag',
                 'scouted_by': data.scout.userprofile.team.team_number,
             })
-            
+
 
     context = {
         'team_number': team_number,
         'points': points,
-        'nav_title': team_number + "'s Heatmap"
+        'nav_title': "Map: " + team_number
     }
     return render(request, 'frc_scout/profiles/heatmap.html', context)
 
