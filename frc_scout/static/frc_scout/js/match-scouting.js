@@ -664,6 +664,8 @@ function submitData() {
 
         },
         error: function() {
+
+
             showErrorMessages(["Data submission failed."], false);
             $("#in_progress_message").hide();
             $("#online_message").hide();

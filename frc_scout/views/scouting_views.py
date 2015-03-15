@@ -70,7 +70,10 @@ def submit_match_scouting_data(request):
                         location = Location.objects.filter(name="TEST")[0]
 
                 else:
-                    location = Location.objects.get(id=request.session.get('location_id'))
+                    try:
+                        location = Location.objects.get(id=request.session.get('location_id'))
+                    except location.DoesNotExist:
+                        pass
 
                 match_object = Match(scout=request.user,
                                      location=location,
