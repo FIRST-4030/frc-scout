@@ -24,7 +24,7 @@ def teams_at_event(request):
         return HttpResponse("Internet connection failed.")
 
     try:
-        tba_teams = r.json()
+        tba_teams = sorted(r.json(), key=lambda x: x['team_number'])
     except ValueError:
         return HttpResponse("There is no event code for your location.", status=400)
 
@@ -37,6 +37,7 @@ def teams_at_event(request):
     for team in tba_teams:
         try:
             this_data = all_pit_scout_data.filter(team_number=team['team_number'])
+            has_image = this_data.exclude(image_id=None).count()
             if len(this_data) > 0:
                 scouted_here = True
             else:
@@ -50,6 +51,7 @@ def teams_at_event(request):
             'team_name': team['nickname'],
             'team_number': team['team_number'],
             'scouted_here': scouted_here,
+            'image_here': has_image,
             'data': this_data
         })
 
