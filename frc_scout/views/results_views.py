@@ -34,6 +34,7 @@ def tableau_info(request):
     return render(request, "frc_scout/results/tableau.html", context)
 
 
+@login_required
 def view_team_averages(request, only_us, only_here):
     teams = Match.objects.values_list('team_number', flat=True).distinct()
     print(teams)

@@ -93,7 +93,7 @@ def view_team_profile(request, team_number=None):
         else:
             statistics['tele_picked_up_total_containers'] = "—"
         # aggregate totestacks, yay!
-        stacks = ToteStack.objects.filter(match__team_number=team_number)
+        stacks = ToteStack.objects.filter(match__team_number=team_number, coop_stack=False)
         if (len(stacks) != 0) and (stacks != None):
             statistics['tele_average_stack_height'] = str("%.2f" % stacks.aggregate(Avg('start_height'))['start_height__avg'])
             statistics['tele_average_totes_stacked'] = str("%.2f" % stacks.aggregate(Avg('totes_added'))['totes_added__avg'])
@@ -104,6 +104,12 @@ def view_team_profile(request, team_number=None):
             statistics['tele_average_stack_height'] = "—"
             statistics['tele_average_totes_stacked'] = "—"
             statistics['tele_average_totes_stacked_per_match'] = "—"
+        coop_stacks = ToteStack.objects.filter(match__team_number=team_number, coop_stack=True)
+        if (len(coop_stacks) != 0) and (coop_stacks != None):
+            match_coop_stacks = coop_stacks.values('match').annotate(total_totes=Sum('totes_added'))
+            statistics['tele_average_coop_totes_stacked_per_match'] = str("%.2f" % match_coop_stacks.aggregate(Avg('total_totes'))['total_totes__avg'])
+        else:
+            statistics['tele_average_coop_totes_stacked_per_match'] = "—"
 
         # aggregate containerstacks
         containers = ContainerStack.objects.filter(match__team_number=team_number)

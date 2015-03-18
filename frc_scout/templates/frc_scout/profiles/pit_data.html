@@ -12,10 +12,10 @@
             <h3>Pit Scouting Data for Team {{ team_number }}</h3>
             {% for data in pit_data %}
             <div class="panel
-            {% if data.team_number == data.pitscout_team_number %}
+            {% if data.team_number == data.scout.userprofile.team.team_number %}
             {# self-scouted #}
             panel-success
-            {% elif data.pitscout_team_number == request.user.userprofile.team.team_number %}
+            {% elif data.scout.userprofile.team.team_number == request.user.userprofile.team.team_number %}
             {# scouted by your team #}
             panel-primary
             {% else %}
@@ -27,29 +27,25 @@
                     <div class="panel-title">
                         <h3 class="panel-title">
                             <div style="float:right;text-align:right;">
-                                {% if data.team_number == data.pitscout_team_number %}
+                                {% if data.team_number == data.scout.userprofile.team.team_number %}
                                     <em>Self-scouted
-                                    {% if data.pitscout_team_number == request.user.userprofile.team.team_number %}
+                                    {% if data.scout.userprofile.team.team_number == request.user.userprofile.team.team_number %}
                                     by {{ data.scout.first_name }}
                                     {% endif %}
                                     </em>
                                 {% else %}
                                     <em>Scouted by
-                                    {% if data.pitscout_team_number == request.user.userprofile.team.team_number %}
-                                        {{ data.scout.first_name }} on team {{ data.pitscout_team_number }}
+                                    {% if data.scout.userprofile.team.team_number == request.user.userprofile.team.team_number %}
+                                        {{ data.scout.first_name }} on team {{ data.scout.userprofile.team.team_number }}
                                     {% else %}
-                                        team {{ data.pitscout_team_number }}
+                                        team {{ data.scout.userprofile.team.team_number }}
                                     {% endif %}
                                     </em>
                                 {% endif %}
                             </div>
                             <div style="float:left;">
                                 <strong>
-                                    {% if  data.team_name %}
-                                        {{ data.team_name }}
-                                    {% else %}
-                                        Team {{ data.team_number }}
-                                    {% endif %}
+                                    {{ data.location.name }}
                                 </strong>
                             </div>
                             <div style="clear:both;"></div>
@@ -61,10 +57,6 @@
                         <div style="text-align: center;">
                             <img src="{{ data.image_link }}" style="max-height: 300px; max-width:100%; border-radius: 5px;">
                         </div>
-                        <br>
-                    {% endif %}
-                    {% if data.team_website %}
-                        Website: <strong><a target="_blank" href="{{ data.team_website }}">{{ data.team_website }}</a></strong>
                         <br>
                     {% endif %}
                     {% if data.driver_1 %}
