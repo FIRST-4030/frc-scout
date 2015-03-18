@@ -1,6 +1,5 @@
 # The purpose of this file is to synchronize our locations with those on TBA,
 # add IDs, and add any that are not already there
-import json
 
 __author__ = 'Sam'
 
@@ -15,7 +14,7 @@ from frc_scout.models import Location
 
 APP_ID = "frc4030:frcscout.com:v1"
 
-TBA_URL = "http://thebluealliance.com/api/v2/events/2015?X-TBA-App-Id=" + APP_ID
+TBA_URL = "http://www.thebluealliance.com/api/v2/events/2015?X-TBA-App-Id=" + APP_ID
 
 try:
     tba_locations = requests.get(TBA_URL).json()
@@ -34,5 +33,7 @@ for tba_location in tba_locations:
     print(str(scout_location) + " -- already existed in our db: " + str(already_existed) + " added code " + tba_location['event_code'])
 
     scout_location.tba_event_code = tba_location['event_code']
+    scout_location.venue_address = tba_location['venue_address']
+    scout_location.location = tba_location['location']
 
     scout_location.save()

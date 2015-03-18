@@ -10,6 +10,8 @@ User._meta.get_field('email')._unique = True
 class Location(models.Model):
     name = models.TextField()
     tba_event_code = models.TextField(blank=True, null=True)
+    venue_address = models.TextField(null=True)
+    location = models.TextField(null=True)
 
     def __str__(self):
         return self.name

@@ -76,13 +76,14 @@
                         {% else %}
                             <h6>Showing {{ matches|length }} matches.</h6>
                         {% endif %}
+
                         <table class="table table-striped table-responsive">
                             <thead>
                             <tr>
                                 {% if request.user.is_superuser %}
                                     <th>Scouting Team</th>
                                 {% endif %}
-                                {% if requst.user.userprofile.team_manager %}
+                                {% if request.user.userprofile.team_manager %}
                                     <th>Scout Name</th>
                                 {% endif %}
                                 <th>Team Number</th>
@@ -100,7 +101,7 @@
                                     {% if request.user.is_superuser %}
                                         <td>{{ match.scout.userprofile.team.team_number }}</td>
                                     {% endif %}
-                                    {% if requst.user.userprofile.team_manager %}
+                                    {% if request.user.userprofile.team_manager %}
                                         <td>{{ match.scout.get_full_name }}</td>
                                     {% endif %}
                                     <td>{{ match.team_number }}</td>
