@@ -12,5 +12,4 @@ urlpatterns = patterns(
     url(r'^admin/', include(admin.site.urls)),
 
     url(r'^', include('frc_scout.urls', namespace='frc_scout')),
-	url(r'^profiler/', include('profiler.urls'))
-)
+	)
