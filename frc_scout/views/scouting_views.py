@@ -3,6 +3,7 @@ from django.core.urlresolvers import reverse
 from django.db.utils import IntegrityError, DataError
 from django.shortcuts import render
 from django.http import Http404, HttpResponse
+import decimal
 
 
 # Match Scouting
@@ -151,7 +152,7 @@ def submit_match_scouting_data(request):
                     match_object.save()
                     pc.match = match_object
                     pc.save()
-                except (IntegrityError, ValueError, DataError):
+                except (IntegrityError, ValueError, DataError, decimal.InvalidOperation):
                     try:
                         errors.append({
                             'team_number': match.get('prematch').get('team_number'),
