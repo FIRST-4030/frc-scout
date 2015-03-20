@@ -38,7 +38,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'frc_scout',
-    'compressor'
+    'compressor',
+	'debug_toolbar',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -50,6 +51,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'sslifyadmin.middleware.SSLifyAdminMiddleware',
+	'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
 ROOT_URLCONF = 'frc_scout_2015.urls'
