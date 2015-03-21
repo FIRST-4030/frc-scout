@@ -62,8 +62,8 @@ class Match(models.Model):
     location = models.ForeignKey(Location)
 
     # Autonomous
-    auto_start_x = models.DecimalField(default=0, max_digits=8, decimal_places=8)
-    auto_start_y = models.DecimalField(default=0, max_digits=8, decimal_places=8)
+    auto_start_x = models.DecimalField(default=0, max_digits=20, decimal_places=16)
+    auto_start_y = models.DecimalField(default=0, max_digits=20, decimal_places=16)
 
     auto_yellow_stacked_totes = models.IntegerField(default=0, verbose_name="Yellow totes stacked")
     auto_yellow_moved_totes = models.IntegerField(default=0, verbose_name="Yellow totes moved")
@@ -123,8 +123,8 @@ class ToteStack(models.Model):
     match = models.ForeignKey(Match)
     start_height = models.IntegerField(default=0)
     totes_added = models.IntegerField(default=0)
-    x = models.DecimalField(max_digits=8, decimal_places=8)
-    y = models.DecimalField(max_digits=8, decimal_places=8)
+    x = models.DecimalField(max_digits=20, decimal_places=16)
+    y = models.DecimalField(max_digits=20, decimal_places=16)
     coop_stack = models.BooleanField(default=False)
 
     def __str__(self):
