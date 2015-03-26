@@ -228,9 +228,6 @@ def edit_match_post(request):
             try:
                 match = Match.objects.get(id=pk)
 
-                if match.scout.userprofile.team.team_number != request.user.userprofile.team.team_number:
-                    return HttpResponse(status=403)
-
             except Match.DoesNotExist:
                 return HttpResponse(status=400)
 
