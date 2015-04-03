@@ -80,8 +80,6 @@ MAX_RESULTS = 100
 @login_required
 def find_match(request):
 
-    team_manager = request.user.userprofile.team_manager
-
     context = {
         'nav_title': "Find Match",
         'locations': Location.objects.all().order_by('name'),
@@ -100,10 +98,10 @@ def find_match(request):
             if scouting_team and scouting_team != "":
                 matches = matches.filter(scout__userprofile__team__team_number=scouting_team)
 
-        elif request.user.is_superuser:
+        elif request.user.userprofile.team_manager:
             matches = matches.filter(scout__userprofile__team__team_number=request.user.userprofile.team.team_number)
 
-        if not team_manager:
+        else:
             matches = matches.filter(scout=request.user)
 
         if team_number and team_number != "":
@@ -177,14 +175,16 @@ def match_score(match):
 def delete_match(request):
     match_id = request.POST.get('match_id', None)
 
-    # need to be manager
-    if not request.user.userprofile.team_manager:
-        return HttpResponse(status=403)
-
     try:
         match = Match.objects.get(id=match_id)
     except Match.DoesNotExist:
         raise Http404
+
+    # need to be manager (or needs to be their data)
+
+    if not request.user.is_superuser:
+        if not request.user.userprofile.team_manager and match.scout != request.user:
+            return HttpResponse(status=403)
 
     # needs to be their data
     if match.scout.userprofile.team.team_number != request.user.userprofile.team.team_number:
@@ -196,13 +196,16 @@ def delete_match(request):
 
 @login_required
 def edit_match(request, match_id=None):
-    if not request.user.userprofile.team_manager:
-        return HttpResponse(status=403)
-
     try:
         match = Match.objects.get(id=match_id)
     except Match.DoesNotExist:
         raise Http404
+
+    # need to be manager (or needs to be their data)
+
+    if not request.user.is_superuser:
+        if not request.user.userprofile.team_manager and match.scout != request.user:
+            return HttpResponse(status=403)
 
     context = {
         'nav_title': "Edit Match",
@@ -217,9 +220,6 @@ def edit_match_post(request):
     if request.method != "POST":
         return HttpResponse(status=400)
 
-    if not request.user.userprofile.team_manager:
-        return HttpResponse(status=403)
-
     if request.POST.get('editable', False):
         name = request.POST.get('name')
         pk = request.POST.get('pk')
@@ -228,11 +228,14 @@ def edit_match_post(request):
             try:
                 match = Match.objects.get(id=pk)
 
-                if match.scout.userprofile.team.team_number != request.user.userprofile.team.team_number:
-                    return HttpResponse(status=403)
-
             except Match.DoesNotExist:
                 return HttpResponse(status=400)
+
+                # need to be manager (or needs to be their data)
+
+            if not request.user.is_superuser:
+                if not request.user.userprofile.team_manager and match.scout != request.user:
+                    return HttpResponse(status=403)
 
             if not request.POST.get('boolean', False):
                 value = request.POST.get('value')
@@ -251,11 +254,12 @@ def edit_match_post(request):
             try:
                 totestack = ToteStack.objects.get(id=pk)
 
-                if totestack.match.scout.userprofile.team.team_number != request.user.userprofile.team.team_number:
-                    return HttpResponse(status=403)
-
             except ToteStack.DoesNotExist:
                 return HttpResponse(status=400)
+
+            if not request.user.is_superuser:
+                if not request.user.userprofile.team_manager and totestack.match.scout != request.user:
+                    return HttpResponse(status=403)
 
             if not request.POST.get('boolean', False):
                 value = request.POST.get('value')
@@ -274,11 +278,12 @@ def edit_match_post(request):
             try:
                 containerstack = ContainerStack.objects.get(id=pk)
 
-                if containerstack.match.scout.userprofile.team.team_number != request.user.userprofile.team.team_number:
-                    return HttpResponse(status=403)
-
             except ToteStack.DoesNotExist:
                 return HttpResponse(status=400)
+
+            if not request.user.is_superuser:
+                if not request.user.userprofile.team_manager and containerstack.match.scout != request.user:
+                    return HttpResponse(status=403)
 
             if not request.POST.get('boolean', False):
                 value = request.POST.get('value')
@@ -301,11 +306,12 @@ def edit_match_post(request):
         try:
             totestack = ToteStack.objects.get(id=id)
 
-            if totestack.match.scout.userprofile.team.team_number != request.user.userprofile.team.team_number:
-                return HttpResponse(status=403)
-
         except ToteStack.DoesNotExist:
             return HttpResponse(status=400)
+
+        if not request.user.is_superuser:
+            if not request.user.userprofile.team_manager and totestack.match.scout != request.user:
+                return HttpResponse(status=403)
 
         try:
             totestack.x = request.POST.get('x')
