@@ -139,11 +139,11 @@
                 localStorage.removeItem('eventSchedule');
                 localStorage.removeItem('teamsAtEvent');
 
-                $.getJSON("http://www.thebluealliance.com/api/v2/event/2015{{ event_code }}/matches?X-TBA-App-Id=frc4030:frcscout.com:v1", function(data) {
+                $.getJSON("https://www.thebluealliance.com/api/v2/event/2015{{ event_code }}/matches?X-TBA-App-Id=frc4030:frcscout.com:v1", function(data) {
                     localStorage.eventSchedule = JSON.stringify(data);
                 });
 
-                $.getJSON("http://www.thebluealliance.com/api/v2/event/2015{{ event_code }}/teams?X-TBA-App-Id=frc4030:frcscout.com:v1", function(data) {
+                $.getJSON("https://www.thebluealliance.com/api/v2/event/2015{{ event_code }}/teams?X-TBA-App-Id=frc4030:frcscout.com:v1", function(data) {
                     localStorage.teamsAtEvent = JSON.stringify(data);
                 });
             });
