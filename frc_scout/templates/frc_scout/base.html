@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html manifest="/static/manifest/cache.manifest" type="text/cache-manifest">
 <head lang="en">
     {% load staticfiles %}
     <title>{% block title %}{% endblock %}</title>
@@ -61,6 +61,7 @@
     <script type="text/javascript" src="{% static 'frc_scout/js/bootstrap.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'frc_scout/js/jquery.cookie.js' %}"></script>
 {% endcompress %}
+<!-- bruh hell naw
 <script>
     // Google Analytics tracking code
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -70,6 +71,7 @@
     ga('create', 'UA-60158931-1', 'auto');
     ga('send', 'pageview');
 </script>
+-->
 {% block extra_js %}{% endblock %}
 </body>
 </html>

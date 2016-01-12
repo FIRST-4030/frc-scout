@@ -1,0 +1,32 @@
+CACHE MANIFEST
+
+
+
+#/
+
+/scouting/match/
+
+#/scouting/match/submit/
+
+/scouting/pit/
+
+#/scouting/pit/submit/
+
+/team/
+
+/static/CACHE/css/1bca11894133.css
+
+/static/CACHE/css/db48f5a585f0.css
+
+/static/CACHE/js/956dcfe86d41.js
+
+/static/CACHE/js/b18edc97fc82.js
+
+/static/frc_scout/img/start_zone.png
+
+#match data
+https://www.thebluealliance.com/api/v2/event/2015tes/matches?X-TBA-App-Id=frc4030:frcscout.com:v1
+https://www.thebluealliance.com/api/v2/event/2015tes/teams?X-TBA-App-Id=frc4030:frcscout.com:v1
+
+#this one is actually uh...submission off something idk remove later
+#https://www.thebluealliance.com/api/v2/event/2015tes/collect?X-TBA-App-Id=frc4030:frcscout.com:v1

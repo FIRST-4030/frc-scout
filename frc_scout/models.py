@@ -1,8 +1,8 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.utils import timezone
 
 # Create your models here.
-from django.utils import timezone
 
 User._meta.get_field('email')._unique = True
 
