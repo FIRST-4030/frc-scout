@@ -8,7 +8,7 @@ import decimal
 
 # Match Scouting
 from frc_scout.decorators import insecure_required
-from frc_scout.models import Match, Location, ToteStack, ContainerStack, PitScoutData, MatchPrivateComments
+from frc_scout.models import Match, Location, ToteStack, ContainerStack, PitScoutData, MatchPrivateComments, Event
 from frc_scout.tba_request import make_tba_request
 import requests
 
@@ -52,7 +52,9 @@ def submit_match_scouting_data(request):
         data = request.POST.get('data')
 
         matches = json.loads(data)
-
+        
+        eventsStorage = []
+        
         errors = []
 
         for match in matches:
@@ -99,40 +101,18 @@ def submit_match_scouting_data(request):
                     for auto_attr in auto:
                         setattr(match_object, auto_attr, auto.get(auto_attr))
 
-                # AUTONOMOUS FOULS AND OTHER
-                if match.get('autonomous_fouls_and_other'):
-                    auto_fouls_other = match.get('autonomous_fouls_and_other')
-
-                    for auto_fouls_other_attr in auto_fouls_other:
-                        setattr(match_object, auto_fouls_other_attr, auto_fouls_other.get(auto_fouls_other_attr))
-
                 # TELEOPERATED
                 if match.get('teleoperated'):
-                    tele = match.get('teleoperated')
+                    events = match.get('teleoperated')
+                    
+                    for x in range(events.length):
+                        event = events[x]
+                        event_object = Event(ev_num=x)
+                        for event_attr in event:
+                            setattr(event_object, event_attr, event.get(event_attr)) #todo: data validation. just in case.
+                        eventsStorage.append(event_object)
+                        
 
-                    for tele_attr in tele:
-                        setattr(match_object, tele_attr, tele.get(tele_attr))
-
-                # TELEOPERATED PICKED UP TOTES
-                if match.get('teleoperated_picked_up_totes'):
-                    tele_picked_up_totes = match.get('teleoperated_picked_up_totes')
-
-                    for tele_picked_up_totes_attr in tele_picked_up_totes:
-                        setattr(match_object, tele_picked_up_totes_attr, tele_picked_up_totes.get(tele_picked_up_totes_attr))
-
-                # TELEOPERATED PICKED UP BINS
-                if 'teleoperated_picked_up_containers' in match:
-                    tele_picked_up_containers = match['teleoperated_picked_up_containers']
-
-                    for tele_picked_up_containers_attr in tele_picked_up_containers:
-                        setattr(match_object, tele_picked_up_containers_attr, tele_picked_up_containers.get(tele_picked_up_containers_attr))
-
-                # TELEOPERATED FOULS AND OTHER
-                if match.get('teleoperated_fouls_and_other'):
-                    tele_fouls_other = match.get('teleoperated_fouls_and_other')
-
-                    for tele_fouls_other_attr in tele_fouls_other:
-                        setattr(match_object, tele_fouls_other_attr, tele_fouls_other.get(tele_fouls_other_attr))
 
                 pc = MatchPrivateComments()
                 # POSTMATCH
@@ -148,6 +128,9 @@ def submit_match_scouting_data(request):
                     match_object.save()
                     pc.match = match_object
                     pc.save()
+                    for event in eventsStorage:
+                        event.match=match_object
+                        event.save()
                 except (IntegrityError, ValueError, DataError, decimal.InvalidOperation):
                     try:
                         errors.append({
@@ -159,41 +142,12 @@ def submit_match_scouting_data(request):
                             'team_number': "Unknown",
                             'match_number': "Unknown",
                         })
-
-                if match.get('teleoperated_stacked_totes'):
-                    for stacked_totes in match.get('teleoperated_stacked_totes'):
-                        tote_stack = ToteStack()
-
-                        try:
-                            setattr(tote_stack, 'match', match_object)
-                            setattr(tote_stack, 'start_height', stacked_totes.get('start_height'))
-                            setattr(tote_stack, 'totes_added', stacked_totes.get('totes_added'))
-                            setattr(tote_stack, 'x', stacked_totes.get('x'))
-                            setattr(tote_stack, 'y', stacked_totes.get('y'))
-                            setattr(tote_stack, 'coop_stack', stacked_totes.get('coop_stack'))
-                        except KeyError:
-                            pass
-
-                        try:
-                            tote_stack.save()
-                        except IntegrityError:
-                            pass
-
-                if match.get('teleoperated_stacked_containers'):
-                    for stacked_containers in match.get('teleoperated_stacked_containers'):
-                        bin_stack = ContainerStack()
-
-                        setattr(bin_stack, 'match', match_object)
-                        setattr(bin_stack, 'height', stacked_containers)
-
-                        try:
-                            bin_stack.save()
-                        except IntegrityError:
-                            pass
+                
 
         if len(errors) != 0:
-            return HttpResponse(json.dumps(errors), status=200)
+            return HttpResponse(json.dumps(errors), status=400)
         else:
+            
             return HttpResponse(status=200)
 
 

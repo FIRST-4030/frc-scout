@@ -72,7 +72,7 @@ class Match(models.Model):
 
 class Event(models.Model):
     match = models.ForeignKey(Match)
-    ev_id = models.IntegerField()
+    ev_num = models.IntegerField(max_length=6)
     eventTypes = (
         (0,"LowGoal"),
         (1,"HighGoal"),
