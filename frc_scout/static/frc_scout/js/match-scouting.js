@@ -745,7 +745,7 @@ function openStage(stage) {
             console.log('runnnning');
             $("#select_team_number_select").find('label > span:contains(' + storedVariables.prematch.team_number + ')').parent().addClass('active');
         } else {
-            console.log('niooooo');
+            console.log('team number not found?');
         }
 
         $(".alliance-toggle").removeClass('active');

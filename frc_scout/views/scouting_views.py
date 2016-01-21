@@ -87,14 +87,10 @@ def submit_match_scouting_data(request):
 
                     for prematch_attr in prematch:
                         setattr(match_object, prematch_attr, prematch.get(prematch_attr))
-                        print(prematch_attr)
+                        #print(prematch_attr)
+                        #why are the debug prints in here? It'd kill performance?
 
-                # AUTO START LOCATION
-                if match.get('autonomous_starting_location'):
-                    auto_starting_location = match.get('autonomous_starting_location')
 
-                    for auto_start_attr in auto_starting_location:
-                        setattr(match_object, auto_start_attr, auto_starting_location.get(auto_start_attr))
 
                 # AUTONOMOUS
                 if match.get('autonomous'):

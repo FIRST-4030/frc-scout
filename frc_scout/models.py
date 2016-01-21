@@ -64,49 +64,32 @@ class Match(models.Model):
     # Autonomous
     auto_start_x = models.DecimalField(default=0, max_digits=20, decimal_places=16)
     auto_start_y = models.DecimalField(default=0, max_digits=20, decimal_places=16)
-
-    auto_yellow_stacked_totes = models.IntegerField(default=0, verbose_name="Yellow totes stacked")
-    auto_yellow_moved_totes = models.IntegerField(default=0, verbose_name="Yellow totes moved")
-    auto_grey_acquired_totes = models.IntegerField(default=0, verbose_name="Grey totes acquired")
-
-    auto_step_center_acquired_containers = models.IntegerField(default=0, verbose_name="Containers acquired from center step")
-    auto_ground_acquired_containers = models.IntegerField(default=0, verbose_name="Containers acquired from ground")
-    auto_moved_containers = models.IntegerField(default=0, verbose_name="Containers moved")
-
-    auto_moved_to_auto_zone = models.BooleanField(default=False, verbose_name="Moved to Auto Zone")
-    auto_no_auto = models.BooleanField(default=False, verbose_name="No autonomous")
-
-    auto_fouls = models.IntegerField(default=0, verbose_name="Autonomous mess-ups committed")
-    auto_interference = models.IntegerField(default=0, verbose_name="Interference committed")
-
-    # Teleoperated
-    tele_picked_up_ground_upright_totes = models.IntegerField(default=0, verbose_name="Upright totes picked up")
-    tele_picked_up_upside_down_totes = models.IntegerField(default=0, verbose_name="Upside-down totes picked up")
-    tele_picked_up_sideways_totes = models.IntegerField(default=0, verbose_name="Sideways totes picked up")
-    tele_picked_up_human_station_totes = models.IntegerField(default=0, verbose_name="Totes received from human station")
-
-    tele_picked_up_sideways_containers = models.IntegerField(default=0, verbose_name="Sideways containers picked up")
-    tele_picked_up_upright_containers = models.IntegerField(default=0, verbose_name="Upright containers picked up")
-    tele_picked_up_center_step_containers = models.IntegerField(default=0, verbose_name="Center-step containers picked up")
-
-    tele_pushed_litter = models.IntegerField(default=0, verbose_name="Litter pushed")
-    tele_placed_in_container_litter = models.IntegerField(default=0, verbose_name="Litter placed in container")
-
-    tele_fouls = models.IntegerField(default=0, verbose_name="Teleoperated fouls committed")
-    tele_knocked_over_stacks = models.IntegerField(default=0, verbose_name="Stacks knocked over")
-
-    tele_dead_bot = models.BooleanField(default=False, verbose_name="Robot died")
-    tele_container_fell_off = models.IntegerField(default=0, verbose_name="Containers dropped")
-
-    tele_foul_context = models.TextField(null=True, blank=True)
-    tele_public_comments = models.TextField(null=True, blank=True)
-
-    match_final_score = models.IntegerField(verbose_name="Final match score", null=True)
+    
 
     def __str__(self):
         return str("Team: %i | Match: %i | Location: %s" % (self.team_number, self.match_number, self.location.name))
 
 
+class Event(models.Model):
+    match = models.ForeignKey(Match)
+    ev_id = models.IntegerField()
+    eventTypes = (
+        (0,"LowGoal"),
+        (1,"HighGoal"),
+        (2,"Crossing"),
+        (3,"PickupBall"),
+        (4,"BlockedShot"),
+        (5,"BlockedCrossing")
+        )
+    time = models.FloatField()
+    endTime = models.FloatField(null=True)
+    evType = models.IntegerField(max_length=1,
+                                choices=eventTypes,
+                                default=0)
+    evId = models.IntegerField(max_length=1, default = 0)
+    x = models.FloatField(null=True)
+    y = models.FloatField(null=True)
+    target = models.IntegerField(max_length=1,default=0, null=True)
 class MatchPrivateComments(models.Model):
     class Meta:
         verbose_name_plural = "Match private comments"
@@ -159,6 +142,9 @@ class PitScoutData(models.Model):
     robot_height = models.FloatField(null=True, verbose_name="Robot Height")
     robot_weight = models.FloatField(null=True)
     robot_speed = models.FloatField(null=True)
+    robot_wheel_count = models.IntegerField(null=True, max_length=2)
+    can_strafe = models.NullBooleanField(null=True)
+    
 
     driver_1 = models.TextField(max_length=64, default=None, null=True)
     driver_2 = models.TextField(max_length=64, default=None, null=True)
@@ -166,23 +152,26 @@ class PitScoutData(models.Model):
     drive_coach_is_mentor = models.NullBooleanField(null=True)
 
     # autonomous
-    can_move_totes = models.NullBooleanField(null=True)
-    can_move_containers = models.NullBooleanField(null=True)
-    can_acquire_containers = models.NullBooleanField(null=True)
+    can_reach_works = models.NullBooleanField(null=True)
+    can_cross_works = models.NullBooleanField(null=True)
+    can_score_boulders = models.NullBooleanField(null=True)
     auto_start_x = models.FloatField(null=True)
     auto_start_y = models.FloatField(null=True)
 
     # teleoperated
-    tote_stack_capacity = models.IntegerField(max_length=3, default=None, null=True)
-
-    # human interaction
-    human_tote_loading = models.NullBooleanField(null=True)
-    human_litter_loading = models.NullBooleanField(null=True)
-    human_litter_throwing = models.NullBooleanField(null=True)
-
-    # maneuvering
-    has_turret = models.NullBooleanField(null=True)
-    has_strafing = models.NullBooleanField(null=True)
+    can_score_high = models.NullBooleanField(null=True)
+    can_score_low = models.NullBooleanField(null=True)
+    can_cross_portcullis = models.NullBooleanField(null=True)
+    can_cross_cheval = models.NullBooleanField(null=True)
+    can_cross_moat = models.NullBooleanField(null=True)
+    can_cross_ramparts = models.NullBooleanField(null=True)
+    can_cross_drawbridge = models.NullBooleanField(null=True)
+    can_cross_sally_port = models.NullBooleanField(null=True)
+    can_cross_rock_wall = models.NullBooleanField(null=True)
+    can_cross_rough_terrain = models.NullBooleanField(null=True)
+    can_cross_low_bar = models.NullBooleanField(null=True)
+    
+    
 
     # other
     known_strengths = models.TextField(max_length=256, null=True)
