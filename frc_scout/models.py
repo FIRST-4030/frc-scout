@@ -65,6 +65,10 @@ class Match(models.Model):
     auto_start_x = models.DecimalField(default=0, max_digits=20, decimal_places=16)
     auto_start_y = models.DecimalField(default=0, max_digits=20, decimal_places=16)
     
+    high_goals = models.IntegerField(max_length=3, default=0)
+    low_goals = models.IntegerField(max_length=3, default=0)
+    blocks = models.IntegerField(max_length=3, default=0)
+    crosses = models.IntegerField(max_length=3, default=0)
 
     def __str__(self):
         return str("Team: %i | Match: %i | Location: %s" % (self.team_number, self.match_number, self.location.name))
@@ -102,29 +106,6 @@ class MatchPrivateComments(models.Model):
                    (self.match.team_number, self.match.match_number, self.match.location.name))
 
 
-class ToteStack(models.Model):
-    match = models.ForeignKey(Match)
-    start_height = models.IntegerField(default=0)
-    totes_added = models.IntegerField(default=0)
-    x = models.DecimalField(max_digits=20, decimal_places=16)
-    y = models.DecimalField(max_digits=20, decimal_places=16)
-    coop_stack = models.BooleanField(default=False)
-
-    def __str__(self):
-        return str("Team: %i | Match: %i | Location: %s" %
-                   (self.match.team_number, self.match.match_number, self.match.location.name))
-
-
-class ContainerStack(models.Model):
-    match = models.ForeignKey(Match)
-    height = models.IntegerField(default=1)
-    containers_added = models.IntegerField(default=1)
-
-    def __str__(self):
-        return str("Team: %i | Match: %i | Location: %s" %
-                   (self.match.team_number, self.match.match_number, self.match.location.name))
-
-
 class PitScoutData(models.Model):
     class Meta:
         verbose_name_plural = "Pit scout data"
@@ -133,7 +114,7 @@ class PitScoutData(models.Model):
     location = models.ForeignKey(Location)
 
     pitscout_name = models.TextField(null=True, blank=True)
-    pitscout_team_number = models.IntegerField(null=True, blank=True)
+    pitscout_team = models.IntegerField(null=True, blank=True)
 
     team_number = models.IntegerField(max_length=5, verbose_name="Team Number")
     team_name = models.TextField(max_length=64, default=None, null=True, verbose_name="Team Name")

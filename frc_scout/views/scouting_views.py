@@ -2,13 +2,13 @@ import json
 from django.core.urlresolvers import reverse
 from django.db.utils import IntegrityError, DataError
 from django.shortcuts import render
-from django.http import Http404, HttpResponse
+from django.http import Http404, HttpResponse, JsonResponse
 import decimal
 
 
 # Match Scouting
 from frc_scout.decorators import insecure_required
-from frc_scout.models import Match, Location, ToteStack, ContainerStack, PitScoutData, MatchPrivateComments, Event
+from frc_scout.models import Match, Location, PitScoutData, MatchPrivateComments, Event
 from frc_scout.tba_request import make_tba_request
 import requests
 
@@ -145,9 +145,8 @@ def submit_match_scouting_data(request):
                 
 
         if len(errors) != 0:
-            return HttpResponse(json.dumps(errors), status=400)
+            return JsonResponse(errors, status=400, safe=False)
         else:
-            
             return HttpResponse(status=200)
 
 
