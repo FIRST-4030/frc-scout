@@ -37,7 +37,7 @@ def tableau_info(request):
     return render(request, "frc_scout/results/tableau.html", context)
 
 @insecure_required
-def view_match_data(request):
+def view_team_match_data(request):
     if not request.user.is_authenticated():
         return  HttpResponse(status=403)
     if request.method != "POST":
@@ -46,6 +46,9 @@ def view_match_data(request):
         data = request.POST.get('data')
         
         params = json.loads(data)
+        
+        if not params.get("team"):
+            return HttpResponse('{"error":"missing team number"', status=400)
         
         matches = Match.objects.filter(team_number=params.get("team")).exclude(location__name="TEST")
         if not params.get("god"):
@@ -56,12 +59,47 @@ def view_match_data(request):
             matches.filter(**params.get("filter"))
         if params.get("order"):
             matches.order_by(params.get("order"))
-        results = []
-        for x in matches:
-            events = Event.objects.filter(match=x)
-            x.events = [y for y in events]
-            results.append(x)
+        if params.get("columns"):
+            results = [x for x in matches.values(params.get("columns"))]
+        else:
+            results = [x for x in matches.values()]
         return JsonResponse(results, safe=False)
+@insecure_required
+def view_event_data(request):
+    if not request.user.is_authenticated():
+        return  HttpResponse(status=403)
+    if request.method != "POST":
+        return HttpResponseNotAllowed(["Post"])
+    else:
+        data = request.POST.get('data')
+        params = json.loads(data)
+        if not params.get("match"):
+            return HttpResponse('{"error":"missing match number"', status=400)
+        events = Event.objects.filter(match_id=params.get("match")).order_by("time").values()
+        results = [x for x in events]
+        return JsonResponse(results, safe=False)
+@insecure_required
+def view_team_event_data(request):
+    if not request.user.is_authenticated():
+        return  HttpResponse(status=403)
+    if request.method != "POST":
+        return HttpResponseNotAllowed(["Post"])
+    else:
+        data = request.POST.get('data')
+        params = json.loads(data)
+        if not params.get("team"):
+            return HttpResponse('{"error":"missing team number"', status=400)
+        events = Event.objects.filter(team_number=params.get("team"))
+        if params.get("filter"):
+            matches.filter(**params.get("filter"))
+        if params.get("order"):
+            matches.order_by(params.get("order"))
+        if params.get("columns"):
+            results = [x for x in matches.values(params.get("columns"))]
+        else:
+            results = [x for x in matches.values()]
+    return JsonResponse(results, safe=False)
+        
 def view_pit_data(request):
     if not request.user.is_authenticated():
         return  HttpResponse(status=403)
@@ -72,7 +110,7 @@ def view_pit_data(request):
         
         params = json.loads(data)
         
-        matches = Match.objects.filter(team_number=params.get("team")).exclude(location__name="TEST")
+        matches = PitScoutData.objects.filter(team_number=params.get("team"))
         if not params.get("god"):
             matches = matches.filter(scout__userprofile__team__team_number=request.user.userprofile.team.team_number)
         

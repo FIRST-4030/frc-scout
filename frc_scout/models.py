@@ -75,22 +75,25 @@ class Match(models.Model):
 
 
 class Event(models.Model):
+    team_number = models.IntegerField(max_length=5)
     match = models.ForeignKey(Match)
-    ev_num = models.IntegerField(max_length=6)
     eventTypes = (
         (0,"LowGoal"),
         (1,"HighGoal"),
         (2,"Crossing"),
         (3,"PickupBall"),
         (4,"BlockedShot"),
-        (5,"BlockedCrossing")
+        (5,"BlockedCrossing"),
+        (6,"GameEnd")
         )
     time = models.FloatField()
     endTime = models.FloatField(null=True)
     evType = models.IntegerField(max_length=1,
                                 choices=eventTypes,
                                 default=0)
-    evId = models.IntegerField(max_length=1, default = 0)
+    nextEvType = models.IntegerField(max_length=1,
+                                choices=eventTypes,
+                                default=6)
     x = models.FloatField(null=True)
     y = models.FloatField(null=True)
     target = models.IntegerField(max_length=1,default=0, null=True)
@@ -104,7 +107,6 @@ class MatchPrivateComments(models.Model):
     def __str__(self):
         return str("Team: %i | Match: %i | Location: %s" %
                    (self.match.team_number, self.match.match_number, self.match.location.name))
-
 
 class PitScoutData(models.Model):
     class Meta:
