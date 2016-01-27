@@ -48,11 +48,11 @@ class Match(models.Model):
     class Meta:
         verbose_name_plural = "Matches"
 
-    # References
-
+    # provide everything after this
+    
     scout_team_number = models.IntegerField(max_length=5)
     scout_name = models.TextField()
-
+    
     no_show = models.BooleanField(default=False)
 
     team_number = models.IntegerField(max_length=5)
@@ -77,6 +77,7 @@ class Match(models.Model):
 class Event(models.Model):
     team_number = models.IntegerField(max_length=5)
     match = models.ForeignKey(Match)
+    #provide all of these, as approprite
     eventTypes = (
         (0,"LowGoal"),
         (1,"HighGoal"),
@@ -86,6 +87,7 @@ class Event(models.Model):
         (5,"BlockedCrossing"),
         (6,"GameEnd")
         )
+    #seconds since match start as time
     time = models.FloatField()
     endTime = models.FloatField(null=True)
     evType = models.IntegerField(max_length=1,
@@ -114,7 +116,7 @@ class PitScoutData(models.Model):
 
     scout = models.ForeignKey(User)
     location = models.ForeignKey(Location)
-
+    #You need to provide everything after this
     pitscout_name = models.TextField(null=True, blank=True)
     pitscout_team = models.IntegerField(null=True, blank=True)
 
@@ -160,7 +162,7 @@ class PitScoutData(models.Model):
     known_strengths = models.TextField(max_length=256, null=True)
     known_weaknesses = models.TextField(max_length=256, null=True)
 
-    # image info
+    # image info (I have no idea how you do this ask terabyte)
     image_id = models.TextField(max_length=256, null=True, blank=True)
     image_link = models.TextField(max_length=256, null=True, blank=True)
     image_type = models.TextField(max_length=64, null=True, blank=True)

@@ -180,7 +180,7 @@ def submit_pit_scouting_data(request):
             setattr(data_object, 'team_website', json_decoded.get('website'))
 
         except ValueError:
-            pass
+            pass 
 
         try:
             data_object.save()

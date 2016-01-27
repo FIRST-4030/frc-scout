@@ -110,7 +110,13 @@ def view_pit_data(request):
         
         params = json.loads(data)
         
-        matches = PitScoutData.objects.filter(team_number=params.get("team"))
+        pit = PitScoutData.objects.filter(team_number=params.get("team"))
         if not params.get("god"):
-            matches = matches.filter(scout__userprofile__team__team_number=request.user.userprofile.team.team_number)
-        
+            pit = pit.filter(scout__userprofile__team__team_number=request.user.userprofile.team.team_number)
+        if params.get("this_location"):
+            pit = pit.filter(location=request.session.get('location_id'))
+        if params.get("columns"):
+            results = [x for x in pit.values(params.get("columns"))]
+        else:
+            results = [x for x in pit.values()]
+    return JsonResponse(results, safe=False)
