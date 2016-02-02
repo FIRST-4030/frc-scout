@@ -5,7 +5,7 @@ from django.db.models.aggregates import Avg, Count, Sum
 from django.forms.models import model_to_dict
 from django.http.response import Http404, HttpResponse
 from django.shortcuts import render
-from frc_scout.models import Location, Match, ToteStack, ContainerStack
+from frc_scout.models import Location, Match, Event
 
 
 @login_required
@@ -40,8 +40,6 @@ def update_scouts(request):
     if request.method == "POST":
 
         if 'scout_id' in request.POST:
-
-            print('if')
 
             scout_id = request.POST.get('scout_id')
             action = request.POST.get('action')
@@ -120,16 +118,12 @@ def find_match(request):
         matches = matches[:MAX_RESULTS]
 
         for match in matches:
-            auto_score, tele_score = match_score(match)
 
             processed_matches.append({
                 'scout': match.scout,
                 'team_number': match.team_number,
                 'id': match.id,
                 'match_number': match.match_number,
-                'match_final_score': match.match_final_score,
-                'auto_score': int(auto_score),
-                'tele_score': int(tele_score),
                 'timestamp': match.timestamp,
                 })
 
@@ -137,38 +131,6 @@ def find_match(request):
 
     return render(request, 'frc_scout/manage/find_match.html', context)
 
-
-def match_score(match):
-    auto_score = 0
-
-    # multiply by point value, divide by robots per alliance
-
-    if match.auto_moved_to_auto_zone is not None:
-        auto_score += (match.auto_moved_to_auto_zone / 3 * 4)
-
-    if match.auto_yellow_moved_totes is not None:
-        auto_score += (match.auto_yellow_moved_totes / 3 * 6)
-
-    if match.auto_moved_containers is not None:
-        auto_score += (match.auto_moved_containers / 3 * 8)
-
-    if match.auto_yellow_stacked_totes is not None:
-        auto_score += (match.auto_yellow_stacked_totes / 3 * 20)
-
-    tele_score = 0
-
-    # worth 2 per tote stacked
-    if match.totestack_set.exclude(coop_stack=True).count() > 0:
-        tele_score += match.totestack_set.exclude(coop_stack=True).aggregate(Sum('totes_added'))['totes_added__sum'] * 2
-
-    # 4 totes for 40 points -> 1 tote for 10 points, sort of
-    if match.totestack_set.filter(coop_stack=True).count() > 0:
-        tele_score += match.totestack_set.filter(coop_stack=True).aggregate(Sum('totes_added'))['totes_added__sum'] * 10
-
-    if match.containerstack_set.count() > 0:
-        tele_score += match.containerstack_set.aggregate(Sum('height'))['height__sum'] * 4
-
-    return auto_score, tele_score
 
 
 @login_required

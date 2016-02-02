@@ -49,6 +49,24 @@ class Match(models.Model):
         verbose_name_plural = "Matches"
 
     # provide everything after this
+    """Sample here
+    {
+        "scout_team_number" : 1899,
+        "scout_name" : "Twilight Sparkle",
+        "no_show" : false,
+        "team_number" : 1988
+        "auto_start_x" : 100,
+        "auto_start_y" : 100,
+        "high_goals" : 9001,
+        "low_goals" : 9001,
+        "blocks_goals" : 9001,
+        "crosses_goals" : 9001,
+        "events" : [
+            {...},
+            {...},
+        ]
+    }
+    """
     
     scout_team_number = models.IntegerField(max_length=5)
     scout_name = models.TextField()
@@ -56,15 +74,20 @@ class Match(models.Model):
     no_show = models.BooleanField(default=False)
 
     team_number = models.IntegerField(max_length=5)
+    #you don't need to provide this
     scout = models.ForeignKey(User)
+    #Get from either TBA or user input
     match_number = models.IntegerField()
+    #Don't need this unless you wait to upload
     timestamp = models.DateTimeField(default=get_current_time)
+    #don't provide this
     location = models.ForeignKey(Location)
 
     # Autonomous
     auto_start_x = models.DecimalField(default=0, max_digits=20, decimal_places=16)
     auto_start_y = models.DecimalField(default=0, max_digits=20, decimal_places=16)
     
+    #averageable stats
     high_goals = models.IntegerField(max_length=3, default=0)
     low_goals = models.IntegerField(max_length=3, default=0)
     blocks = models.IntegerField(max_length=3, default=0)
@@ -77,6 +100,7 @@ class Match(models.Model):
 class Event(models.Model):
     team_number = models.IntegerField(max_length=5)
     match = models.ForeignKey(Match)
+    ev_num = models.IntegerField(max_length=2, default=0)
     #provide all of these, as approprite
     eventTypes = (
         (0,"LowGoal"),

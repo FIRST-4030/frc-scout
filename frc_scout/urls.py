@@ -9,7 +9,6 @@ urlpatterns = patterns(
 
     # About us
     url(r'^about/$', views.about, name='about_us'),
-
     # Views dealing with session stuff stored in session_views.py
     url(r'^$', views.index, name='index'),
     url(r'^login/$', views.login_view, name='login'),
@@ -21,8 +20,7 @@ urlpatterns = patterns(
     url(r'^json/username_exists/$', views.check_if_username_exists, name='check_if_username_exists'),
     url(r'^json/locations/$', views.get_locations, name='get_locations'),
     url(r'^json/results/averages/$', views.get_averages, name='get_averages'),
-    url(r'^json/results/totes_stacked_and_containers_scored/$', views.totes_stacked_and_containers_scored, name='totes_stacked_and_containers_scored'),
-
+    
     # Team management views
     url(r'^manage/scouts/$', views.view_scouts, name='view_scouts'),
     url(r'^manage/scouts/update/$', views.update_scouts, name='update_scouts'),
@@ -45,17 +43,10 @@ urlpatterns = patterns(
     # Profile views
     url(r'^team/$', views.view_team_profile, name='view_team_profile'),
     url(r'^team/(?P<team_number>-?[0-9]+)/$', views.view_team_profile, name='view_team_profile'),
-    url(r'^team/(?P<team_number>-?[0-9]+)/matches/$', views.view_team_matches, name='view_team_matches'),
     url(r'^team/(?P<team_number>-?[0-9]+)/pit/$', views.view_team_pit_data, name='view_team_pit_data'),
-    url(r'^team/(?P<team_number>-?[0-9]+)/map/$', views.view_team_auto_heatmap, name='view_team_map'),
 
-    url(r'^team/edit/$', views.edit_team_profile, name='edit_team_profile'),
+    url(r'^team/edit/$', views.edit_team_profiles, name='edit_team_profile'),
 
-    # Averages views
-    url(r'^results/averages/$', views.view_team_averages, {'only_us':False, 'only_here':True}, name='view_team_averages'),
-    url(r'^results/averages/us/$', views.view_team_averages, {'only_us':True, 'only_here':True}, name='view_team_averages'),
-    url(r'^results/averages/everywhere/$', views.view_team_averages, {'only_us':False, 'only_here':False}, name='view_team_averages'),
-    url(r'^results/averages/everywhere/us/$', views.view_team_averages, {'only_us':True, 'only_here':False}, name='view_team_averages'),
 
     # Results views
     url(r'^results/database/$', views.database_instructions, name='database_instructions'),
@@ -63,5 +54,8 @@ urlpatterns = patterns(
 
     # Event views
     url(r'^event/teams/$', views.teams_at_event, name='teams_at_event'),
+    
+    
 
+    
     )

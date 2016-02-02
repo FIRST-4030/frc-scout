@@ -2,9 +2,8 @@ from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseNotAllowed, JsonResponse
 from django.shortcuts import render
-from frc_scout.models import Team, Match, Event
+from frc_scout.models import Team, Match, Event, PitScoutData
 from frc_scout.decorators import insecure_required
-from frc_scout.views.team_management_views import match_score
 import json
 
 __author__ = 'Sam'
@@ -91,13 +90,13 @@ def view_team_event_data(request):
             return HttpResponse('{"error":"missing team number"', status=400)
         events = Event.objects.filter(team_number=params.get("team"))
         if params.get("filter"):
-            matches.filter(**params.get("filter"))
+            events.filter(**params.get("filter"))
         if params.get("order"):
-            matches.order_by(params.get("order"))
+            events.order_by(params.get("order"))
         if params.get("columns"):
-            results = [x for x in matches.values(params.get("columns"))]
+            results = [x for x in events.values(params.get("columns"))]
         else:
-            results = [x for x in matches.values()]
+            results = [x for x in events.values()]
     return JsonResponse(results, safe=False)
         
 def view_pit_data(request):

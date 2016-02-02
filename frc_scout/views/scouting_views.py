@@ -44,13 +44,11 @@ def pit_scouting(request):
     return render(request, 'frc_scout/scouting/pit/container.html', context)
 
 
-@insecure_required
 def submit_match_scouting_data(request):
     if request.method != "POST":
         raise Http404
     else:
-        data = request.POST.get('data')
-
+        data = str(request.POST.get('data'))
         matches = json.loads(data)
         
         eventsStorage = []
@@ -65,7 +63,7 @@ def submit_match_scouting_data(request):
                 # All variables that are NOT in separate database tables
                 #
 
-                if match['postmatch'].get('practice_scouting'):
+                if match['practice_scouting']:
                     try:
                         location = Location.objects.filter(name="TEST")[0]
                     except Location.DoesNotExist and IndexError:
@@ -83,64 +81,37 @@ def submit_match_scouting_data(request):
                                      scout_name=request.user.first_name + " " + request.user.last_name[:1],
                                      scout_team_number=request.user.userprofile.team.team_number)
 
-                # PRE-MATCH
-                if match.get('prematch'):
-                    prematch = match.get('prematch')
-
-                    for prematch_attr in prematch:
-                        setattr(match_object, prematch_attr, prematch.get(prematch_attr))
-                        #print(prematch_attr)
-                        #why are the debug prints in here? It'd kill performance?
-
-
-
-                # AUTONOMOUS
-                if match.get('autonomous'):
-                    auto = match.get('autonomous')
-
-                    for auto_attr in auto:
-                        setattr(match_object, auto_attr, auto.get(auto_attr))
-
                 # TELEOPERATED
-                if match.get('teleoperated'):
-                    events = match.get('teleoperated')
+                if match['events']:
+                    events = match.pop('events')
                     
-                    for x in range(events.length):
+                    for x in range(len(events)):
                         event = events[x]
-                        event_object = Event(ev_num=x)
+                        event_object = Event(ev_num=x,team_number=match['team_number'])
                         for event_attr in event:
                             setattr(event_object, event_attr, event.get(event_attr)) #todo: data validation. just in case.
                         eventsStorage.append(event_object)
-                        
-
-
-                pc = MatchPrivateComments()
-                # POSTMATCH
-                if match.get('postmatch'):
-                    postmatch = match.get('postmatch')
-
-                    for postmatch_attr in postmatch:
-                        setattr(match_object, postmatch_attr, postmatch.get(postmatch_attr))
-
-                    # private comments
-                    pc.comments = postmatch.get('tele_private_comments', None)
+                
+                for attr in match:
+                    setattr(match_object, attr, match.get(attr))
+                print(str(match_object.__dict__))
                 try:
                     match_object.save()
-                    pc.match = match_object
-                    pc.save()
                     for event in eventsStorage:
                         event.match=match_object
                         event.save()
-                except (IntegrityError, ValueError, DataError, decimal.InvalidOperation):
+                except (IntegrityError, ValueError, DataError, decimal.InvalidOperation) as e:
                     try:
                         errors.append({
                             'team_number': match.get('prematch').get('team_number'),
                             'match_number': match.get('prematch').get('match_number'),
+                            'error':str(e)
                             })
                     except AttributeError:
                         errors.append({
                             'team_number': "Unknown",
                             'match_number': "Unknown",
+                            'error':str(e)
                         })
                 
 
