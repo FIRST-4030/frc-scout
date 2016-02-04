@@ -42,7 +42,7 @@ def view_team_match_data(request):
     if request.method != "POST":
         return HttpResponseNotAllowed(["Post"])
     else:
-        data = request.POST.get('data')
+        data = str(request.POST.get('data'))
         
         params = json.loads(data)
         

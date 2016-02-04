@@ -56,6 +56,9 @@ urlpatterns = patterns(
     url(r'^event/teams/$', views.teams_at_event, name='teams_at_event'),
     
     
-
+    #I'll organize these somday
+    url(r'^dev/team_match/$', views.view_team_match_data, name='team_match_data'),
+    url(r'^dev/match_event_data/$', views.view_event_data, name='match_event_data'),
+    url(r'^dev/team_event/$', views.view_team_event_data, name='team_event_data'),
     
     )

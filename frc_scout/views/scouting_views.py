@@ -127,8 +127,8 @@ def submit_pit_scouting_data(request):
         return HttpResponse(status=403)
 
     else:
-        data = json.loads(request.POST.get('data'))
-        image_data = json.loads(request.POST.get('image_data'))
+        data = json.loads(str(request.POST.get('data')))
+        image_data = json.loads(str(request.POST.get('image_data')))
 
         data_object = PitScoutData(scout=request.user,
                                    location=Location.objects.get(id=request.session.get('location_id')),

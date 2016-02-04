@@ -123,6 +123,7 @@ class Event(models.Model):
     x = models.FloatField(null=True)
     y = models.FloatField(null=True)
     target = models.IntegerField(max_length=1,default=0, null=True)
+    is_auton = models.BooleanField(default=False)
 class MatchPrivateComments(models.Model):
     class Meta:
         verbose_name_plural = "Match private comments"

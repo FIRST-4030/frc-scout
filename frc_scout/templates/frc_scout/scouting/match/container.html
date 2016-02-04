@@ -8,7 +8,7 @@
 {% block extra_css %}
     {% compress css inline %}
         <style type="text/css">
-            {#            ::-webkit-input-placeholder { /* WebKit browsers */#}
+            ::-webkit-input-placeholder { /* WebKit browsers */
             {#                color:    #666666 !important;#}
             {#            }#}
             {#            :-moz-placeholder { /* Mozilla Firefox 4 to 18 */#}
@@ -134,7 +134,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div>
-                    <img src="{% static "frc_scout/img/start_zone.png" %}" class="auto-location-image" id="auto_start_image">
+                    <img src="{% static "frc_scout/img/start_zone_2016.png" %}" class="auto-location-image" id="auto_start_image">
                 </div>
             </div>
         </div>
@@ -151,85 +151,68 @@
             <div class="col-md-6">
                 <h2>Autonomous<span class="team-number"></span></h2>
             </div>
-            <div class="col-md-6">
-                <button id="auto_no_auto" onclick="saveAndContinue('autonomous_fouls_and_other', 'teleoperated', this);" class="btn btn-extra-high btn-lg-text btn-warning max-width" style="margin-top: 20px;">no auto  &nbsp;<span class="glyphicon glyphicon-arrow-right"></span></button>
-            </div>
         </div>
         <div class="row">
             <div class="col-sm-6">
-                <h3>Totes</h3>
+                <h3>Enemy Side</h3>
                 <div class="row">
                     <div class="col-xs-8">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="auto-moved-yellow-tote" data-operation="add">Yellow Tote in Zone</button>
-                    </div>
-                    <div class="col-xs-2">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning btn-add-subtract" data-name="auto-moved-yellow-tote" data-operation="subtract">&mdash;</button>
-                    </div>
-                    <div class="col-xs-2 text-center">
-                        <h4 class="button-state-text" id="auto-moved-yellow-tote-text" data-max="3">0</h4>
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="LowGoal" data-operation="add">Made Low Goal</button>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-xs-8">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="auto-stacked-yellow-tote" data-operation="add">Stacked Yellow</button>
-                    </div>
-                    <div class="col-xs-2">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning btn-add-subtract" data-name="auto-stacked-yellow-tote" data-operation="subtract">&mdash;</button>
-                    </div>
-                    <div class="col-xs-2 text-center">
-                        <h4 class="button-state-text" id="auto-stacked-yellow-tote-text" data-max="3">0</h4>
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="HighGoal" data-operation="add">Made High Goal</button>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-xs-8">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="auto-acquired-grey-tote" data-operation="add">Acquired Grey</button>
-                    </div>
-                    <div class="col-xs-2">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning btn-add-subtract" data-name="auto-acquired-grey-tote" data-operation="subtract">&mdash;</button>
-                    </div>
-                    <div class="col-xs-2 text-center">
-                        <h4 class="button-state-text" id="auto-acquired-grey-tote-text">0</h4>
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="Crossing" data-operation="add">Crossed</button>
                     </div>
                 </div>
             </div>
-
+            
+            
             <div class="col-sm-6">
-                <h3>Containers</h3>
-
+                <h3>Inbetween</h3>
                 <div class="row">
                     <div class="col-xs-8">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" onclick="saveAndContinue('autonomous', 'autonomous_containers_unscored');">collected (not scored)</button>
-                    </div>
-                    <div class="col-xs-2">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning btn-add-subtract auto-container-undo" data-affect="autonomous_containers_unscored">&mdash;</button>
-                    </div>
-                    <div class="col-xs-2 text-center">
-                        <h4 class="button-state-text" data-field="autonomous_containers_unscored" id="auto_unscored_container_text">0</h4>
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="Crossing" data-operation="add">Crossed</button>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-xs-8">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" onclick="saveAndContinue('autonomous', 'autonomous_containers_scored');">Scored</button>
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="PickupBall" data-operation="add">Picked up Ball</button>
                     </div>
-                    <div class="col-xs-2">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning btn-add-subtract auto-container-undo" data-affect="autonomous_containers_scored">&mdash;</button>
-                    </div>
-                    <div class="col-xs-2 text-center">
-                        <h4 class="button-state-text" data-field="autonomous_containers_scored" id="auto_scored_container_text">0</h4>
+                </div>
+            </div>
+            
+            <div class="col-sm-6">
+                <h3>Your Side</h3>
+                <div class="row">
+                    <div class="col-xs-8">
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="BlockedShot" data-operation="add">Blocked a Shot</button>
                     </div>
                 </div>
 
-                <div class="row" style="margin-top:20px;">
-                    <div class="col-xs-7">
-                        <span class='btn-lg-text'>ROBOT ENDED IN AUTO ZONE</span>
-                    </div>
-                    <div class='col-xs-5 text-right'>
-                        <input type="checkbox" id="auto_moved_to_alliance_zone">
+                <div class="row">
+                    <div class="col-xs-8">
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="BlockedCrossing" data-operation="add">Blocked a crossing</button>
                     </div>
                 </div>
+            </div>
+            
+            <div class="col-sm-6">
+                <div class="col-sm-4 col-sm-push-4">
+                <!-- THE UNDO BUTTON! Javascript has not yet been implemented for this. Tell me (Drew) when Javascript exists to undo a button press  --> 
+                <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name:"Undo" data-operation="Undo"> Undo </button>
+                </div>
+            </div>
+
+
             </div>
         </div>
         <br>
@@ -301,106 +284,67 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-sm-4">
-                <h3>Totes</h3>
-                <div class="row">
-                    <div class="col-xs-7">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width" onclick="saveAndContinue('teleoperated', 'teleoperated_picked_up_totes');">picked up</button>
-                    </div>
-                    <div class="col-xs-3">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning max-width" id="tele_picked_up_totes_subtract_button">&mdash;</button>
-                    </div>
-                    <div class="col-xs-2">
-                        <h4 class="button-state-text three-column" id="tele_picked_up_totes">0</h4>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-xs-7">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width" id="tele_stacked_totes_button" onclick="saveAndContinue('teleoperated', 'teleoperated_stacked_totes');">stacked</button>
-                    </div>
-                    <div class="col-xs-3">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning max-width" id="tele_stacked_totes_subtract">&mdash;</button>
-                    </div>
-                    <div class="col-xs-2">
-                        <h4 class="button-state-text three-column" id="tele_stacked_totes_text">0</h4>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-sm-4">
-                <h3>Containers</h3>
-                <div class="row">
-                    <div class="col-xs-7">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width" onclick="saveAndContinue('teleoperated', 'teleoperated_picked_up_containers');">picked up</button>
-                    </div>
-                    <div class="col-xs-3">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning max-width" id="tele_picked_up_containers_subtract">&mdash;</button>
-                    </div>
-                    <div class="col-xs-2">
-                        <h4 class="button-state-text three-column" id="tele_picked_up_containers_text" data-max="3">0</h4>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-xs-7">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width tele-stacked-containers" onclick="saveAndContinue('teleoperated', 'teleoperated_stacked_containers');">stacked</button>
-                    </div>
-                    <div class="col-xs-3">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning max-width tele-stacked-containers" id="tele_stacked_containers_subtract">&mdash;</button>
-                    </div>
-                    <div class="col-xs-2">
-                        <h4 class="button-state-text three-column" id="tele_stacked_containers_text" data-max="3">0</h4>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-sm-4">
-                <h3>Litter</h3>
-                <div class="row">
-                    <div class="col-xs-7">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="tele_pushed_litter" data-operation="add">pushed</button>
-                    </div>
-                    <div class="col-xs-3">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning max-width btn-add-subtract" data-name="tele_pushed_litter" data-operation="subtract">&mdash;</button>
-                    </div>
-                    <div class="col-xs-2">
-                        <h4 class="button-state-text three-column" id="tele_pushed_litter-text" data-max="20">0</h4>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-xs-7">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="tele_placed_in_container_litter" data-operation="add">in container</button>
-                    </div>
-                    <div class="col-xs-3">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-warning max-width btn-add-subtract" data-name="tele_placed_in_container_litter" data-operation="subtract">&mdash;</button>
-                    </div>
-                    <div class="col-xs-2">
-                        <h4 class="button-state-text three-column" id="tele_placed_in_container_litter-text" data-max="7">0</h4>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
             <div class="col-sm-6">
-                <h3 id="totes_in_possession_wrapper">Totes in possession: <span id="totes_in_possession">0</span></h3>
+                <h3>Enemy Side</h3>
+                <div class="row">
+                    <div class="col-xs-8">
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="LowGoal" data-operation="add">Made Low Goal</button>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-8">
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="HighGoal" data-operation="add">Made High Goal</button>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-8">
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="Crossing" data-operation="add">Crossed</button>
+                    </div>
+                </div>
             </div>
-            <div class="col-sm-6 text-right" id="died_during_match_text" style="display: none;">
-                <h3 style="color: darkred;">Robot died during match</h3>
+            
+            
+            <div class="col-sm-6">
+                <h3>Inbetween</h3>
+                <div class="row">
+                    <div class="col-xs-8">
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="Crossing" data-operation="add">Crossed</button>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-8">
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="PickupBall" data-operation="add">Picked up Ball</button>
+                    </div>
+                </div>
             </div>
-        </div>
-        <br>
-        <div class="row">
-            <div class="col-sm-4 col-sm-push-4">
-                <button class="btn btn-extra-high btn-danger btn-lg max-width" onclick="saveAndContinue('teleoperated', 'teleoperated_fouls_and_other');">Mess Ups</button>
+            
+            <div class="col-sm-6">
+                <h3>Your Side</h3>
+                <div class="row">
+                    <div class="col-xs-8">
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="BlockedShot" data-operation="add">Blocked a Shot</button>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-8">
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="BlockedCrossing" data-operation="add">Blocked a crossing</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-sm-6">
+                <div class="col-sm-4 col-sm-push-4">
+                <!-- THE UNDO BUTTON! Javascript has not yet been implemented for this. Tell me (Drew) when Javascript exists to undo a button press  --> 
+                <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name:"Undo" data-operation="Undo"> Undo </button>
+                </div>
             </div>
 
-            <div class="col-sm-4 col-sm-push-4">
-                <button class="btn btn-extra-high btn-primary btn-lg max-width" onclick="saveAndContinue('teleoperated', 'postmatch');">end match  &nbsp;<span class="glyphicon glyphicon-arrow-right"></span></button>
-            </div>
 
-            <div class="col-sm-4 col-sm-pull-8">
-                <button class="btn btn-extra-high btn-info btn-lg max-width" onclick="saveAndContinue('teleoperated', 'autonomous');"><span class="glyphicon glyphicon-arrow-left"></span>&nbsp; autoNomoUs</button>
             </div>
-
         </div>
     </div>
 
