@@ -51,7 +51,7 @@
     }
 }
 
-@media (max-width: 750px) {
+@media (max-width: 750px) {fau
     .btn-grid {
         height: 18vh !important;
         font-size: 20px;
@@ -96,6 +96,16 @@ body {
     max-width: 100%;
 
     background-color: cyan;
+}
+
+.input-location-image {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    margin-top: 10px;
+
+    height: 70vh;
+    max-width: 100%;
 }
 
 .three-column {

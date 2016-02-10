@@ -110,10 +110,10 @@
                 <button class="btn btn-extra-high btn-info btn-lg max-width" onclick="window.location = '{% url 'frc_scout:index' %}';"><span class="glyphicon glyphicon-arrow-left"></span> return home</button>
             </div>
             <div class="col-sm-4">
-                <button id="no_show" class="btn btn-extra-high btn-warning btn-lg max-width" onclick="saveAndContinue('prematch', 'finish', this);">No-show</button>
+                <button id="no_show" class="btn btn-extra-high btn-warning btn-lg max-width" onclick="changeStage('prematch',finish')">No-show</button>
             </div>
             <div class="col-sm-4">
-                <button class="btn btn-extra-high btn-primary btn-lg max-width" onclick="saveAndContinue('prematch', 'autonomous_starting_location');">autonomous &nbsp;<span class="glyphicon glyphicon-arrow-right"></span></button>
+                <button class="btn btn-extra-high btn-primary btn-lg max-width" onclick="changeStage('prematch','autonomous');">autonomous &nbsp;<span class="glyphicon glyphicon-arrow-right"></span></button>
             </div>
         </div>
         <Br>
@@ -125,10 +125,10 @@
     </div>
 
     <!-- AUTONOMOUS STARTING LOCATION -->
-    <div class="container-fluid stage" style="display: none;" id="autonomous_starting_location">
+    <div class="container-fluid stage" style="display: none;" id="autonomous_location">
         <div class="row">
             <div class="col-md-12">
-                <h2>Autonomous Start<span class="team-number"></span></h2>
+                <h2>Autonomous Start<span class="team-number"></span></h2>s
             </div>
         </div>
         <div class="row">
@@ -140,12 +140,12 @@
         </div>
         <div class="row">
             <div class="col-md-12">
-                <button class="btn btn-lg btn-info max-width" style="margin-top: 2vh; height: 10vh;" onclick="discardAndChangeStage('autonomous_starting_location', 'prematch');"><span class="glyphicon glyphicon-arrow-left"></span>&nbsp; preMatCH</button>
+                <button class="btn btn-lg btn-info max-width" style="margin-top: 2vh; height: 10vh;" onclick="discardAndChangeStage('autonomous_starting_location', 'prematch');"><span class="glyphicon glyphicon-arrow-left"></span>&nbsp; prematch</button>
             </div>
         </div>
     </div>
 
-    <!-- AUTONOMOUS -->
+    <!-- AUTONOMOUS EVENT SELECT -->
     <div class="container-fluid stage" style="display: none;" id="autonomous">
         <div class="row">
             <div class="col-md-6">
@@ -157,19 +157,13 @@
                 <h3>Enemy Side</h3>
                 <div class="row">
                     <div class="col-xs-8">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="LowGoal" data-operation="add">Made Low Goal</button>
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="LowGoal" selector="teleoperated_location">Made Low Goal</button>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-xs-8">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="HighGoal" data-operation="add">Made High Goal</button>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-xs-8">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="Crossing" data-operation="add">Crossed</button>
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="HighGoal" selector="teleoperated_location">Made High Goal</button>
                     </div>
                 </div>
             </div>
@@ -179,13 +173,13 @@
                 <h3>Inbetween</h3>
                 <div class="row">
                     <div class="col-xs-8">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="Crossing" data-operation="add">Crossed</button>
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="Crossing" selector="teleoperated_location">Crossed</button>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-xs-8">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="PickupBall" data-operation="add">Picked up Ball</button>
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="PickupBall" selector="teleoperated_location">Picked up Ball</button>
                     </div>
                 </div>
             </div>
@@ -194,13 +188,13 @@
                 <h3>Your Side</h3>
                 <div class="row">
                     <div class="col-xs-8">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="BlockedShot" data-operation="add">Blocked a Shot</button>
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="BlockedShot" selector="teleoperated_location">Blocked a Shot</button>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-xs-8">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="BlockedCrossing" data-operation="add">Blocked a crossing</button>
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="BlockedCrossing" selector="teleoperated_location">Blocked a crossing</button>
                     </div>
                 </div>
             </div>
@@ -208,72 +202,25 @@
             <div class="col-sm-6">
                 <div class="col-sm-4 col-sm-push-4">
                 <!-- THE UNDO BUTTON! Javascript has not yet been implemented for this. Tell me (Drew) when Javascript exists to undo a button press  --> 
-                <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name:"Undo" data-operation="Undo"> Undo </button>
+                <button id = "undo" class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract"> Undo </button>
                 </div>
             </div>
 
 
             </div>
+            <div class="row">
+                <div class="col-sm-4 col-sm-push-4">
+                    <button class="btn btn-extra-high btn-danger btn-lg max-width" onclick="saveAndContinue('autonomous', 'autonomous_fouls_and_other');">mess ups</button>
+                </div>
+                <div class="col-sm-4 col-sm-push-4">
+                    <button class="btn btn-extra-high btn-primary btn-lg max-width" onclick="saveAndContinue('autonomous', 'teleoperated');">teleoperated  &nbsp;<span class="glyphicon glyphicon-arrow-right"></span></button>
+                </div>
+                <div class="col-sm-4 col-sm-pull-8">
+                    <button class="btn btn-extra-high btn-info btn-lg max-width" onclick="saveAndContinue('autonomous', 'prematch');"><span class="glyphicon glyphicon-arrow-left"></span>&nbsp; Prematch</button>
+                </div>
+            </div>
         </div>
         <br>
-        <div class="row">
-            <div class="col-sm-4 col-sm-push-4">
-                <button class="btn btn-extra-high btn-danger btn-lg max-width" onclick="saveAndContinue('autonomous', 'autonomous_fouls_and_other');">mess ups</button>
-            </div>
-
-            <div class="col-sm-4 col-sm-push-4">
-                <button class="btn btn-extra-high btn-primary btn-lg max-width" onclick="saveAndContinue('autonomous', 'teleoperated');">teleoperated  &nbsp;<span class="glyphicon glyphicon-arrow-right"></span></button>
-            </div>
-
-            <div class="col-sm-4 col-sm-pull-8">
-                <button class="btn btn-extra-high btn-info btn-lg max-width" onclick="saveAndContinue('autonomous', 'prematch');"><span class="glyphicon glyphicon-arrow-left"></span>&nbsp; Prematch</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- AUTONOMOUS CONTAINERS UNSCORED -->
-    <div class="container-fluid stage" id="autonomous_containers_unscored" style="display: none;">
-        <div class="row">
-            <div class="col-md-12" style="margin-top: 2vh;">
-                <button id="auto_ground_acquired_containers" onclick="saveAndContinue('autonomous_containers_unscored', 'autonomous', this);" class="auto_ground_acquired_containers btn btn-lg btn-warning max-width" style="height: 35vh; margin-top: 1vh; margin-bottom: 1vh; font-size: 30px;">From Ground</button>
-            </div>
-            <div class="col-md-12">
-                <button id="auto_step_center_acquired_containers" onclick="saveAndContinue('autonomous_containers_unscored', 'autonomous', this);" class="auto_step_center_acquired_containers btn btn-lg btn-danger max-width" style="height: 35vh; margin-top: 1vh; margin-bottom: 1vh; font-size: 30px;">From Center/Step</button>
-            </div>
-            <div class="col-md-12">
-                <button class="btn btn-lg btn-info max-width" style="margin-top: 3vh; height: 10vh;" onclick="discardAndChangeStage('autonomous_containers_unscored', 'autonomous');"><span class="glyphicon glyphicon-arrow-left"></span>&nbsp; autONOMOUS</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- AUTONOMOUS CONTAINERS SCORED -->
-    <div class="container-fluid stage" id="autonomous_containers_scored" style="display: none;">
-        <div class="row">
-            <div class="col-md-12" style="margin-top: 2vh;">
-                <button id="auto_ground_acquired_containers" onclick="saveAndContinue('autonomous_containers_scored', 'autonomous', this);" class="auto_ground_acquired_containers btn btn-lg btn-warning max-width" style="height: 35vh; margin-top: 1vh; margin-bottom: 1vh; font-size: 30px;">From Ground</button>
-            </div>
-            <div class="col-md-12">
-                <button id="auto_step_center_acquired_containers" onclick="saveAndContinue('autonomous_containers_scored', 'autonomous', this);" class="auto_step_center_acquired_containers btn btn-lg btn-danger max-width" style="height: 35vh; margin-top: 1vh; margin-bottom: 1vh; font-size: 30px;">From Center/Step</button>
-            </div>
-            <div class="col-md-12">
-                <button class="btn btn-lg btn-info max-width" style="margin-top: 3vh; height: 10vh;" onclick="discardAndChangeStage('autonomous_containers_scored', 'autonomous');"><span class="glyphicon glyphicon-arrow-left"></span>&nbsp; autONOMOUS</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- AUTONOMOUS FOULS & OTHER -->
-    <div class="container-fluid stage" id="autonomous_fouls_and_other" style="display: none;">
-        <div class="row">
-            <div class="col-md-12" style="margin-top: 2vh;">
-                <button id="auto_fouls" onclick="saveAndContinue('autonomous_fouls_and_other', 'autonomous', this);" class="btn btn-lg btn-warning max-width" style="height: 30vh; margin-top: 1vh; margin-bottom: 1vh; font-size: 30px;">fouls</button>
-            </div>
-            <div class="col-md-12">
-                <button id="auto_interference" onclick="saveAndContinue('autonomous_fouls_and_other', 'autonomous', this);" class="btn btn-lg btn-danger max-width" style="height: 30vh; margin-top: 1vh; margin-bottom: 1vh; font-size: 30px;">interference</button>
-            </div>
-            <div class="col-md-12">
-                <button class="btn btn-lg btn-info max-width" style="margin-top: 3vh; height: 10vh;" onclick="discardAndChangeStage('autonomous_fouls_and_other', 'autonomous');"><span class="glyphicon glyphicon-arrow-left"></span>&nbsp; autONOMOUS</button>
-            </div>
-        </div>
     </div>
 
     <!-- TELEOPERATED -->
@@ -347,185 +294,24 @@
             </div>
         </div>
     </div>
-
-    <!-- TELEOPERATED PICKED UP TOTES -->
-    <div class="container-fluid stage" id="teleoperated_picked_up_totes" style="display:none;">
+    
+    <!-- TELEOPERATED LOCATION SELECT -->
+    <div class="container-fluid stage" style="display: none;" id="teleoperated_location" class="location-select">
         <div class="row">
-            <div class="col-sm-6">
-                <button class="btn btn-lg btn-default max-width btn-grid" id="tele_picked_up_ground_upright_totes" style="margin-top: 2vh; margin-bottom: 1vh;" onclick="saveAndContinue('teleoperated_picked_up_totes', 'teleoperated', this);">ground upright</button>
-                <button class="btn btn-lg btn-success max-width btn-grid" id="tele_picked_up_upside_down_totes" style="margin-top: 1vh; margin-bottom: 1vh;" onclick="saveAndContinue('teleoperated_picked_up_totes', 'teleoperated', this);">upside down</button>
-            </div>
-
-            <div class="col-sm-6">
-                <button class="btn btn-lg btn-danger max-width btn-grid" id="tele_picked_up_sideways_totes" style="margin-top: 2vh; margin-bottom: 1vh;" onclick="saveAndContinue('teleoperated_picked_up_totes', 'teleoperated', this);">side</button>
-                <button class="btn btn-lg btn-warning max-width btn-grid" id="tele_picked_up_human_station_totes" style="margin-top: 1vh; margin-bottom: 1vh;" onclick="saveAndContinue('teleoperated_picked_up_totes', 'teleoperated', this);">human station</button>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-12">
-                <button class="btn btn-lg btn-info max-width" style="margin-top: 1vh; height: 10vh;" onclick="discardAndChangeStage('teleoperated_picked_up_totes', 'teleoperated');"><span class="glyphicon glyphicon-arrow-left"></span>&nbsp; teleoperated</button>
-            </div>
-        </div>
-
-    </div>
-
-    <!-- TELEOPERATED STACKED TOTES -->
-    <div class="container-fluid stage" id="teleoperated_stacked_totes" style="display:none;">
-        <div class="row">
-            <div class="col-md-12">
-                <h3>Totes Stacked On Top Of</h3>
-                <div class="btn-group max-width" data-toggle="buttons" id="start_height">
-                    <label class="btn btn-success btn-group-tall-6 start-height-group-wrapper">
-                        <input type="radio" name="start_height_group" data-height="0"><span style="font-size: 24px; margin-top: 10px;">New<br>Stack</span>
-                    </label>
-                    <label class="btn btn-success btn-group-tall-6 start-height-group-wrapper">
-                        <input type="radio" name="start_height_group" data-height="1"><span>1</span>
-                    </label>
-                    <label class="btn btn-success btn-group-tall-6 start-height-group-wrapper">
-                        <input type="radio" name="start_height_group" data-height="2"><span>2</span>
-                    </label>
-                    <label class="btn btn-success btn-group-tall-6 start-height-group-wrapper">
-                        <input type="radio" name="start_height_group" data-height="3"><span>3</span>
-                    </label>
-                    <label class="btn btn-success btn-group-tall-6 start-height-group-wrapper">
-                        <input type="radio" name="start_height_group" data-height="4"><span>4</span>
-                    </label>
-                    <label class="btn btn-success btn-group-tall-6 start-height-group-wrapper">
-                        <input type="radio" name="start_height_group" data-height="5"><span>5</span>
-                    </label>
-                </div>
+            <div class="col-md-6">
+                <h2>Teleoperated Event Location<span class="team-number"></span></h2>
             </div>
         </div>
         <div class="row">
-            <div class="col-md-12">
-                <h3>Totes Added To Stack</h3>
-                <div class="btn-group max-width" data-toggle="buttons" id="totes_added">
-                    <label class="btn btn-warning btn-group-tall-6">
-                        <input type="radio" name="totes_added_group" data-height="1"><span>1</span>
-                    </label>
-                    <label class="btn btn-warning btn-group-tall-6">
-                        <input type="radio" name="totes_added_group" data-height="2"><span>2</span>
-                    </label>
-                    <label class="btn btn-warning btn-group-tall-6">
-                        <input type="radio" name="totes_added_group" data-height="3"><span>3</span>
-                    </label>
-                    <label class="btn btn-warning btn-group-tall-6">
-                        <input type="radio" name="totes_added_group" data-height="4"><span>4</span>
-                    </label>
-                    <label class="btn btn-warning btn-group-tall-6">
-                        <input type="radio" name="totes_added_group" data-height="5"><span>5</span>
-                    </label>
-                    <label class="btn btn-warning btn-group-tall-6">
-                        <input type="radio" name="totes_added_group" data-height="6"><span>6</span>
-                    </label>
-                </div>
-            </div>
-        </div>
-
-        <br>
-        <div class="row">
-            <div class="col-sm-6">
-                <button class="btn btn-lg btn-extra-high btn-info max-width" onclick="discardAndChangeStage('teleoperated_picked_up_totes', 'teleoperated');"><span class="glyphicon glyphicon-arrow-left"></span>&nbsp; teleoperated</button>
-            </div>
-            <div class="col-sm-6">
-                <button class="btn btn-lg btn-extra-high btn-primary max-width" onclick="saveAndContinue('teleoperated_stacked_totes', 'teleoperated_stacked_totes_location');">Continue <span class="glyphicon glyphicon-arrow-right"></span></button>
-            </div>
-        </div>
-    </div>
-
-    <!-- TELEOPERATED STACKED TOTES LOCATION -->
-    <div class="container-fluid stage" style="display:none;" id="teleoperated_stacked_totes_location">
-        <div class="row">
-            <div class="col-md-12">
-                <h2>Stack Location<span class="team-number"></span></h2>
-
-                <img src="{% static "frc_scout/img/tote_score.png" %}" class="auto-location-image" id="teleoperated_stacked_totes_image">
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <button class="btn btn-lg btn-info max-width" style="margin-top: 2vh; height: 10vh;" onclick="discardAndChangeStage('teleoperated_stacked_totes_location', 'teleoperated_stacked_totes');"><span class="glyphicon glyphicon-arrow-left"></span>&nbsp; Stacked Totes</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- TELEOPERATED PICKED UP BINS -->
-    <div class="container-fluid stage" style="display: none;" id="teleoperated_picked_up_containers">
-        <div class="row">
-            <div class="col-md-12" style="margin-top: 2vh;">
-                <button id="tele_picked_up_sideways_containers" onclick="saveAndContinue('teleoperated_picked_up_containers', 'teleoperated', this);" class="btn btn-lg btn-warning max-width" style="height: 25vh; margin-top: 1vh; margin-bottom: 1vh; font-size: 30px;">side</button>
-            </div>
-            <div class="col-md-12">
-                <button id="tele_picked_up_upright_containers" onclick="saveAndContinue('teleoperated_picked_up_containers', 'teleoperated', this);" class="btn btn-lg btn-success max-width" style="height: 25vh; margin-top: 1vh; margin-bottom: 1vh; font-size: 30px;">upright</button>
-            </div>
-            <div class="col-md-12">
-                <button id="tele_picked_up_center_step_containers" onclick="saveAndContinue('teleoperated_picked_up_containers', 'teleoperated', this);" class="btn btn-lg btn-danger max-width" style="height: 25vh; margin-top: 1vh; font-size: 30px;">center/step</button>
-            </div>
-            <div class="col-md-12">
-                <button class="btn btn-lg btn-info max-width" style="margin-top: 3vh; height: 10vh;" onclick="discardAndChangeStage('teleoperated_picked_up_totes', 'teleoperated');"><span class="glyphicon glyphicon-arrow-left"></span>&nbsp; teleoperated</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- TELEOPERATED STACKED BINS -->
-    <div class="container-fluid stage" style="display: none;" id="teleoperated_stacked_containers">
-        <div class="row">
-            <div class="col-md-12">
-                <h3>Totes Stacked On Top Of</h3>
-                <div class="btn-group max-width" data-toggle="buttons" id="container_stack_height">
-                    <label class="btn btn-success btn-group-tall-6">
-                        <input type="radio" name="options" data-height="1"><span>1</span>
-                    </label>
-                    <label class="btn btn-success btn-group-tall-6">
-                        <input type="radio" name="options" data-height="2"><span>2</span>
-                    </label>
-                    <label class="btn btn-success btn-group-tall-6">
-                        <input type="radio" name="options" data-height="3"><span>3</span>
-                    </label>
-                    <label class="btn btn-success btn-group-tall-6">
-                        <input type="radio" name="options" data-height="4"><span>4</span>
-                    </label>
-                    <label class="btn btn-success btn-group-tall-6">
-                        <input type="radio" name="options" data-height="5"><span>5</span>
-                    </label>
-                    <label class="btn btn-success btn-group-tall-6">
-                        <input type="radio" name="options" data-height="6"><span>6</span>
-                    </label>
-                </div>
+            <div>
+                <img src="{% static "frc_scout/img/input_map_2016.png" %}" class="input-location-image" id="input_location_image">
+                <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" onclick="cancelImage()"> Cancel </button>
             </div>
         </div>
         <br>
-        <div class="row">
-            <div class="col-sm-6">
-                <button class="btn btn-lg btn-extra-high btn-info max-width" onclick="discardAndChangeStage('teleoperated_picked_up_totes', 'teleoperated');"><span class="glyphicon glyphicon-arrow-left"></span>&nbsp; teleoperated</button>
-            </div>
-            <div class="col-sm-6">
-                <button class="btn btn-lg btn-extra-high btn-primary max-width" onclick="saveAndContinue('teleoperated_stacked_containers', 'teleoperated');">Continue <span class="glyphicon glyphicon-arrow-right"></span></button>
-            </div>
-        </div>
     </div>
 
-    <!-- TELEOPERATED FOULS AND OTHER -->
-    <div class="container-fluid stage" id="teleoperated_fouls_and_other" style="display:none;">
-        <div class="row">
-            <div class="col-sm-6">
-                <button class="btn btn-lg btn-default max-width btn-grid" id="tele_fouls" style="margin-top: 2vh; margin-bottom: 1vh;" onclick="saveAndContinue('teleoperated_fouls_and_other', 'teleoperated', this);">fouls</button>
-                <button class="btn btn-lg btn-success max-width btn-grid" id="tele_knocked_over_stacks" style="margin-top: 1vh; margin-bottom: 1vh;" onclick="saveAndContinue('teleoperated_fouls_and_other', 'teleoperated', this);">knocked over stack</button>
-            </div>
-
-            <div class="col-sm-6">
-                <button class="btn btn-lg btn-danger max-width btn-grid" id="tele_dead_bot" style="margin-top: 2vh; margin-bottom: 1vh;" onclick="saveAndContinue('teleoperated_fouls_and_other', 'teleoperated', this);">dead bot</button>
-                <button class="btn btn-lg btn-warning max-width btn-grid" id="tele_container_fell_off" style="margin-top: 1vh; margin-bottom: 1vh;" onclick="saveAndContinue('teleoperated_fouls_and_other', 'teleoperated', this);">container fell off</button>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <button class="btn btn-lg btn-info max-width" style="margin-top: 1vh; height: 10vh;" onclick="discardAndChangeStage('teleoperated_picked_up_totes', 'teleoperated');"><span class="glyphicon glyphicon-arrow-left"></span>&nbsp; teleoperated</button>
-            </div>
-        </div>
-    </div>
-
+    
     <!-- END GAME -->
     <div class="container-fluid stage" style="display: none;" id="postmatch">
         <div class="row">
@@ -638,7 +424,6 @@
 
 
 {% block extra_js %}
-    {% compress js %}
         <script type="text/javascript" src="{% static 'frc_scout/js/bootstrap-switch.min.js' %}"></script>
         <script type="text/javascript" src="{% static "frc_scout/js/match-scouting.js" %}"></script>
 
@@ -649,5 +434,4 @@
                 });
             }
         </script>
-    {% endcompress %}
 {% endblock %}

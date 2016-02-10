@@ -68,8 +68,8 @@ class Match(models.Model):
     }
     """
     
-    scout_team_number = models.IntegerField(max_length=5)
-    scout_name = models.TextField()
+    scout_team_number = models.IntegerField(max_length=5, null=True)
+    scout_name = models.TextField(null=True)
     
     no_show = models.BooleanField(default=False)
 
@@ -111,8 +111,8 @@ class Event(models.Model):
         (5,"BlockedCrossing"),
         (6,"GameEnd")
         )
-    #seconds since match start as time
-    time = models.FloatField()
+    #milliseconds since match start as time
+    time = models.IntegerField(max_length=8)
     endTime = models.FloatField(null=True)
     evType = models.IntegerField(max_length=1,
                                 choices=eventTypes,
@@ -122,8 +122,7 @@ class Event(models.Model):
                                 default=6)
     x = models.FloatField(null=True)
     y = models.FloatField(null=True)
-    target = models.IntegerField(max_length=1,default=0, null=True)
-    is_auton = models.BooleanField(default=False)
+    isAuton = models.BooleanField(default=False)
 class MatchPrivateComments(models.Model):
     class Meta:
         verbose_name_plural = "Match private comments"
