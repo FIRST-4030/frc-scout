@@ -58,8 +58,14 @@ $(".input-location-image").click(function(event){
 
     var xPosition = (event.pageX - image.offset().left) / image.width();
     var yPosition = (event.pageY - image.offset().top) / image.height();
-
-    imageCallback(xPosition,yPosition);
+    $("#displayDot").show();
+    $("#displayDot").offset({
+        left:image.offset().left + xPosition * image.width(),
+        top:image.offset().top + yPosition * image.height()
+    });
+    if(confirm("Put it here?"))
+        imageCallback(xPosition,yPosition);
+    $("#displayDot").hide();
 });
 
 
@@ -211,7 +217,19 @@ function attemptMatchSubmission(){
         data: {
             csrfmiddlewaretoken: $.cookie('csrftoken'),
             data: localStorage.getItem("matches")
-        }});
+        },
+        statusCode:{
+            500:function(){
+                alert("Internal Server error");
+            },
+            400:function(){
+                alert("Your data had an issue");
+            },
+            403:function(){
+                alert("You're forbidden");
+            }
+        }
+    });
 }
 
 
