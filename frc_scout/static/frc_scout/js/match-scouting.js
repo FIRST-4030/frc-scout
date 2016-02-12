@@ -1,6 +1,6 @@
 //var backgroundColorRed = "rgb(255, 158, 158)";
-var backgroundColorRed = "rgba(255, 131, 131, 0.862745)";
-var backgroundColorBlue = "rgb(199, 208, 255)";
+var backgroundColorRed = "rgb(255, 204, 204)";
+var backgroundColorBlue = "rgb(204, 216, 255)";
 
 var schedule = null;
 var matchdata = { 
@@ -10,6 +10,7 @@ var matchProperties = {
     startTime:0,
     currentStage:""
 };
+var isAuton=true;
 function imageCallback(x, y){
     matchdata.events[matchdata.events.length-1].x = x;
     matchdata.events[matchdata.events.length-1].y = x;
@@ -168,17 +169,13 @@ $(".btn-add-subtract").click(function(event){
         isAuton:$("#autonomous").is(":visible"),
         time:Date.now()-matchProperties.startTime
     };
-    if(eventData.isAuton){
-        $("#autonomous").hide();
-    }else{
-        $("#teleoperated").hide();
-    }
+    $("#events").hide();
     $("#" + data.attr("selector")).show();
     matchdata.events.push(eventData);
 });
 
 $("#undo").click(function(){
-   if(confirm("Delete the last event")){
+   if(confirm("Delete the last event\n" + JSON.stringify(matchdata.events[matchdata.events.length-1], null, 2))){
        matchdata.events.pop();
    }
 });
@@ -204,6 +201,29 @@ function discardAndChangeStage(fromStage, toStage) {
     $("#" + toStage).show();
 }
 
+function forwards(){
+    if(isAuton){
+        isAuton = false;
+        $("#scoutMode").text("Teleoperational");
+    }else{
+        changeStage("events","finish");
+    }
+}
+function backwards(){
+    if(isAuton){
+        changeStage("events","prematch");
+    }else{
+        isAuton = true;
+        $("#scoutMode").text("Autonomous");
+    }
+}
+function cancelImage(){
+    if(confirm("Are you sure?")){
+        matchdata.events.pop();
+        $(".stage").hide();
+        $("#events").show();
+    }
+}
 function saveData(){
     var matches = JSON.parse(localStorage.getItem("matches"));
     matches.push(matchdata);
@@ -211,25 +231,27 @@ function saveData(){
 }
 
 function attemptMatchSubmission(){
-    $.ajax({
-        url: '/scouting/match/submit/',
-        method: "POST",
-        data: {
-            csrfmiddlewaretoken: $.cookie('csrftoken'),
-            data: localStorage.getItem("matches")
-        },
-        statusCode:{
-            500:function(){
-                alert("Internal Server error");
+    if(localStorage.getItem("matches")){
+        $.ajax({
+            url: '/scouting/match/submit/',
+            method: "POST",
+            data: {
+                csrfmiddlewaretoken: $.cookie('csrftoken'),
+                data: localStorage.getItem("matches")
             },
-            400:function(){
-                alert("Your data had an issue");
-            },
-            403:function(){
-                alert("You're forbidden");
+            statusCode:{
+                500:function(){
+                    alert("Internal Server error");
+                },
+                400:function(){
+                    alert("Your data had an issue");
+                },
+                403:function(){
+                    alert("You're forbidden");
+                }
             }
-        }
-    });
+        });
+    }
 }
 
 

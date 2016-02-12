@@ -13,7 +13,8 @@
     margin-top: 2em;
     margin-bottom: 20px;
 }
-
+    
+}
 .section-header-text {
     background-color: white;
     position: relative;
@@ -24,6 +25,8 @@
 .btn-grid {
     height: 40vh !important;
     font-size: 32px ;
+    /*posterity:  if you are editting this code again, just know that i spent many hours crying over my laptop because of ben's inline styling. 
+    Don't make his mistakes. if you do... $(.you).hide*/
 }
 
 @media (min-width: 768px) {
@@ -82,10 +85,7 @@
     width: 100%;
 }
 
-body {
-    padding-bottom: 20px;
-    
-}
+
 
 .auto-location-image {
     margin-left: auto;
@@ -132,10 +132,16 @@ body {
     color: white;
 }
 
+body {
+    padding-bottom: 20px;
+    background-color: #f2f2f2;
+    font-family: 'Exo 2', sans-serif;
+}
 @media (max-width: 640px) {
     .btn-fill {
         width: 100%;
         margin-left: 0px;
         margin-right: 0px;
     }
+
 }

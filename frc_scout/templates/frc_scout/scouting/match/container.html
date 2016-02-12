@@ -8,20 +8,6 @@
 {% block extra_css %}
     {% compress css inline %}
         <style type="text/css">
-            ::-webkit-input-placeholder { /* WebKit browsers */
-            {#                color:    #666666 !important;#}
-            {#            }#}
-            {#            :-moz-placeholder { /* Mozilla Firefox 4 to 18 */#}
-            {#                color:    #666666 !important;#}
-            {#                opacity:  1;#}
-            {#            }#}
-            {#            ::-moz-placeholder { /* Mozilla Firefox 19+ */#}
-            {#                color:    #666666 !important;#}
-            {#                opacity:  1;#}
-            {#            }#}
-            {#            :-ms-input-placeholder { /* Internet Explorer 10+ */#}
-            {#                color:    #666666 !important;#}
-            {#            }#}
 
             #teleoperated {
                 background: linear-gradient(rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, .3) 50%);
@@ -37,7 +23,7 @@
         </style>
     {% endcompress %}
     {% compress css %}
-        <link rel="stylesheet" type="text/css" href="{% static 'frc_scout/css/bootstrap-switch.min.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static "frc_scout/css/bootstrap-switch.min.css" %}">
     {% endcompress %}
 {% endblock %}
 
@@ -102,6 +88,10 @@
                 </div>
             </div>
         </div>
+        <div class="row" id="defenses">
+            <input type="select"></input>
+            
+        </div>
         <div class="row">
             <div class="col-md-12">
                 {% if not practice_scouting %}
@@ -120,7 +110,7 @@
                 <button id="no_show" class="btn btn-extra-high btn-warning btn-lg max-width" onclick="changeStage('prematch',finish')">No-show</button>
             </div>
             <div class="col-sm-4">
-                <button class="btn btn-extra-high btn-primary btn-lg max-width" onclick="changeStage('prematch','autonomous');">autonomous &nbsp;<span class="glyphicon glyphicon-arrow-right"></span></button>
+                <button class="btn btn-extra-high btn-primary btn-lg max-width" onclick="changeStage('prematch','events');">autonomous &nbsp;<span class="glyphicon glyphicon-arrow-right"></span></button>
             </div>
         </div>
         <Br>
@@ -153,10 +143,10 @@
     </div>
 
     <!-- AUTONOMOUS EVENT SELECT -->
-    <div class="container-fluid stage" style="display: none;" id="autonomous">
+    <div class="container-fluid stage" style="display: none;" id="events">
         <div class="row">
             <div class="col-md-6">
-                <h2>Autonomous<span class="team-number"></span></h2>
+                <h2> <span id = "scoutMode">Autonomous</span><span class="team-number"></span></h2>
             </div>
         </div>
         <div class="row">
@@ -206,104 +196,26 @@
                 </div>
             </div>
             
-            <div class="col-sm-6">
-                <div class="col-sm-4 col-sm-push-4">
-                <!-- THE UNDO BUTTON! Javascript has not yet been implemented for this. Tell me (Drew) when Javascript exists to undo a button press  --> 
-                <button id = "undo" class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract"> Undo </button>
-                </div>
-            </div>
 
 
             </div>
             <div class="row">
                 <div class="col-sm-4 col-sm-push-4">
-                    <button class="btn btn-extra-high btn-danger btn-lg max-width" onclick="saveAndContinue('autonomous', 'autonomous_fouls_and_other');">mess ups</button>
+                    <button id = "undo" class="btn btn-extra-high btn-danger btn-lg max-width" >mess ups</button>
                 </div>
                 <div class="col-sm-4 col-sm-push-4">
-                    <button class="btn btn-extra-high btn-primary btn-lg max-width" onclick="saveAndContinue('autonomous', 'teleoperated');">teleoperated  &nbsp;<span class="glyphicon glyphicon-arrow-right"></span></button>
+                    <button class="btn btn-extra-high btn-primary btn-lg max-width" onclick="forwards();">teleoperated  &nbsp;<span class="glyphicon glyphicon-arrow-right"></span></button>
                 </div>
                 <div class="col-sm-4 col-sm-pull-8">
-                    <button class="btn btn-extra-high btn-info btn-lg max-width" onclick="saveAndContinue('autonomous', 'prematch');"><span class="glyphicon glyphicon-arrow-left"></span>&nbsp; Prematch</button>
+                    <button class="btn btn-extra-high btn-info btn-lg max-width" onclick="backwards();"><span class="glyphicon glyphicon-arrow-left"></span>&nbsp; Prematch</button>
                 </div>
             </div>
         </div>
         <br>
     </div>
-
-    <!-- TELEOPERATED -->
-    <div class="container-fluid stage" id="teleoperated" style="display:none;">
-        <div class="row">
-            <div class="col-md-12">
-                <h2>Teleoperated<span class="team-number"></span></h2>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-6">
-                <h3>Enemy Side</h3>
-                <div class="row">
-                    <div class="col-xs-8">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="LowGoal" data-operation="add">Made Low Goal</button>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-xs-8">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="HighGoal" data-operation="add">Made High Goal</button>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-xs-8">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="Crossing" data-operation="add">Crossed</button>
-                    </div>
-                </div>
-            </div>
-            
-            
-            <div class="col-sm-6">
-                <h3>Inbetween</h3>
-                <div class="row">
-                    <div class="col-xs-8">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="Crossing" data-operation="add">Crossed</button>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-xs-8">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="PickupBall" data-operation="add">Picked up Ball</button>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="col-sm-6">
-                <h3>Your Side</h3>
-                <div class="row">
-                    <div class="col-xs-8">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="BlockedShot" data-operation="add">Blocked a Shot</button>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-xs-8">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="BlockedCrossing" data-operation="add">Blocked a crossing</button>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="col-sm-6">
-                <div class="col-sm-4 col-sm-push-4">
-                <!-- THE UNDO BUTTON! Javascript has not yet been implemented for this. Tell me (Drew) when Javascript exists to undo a button press  --> 
-                <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name:"Undo" data-operation="Undo"> Undo </button>
-                </div>
-            </div>
-
-
-            </div>
-        </div>
-    </div>
     
-    <!-- TELEOPERATED LOCATION SELECT -->
-    <div class="container-fluid stage" style="display: none;" id="teleoperated_location" class="location-select">
+    <!-- LOCATION SELECT -->
+    <div class="container-fluid stage location-select" style="display: none;" id="location_select">
         <div class="row">
             <div class="col-md-6">
                 <h2>Teleoperated Event Location<span class="team-number"></span></h2>
