@@ -88,29 +88,98 @@
                 </div>
             </div>
         </div>
-        <div class="row" id="defenses">
-            <input type="select"></input>
-            
+        </br>
+        <div class="row" id="defenses_1">
+            <label for="select_team_defenses_1" style="padding-top: 10px; font-weight: bold;" class="col-sm-4 control-label input-x-lg">Enemy Defense 1:</label>
+            <div class="col-sm-8">
+                <div id="select_team_defenses">
+                    <select id="select_team_defenses_1" style="padding-top: 10px;" class="form-control input-x-lg background-white">
+                        <option value="">Select a Defense</option>
+                        <option value="def_port">Portcullis</option>
+                        <option value="def_moat">Moat</option>
+                        <option value="def_draw">Drawbridge</option>
+                        <option value="def_terr">Rough Terrain</option>
+                        <option value="def_rock">Rock Wall</option>
+                        <option value="def_ramp">Ramparts</option>
+                        <option value="def_sp">Sally Port</option>
+                        <option value="def_cf">Cheval de Frise</option>
+                    </select>
+                </div>
+            </div>
         </div>
-        <div class="row">
-            <div class="col-md-12">
+        <div class="row" id="defenses_2">
+            <label for="select_team_defenses_2" style="padding-top: 10px; font-weight: bold;" class="col-sm-4 control-label input-x-lg">Enemy Defense 2:</label>
+            <div class="col-sm-8">
+                <div id="select_team_defenses">
+                    <select id="select_team_defenses_2" style="padding-top: 10px;" class="form-control input-x-lg background-white">
+                        <option value="">Select a Defense</option>
+                        <option value="def_port">Portcullis</option>
+                        <option value="def_moat">Moat</option>
+                        <option value="def_draw">Drawbridge</option>
+                        <option value="def_terr">Rough Terrain</option>
+                        <option value="def_rock">Rock Wall</option>
+                        <option value="def_ramp">Ramparts</option>
+                        <option value="def_sp">Sally Port</option>
+                        <option value="def_cf">Cheval de Frise</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row" id="defenses_3">
+            <label for="select_team_defenses_3" style="padding-top: 10px; font-weight: bold;" class="col-sm-4 control-label input-x-lg">Enemy Defense 3:</label>
+            <div class="col-sm-8">
+                <div id="select_team_defenses">
+                    <select id="select_team_defenses_3" style="padding-top: 10px;" class="form-control input-x-lg background-white">
+                        <option value="">Select a Defense</option>
+                        <option value="def_port">Portcullis</option>
+                        <option value="def_moat">Moat</option>
+                        <option value="def_draw">Drawbridge</option>
+                        <option value="def_terr">Rough Terrain</option>
+                        <option value="def_rock">Rock Wall</option>
+                        <option value="def_ramp">Ramparts</option>
+                        <option value="def_sp">Sally Port</option>
+                        <option value="def_cf">Cheval de Frise</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row" id="defenses_4">
+            <label for="select_team_defenses_4" style="padding-top: 10px; font-weight: bold;" class="col-sm-4 control-label input-x-lg">Enemy Defense 4:</label>
+            <div class="col-sm-8">
+                <div id="select_team_defenses">
+                    <select id="select_team_defenses_4" style="padding-top: 10px;" class="form-control input-x-lg background-white">
+                        <option value="">Select a Defense</option>
+                        <option value="def_port">Portcullis</option>
+                        <option value="def_moat">Moat</option>
+                        <option value="def_draw">Drawbridge</option>
+                        <option value="def_terr">Rough Terrain</option>
+                        <option value="def_rock">Rock Wall</option>
+                        <option value="def_ramp">Ramparts</option>
+                        <option value="def_sp">Sally Port</option>
+                        <option value="def_cf">Cheval de Frise</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row" id="locationrow">
+            <div class="col-md-12" id="locationcol">
                 {% if not practice_scouting %}
-                    <h3 style="color: #666666;">Location: <span id='location'>{{ request.session.location_name }}</span></h3>
+                    <h3 style="color: #666666;" id="locationheading">Location: <span id='location'>{{ request.session.location_name }}</span></h3>
                 {% else %}
-                    <h3 style="color:#bd001f; font-weight: bold;">You are scouting a practice match. Your data will be submitted to the TEST location.</h3>
+                    <h3 style="color:#bd001f; font-weight: bold;" id="locationsubheading">You are scouting a practice match. Your data will be submitted to the TEST location.</h3>
                 {% endif %}
             </div>
             <br>
         </div>
-        <div class="row">
-            <div class="col-sm-4">
-                <button class="btn btn-extra-high btn-info btn-lg max-width" onclick="window.location = '{% url 'frc_scout:index' %}';"><span class="glyphicon glyphicon-arrow-left"></span> return home</button>
+        <div class="row" id="buttonsrow">
+            <div class="col-sm-4" id="homebuttoncol">
+                <button class="btn btn-extra-high btn-info btn-lg max-width" onclick="window.location = '{% url 'frc_scout:index' %}';" id="homebutton"><span class="glyphicon glyphicon-arrow-left"></span> return home</button>
             </div>
-            <div class="col-sm-4">
+            <div class="col-sm-4" id="nowshowcol">
                 <button id="no_show" class="btn btn-extra-high btn-warning btn-lg max-width" onclick="changeStage('prematch',finish')">No-show</button>
             </div>
-            <div class="col-sm-4">
-                <button class="btn btn-extra-high btn-primary btn-lg max-width" onclick="changeStage('prematch','events');">autonomous &nbsp;<span class="glyphicon glyphicon-arrow-right"></span></button>
+            <div class="col-sm-4" id="autocol">
+                <button class="btn btn-extra-high btn-primary btn-lg max-width" onclick="changeStage('prematch','events');" id="autobutton">autonomous &nbsp;<span class="glyphicon glyphicon-arrow-right"></span></button>
             </div>
         </div>
         <Br>
@@ -165,7 +234,6 @@
                 </div>
             </div>
             
-            
             <div class="col-sm-6">
                 <h3>Inbetween</h3>
                 <div class="row">
@@ -195,19 +263,17 @@
                     </div>
                 </div>
             </div>
-            
-
-
-            </div>
+        </div>
+        
             <div class="row">
                 <div class="col-sm-4 col-sm-push-4">
                     <button id = "undo" class="btn btn-extra-high btn-danger btn-lg max-width" >mess ups</button>
                 </div>
                 <div class="col-sm-4 col-sm-push-4">
-                    <button class="btn btn-extra-high btn-primary btn-lg max-width" onclick="forwards();">teleoperated  &nbsp;<span class="glyphicon glyphicon-arrow-right"></span></button>
+                    <button class="btn btn-extra-high btn-primary btn-lg max-width" onclick="forwards();"><span id="forwards">teleoperated</span>  &nbsp;<span class="glyphicon glyphicon-arrow-right"></span></button>
                 </div>
                 <div class="col-sm-4 col-sm-pull-8">
-                    <button class="btn btn-extra-high btn-info btn-lg max-width" onclick="backwards();"><span class="glyphicon glyphicon-arrow-left"></span>&nbsp; Prematch</button>
+                    <button class="btn btn-extra-high btn-info btn-lg max-width" onclick="backwards();"><span class="glyphicon glyphicon-arrow-left"></span>&nbsp; <span id = "back">Prematch</span></button>
                 </div>
             </div>
         </div>
@@ -232,6 +298,20 @@
             </div>
         </div>
         <br>
+    </div>
+
+    <!-- DEFENSE SELECT -->
+    <div class="container-fluid stage" id="defenseselection" style="display:none;">
+        <div class="row">
+            <div class="col-sm-8">
+                <button id="defense_select_1" class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract">Defense (1)</button>
+                <button id="defense_select_2" class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract">Defense (2)</button>
+            </div>
+            <div class="col-sm-8">
+                <button id="defense_select_3" class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract">Defense (3)</button>
+                <button id="defense_select_4" class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract">Defense (4)</button>
+            </div>
+        </div>
     </div>
 
     

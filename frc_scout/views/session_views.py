@@ -13,8 +13,9 @@ from django.template import RequestContext
 from frc_scout.models import Team, UserProfile, Location, SitePreferences, Match
 from django.db import IntegrityError
 from frc_scout.decorators import secure_required, insecure_required
-from frc_scout_2015.local_settings import *
+import frc_scout_2015.local_settings
 
+local_settings = frc_scout_2015.local_settings
 
 @insecure_required
 def index(request):
@@ -36,7 +37,7 @@ def index(request):
             pass
 
         try:
-            obj = SitePreferences.objects.filter(site_url=SITE_URL)
+            obj = SitePreferences.objects.filter(site_url=local_settings.SITE_URL)
             if obj:
                 context['home_messages'] = obj[0].home_message
 
@@ -64,7 +65,7 @@ def login_view(request):
         }
 
     try:
-        obj = SitePreferences.objects.filter(site_url=SITE_URL)
+        obj = SitePreferences.objects.filter(site_url=local_settings.SITE_URL)
         if obj:
             context['login_message'] = obj[0].login_message
 
@@ -153,7 +154,7 @@ def create_account(request):
 
         user.userprofile.save()
 
-        if not created and SERVER_EMAIL is not None:
+        if not created and local_settings.SERVER_EMAIL is not None:
             team_managers = \
                 User.objects.filter(userprofile__team__team_number=team_number, userprofile__team_manager=True).values('email')
 

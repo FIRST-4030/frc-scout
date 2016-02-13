@@ -128,16 +128,22 @@ def submit_pit_scouting_data(request):
 
     else:
         data = json.loads(str(request.POST.get('data')))
-        image_data = json.loads(str(request.POST.get('image_data')))
-
+        if request.POST.get('image_data'):
+            image_data = json.loads(str(request.POST.get('image_data')))
+        else:
+            image_data = "nope"
         data_object = PitScoutData(scout=request.user,
                                    location=Location.objects.get(id=request.session.get('location_id')),
                                    pitscout_name=request.user.first_name + " " + request.user.last_name[:1],
-                                   pitscout_team_number=request.user.userprofile.team.team_number)
+                                   pitscout_team=request\
+                                   .user\
+                                   .userprofile\
+                                   .team\
+                                   .team_number)
         for name in data:
             setattr(data_object, name, data.get(name))
 
-        if image_data.get('data'):
+        if image_data != "nope":
             data_object.image_id = image_data['data']['id']
             data_object.image_link = image_data['data']['link']
             data_object.image_type = image_data['data']['type']

@@ -66,7 +66,8 @@ $("input[type=checkbox]").bootstrapSwitch({
                 var yPosition = (event.pageY - image.offset().top) / image.height();
 
 
-                if((yPosition > 0.18 && yPosition < 0.4) || yPosition > 0.62) {
+                if(true) { //assume all locations are valid and that the scouter isnt an idiot.
+                //i really don't want to deal with coordinates right now -_-
                     if(!confirm("Confirm autonomous starting location.")) {
                         return;
                     }
@@ -110,6 +111,9 @@ $("input[type=checkbox]").bootstrapSwitch({
             }
 
             function postToImgur() {
+                if($("#robot_image")[0].files[0] == null){
+                    
+                }
                 var formData = new FormData();
                 formData.append("image", $("#robot_image")[0].files[0]);
                 $.ajax({
@@ -142,7 +146,7 @@ $("input[type=checkbox]").bootstrapSwitch({
                 var formData = getFormData();
 
                 $.ajax({
-                    url: '{% url "frc_scout:submit_pit_scouting_data" %}',
+                    url: '/scouting/pit/submit/',
                     type: "POST",
                     data: {
                         csrfmiddlewaretoken: $.cookie('csrftoken'),
@@ -158,6 +162,9 @@ $("input[type=checkbox]").bootstrapSwitch({
                             $("#success_message").show();
                             $("#submit_progress").hide();
                         }, 2000);
+                    },
+                    error:function(response){
+                        console.log(response);
                     }
                 })
 

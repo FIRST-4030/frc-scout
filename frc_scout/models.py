@@ -179,8 +179,6 @@ class PitScoutData(models.Model):
     can_cross_rock_wall = models.NullBooleanField(null=True)
     can_cross_rough_terrain = models.NullBooleanField(null=True)
     can_cross_low_bar = models.NullBooleanField(null=True)
-    
-    
 
     # other
     known_strengths = models.TextField(max_length=256, null=True)

@@ -3,24 +3,38 @@ var backgroundColorRed = "rgb(255, 204, 204)";
 var backgroundColorBlue = "rgb(204, 216, 255)";
 
 var schedule = null;
-var matchdata = { 
+var matchdata = 
+    { 
     events : []
-};
-var matchProperties = {
+    };
+var matchProperties = 
+    {
     startTime:0,
     currentStage:""
-};
+    };
 var isAuton=true;
 function imageCallback(x, y){
     matchdata.events[matchdata.events.length-1].x = x;
     matchdata.events[matchdata.events.length-1].y = x;
     $(".location-select").hide();
-    if(matchdata.events[matchdata.events.length-1].isAuton){
-        $("#autonomous").show();
-    }else{
-        $("#teleoperated").show();
-    }
+    $("#events").show();
 }
+var xPosition, yPosition;
+/*
+ Get the relative coordinates from start image
+ */
+$("#auto_start_image").click(function (event) {
+    var image = $(this);
+
+    xPosition = (event.pageX - image.offset().left) / image.width();
+    yPosition = (event.pageY - image.offset().top) / image.height();
+
+    if((yPosition > 0.18 && yPosition < 0.4) || yPosition > 0.62) {
+        changeStage('autonomous_starting_location', 'autonomous');
+    } else {
+        alert(["Invalid starting location."], false);
+    }
+});
 /*
  Run on page load
  */
@@ -201,11 +215,15 @@ function discardAndChangeStage(fromStage, toStage) {
     $("#" + toStage).show();
 }
 
-function forwards(){
+function forwards()
+{
     if(isAuton){
         isAuton = false;
         $("#scoutMode").text("Teleoperational");
-    }else{
+        $("#back").text("autonomous");
+        $("#forwards").text("finish");
+    }
+    else{
         changeStage("events","finish");
     }
 }
@@ -215,6 +233,8 @@ function backwards(){
     }else{
         isAuton = true;
         $("#scoutMode").text("Autonomous");
+        $("#back").text("prematch");
+        $("#forwards").text("teleoperated");
     }
 }
 function cancelImage(){
