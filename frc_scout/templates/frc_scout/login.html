@@ -40,7 +40,8 @@
                 </div>
                 <div class="form-group">
                     <button class="btn btn-primary form-control" style="margin-bottom: 10px;">Login</button>
-                    <a href="{% url 'frc_scout:create_account' %}" class="btn btn-warning form-control" type="button" style="margin-bottom: 10px;">Create Account</a>
+                    <a href="{% url 'frc_scout:create_account' %}" class="btn btn-success form-control" type="button" style="margin-bottom: 10px;">Create Account</a>
+                    <a href="{% url "password_reset_recover" %}" class="btn btn-warning form-control" type="button" style="margin-bottom: 10px;">Reset Password</a>
                     <a href="{% url 'frc_scout:about_us' %}" class="btn btn-success form-control" type="button" style="margin-bottom: 10px;">What is FRC Scout?</a>
                     <a href="mailto:contact@frcscout.com" class="btn btn-info form-control">Contact Us</a>
                 </div>

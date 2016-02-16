@@ -13,10 +13,12 @@ urlpatterns = patterns(
     url(r'^admin/', include(admin.site.urls)),
 
     url(r'^', include('frc_scout.urls', namespace='frc_scout')),
-	)
+    url(r'^password/', include('password_reset.urls')),
+)
 
 if settings.DEBUG:
     import debug_toolbar
     urlpatterns += patterns('',
-        url(r'^__debug__/', include(debug_toolbar.urls)),
-	)
+                            url(r'^__debug__/', include(debug_toolbar.urls)),
+    )
+

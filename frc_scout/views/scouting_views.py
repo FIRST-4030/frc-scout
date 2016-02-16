@@ -10,7 +10,7 @@ import decimal
 from frc_scout.decorators import insecure_required
 from frc_scout.models import Match, Location, ToteStack, ContainerStack, PitScoutData, MatchPrivateComments
 from frc_scout.tba_request import make_tba_request
-import requests
+
 
 @insecure_required
 def match_scouting(request):
@@ -20,6 +20,7 @@ def match_scouting(request):
         }
 
     return render(request, 'frc_scout/scouting/match/container.html', context)
+
 
 @insecure_required
 def match_scouting_practice(request):
