@@ -93,7 +93,7 @@
             <label for="select_team_defenses_1" style="padding-top: 10px; font-weight: bold;" class="col-sm-4 control-label input-x-lg">Enemy Defense 1:</label>
             <div class="col-sm-8">
                 <div id="select_team_defenses">
-                    <select id="select_team_defenses_1" style="padding-top: 10px;" class="form-control input-x-lg background-white">
+                    <select id="select_team_defenses_1" style="padding-top: 10px;" class="form-control input-x-lg background-white select-defense">
                         <option value="">Select a Defense</option>
                         <option value="def_port">Portcullis</option>
                         <option value="def_moat">Moat</option>
@@ -111,7 +111,7 @@
             <label for="select_team_defenses_2" style="padding-top: 10px; font-weight: bold;" class="col-sm-4 control-label input-x-lg">Enemy Defense 2:</label>
             <div class="col-sm-8">
                 <div id="select_team_defenses">
-                    <select id="select_team_defenses_2" style="padding-top: 10px;" class="form-control input-x-lg background-white">
+                    <select id="select_team_defenses_2" style="padding-top: 10px;" class="form-control input-x-lg background-white select-defense">
                         <option value="">Select a Defense</option>
                         <option value="def_port">Portcullis</option>
                         <option value="def_moat">Moat</option>
@@ -129,7 +129,7 @@
             <label for="select_team_defenses_3" style="padding-top: 10px; font-weight: bold;" class="col-sm-4 control-label input-x-lg">Enemy Defense 3:</label>
             <div class="col-sm-8">
                 <div id="select_team_defenses">
-                    <select id="select_team_defenses_3" style="padding-top: 10px;" class="form-control input-x-lg background-white">
+                    <select id="select_team_defenses_3" style="padding-top: 10px;" class="form-control input-x-lg background-white select-defense">
                         <option value="">Select a Defense</option>
                         <option value="def_port">Portcullis</option>
                         <option value="def_moat">Moat</option>
@@ -147,7 +147,7 @@
             <label for="select_team_defenses_4" style="padding-top: 10px; font-weight: bold;" class="col-sm-4 control-label input-x-lg">Enemy Defense 4:</label>
             <div class="col-sm-8">
                 <div id="select_team_defenses">
-                    <select id="select_team_defenses_4" style="padding-top: 10px;" class="form-control input-x-lg background-white">
+                    <select id="select_team_defenses_4" style="padding-top: 10px;" class="form-control input-x-lg background-white select-defense">
                         <option value="">Select a Defense</option>
                         <option value="def_port">Portcullis</option>
                         <option value="def_moat">Moat</option>
@@ -238,7 +238,7 @@
                 <h3>Inbetween</h3>
                 <div class="row">
                     <div class="col-xs-8">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="Crossing" selector="location_select">Crossed</button>
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="Crossing" selector="defense_select">Crossed</button>
                     </div>
                 </div>
 
@@ -259,7 +259,7 @@
 
                 <div class="row">
                     <div class="col-xs-8">
-                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="BlockedCrossing" selector="location_select">Blocked a crossing</button>
+                        <button class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract" data-name="BlockedCrossing" selector="defense_select">Blocked a crossing</button>
                     </div>
                 </div>
             </div>
@@ -278,7 +278,7 @@
             </div>
         </div>
         <br>
-    </div>
+   
     
     <!-- LOCATION SELECT -->
     <div class="container-fluid stage location-select" style="display: none;" id="location_select">
@@ -301,15 +301,20 @@
     </div>
 
     <!-- DEFENSE SELECT -->
-    <div class="container-fluid stage" id="defenseselection" style="display:none;">
+    <div class="container-fluid stage" id="defense_select" style="display:none;">
         <div class="row">
             <div class="col-sm-8">
-                <button id="defense_select_1" class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract">Defense (1)</button>
-                <button id="defense_select_2" class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract">Defense (2)</button>
+                <button id="defense_select_1" class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-defense">Defense (1)</button>
+                <button id="defense_select_2" class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-defense">Defense (2)</button>
             </div>
             <div class="col-sm-8">
-                <button id="defense_select_3" class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract">Defense (3)</button>
-                <button id="defense_select_4" class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-add-subtract">Defense (4)</button>
+                <button id="defense_select_3" class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-defense">Defense (3)</button>
+                <button id="defense_select_4" class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-defense">Defense (4)</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <button id="defense_lowBar_0" class="btn btn-extra-high btn-lg btn-lg-text btn-success max-width btn-defense">Low Bar</button>
             </div>
         </div>
     </div>
@@ -421,6 +426,7 @@
             </div>
         </div>
     </div>
+ </div>
     <input type="hidden" id="practice_scouting" name="practice_scouting" value="{% if practice_scouting %}true{% else %}false{% endif %}">
 
 {% endblock %}
@@ -428,7 +434,7 @@
 
 {% block extra_js %}
         <script type="text/javascript" src="{% static 'frc_scout/js/bootstrap-switch.min.js' %}"></script>
-        <script type="text/javascript" src="{% static "frc_scout/js/match-scouting.js" %}"></script>
+        <script type="text/javascript" src="{% static 'frc_scout/js/match-scouting.js' %}"></script>
 
         <script type="text/javascript">
             if($("#practice_scouting").val() === "true") {

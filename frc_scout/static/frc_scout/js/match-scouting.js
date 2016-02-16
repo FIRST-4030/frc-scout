@@ -2,16 +2,16 @@
 var backgroundColorRed = "rgb(255, 204, 204)";
 var backgroundColorBlue = "rgb(204, 216, 255)";
 
+
+var defenses = ["Portcullis","Moat","Drawbridge","Rough Terrain","Rock Wall","Ramparts","Sally Port","Cheval de Frise"]
 var schedule = null;
-var matchdata = 
-    { 
+var matchdata = { 
     events : []
-    };
-var matchProperties = 
-    {
+};
+var matchProperties = {
     startTime:0,
     currentStage:""
-    };
+};
 var isAuton=true;
 function imageCallback(x, y){
     matchdata.events[matchdata.events.length-1].x = x;
@@ -187,7 +187,21 @@ $(".btn-add-subtract").click(function(event){
     $("#" + data.attr("selector")).show();
     matchdata.events.push(eventData);
 });
+$(".select-defense").on("change", function(event){
+    var obj = $(this);
+    $("#defense_select_" + getLast(obj)).text(defenses[obj.prop("selectedIndex")-1]);
+});
+$(".btn-defense").click(function(event){
+    var obj = $(this);
+    matchdata.events[matchdata.events.length-1].y = defenses.indexOf(obj.text(defenses));
+    matchdata.events[matchdata.events.length-1].x = parseInt(getLast(obj));
+    $("#defense_select").hide();
+    $("#events").show();
+});
 
+function getLast(obj){
+    return obj.attr("id")[obj.attr("id").length-1];
+}
 $("#undo").click(function(){
    if(confirm("Delete the last event\n" + JSON.stringify(matchdata.events[matchdata.events.length-1], null, 2))){
        matchdata.events.pop();

@@ -5,39 +5,37 @@ $("input[type=checkbox]").bootstrapSwitch({
                 'indeterminate': true
             });
 
-            $(function() {
-                if(window.location.hash) {
-                    if(!isNaN(window.location.hash.substr(1))) {
-                        $("#team_number").val(window.location.hash.substr(1));
-                    }
-                }
-            });
+$(function() {
+    if(window.location.hash) {
+        if(!isNaN(window.location.hash.substr(1))) {
+            $("#team_number").val(window.location.hash.substr(1));
+        }
+    }
+});
 
-            $(".set-indeterminate").click(function() {
-                $(this).prev('.bootstrap-switch').find('input[type=checkbox]').bootstrapSwitch('indeterminate', true);
-            });
+$(".set-indeterminate").click(function() {
+    $(this).prev('.bootstrap-switch').find('input[type=checkbox]').bootstrapSwitch('indeterminate', true);
+});
 
-            function getFormData() {
-                var data = {}
-
-                $.each($("#pit_scout_form").find('input, select').not('input[type=checkbox], input[type=file]'), function() {
-                    if($(this).val() !== "") {
-                        if(!isNaN($(this).val())) {
-                            data[this.id] = parseFloat($(this).val());
-                        } else {
-                            data[this.id] = $(this).val();
-                        }
-                    }
-                });
-
-                $.each($("#pit_scout_form").find('input[type=checkbox]'), function() {
-                    if(!$(this).bootstrapSwitch('indeterminate')) {
-                        data[this.id] = $(this).bootstrapSwitch('state');
-                    }
-                })
-
-                return data;
+function getFormData() {
+    var data = {}
+    $.each($("#pit_scout_form").find('input, select').not('input[type=checkbox], input[type=file]'), function() {
+        if($(this).val() !== "") {
+            if(!isNaN($(this).val())) {
+                data[this.id] = parseFloat($(this).val());
+            } else {
+                data[this.id] = $(this).val();
             }
+        }
+    });
+    $.each($("#pit_scout_form").find('input[type=checkbox]'), function() {
+        if(!$(this).bootstrapSwitch('indeterminate')) {
+            data[this.id] = $(this).bootstrapSwitch('state');
+        }
+    })
+
+    return data;
+}
 
             function clearForm() {
                 $.each($("#pit_scout_form").find('input, select').not('input[type=checkbox]'), function() {
