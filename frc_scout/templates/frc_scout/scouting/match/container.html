@@ -329,38 +329,10 @@
         </div>
         <div class="row">
             <div class="col-md-12">
-                <input type="number" class="form-control background-white input-x-lg" id="match_final_score" placeholder="Final Alliance Score">
+                <button class="btn-extra-high btn-lg btn-lg-text btn-success max-width" id="submit" onclick="attemptMatchSubmission()">Submit</button>
             </div>
         </div>
-        <br>
-        <div class="row">
-            <div class="col-md-12">
-                <textarea class="form-control background-white" rows="2" id="tele_foul_context" placeholder="Please comment on any fouls that occurred during the match."></textarea>
-            </div>
-        </div>
-        <br>
-        <div class="row">
-            <div class="col-md-12">
-                {#                <h5><strong>Private</strong> comments about the match. <span style="color: green; font-weight: 500;">Only your team will have access to them.</span></h5>#}
-                <textarea class="form-control background-white" rows="2" id="tele_private_comments" placeholder="Private comments about the match &mdash; only your team will have access to them."></textarea>
-            </div>
-        </div>
-        <br>
-        <div class="row">
-            <div class="col-md-12">
-                {#                <h5><strong>Public</strong> comments about the match. <span style="color: firebrick; font-weight: 500;">Everyone will have access to them.</span></h5>#}
-                <textarea class="form-control background-white" rows="2" id="tele_public_comments" placeholder="Public comments about the match &mdash; everyone will have access to them."></textarea>
-            </div>
-        </div>
-        <Br>
-        <div class="row">
-            <div class="col-sm-6">
-                <button style="margin-top: 5px; margin-bottom: 5px;" class="btn btn-extra-high btn-info btn-lg max-width" onclick="saveAndContinue('postmatch', 'teleoperated');"><span class="glyphicon glyphicon-arrow-left"></span>&nbsp; teleoperated</button>
-            </div>
-            <div class="col-sm-6">
-                <button style="margin-top: 5px; margin-bottom: 5px;" class="btn btn-extra-high btn-primary btn-lg max-width" onclick="saveAndContinue('postmatch', 'finish');">finish scouting  &nbsp;<span class="glyphicon glyphicon-arrow-right"></span></button>
-            </div>
-        </div>
+        
     </div>
 
     <div class="container-fluid stage" id="finish" style="display: none;">
@@ -395,7 +367,7 @@
                                     <button class="btn btn-danger max-width btn-lg btn-extra-high" onclick="discardData();"><span class="glyphicon glyphicon-exclamation-sign"></span> discard data</button>
                                 </div>
                                 <div class="col-sm-9">
-                                    <button class="btn btn-success max-width btn-lg btn-extra-high" onclick="submitData();" id="upload_data"><span class="glyphicon glyphicon-upload"></span> submit to database</button>
+                                    <button class="btn btn-success max-width btn-lg btn-extra-high" onclick="attemptMatchSubmission();" id="upload_data"><span class="glyphicon glyphicon-upload"></span> submit to database</button>
                                 </div>
                             </div>
                         </div>

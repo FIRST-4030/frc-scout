@@ -18,14 +18,26 @@ def database_instructions(request):
     return render(request, 'frc_scout/results/connect_to_database.html', context)
 
 
-@login_required
-def average_scores(request):
-    context = {
-        'nav_title': "Average Scores"
-    }
-
-    return render(request, 'frc_scout/results/average_total_score.html', context)
-
+@insecure_required
+def get_count(request):
+    if not request.user.is_authenticated():
+        return  HttpResponse(status=403)
+    if request.method != "POST":
+        return HttpResponseNotAllowed(["Post"])
+    else:
+        data = str(request.POST.get('data'))
+        
+        params = json.loads(data)
+    if not params.get("team"):
+        return HttpResponse('{"error":"missing team number"}', status=400)
+        
+    events = Event.objects.filter(team_number=params.get("team"))
+    counts = [None] * 7
+    if params.get("filter"):
+        events = events.filter(**params.get("filter"))
+    for x in range(7):
+        counts[x] = events.filter(evType=x).count()
+    return JsonResponse(counts, safe=False)
 
 def tableau_info(request):
     context = {
@@ -34,6 +46,14 @@ def tableau_info(request):
     }
 
     return render(request, "frc_scout/results/tableau.html", context)
+
+@login_required
+def heatmap(request):
+    context = {
+        'nav_title': "Event Heatmaps",
+    }
+
+    return render(request, "frc_scout/results/heatmap.html", context)
 
 @insecure_required
 def view_team_match_data(request):
@@ -47,7 +67,7 @@ def view_team_match_data(request):
         params = json.loads(data)
         
         if not params.get("team"):
-            return HttpResponse('{"error":"missing team number"', status=400)
+            return HttpResponse('{"error":"missing team number"}', status=400)
         
         matches = Match.objects.filter(team_number=params.get("team")).exclude(location__name="TEST")
         if not params.get("god"):
@@ -55,11 +75,11 @@ def view_team_match_data(request):
         if params.get("this_location"):
             matches = matches.filter(location=request.session.get('location_id'))
         if params.get("filter"):
-            matches.filter(**params.get("filter"))
+            matches = matches.filter(**params.get("filter"))
         if params.get("order"):
-            matches.order_by(params.get("order"))
+            matches = matches.order_by(*params.get("order"))
         if params.get("columns"):
-            results = [x for x in matches.values(params.get("columns"))]
+            results = [x for x in matches.values(*params.get("columns"))]
         else:
             results = [x for x in matches.values()]
         return JsonResponse(results, safe=False)
@@ -73,9 +93,16 @@ def view_event_data(request):
         data = request.POST.get('data')
         params = json.loads(data)
         if not params.get("match"):
-            return HttpResponse('{"error":"missing match number"', status=400)
-        events = Event.objects.filter(match_id=params.get("match")).order_by("time").values()
-        results = [x for x in events]
+            return HttpResponse('{"error":"missing match number"}', status=400)
+        events = Event.objects.filter(match_id=params.get("match")).order_by("time")
+        if params.get("filter"):
+            events = events.filter(**params.get("filter"))
+        if params.get("order"):
+            events = events.order_by(*params.get("order"))
+        if params.get("columns"):
+            results = [x for x in matches.values(*params.get("columns"))]
+        else:
+            results = [x for x in matches.values()]
         return JsonResponse(results, safe=False)
 @insecure_required
 def view_team_event_data(request):
@@ -87,14 +114,14 @@ def view_team_event_data(request):
         data = request.POST.get('data')
         params = json.loads(data)
         if not params.get("team"):
-            return HttpResponse('{"error":"missing team number"', status=400)
+            return HttpResponse('{"error":"missing team number"}', status=400)
         events = Event.objects.filter(team_number=params.get("team"))
         if params.get("filter"):
-            events.filter(**params.get("filter"))
+            events = events.filter(**params.get("filter"))
         if params.get("order"):
-            events.order_by(params.get("order"))
+            events = events.order_by(*params.get("order"))
         if params.get("columns"):
-            results = [x for x in events.values(params.get("columns"))]
+            results = [x for x in events.values(*params.get("columns"))]
         else:
             results = [x for x in events.values()]
     return JsonResponse(results, safe=False)

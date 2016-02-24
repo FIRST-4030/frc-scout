@@ -42,7 +42,7 @@ $(function() {
     // always hide the loading thing once js is run
     $("#loading").hide();
     $("#prematch").show();
-
+    matchdata.practice_scouting = $("#practice_scouting").val();
     /* If there's no hash setup a new match */
     if (window.location.hash === "" || !localStorage.pageMatchID) {
         console.log("new match: " + localStorage.pageMatchID);
@@ -118,14 +118,14 @@ $("#match_number").on('keyup', function() {
 
         $.each(red, function(k, v) {
             $("#red" + k).text(v.substr(3));
-            $("#select_team_number_select").append("<option class='d' data-color='red' value='" + v + "'>Red " + onetwothree[index] + ": " + v.substr(3) + "</option>");
+            $("#select_team_number_select").append("<option class='d' data-color='red' value='" + v.substr(3) + "'>Red " + onetwothree[index] + ": " + v.substr(3) + "</option>");
             index++;
         });
 
         index = 0;
 
         $.each(blue, function(k, v) {
-            $("#select_team_number_select").append("<option class='d' data-color='blue' value='" + v + "'>Blue " + onetwothree[index] + ": " + v.substr(3) + "</option>");
+            $("#select_team_number_select").append("<option class='d' data-color='blue' value='" + v.substr(3) + "'>Blue " + onetwothree[index] + ": " + v.substr(3) + "</option>");
             $("#blue" + k).text(v.substr(3));
             index++;
         });
@@ -179,7 +179,7 @@ var events = {
 $(".btn-add-subtract").click(function(event){
     var data = $(this);
     var eventData = {
-        evType:data.attr("data-name"),
+        evType:events[data.prop("data-name")],
         isAuton:$("#autonomous").is(":visible"),
         time:Date.now()-matchProperties.startTime
     };
@@ -193,7 +193,7 @@ $(".select-defense").on("change", function(event){
 });
 $(".btn-defense").click(function(event){
     var obj = $(this);
-    matchdata.events[matchdata.events.length-1].y = defenses.indexOf(obj.text(defenses));
+    matchdata.events[matchdata.events.length-1].y = defenses.indexOf(obj.text());
     matchdata.events[matchdata.events.length-1].x = parseInt(getLast(obj));
     $("#defense_select").hide();
     $("#events").show();
@@ -216,9 +216,18 @@ $("#team_number").keyup(function() {
 
 function changeStage(fromStage, toStage){
     if(fromStage == "prematch") {
-        matchdata.team_number =  parseInt($("#team_number").text());
-        matchdata.match_number = parseInt($("#match_number").text());
+        if($("#team_number").val() == "")
+            matchdata.team_number =  parseInt($("#select_team_number_select").val());
+        matchdata.match_number = parseInt($("#match_number").val());
         matchProperties.startTime = Date.now();
+    }else if(fromStage=="postmatch"){
+        var data = JSON.parse(localStorage.getItem("matches"));
+        data.pop()
+        localStorage.setItem("matches", JSON.stringify(data));
+    }else if(toStage=="postmatch"){
+        var data = JSON.parse(localStorage.getItem("matches"));
+        data.push(matchdata)
+        localStorage.setItem("matches", JSON.stringify(data));
     }
     discardAndChangeStage(fromStage,toStage);
 }
@@ -259,6 +268,9 @@ function cancelImage(){
     }
 }
 function saveData(){
+    if(localStorage.getItem("matches") == undefined){
+        localStorage.setItem("matches", JSON.stringify([matches]));
+    }
     var matches = JSON.parse(localStorage.getItem("matches"));
     matches.push(matchdata);
     localStorage.setItem("matches", JSON.stringify(matches));
@@ -266,7 +278,7 @@ function saveData(){
 
 function attemptMatchSubmission(){
     if(localStorage.getItem("matches")){
-        $.ajax({
+        var item = $.ajax({
             url: '/scouting/match/submit/',
             method: "POST",
             data: {
@@ -283,8 +295,12 @@ function attemptMatchSubmission(){
                 403:function(){
                     alert("You're forbidden");
                 }
+            },
+            success: function(){
+                localStorage.setItem("matches", null);
             }
         });
+        console.log(item);
     }
 }
 

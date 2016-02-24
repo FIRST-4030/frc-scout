@@ -19,7 +19,7 @@ urlpatterns = patterns(
     url(r'^json/team_exists/$', views.check_if_team_exists, name='check_if_team_exists'),
     url(r'^json/username_exists/$', views.check_if_username_exists, name='check_if_username_exists'),
     url(r'^json/locations/$', views.get_locations, name='get_locations'),
-    url(r'^json/results/averages/$', views.get_averages, name='get_averages'),
+    url(r'^results/counts/$', views.get_count, name='get_averages'),
     
     # Team management views
     url(r'^manage/scouts/$', views.view_scouts, name='view_scouts'),
@@ -51,6 +51,7 @@ urlpatterns = patterns(
     # Results views
     url(r'^results/database/$', views.database_instructions, name='database_instructions'),
     url(r'^results/tableau/$', views.tableau_info, name='tableau_info'),
+    url(r'^results/heatmap/$', views.heatmap, name='heatmap'),
 
     # Event views
     url(r'^event/teams/$', views.teams_at_event, name='teams_at_event'),

@@ -49,6 +49,7 @@ def submit_match_scouting_data(request):
         raise Http404
     else:
         data = str(request.POST.get('data'))
+        print(data)
         matches = json.loads(data)
         
         eventsStorage = []
