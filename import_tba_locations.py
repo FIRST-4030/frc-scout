@@ -14,7 +14,9 @@ from frc_scout.models import Location
 
 APP_ID = "frc4030:frcscout.com:v1"
 
-TBA_URL = "http://www.thebluealliance.com/api/v2/events/2015?X-TBA-App-Id=" + APP_ID
+TBA_URL = "http://www.thebluealliance.com/api/v2/events/2016?X-TBA-App-Id=" + APP_ID
+
+tba_locations = None
 
 try:
     tba_locations = requests.get(TBA_URL).json()
