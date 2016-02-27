@@ -1,6 +1,6 @@
 # FRC Scout
 
-** Now with updates for 2016.**
+**Now with updates for 2016.**
 
 Web-based scouting system for the 2015 FRC game, Recycle Rush.
 Go to: [frcscout.com](http://frcscout.com)
