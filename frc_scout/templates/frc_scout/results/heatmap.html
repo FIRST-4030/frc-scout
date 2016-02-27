@@ -1,0 +1,55 @@
+{% extends 'frc_scout/base.html' %}
+
+{% load staticfiles %}
+
+{% block title %}Scouting{% endblock %}
+{% load compress %}
+
+{% block extra_css %}
+    <style>
+        #eventMap{
+            background-image:url('{% static "frc_scout/img/input_map_2016.png" %}');
+        }
+    </style>
+    {% compress css %}
+        <link rel="stylesheet" type="text/css" href="{% static "frc_scout/css/bootstrap-switch.min.css" %}">
+    {% endcompress %}
+{% endblock %}
+
+{% block main_content %}
+
+
+    <!-- LOADING SCREEN -->
+    <div class="container" id="heatmap">
+        <div class="row">
+            <div class="col-md-6">
+                <h2>Event Heatmap<span class="team-number"></span></h2>
+            </div>
+        </div>
+        <div class="row" >
+            <div class ="col-md-12" id = "heatmap_container">
+                <img src="{% static "frc_scout/img/input_map_2016.png" %}" class="input-location-image" id="heatmap_image">
+            </div>
+        </div>
+        <div class="row">
+            <div class = "col-md-6" id = "tree_container">
+                <canvas id = "tree" width="600" height= "400"></canvas>
+            </div>
+        </div>
+        <div class="row">
+            <div class = "col-md-6" id = "tree_container">
+                <canvas id = "eventMap" width="600" height= "400"></canvas>
+            </div>
+        </div>
+        <br>
+    </div>
+{% endblock %}
+{% block extra_js %}
+        <script type="text/javascript" src="{% static 'frc_scout/js/bootstrap-switch.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'frc_scout/js/springy.js' %}"></script>
+        <script type="text/javascript" src="{% static 'frc_scout/js/springyui.js' %}"></script>
+        <script type="text/javascript" src="{% static 'frc_scout/js/heatmap.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'frc_scout/js/match-data.js' %}"></script>
+        
+        
+{% endblock %}

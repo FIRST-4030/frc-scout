@@ -1,8 +1,10 @@
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
+from django.http import HttpResponse, HttpResponseNotAllowed, JsonResponse
 from django.shortcuts import render
-from frc_scout.models import Team, Match
-from frc_scout.views.team_management_views import match_score
+from frc_scout.models import Team, Match, Event, PitScoutData
+from frc_scout.decorators import insecure_required
+import json
 
 __author__ = 'Sam'
 
@@ -16,14 +18,26 @@ def database_instructions(request):
     return render(request, 'frc_scout/results/connect_to_database.html', context)
 
 
-@login_required
-def average_scores(request):
-    context = {
-        'nav_title': "Average Scores"
-    }
-
-    return render(request, 'frc_scout/results/average_total_score.html', context)
-
+@insecure_required
+def get_count(request):
+    if not request.user.is_authenticated():
+        return  HttpResponse(status=403)
+    if request.method != "POST":
+        return HttpResponseNotAllowed(["Post"])
+    else:
+        data = str(request.POST.get('data'))
+        
+        params = json.loads(data)
+    if not params.get("team"):
+        return HttpResponse('{"error":"missing team number"}', status=400)
+        
+    events = Event.objects.filter(team_number=params.get("team"))
+    counts = [None] * 7
+    if params.get("filter"):
+        events = events.filter(**params.get("filter"))
+    for x in range(7):
+        counts[x] = events.filter(evType=x).count()
+    return JsonResponse(counts, safe=False)
 
 def tableau_info(request):
     context = {
@@ -33,52 +47,102 @@ def tableau_info(request):
 
     return render(request, "frc_scout/results/tableau.html", context)
 
-
 @login_required
-def view_team_averages(request, only_us, only_here):
-    teams = Match.objects.values_list('team_number', flat=True).distinct()
-    print(teams)
-    scores = []
-    for team_number in teams:
-        total_auto = 0
-        total_tele = 0
-
-        matches = Match.objects.filter(team_number=team_number).exclude(location__name="TEST")
-        if only_us:
-            matches = matches.filter(scout__userprofile__team__team_number=request.user.userprofile.team.team_number)
-        if only_here:
-            matches = matches.filter(location=request.session.get('location_id'))
-
-        for match in matches:
-            auto_score, tele_score = match_score(match)
-            total_auto += auto_score
-            total_tele += tele_score
-        try:
-            avg_auto = total_auto / len(matches)
-            avg_tele = total_tele / len(matches)
-            avg_total = avg_auto + avg_tele
-
-            avg_auto = str("%.2f" % avg_auto)
-            avg_tele = str("%.2f" % avg_tele)
-            avg_total = str("%.2f" % avg_total)
-
-            scores.append({'team': team_number,
-                'auto': avg_auto, 'tele': avg_tele, 'total': avg_total})
-
-        except ZeroDivisionError:
-            scores.append({'team': team_number,
-                'auto': "—", 'tele': "—", 'total': "—"})
-
-        scores = [s for s in scores if s['total'] != "—"]
-
-    scores = sorted(scores, key=lambda k: 0 if k['total'] == "—" else float(k['total']), reverse=True)
-
-
+def heatmap(request):
     context = {
-        'nav_title': "Team Averages",
-        'parent': reverse('frc_scout:index'),
-        'scores': scores,
-        'opts': { 'only_us' : only_us, 'only_here' : only_here },
+        'nav_title': "Event Heatmaps",
     }
 
-    return render(request, "frc_scout/results/team_averages.html", context)
+    return render(request, "frc_scout/results/heatmap.html", context)
+
+@insecure_required
+def view_team_match_data(request):
+    if not request.user.is_authenticated():
+        return  HttpResponse(status=403)
+    if request.method != "POST":
+        return HttpResponseNotAllowed(["Post"])
+    else:
+        data = str(request.POST.get('data'))
+        
+        params = json.loads(data)
+        
+        if not params.get("team"):
+            return HttpResponse('{"error":"missing team number"}', status=400)
+        
+        matches = Match.objects.filter(team_number=params.get("team")).exclude(location__name="TEST")
+        if not params.get("god"):
+            matches = matches.filter(scout__userprofile__team__team_number=request.user.userprofile.team.team_number)
+        if params.get("this_location"):
+            matches = matches.filter(location=request.session.get('location_id'))
+        if params.get("filter"):
+            matches = matches.filter(**params.get("filter"))
+        if params.get("order"):
+            matches = matches.order_by(*params.get("order"))
+        if params.get("columns"):
+            results = [x for x in matches.values(*params.get("columns"))]
+        else:
+            results = [x for x in matches.values()]
+        return JsonResponse(results, safe=False)
+@insecure_required
+def view_event_data(request):
+    if not request.user.is_authenticated():
+        return  HttpResponse(status=403)
+    if request.method != "POST":
+        return HttpResponseNotAllowed(["Post"])
+    else:
+        data = request.POST.get('data')
+        params = json.loads(data)
+        if not params.get("match"):
+            return HttpResponse('{"error":"missing match number"}', status=400)
+        events = Event.objects.filter(match_id=params.get("match")).order_by("time")
+        if params.get("filter"):
+            events = events.filter(**params.get("filter"))
+        if params.get("order"):
+            events = events.order_by(*params.get("order"))
+        if params.get("columns"):
+            results = [x for x in matches.values(*params.get("columns"))]
+        else:
+            results = [x for x in matches.values()]
+        return JsonResponse(results, safe=False)
+@insecure_required
+def view_team_event_data(request):
+    if not request.user.is_authenticated():
+        return  HttpResponse(status=403)
+    if request.method != "POST":
+        return HttpResponseNotAllowed(["Post"])
+    else:
+        data = request.POST.get('data')
+        params = json.loads(data)
+        if not params.get("team"):
+            return HttpResponse('{"error":"missing team number"}', status=400)
+        events = Event.objects.filter(team_number=params.get("team"))
+        if params.get("filter"):
+            events = events.filter(**params.get("filter"))
+        if params.get("order"):
+            events = events.order_by(*params.get("order"))
+        if params.get("columns"):
+            results = [x for x in events.values(*params.get("columns"))]
+        else:
+            results = [x for x in events.values()]
+    return JsonResponse(results, safe=False)
+        
+def view_pit_data(request):
+    if not request.user.is_authenticated():
+        return  HttpResponse(status=403)
+    if request.method != "POST":
+        return HttpResponseNotAllowed(["Post"])
+    else:
+        data = request.POST.get('data')
+        
+        params = json.loads(data)
+        
+        pit = PitScoutData.objects.filter(team_number=params.get("team"))
+        if not params.get("god"):
+            pit = pit.filter(scout__userprofile__team__team_number=request.user.userprofile.team.team_number)
+        if params.get("this_location"):
+            pit = pit.filter(location=request.session.get('location_id'))
+        if params.get("columns"):
+            results = [x for x in pit.values(params.get("columns"))]
+        else:
+            results = [x for x in pit.values()]
+    return JsonResponse(results, safe=False)

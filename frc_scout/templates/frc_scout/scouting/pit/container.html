@@ -68,18 +68,18 @@
                     <input type="file" accept="image/*" id="robot_image" class="form-control">
                 </div>
             </div>
-            {#            <div class="form-group">#}
-            {#                <label for="team_name" class="col-lg-2 control-label">Team Name</label>#}
-            {#                <div class="col-lg-10">#}
-            {#                    <input type="text" class="form-control" id="team_name" placeholder="Team Name">#}
-            {#                </div>#}
-            {#            </div>#}
-            {#            <div class="form-group">#}
-            {#                <label for="team_name" class="col-lg-2 control-label">Team Website</label>#}
-            {#                <div class="col-lg-10">#}
-            {#                    <input type="url" class="form-control" id="team_website" placeholder="Team Website">#}
-            {#                </div>#}
-            {#            </div>#}
+            <div class="form-group">
+                <label for="team_name" class="col-lg-2 control-label">Team Name</label>
+                <div class="col-lg-10">
+                    <input type="text" class="form-control" id="team_name" placeholder="Team Name">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="team_name" class="col-lg-2 control-label">Team Website</label>
+                <div class="col-lg-10">
+                    <input type="url" class="form-control" id="team_website" placeholder="Team Website">
+                </div>
+            </div>
             <div class="form-group">
                 <label for="driver_1" class="col-lg-2 control-label">Driver 1</label>
                 <div class="col-lg-10">
@@ -121,26 +121,32 @@
                     <input type="number" class="form-control" id="robot_weight" placeholder="Weight">
                 </div>
             </div>
+            <div class="form-group">
+                <label for="robot_wheel_count" class="col-lg-2 control-label">Wheel Count</label>
+                <div class="col-lg-10">
+                    <input type="number" class="form-control" id="robot_wheel_count" placeholder="Wheel Count">
+                </div>
+            </div>
 
             <legend>Autonomous</legend>
             <div class="form-group">
-                <label for="can_move_totes" class="col-lg-2 control-label">Can Move Totes</label>
+                <label for="can_reach_works" class="col-lg-2 control-label">Can Reach Works</label>
                 <div class="col-lg-10">
-                    <input type="checkbox" class="form-control" id="can_move_totes">
+                    <input type="checkbox" class="form-control" id="can_reach_works">
                     <button type="button" class="btn btn-info set-indeterminate">Unknown</button>
                 </div>
             </div>
             <div class="form-group">
-                <label for="can_move_containers" class="col-lg-2 control-label">Can Move Containers</label>
+                <label for="can_cross_works" class="col-lg-2 control-label">Can Cross Works</label>
                 <div class="col-lg-10">
-                    <input type="checkbox" class="form-control" id="can_move_containers">
+                    <input type="checkbox" class="form-control" id="can_cross_works">
                     <button type="button" class="btn btn-info set-indeterminate">Unknown</button>
                 </div>
             </div>
             <div class="form-group">
-                <label for="can_acquire_containers" class="col-lg-2 control-label">Can Acquire Containers</label>
+                <label for="can_score_boulders" class="col-lg-2 control-label">Can Score Boulders</label>
                 <div class="col-lg-10">
-                    <input type="checkbox" class="form-control" id="can_acquire_containers">
+                    <input type="checkbox" class="form-control" id="can_score_boulders">
                     <button type="button" class="btn btn-info set-indeterminate">Unknown</button>
                 </div>
             </div>
@@ -160,70 +166,101 @@
                             <h4 class="modal-title" id="myModalLabel">Click Preferred Start Location</h4>
                         </div>
                         <div class="modal-body">
-                            <img id="auto_start_image" src="{% static 'frc_scout/img/start_zone.png' %}" style="background-color: cyan; width: 100%;">
+                            <img id="auto_start_image" src="{% static 'frc_scout/img/start_zone_2016.png' %}" style="background-color: cyan; width: 100%;">
                         </div>
                     </div>
                 </div>
             </div>
 
-
             <legend>Teleoperated</legend>
             <div class="form-group">
-                <label for="tote_stack_capacity" class="col-lg-2 control-label">Tote Stack Capacity</label>
+                <label for="can_score_high" class="col-lg-2 control-label">Can Score High</label>
                 <div class="col-lg-10">
-                    <select class="form-control" id="tote_stack_capacity">
-                        <option value="">Unknown</option>
-                        <option value="0">0</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                        <option value="6">6</option>
-                    </select>
-                </div>
-            </div>
-
-            <legend>Human Interaction</legend>
-            <div class="form-group">
-                <label for="human_tote_loading" class="col-lg-2 control-label">Human Can Load Totes</label>
-                <div class="col-lg-10">
-                    <input type="checkbox" class="form-control" id="human_tote_loading">
+                    <input type="checkbox" class="form-control" id="can_score_high">
                     <button type="button" class="btn btn-info set-indeterminate">Unknown</button>
                 </div>
             </div>
             <div class="form-group">
-                <label for="human_litter_loading" class="col-lg-2 control-label">Human Can Load Litter</label>
+                <label for="can_score_low" class="col-lg-2 control-label">Can Score Low</label>
                 <div class="col-lg-10">
-                    <input type="checkbox" class="form-control" id="human_litter_loading">
+                    <input type="checkbox" class="form-control" id="can_score_low">
                     <button type="button" class="btn btn-info set-indeterminate">Unknown</button>
                 </div>
             </div>
             <div class="form-group">
-                <label for="human_litter_throwing" class="col-lg-2 control-label">Human Can Throw Litter</label>
+                <label for="can_cross_portcullis" class="col-lg-2 control-label">Can Cross Portcullis</label>
                 <div class="col-lg-10">
-                    <input type="checkbox" class="form-control" id="human_litter_throwing">
+                    <input type="checkbox" class="form-control" id="can_cross_portcullis">
+                    <button type="button" class="btn btn-info set-indeterminate">Unknown</button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="can_cross_cheval" class="col-lg-2 control-label">Can Cross Cheval</label>
+                <div class="col-lg-10">
+                    <input type="checkbox" class="form-control" id="can_cross_cheval">
+                    <button type="button" class="btn btn-info set-indeterminate">Unknown</button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="can_cross_moat" class="col-lg-2 control-label">Can Cross Moat</label>
+                <div class="col-lg-10">
+                    <input type="checkbox" class="form-control" id="can_cross_moat">
+                    <button type="button" class="btn btn-info set-indeterminate">Unknown</button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="can_cross_ramparts" class="col-lg-2 control-label">Can Cross Ramparts</label>
+                <div class="col-lg-10">
+                    <input type="checkbox" class="form-control" id="can_cross_ramparts">
+                    <button type="button" class="btn btn-info set-indeterminate">Unknown</button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="can_cross_drawbridge" class="col-lg-2 control-label">Can Cross Drawbridge</label>
+                <div class="col-lg-10">
+                    <input type="checkbox" class="form-control" id="can_cross_drawbridge">
+                    <button type="button" class="btn btn-info set-indeterminate">Unknown</button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="can_cross_sally_port" class="col-lg-2 control-label">Can Cross Sally Port</label>
+                <div class="col-lg-10">
+                    <input type="checkbox" class="form-control" id="can_cross_sally_port">
+                    <button type="button" class="btn btn-info set-indeterminate">Unknown</button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="can_cross_rock_wall" class="col-lg-2 control-label">Can Cross Rock Wall</label>
+                <div class="col-lg-10">
+                    <input type="checkbox" class="form-control" id="can_cross_rock_wall">
+                    <button type="button" class="btn btn-info set-indeterminate">Unknown</button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="can_cross_rough_terrain" class="col-lg-2 control-label">Can Cross Rough Terrain</label>
+                <div class="col-lg-10">
+                    <input type="checkbox" class="form-control" id="can_cross_rough_terrain">
+                    <button type="button" class="btn btn-info set-indeterminate">Unknown</button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="can_cross_low_bar" class="col-lg-2 control-label">Can Cross Low Bar</label>
+                <div class="col-lg-10">
+                    <input type="checkbox" class="form-control" id="can_cross_low_bar">
                     <button type="button" class="btn btn-info set-indeterminate">Unknown</button>
                 </div>
             </div>
 
             <legend>Maneuvering</legend>
             <div class="form-group">
-                <label for="has_turret" class="col-lg-2 control-label">Has Turret</label>
+                <label for="can_strafe" class="col-lg-2 control-label">Can Strafe</label>
                 <div class="col-lg-10">
-                    <input type="checkbox" class="form-control" id="has_turret">
+                    <input type="checkbox" class="form-control" id="can_strafe">
                     <button type="button" class="btn btn-info set-indeterminate">Unknown</button>
                 </div>
             </div>
             <div class="form-group">
-                <label for="has_strafing" class="col-lg-2 control-label">Has Strafing</label>
-                <div class="col-lg-10">
-                    <input type="checkbox" class="form-control" id="has_strafing">
-                    <button type="button" class="btn btn-info set-indeterminate">Unknown</button>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="robot_speed" class="col-lg-2 control-label">Robot Speed (ft/s)</label>
+                <label for="robot_speed" class="col-lg-2 control-label">Speed (ft/sec)</label>
                 <div class="col-lg-10">
                     <input type="number" class="form-control" id="robot_speed" placeholder="Speed">
                 </div>
@@ -269,173 +306,8 @@
     {% compress js %}
         <script type="text/javascript" src="{% static 'frc_scout/js/bootstrap-switch.min.js' %}"></script>
     {% endcompress %}
-    {% compress js inline %}
-        <script type="text/javascript">
-            $("input[type=checkbox]").bootstrapSwitch({
-                'offText': "NO",
-                'onText': "YES",
-                'size': 'large',
-                'indeterminate': true
-            });
-
-            $(function() {
-                if(window.location.hash) {
-                    if(!isNaN(window.location.hash.substr(1))) {
-                        $("#team_number").val(window.location.hash.substr(1));
-                    }
-                }
-            });
-
-            $(".set-indeterminate").click(function() {
-                $(this).prev('.bootstrap-switch').find('input[type=checkbox]').bootstrapSwitch('indeterminate', true);
-            });
-
-            function getFormData() {
-                var data = {}
-
-                $.each($("#pit_scout_form").find('input, select').not('input[type=checkbox], input[type=file]'), function() {
-                    if($(this).val() !== "") {
-                        if(!isNaN($(this).val())) {
-                            data[this.id] = parseFloat($(this).val());
-                        } else {
-                            data[this.id] = $(this).val();
-                        }
-                    }
-                });
-
-                $.each($("#pit_scout_form").find('input[type=checkbox]'), function() {
-                    if(!$(this).bootstrapSwitch('indeterminate')) {
-                        data[this.id] = $(this).bootstrapSwitch('state');
-                    }
-                })
-
-                return data;
-            }
-
-            function clearForm() {
-                $.each($("#pit_scout_form").find('input, select').not('input[type=checkbox]'), function() {
-                    $(this).val("");
-                });
-
-                $.each($("#pit_scout_form").find('input[type=checkbox]'), function() {
-                    $(this).bootstrapSwitch('indeterminate', true);
-                })
-
-                $("#toggle_modal")
-                        .removeClass('success')
-                        .addClass('primary')
-                        .text("SELECT");
-
-                $("#failure").hide();
-            }
-
-            /*
-             Get the relative coordinates from start image
-             */
-            $("#auto_start_image").click(function (event) {
-                var image = $(this);
-
-                var xPosition = (event.pageX - image.offset().left) / image.width();
-                var yPosition = (event.pageY - image.offset().top) / image.height();
-
-
-                if((yPosition > 0.18 && yPosition < 0.4) || yPosition > 0.62) {
-                    if(!confirm("Confirm autonomous starting location.")) {
-                        return;
-                    }
-
-                    $("#auto_start_x").val(xPosition);
-                    $("#auto_start_y").val(yPosition);
-                    $("#autoStartModal").modal('hide');
-
-                    $("#toggle_modal")
-                            .removeClass('btn-primary')
-                            .addClass('btn-success')
-                            .html("<span class='glyphicon glyphicon-check'></span> Location set, click to edit.");
-                } else {
-                    alert("Invalid Location.");
-                }
-            });
-
-            window.onbeforeunload = function() {
-                if(Object.keys(getFormData()).length > 0) {
-                    return "You've entered data into the form. Are you sure you want to reload the page?";
-                }
-            }
-
-            function submitForm() {
-                if($("#team_number").val() === "") {
-                    window.scrollTo(0, 1);
-                    $("#required_message").show();
-                    return;
-                }
-                if(Object.keys(getFormData()).length > 1 || $("#robot_image").val() !== "") {
-
-                    $("#submit_progress").show();
-                    $("#submit_progress_bar").css('width', '20%');
-
-                    $("#submit_button").button('loading');
-                    postToImgur();
-                } else {
-                    window.scrollTo(0, 1);
-                    $("#insufficient_message").show();
-                }
-            }
-
-            function postToImgur() {
-                var formData = new FormData();
-                formData.append("image", $("#robot_image")[0].files[0]);
-                $.ajax({
-                    url: "https://api.imgur.com/3/image",
-                    type: "POST",
-                    datatype: "json",
-                    headers: {
-                        "Authorization": "Client-ID 74944771f93ba86"
-                    },
-                    data: formData,
-                    success: function(response) {
-                        console.log(response);
-                        $("#submit_progress_bar").css('width', '80%');
-                        postFormData(response);
-                    },
-                    error: function(response) {
-                        console.log(response);
-                        $("#submit_progress_bar").css('width', '0%');
-                        $("#failure").show();
-                        postFormData(response);
-
-                    },
-                    cache: false,
-                    contentType: false,
-                    processData: false
-                });
-            }
-
-            function postFormData(imageData) {
-                var formData = getFormData();
-
-                $.ajax({
-                    url: '{% url "frc_scout:submit_pit_scouting_data" %}',
-                    type: "POST",
-                    data: {
-                        csrfmiddlewaretoken: $.cookie('csrftoken'),
-                        data: JSON.stringify(formData),
-                        image_data: JSON.stringify(imageData)
-                    },
-                    success: function() {
-                        $("#submit_progress_bar").css('width', '100%');
-                        window.setTimeout(function() {
-                            $("#submit_button").button('reset');
-                            clearForm();
-                            window.scrollTo(0, 1);
-                            $("#success_message").show();
-                            $("#submit_progress").hide();
-                        }, 2000);
-                    }
-                })
-
-            }
-        </script>
+    {% compress js  %}
+        <script type="text/javascript" src="{% static 'frc_scout/js/pit-scouting.js' %}"> </script>
     {% endcompress %}
 {% endblock %}
 

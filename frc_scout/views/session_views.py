@@ -1,6 +1,7 @@
 import json
 
 from django.contrib.auth import authenticate, logout, login
+from django.views.decorators.csrf import *
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
@@ -8,11 +9,13 @@ from django.http.response import HttpResponseRedirect
 from django.shortcuts import render
 from django.contrib import messages
 from django.utils import timezone
+from django.template import RequestContext
 from frc_scout.models import Team, UserProfile, Location, SitePreferences, Match
 from django.db import IntegrityError
 from frc_scout.decorators import secure_required, insecure_required
-from frc_scout_2015 import local_settings
+import frc_scout_2015.local_settings
 
+local_settings = frc_scout_2015.local_settings
 
 @insecure_required
 def index(request):
@@ -45,9 +48,9 @@ def index(request):
     else:
         return HttpResponseRedirect(reverse('frc_scout:login'))
 
-
-@secure_required
 # Cannot be named login() because it conflicts with django internally and causes an infinite loop
+@ensure_csrf_cookie
+@secure_required
 def login_view(request):
 
     location_list = {}
@@ -113,7 +116,6 @@ def login_view(request):
 # Cannot be named logout(), see above
 def logout_view(request):
     logout(request)
-    messages.success(request, "You have logged out successfully.")
     return HttpResponseRedirect(reverse('frc_scout:login'))
 
 

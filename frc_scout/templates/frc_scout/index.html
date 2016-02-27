@@ -5,7 +5,9 @@
 {% block nav %}{% include 'frc_scout/nav.html' %}{% endblock %}
 
 {% block main_content %}
-
+    <script>
+        console.log("{{csrf_token}}");
+    </script>
     <div class="row">
 
         {% if home_messages %}
@@ -75,12 +77,11 @@
         {% endif %}
 
         <div class="col-md-10 col-md-offset-1">
-            <div class="panel panel-primary">
+            <div class="panel panel-primary">        
                 <div class="panel-heading">
                     <h3 class="panel-title">Results</h3>
                 </div>
                 <div class="panel-body">
-                    <a class="btn btn-primary btn-super btn-fill" href="{% url "frc_scout:view_team_averages" only_us=False only_here=True %}">View team averages</a>
                     <a class="btn btn-primary btn-super btn-fill" href="{% url 'frc_scout:tableau_info' %}">Integrate with Tableau</a>
                     <a class="btn btn-primary btn-super btn-fill" href="{% url 'frc_scout:database_instructions' %}">connect to database</a>
                     <a class="btn btn-primary btn-super btn-fill" href="{% url "frc_scout:view_team_profile" %}">Team Profile</a>
