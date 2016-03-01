@@ -54,7 +54,7 @@
     }
 }
 
-@media (max-width: 750px) {fau
+@media (max-width: 750px) {
     .btn-grid {
         height: 18vh !important;
         font-size: 20px;
@@ -132,11 +132,16 @@
     color: white;
 }
 
+/*
+Naw, this just makes everything less readable.
+
 body {
     padding-bottom: 20px;
     background-color: #f2f2f2;
     font-family: 'Exo 2', sans-serif;
 }
+*/
+
 @media (max-width: 640px) {
     .btn-fill {
         width: 100%;
